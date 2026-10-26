@@ -440,9 +440,11 @@ def command_reference_check(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
     """Check whether the committed agentic-kit command reference is current."""
-    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace, is_partial_external_workspace
 
-    if is_external_manifest_workspace(Path(".")):
+    if is_partial_external_workspace(Path(".")):
+        check_result = {"ok": False, "returncode": 2, "stdout": "", "stderr": "workspace-bootstrap-required: config.yaml missing; review workspace init --recover-partial."}
+    elif is_external_manifest_workspace(Path(".")):
         # KIT-GF-083: an external workspace has no Kit test suite; compare the workspace reference
         # files with the installed Kit's rendering instead of running the Kit's own pytest file.
         check_result = _refresh_command_reference_files(Path(".").resolve(), write=False)

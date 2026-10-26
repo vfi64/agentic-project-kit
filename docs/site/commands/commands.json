@@ -12432,6 +12432,42 @@
             "--json"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Plan signed additive recovery of a generated external project.",
+          "name": "recover_partial",
+          "opts": [
+            "--recover-partial"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Reviewed recovery plan signature.",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Maintainer approving recovery.",
+          "name": "approved_by",
+          "opts": [
+            "--approved-by"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Source of explicit recovery consent.",
+          "name": "consent_source",
+          "opts": [
+            "--consent-source"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit workspace init",

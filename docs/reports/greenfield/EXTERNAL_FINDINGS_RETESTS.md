@@ -1467,6 +1467,40 @@ Expected: Pin 99.0.0 returns BLOCKED with installed_kit_older_than_ci_pin; pin 0
 
 Expected result fields: `{"assertions": ["High CI pin blocks before any entrypoint write; lower pin passes."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
+## KIT-GF-087
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md
+
+Execution class: local (effects: none); machine contract: Partial generated project recovery is planned, signed, valid and idempotent without touching project documents.
+
+Preconditions: Disposable generic Git repository; explicit fixture-only recovery consent.
+
+```text
+agentic-kit workspace init --recover-partial --json
+```
+
+Expected: Signed additive recovery reaches valid external rule sources; repeated initialization writes nothing.
+
+Expected result fields: `{"assertions": ["AWAITING_APPROVAL then PASS; rule sources valid; repeated recovery written false"]}`.
+
+## KIT-GF-088
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md
+
+Execution class: local (effects: none); machine contract: Work-check refuses partial bootstrap before Kit-internal tests and passes the generic external gate family after signed completion.
+
+Preconditions: Disposable generic Git repository with no Python test suite.
+
+```text
+agentic-kit work check --profile minimal --json
+```
+
+Expected: Partial bootstrap blocks explicitly; initialized generic workspace passes external gates without Kit tests.
+
+Expected result fields: `{"assertions": ["partial work-check BLOCKED, recovery PASS, external work-check PASS"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

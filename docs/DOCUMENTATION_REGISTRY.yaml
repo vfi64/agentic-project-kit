@@ -1859,3 +1859,8 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: D1 shared task selection implementation, validation and bounded scope.
+  - path: docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md
+    class: evidence/log
+    owner: maintainers
+    summary: Partial external bootstrap recovery and gate isolation with independent fixture
+      evidence

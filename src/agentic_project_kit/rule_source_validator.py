@@ -9,7 +9,7 @@ from agentic_project_kit.chat_bootloader import MANDATORY_BOOT_SOURCES
 from agentic_project_kit.handoff_prompt import MANDATORY_SUCCESSOR_CHAT_SOURCES
 from agentic_project_kit.handoff_state import load_handoff_state, validate_handoff_state
 from agentic_project_kit.rule_refresh import COMMUNICATION_RULE_SOURCES, HANDOFF_RULE_SOURCES
-from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace, is_partial_external_workspace, has_generated_project_contract
 
 
 CANONICAL_YAML_RULE_SOURCES = (
@@ -94,8 +94,10 @@ def rule_source_paths_for_root(root: str | Path = ".") -> tuple[str, ...]:
     """Return the rule-source contract for the detected workspace mode."""
 
     root_path = Path(root)
-    if is_external_manifest_workspace(root_path):
-        return external_manifest_rule_source_paths()
+    if is_external_manifest_workspace(root_path) or (is_partial_external_workspace(root_path) and has_generated_project_contract(root_path)):
+        return external_manifest_rule_source_paths() + tuple(
+            name for name in (".agentic/project.yaml", "sentinel.yaml") if (root_path / name).exists()
+        )
     return canonical_rule_source_paths()
 
 
@@ -103,13 +105,10 @@ def validate_rule_sources(root: str | Path = ".") -> RuleSourceValidationResult:
     """Validate canonical rule sources without writing files or generating snapshots."""
 
     root_path = Path(root)
-    external_workspace = is_external_manifest_workspace(root_path)
-    source_paths = (
-        external_manifest_rule_source_paths()
-        if external_workspace
-        else canonical_rule_source_paths()
-    )
-    workspace_mode = "external_manifest_workspace" if external_workspace else "self_hosting"
+    partial = is_partial_external_workspace(root_path) and has_generated_project_contract(root_path)
+    external_workspace = is_external_manifest_workspace(root_path) or partial
+    source_paths = rule_source_paths_for_root(root_path)
+    workspace_mode = "partial_external_workspace" if partial else ("external_manifest_workspace" if external_workspace else "self_hosting")
     missing_required_paths: list[str] = []
     yaml_parse_error_paths: list[str] = []
     handoff_state_errors: list[str] = []
@@ -125,9 +124,26 @@ def validate_rule_sources(root: str | Path = ".") -> RuleSourceValidationResult:
         if path.suffix in {".yaml", ".yml"}:
             try:
                 yaml.safe_load(path.read_text(encoding="utf-8"))
-            except yaml.YAMLError as exc:
+            except (OSError, UnicodeError, yaml.YAMLError) as exc:
                 yaml_parse_error_paths.append(source)
                 blocking_reasons.append(f"yaml parse error in rule source: {source}: {exc}")
+
+    if external_workspace:
+        from agentic_project_kit.workspace import load_workspace
+        from agentic_project_kit.contract import load_project_contract, validate_project_contract
+        try:
+            if not partial:
+                load_workspace(root_path, suppress_legacy_profile_warning=True)
+            contract = load_project_contract(root_path)
+            if contract is not None:
+                blocking_reasons.extend(validate_project_contract(contract))
+            registry = root_path / ".agentic/registries/rules.yaml"
+            if registry.is_file():
+                data = yaml.safe_load(registry.read_text(encoding="utf-8"))
+                if not isinstance(data, dict) or not isinstance(data.get("rules"), list):
+                    blocking_reasons.append("external rule registry requires a rules list")
+        except (OSError, UnicodeError, ValueError, RuntimeError, yaml.YAMLError) as exc:
+            blocking_reasons.append(f"invalid external rule source: {exc}")
 
     handoff_path = root_path / ".agentic/handoff_state.yaml"
     if not external_workspace and handoff_path.exists() and handoff_path.is_file():

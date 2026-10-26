@@ -17,7 +17,7 @@ from agentic_project_kit.release_run import ReleaseRunOptions, run_release
 from agentic_project_kit.work_discard_changes import discard_all_changes
 from agentic_project_kit.work_rescue import rescue_main_work
 from agentic_project_kit.workspace import load_workspace
-from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace, is_partial_external_workspace
 
 work_app = typer.Typer(help="Human-friendly meta commands for patch, PR, and recovery workflows.")
 release_flow_app = typer.Typer(help="Human-friendly meta commands for release readiness and preparation.")
@@ -616,6 +616,14 @@ def work_check_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Run common human workflow gates without committing or pushing."""
+    if is_partial_external_workspace(Path(".")):
+        payload = _payload("work-check", [{
+            "name": "workspace-bootstrap-required", "argv": [], "ok": False,
+            "returncode": 2, "stdout": "", "stderr": "Review workspace init --recover-partial; external config.yaml is missing.",
+        }], extra={"profile": profile, "workspace_mode": "partial_external_workspace"})
+        _emit(payload, json_output=json_output)
+        _exit_if_blocked(payload)
+        return
     if is_external_manifest_workspace(Path(".")):
         steps = [
             _run_step("repo-status", _agentic("transfer", "repo-status")),

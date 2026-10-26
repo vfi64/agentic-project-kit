@@ -103,9 +103,11 @@ def build_workspace_init_plan(
     execute: bool = False,
     inject_ci: bool = False,
     inject_pre_commit: bool = False,
+    recovery_plan: bool = False,
 ) -> WorkspaceInitPlan:
     root_path = Path(root)
-    _preflight_workspace_absence(root_path)
+    if not recovery_plan:
+        _preflight_workspace_absence(root_path)
     adopted = analyze_workspace_adoption(root_path)
     project = _override_project(
         adopted.project,

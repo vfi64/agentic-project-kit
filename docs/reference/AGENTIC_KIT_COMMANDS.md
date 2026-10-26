@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 87ad8173f106
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: c53db88c5322
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -4349,6 +4349,10 @@ Plan or create a bounded operating-layer workspace.
 | `inject_ci` | `TyperOption` | --inject-ci | `False` | `False` | Opt in to GitHub Actions workflow injection. |
 | `inject_pre_commit` | `TyperOption` | --inject-pre-commit | `False` | `False` | Opt in to pre-commit snippet injection. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
+| `recover_partial` | `TyperOption` | --recover-partial | `False` | `False` | Plan signed additive recovery of a generated external project. |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Reviewed recovery plan signature. |
+| `approved_by` | `TyperOption` | --approved-by | `False` | `` | Maintainer approving recovery. |
+| `consent_source` | `TyperOption` | --consent-source | `False` | `` | Source of explicit recovery consent. |
 
 ### `agentic-kit workspace remove`
 

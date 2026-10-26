@@ -8,7 +8,7 @@ import subprocess
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.cli_executable import default_agentic_kit
-from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+from agentic_project_kit.workspace_detection import is_external_manifest_workspace, is_partial_external_workspace
 
 
 Runner = Callable[[Sequence[str], Path], tuple[int, str]]
@@ -157,6 +157,9 @@ def evaluate_standard_gates_audit_suite(
 
 
 def _standard_gate_commands_for_root(root: Path) -> tuple[tuple[str, ...], ...]:
+    if is_partial_external_workspace(root):
+        # Missing initialization is a blocker, never permission to run Kit tests.
+        return (("work", "check", "--profile", "minimal", "--json"),)
     if is_external_manifest_workspace(root):
         return EXTERNAL_STANDARD_GATE_COMMANDS
     return REQUIRED_STANDARD_GATE_COMMANDS

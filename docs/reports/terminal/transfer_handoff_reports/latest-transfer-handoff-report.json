@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-26T17:05:49.303842+00:00",
+    "created_at_utc": "2026-10-26T22:05:51.791765+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -318,11 +318,11 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-26T17:05:49.572211+00:00",
+    "generated_at_utc": "2026-10-26T22:05:51.993241+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/d1-task-selection-contract",
-      "head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa",
+      "branch": "fix/kit-ios-foreign-workspace-bootstrap",
+      "head": "298311bc31d56fcfaa9884d0eb46310aa86dc02e",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -384,8 +384,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "c71346d2ed5eea16b93257adddfb4ef772a53310c60ec61cc3ee14c951dd1dc1",
-      "docs/reference/agentic-kit-commands.json": "2df32bad2014936c1a20bc6873f958ce23105669b68c4e3b695085b7eae2b692"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "79d8d63e81a6ff2a4a81b97178fe805f520d14cbbeebab0577c2c83b3182ccf8",
+      "docs/reference/agentic-kit-commands.json": "98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -426,7 +426,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "0695b55e005f7af726e8fc943b3d418e6e1e192999ac6c603f52d3e538a2fda2"
+        "sha256": "6f66909218c515e9026885c9ee365777b9a699df82cc9032dd2ae3d3de0e3779"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -931,12 +931,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/d1-task-selection-contract",
+      "branch": "fix/kit-ios-foreign-workspace-bootstrap",
       "dirty_status": "",
-      "head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa",
-      "head_matches_upstream": true,
-      "upstream": "origin/codex/d1-task-selection-contract",
-      "upstream_head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa"
+      "head": "298311bc31d56fcfaa9884d0eb46310aa86dc02e",
+      "head_matches_upstream": false,
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -998,7 +998,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "0695b55e005f7af726e8fc943b3d418e6e1e192999ac6c603f52d3e538a2fda2"
+        "sha256": "6f66909218c515e9026885c9ee365777b9a699df82cc9032dd2ae3d3de0e3779"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1503,12 +1503,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/d1-task-selection-contract",
+      "branch": "fix/kit-ios-foreign-workspace-bootstrap",
       "dirty_status": "",
-      "head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa",
-      "head_matches_upstream": true,
-      "upstream": "origin/codex/d1-task-selection-contract",
-      "upstream_head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa"
+      "head": "298311bc31d56fcfaa9884d0eb46310aa86dc02e",
+      "head_matches_upstream": false,
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {

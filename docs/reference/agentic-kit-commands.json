@@ -20422,6 +20422,62 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Plan signed additive recovery of a generated external project.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "recover_partial",
+          "opts": [
+            "--recover-partial"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Reviewed recovery plan signature.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Maintainer approving recovery.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "approved_by",
+          "opts": [
+            "--approved-by"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Source of explicit recovery consent.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "consent_source",
+          "opts": [
+            "--consent-source"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -20580,7 +20636,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "87ad8173f106",
+    "manifest_sha": "c53db88c5322",
     "schema_version": 2
   },
   "schema_version": 3,

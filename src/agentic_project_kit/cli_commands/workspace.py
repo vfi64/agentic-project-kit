@@ -126,8 +126,27 @@ def workspace_init_command(
     inject_ci: Annotated[bool, typer.Option("--inject-ci", help="Opt in to GitHub Actions workflow injection.")] = False,
     inject_pre_commit: Annotated[bool, typer.Option("--inject-pre-commit", help="Opt in to pre-commit snippet injection.")] = False,
     json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
+    recover_partial: Annotated[bool, typer.Option("--recover-partial", help="Plan signed additive recovery of a generated external project.")] = False,
+    expected_signature: Annotated[str, typer.Option("--expected-signature", help="Reviewed recovery plan signature.")] = "",
+    approved_by: Annotated[str, typer.Option("--approved-by", help="Maintainer approving recovery.")] = "",
+    consent_source: Annotated[str, typer.Option("--consent-source", help="Source of explicit recovery consent.")] = "",
 ) -> None:
     """Plan or create a bounded operating-layer workspace."""
+
+    if recover_partial:
+        from agentic_project_kit.workspace_recovery import recover_workspace
+        if inject_ci or inject_pre_commit:
+            payload = {"result_status": "BLOCKED", "written": False, "reason": "Recovery does not inject CI or pre-commit files."}
+        else:
+            payload = recover_workspace(
+                root, execute=execute, expected_signature=expected_signature,
+                approved_by=approved_by, consent_source=consent_source,
+                name=name, project_type=project_type, profile=profile,
+            )
+        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        if payload["result_status"] == "BLOCKED":
+            raise typer.Exit(2)
+        return
 
     try:
         plan = build_workspace_init_plan(
