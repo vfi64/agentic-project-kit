@@ -16,6 +16,7 @@ from agentic_project_kit.workspace_detection import (
     non_workspace_message,
     is_non_workspace_root,
     is_agentic_project_kit_development_checkout,
+    is_partial_external_workspace,
 )
 
 
@@ -282,6 +283,8 @@ def build_check_context(project_root: Path) -> CheckContext:
             skip_status_renderer="agentic-kit init NAME",
         )
     workspace = _load_manifest_workspace_for_checks(project_root)
+    if is_partial_external_workspace(project_root):
+        workspace = ValueError("workspace-bootstrap-required: review workspace init --recover-partial before running workspace gates")
     if isinstance(workspace, ValueError):
         return CheckContext(
             root=project_root.as_posix(),

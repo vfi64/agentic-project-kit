@@ -57,6 +57,35 @@ project archives remain untouched. An explicitly approved document archive
 operation creates its target directory when needed; initialization is not that
 operation.
 
+### Completing a partially generated external workspace
+
+`agentic-kit workspace init --recover-partial --json` plans additive completion
+of a generated project with `.agentic/project.yaml` but no operating-layer
+`.agentic/config.yaml`. The preview is mutation-free and returns
+`AWAITING_APPROVAL`, file hashes, preserved paths and `approval_signature`.
+Execution requires `--execute --expected-signature <signature> --approved-by
+<maintainer> --consent-source <source>`. The signature binds the root, HEAD,
+existing operating-layer contents, new generator output and additive gitignore
+lines. The owning workspace-init renderer supplies every new generated file.
+Conflicts, unknown files/directories, symlinks and invalid project contracts
+remain BLOCKED; existing files are never replaced. Historical DPA creation
+provenance is preserved, with name differences disclosed in the reviewed plan.
+This completion does not adjudicate the broader DPA adoption assessment.
+
+The config manifest is written last among the generated files. An interrupted
+write remains partial and may be planned again; nonmatching remnants block.
+A completed, valid workspace returns PASS without writes on repetition.
+Normal empty-repository initialization and its collision refusal are unchanged.
+
+Missing config must not select Kit development tests. Work-check and standard
+gates report `workspace-bootstrap-required` for partial external workspaces.
+After completion, the existing external gate family checks project documents,
+declared profiles, governance, doctor and transfer state. It never assumes a Kit
+test file or Python test suite exists. This does not prove Swift compilation or
+replace project build/test CI. Existing project.yaml and sentinel.yaml join the
+rule snapshot; invalid configuration or rules keep `fail_closed` and prevent
+rule acknowledgement and commit. Tests: `tests/test_workspace_recovery.py`.
+
 ## 3. The core decision: kernel, precisely framed
 
 The engine is a **kernel**: project-agnostic at the center, everything

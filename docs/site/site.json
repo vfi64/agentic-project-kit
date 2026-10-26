@@ -12727,6 +12727,42 @@
               "--json"
             ],
             "required": false
+          },
+          {
+            "default": false,
+            "help": "Plan signed additive recovery of a generated external project.",
+            "name": "recover_partial",
+            "opts": [
+              "--recover-partial"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Reviewed recovery plan signature.",
+            "name": "expected_signature",
+            "opts": [
+              "--expected-signature"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Maintainer approving recovery.",
+            "name": "approved_by",
+            "opts": [
+              "--approved-by"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Source of explicit recovery consent.",
+            "name": "consent_source",
+            "opts": [
+              "--consent-source"
+            ],
+            "required": false
           }
         ],
         "qualified_name": "agentic-kit workspace init",
@@ -14071,7 +14107,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "b2cf971eebd1e0a6e57255fb359fd0c91c4006eb70c2d855de0bbb0b2b1241cc",
-        "docs/reference/agentic-kit-commands.json": "2df32bad2014936c1a20bc6873f958ce23105669b68c4e3b695085b7eae2b692",
+        "docs/reference/agentic-kit-commands.json": "98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -14081,7 +14117,7 @@
         "site/templates/figures/G2.svg": "8765be0ba0e6d94c6c9448905e816211583ff3fdb1fb457fbde766c3dba1ec60",
         "site/templates/figures/G3-mobile.svg": "6d9cccea1ddf7b43fb34bec25c215175c40becb2497b9cd71ebc9de8293a5e72",
         "site/templates/figures/G3.svg": "52ba78e99e8496b7c3de1ccb04889f860afdcea8566c448a40d5a555b8c82152",
-        "src/agentic_project_kit/cli_commands/human_workflows.py": "01e1857f7a7e06ae10d64c776043e6e3c15ab7f8edd4b43e41000db9302e0404",
+        "src/agentic_project_kit/cli_commands/human_workflows.py": "c4e18b86356691f191ab2a43a1dbdaff930d9a9d438da94f4d375a1fedf76003",
         "src/agentic_project_kit/successor_handoff_package.py": "053a96a55182ff05d3e801c56dfc74535a4205de67ecd4db1ba837c2494f81f2"
       }
     }
@@ -14096,14 +14132,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "87ad8173f106",
+    "manifest_sha": "c53db88c5322",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.6",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.6",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "87ad8173f106",
+    "reproduced_manifest_sha": "c53db88c5322",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,

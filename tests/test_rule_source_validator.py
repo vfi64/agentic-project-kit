@@ -47,6 +47,7 @@ def write_external_workspace_sources(root: Path) -> None:
                 "project": {"name": "external-demo", "type": "python"},
                 "profile": "python-default",
                 "modules": {"rule_registry": True, "transfer": True},
+                "hygiene": {"doc_lifecycle": "warn", "review_budgets": {}},
             },
             sort_keys=False,
         ),

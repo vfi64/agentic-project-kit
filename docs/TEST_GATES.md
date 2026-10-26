@@ -1,5 +1,17 @@
 # Test Gates
 
+## External bootstrap recovery and gate isolation
+
+`tests/test_workspace_recovery.py` covers empty, partial and complete workspaces,
+signed consent, drift, unknown files, symlinks, invalid rules, preservation of
+planning and historical generator receipts, repeated execution, external gates
+without Python tests, and real local commit rejection/acceptance around rule
+acknowledgement. `tests/test_rule_source_validator.py` validates external config
+semantics in addition to YAML syntax. KIT-GF-087 and KIT-GF-088 have executable
+local contracts; a local PASS never assigns consumer VERIFIED_FIXED or proves
+Swift/Xcode compilation. See the combined greenfield report for isolated
+consumer-snapshot evidence and its limits.
+
 ## D1 shared task selection
 
 `tests/test_task_selection_runtime.py` exercises the shared manifest route schema and identity, pure matching, CLI fact observations, opt-in exact PR reads, stale root/HEAD/PR refusal, ambiguous alternatives, malformed inputs and legacy compatibility. Every outcome has execution_authorized false and never constructs an argv. Website task routes derive from the same export. `tests/test_task_selection_design.py` preserves the earlier inactive proposal as historical review material only; production never reads it. Owner review of the initial authority and matrix was accepted as option A on 2026-10-26. Semantic adequacy and agent-context effects remain separate from structural test PASS.

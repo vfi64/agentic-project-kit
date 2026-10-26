@@ -66,5 +66,15 @@ def is_external_operating_workspace(project_root: Path) -> bool:
     )
 
 
+def is_partial_external_workspace(project_root: Path) -> bool:
+    """Unresolved operating-layer ownership must not imply Kit self-hosting."""
+    root = Path(project_root)
+    return (
+        not is_agentic_project_kit_development_checkout(root)
+        and not (root / ".agentic/config.yaml").exists()
+        and (root / ".agentic").exists()
+    )
+
+
 def non_workspace_message(project_root: Path) -> str:
     return f"{Path(project_root).resolve()} is {NON_WORKSPACE_LABEL}. {NON_WORKSPACE_NEXT_STEP}"
