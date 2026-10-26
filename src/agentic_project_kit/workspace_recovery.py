@@ -150,14 +150,16 @@ def recover_workspace(
             fresh, _ = _recovery_plan(root, name=name, project_type=project_type, profile=profile)
             if fresh["approval_signature"] != expected_signature:
                 raise ValueError("Workspace changed after approval; review a fresh plan.")
+            _append_gitignore_volatile(root)
+            if result["approval_subject"]["gitignore_diff"]:
+                written_paths.append(".gitignore")
             # Config is the commit marker: an interrupted attempt stays partial.
             for relative in sorted(additions, key=lambda value: (value == ".agentic/config.yaml", value)):
                 path = root / relative
                 path.parent.mkdir(parents=True, exist_ok=True)
                 with path.open("xb") as stream:
+                    written_paths.append(relative)
                     stream.write(additions[relative].encode())
-                written_paths.append(relative)
-            _append_gitignore_volatile(root)
             load_workspace(root, suppress_legacy_profile_warning=True)
         result.update(result_status="PASS", written=True, approved_by=approved_by, consent_source=consent_source,
                       next_action="Validate rules, bootstrap the rule inventory and acknowledge before committing.")

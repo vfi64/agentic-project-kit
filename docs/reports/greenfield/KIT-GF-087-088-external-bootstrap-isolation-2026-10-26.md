@@ -50,6 +50,13 @@ pass (KIT-GF-087: 1 PASS; KIT-GF-088: 1 PASS), as do check-docs, Ruff and Doctor
 Doctor retains 76 pre-existing report-only lifecycle notices. The full-suite
 result is recorded in the final PR validation. No source test was disabled.
 
+The first full run on cedfacec returned 4257 passed / 5 failed. Four failures
+identified an overly broad bootstrap block in general generated-project
+documentation checks; that block was removed while the operational work and
+reference gates remain fail-closed. The fifth identified an old manifest ID in
+the generated historical D1 review matrix, regenerated through its own script.
+A write-failure regression also keeps config absent when gitignore setup fails.
+
 An independent process retest copied 30 tracked/unignored files from the actual
 consumer snapshot into a temporary Git repository. The original checkout was
 read only and every source hash remained unchanged. The first harness check

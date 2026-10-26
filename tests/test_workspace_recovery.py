@@ -12,6 +12,7 @@ from agentic_project_kit.cli_commands import human_workflows
 from agentic_project_kit.rule_source_validator import validate_rule_sources
 from agentic_project_kit.standard_gates_audit_suite import _standard_gate_commands_for_root
 from agentic_project_kit.workspace_recovery import recover_workspace
+from agentic_project_kit import workspace_recovery
 from agentic_project_kit.dpa_workspace_init_projection import render_workspace_init_projection_manifest, DPA_WORKSPACE_INIT_MANIFEST_PATH
 
 
@@ -107,6 +108,17 @@ def test_missing_or_stale_consent_does_not_mutate(partial):
     before = snapshot(partial)
     assert execute(partial, plan)["result_status"] == "BLOCKED"
     assert snapshot(partial) == before
+
+
+def test_failed_gitignore_write_leaves_initialization_incomplete(partial, monkeypatch):
+    plan = recover_workspace(partial)
+    def refuse(root):
+        raise PermissionError("fixture denial")
+    monkeypatch.setattr(workspace_recovery, "_append_gitignore_volatile", refuse)
+    result = execute(partial, plan)
+    assert result["result_status"] == "BLOCKED"
+    assert not (partial / ".agentic/config.yaml").exists()
+    assert result["written"] is False
 
 
 def test_invalid_full_workspace_is_not_reset(partial):

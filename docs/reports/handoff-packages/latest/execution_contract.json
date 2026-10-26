@@ -335,8 +335,8 @@
       "branch": "fix/kit-ios-foreign-workspace-bootstrap",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "6ccabb835b0b7b50f9b7fd6518b649e83e392616",
-      "head_matches_origin_main": true,
+      "head": "cedfacec1f0c670a454b85d696556cd8d635ce74",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "6ccabb835b0b7b50f9b7fd6518b649e83e392616",
       "worktree_clean": false
@@ -522,8 +522,8 @@
     "branch": "fix/kit-ios-foreign-workspace-bootstrap",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "6ccabb835b0b7b50f9b7fd6518b649e83e392616",
-    "head_matches_origin_main": true,
+    "head": "cedfacec1f0c670a454b85d696556cd8d635ce74",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "6ccabb835b0b7b50f9b7fd6518b649e83e392616",
     "worktree_clean": false
