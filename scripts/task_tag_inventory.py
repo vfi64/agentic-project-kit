@@ -147,7 +147,7 @@ def render(report: dict) -> str:
               "Use the listed missing assignments and collisions as input to the existing decomplexification and context-budget plans. D1 must review task intent, diagnostics versus mutations, compatibility and state/permission conditions before choosing shared preferred routes. Do not infer token savings, authorization or semantic coverage from these counts.", "",
               "## Limits", ""] + ["- " + item for item in report["limits"]]
     lines += ["", "## Reproduction", "",
-              "Run the developer script scripts/task_tag_inventory.py with --source-commit set to the pinned source above and --out set to an output directory. It only reads Git/manifest data and writes inventory.json and README.md; it does not execute Kit commands or model runs. Tests are reported separately, never fabricated as part of metadata generation."]
+              "Run the developer script scripts/task_tag_inventory.py with --source-commit set to the pinned source above and --out set to an output directory. Both source commits must exist locally; this developer tool does not fetch missing history. It only reads Git/manifest data and writes inventory.json and README.md; it does not execute Kit commands or model runs. Tests are reported separately, never fabricated as part of metadata generation."]
     return "\n".join(lines) + "\n"
 
 

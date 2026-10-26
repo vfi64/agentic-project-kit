@@ -1,11 +1,13 @@
 """W1-P0 inventories metadata without inventing semantic task authority."""
 import importlib.util
 import json
+import subprocess
 from pathlib import Path
 
 import pytest
 
 from agentic_project_kit.command_selector import select_for_task
+from agentic_project_kit.command_manifest import manifest_sha
 
 ROOT = Path(__file__).resolve().parents[1]
 SPEC = importlib.util.spec_from_file_location("task_tag_inventory", ROOT / "scripts/task_tag_inventory.py")
@@ -94,9 +96,35 @@ def test_committed_report_renderer_and_input_counts_are_consistent():
     assert "| 999 |" in AUDIT.render(data)
 
 
-def test_current_pinned_inputs_are_reproducible_without_running_workflows():
-    a = AUDIT.generate(ROOT, "HEAD")
-    b = AUDIT.generate(ROOT, "HEAD")
+def test_current_pinned_inputs_are_reproducible_without_running_workflows(tmp_path, monkeypatch):
+    # CI intentionally has a shallow checkout. Exercise real Git input pinning
+    # with owned local history, not an unrelated historical object on the runner.
+    def git(*args):
+        return subprocess.run(["git", *args], cwd=tmp_path, check=True,
+                              capture_output=True, text=True).stdout.strip()
+
+    git("init")
+    git("config", "user.name", "Inventory Fixture")
+    git("config", "user.email", "fixture@example.invalid")
+    for path in (AUDIT.MANIFEST, AUDIT.PRODUCER, AUDIT.SELECTOR):
+        target = tmp_path / path
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / path).read_bytes())
+    initial = json.loads((tmp_path / AUDIT.MANIFEST).read_text())
+    git("add", ".")
+    git("commit", "-m", "Historical metadata fixture")
+    monkeypatch.setattr(AUDIT, "HISTORICAL", git("rev-parse", "HEAD"))
+    changed = json.loads(json.dumps(initial))
+    row = next(c for c in changed["commands"] if c["surface"] == "orchestrator")
+    row["task_tags"].append("fixture-additional-task")
+    changed["meta"]["manifest_sha"] = manifest_sha(changed["commands"])
+    (tmp_path / AUDIT.MANIFEST).write_text(json.dumps(changed))
+    git("add", AUDIT.MANIFEST)
+    git("commit", "-m", "Current metadata fixture")
+    a = AUDIT.generate(tmp_path, "HEAD")
+    b = AUDIT.generate(tmp_path, "HEAD")
     assert a == b
     assert a["analysis_status"] == "COMPLETE_METADATA_INVENTORY"
     assert a["semantic_coverage"] == "NOT_ASSESSED"
+    assert a["historical_baseline"]["counts"] == AUDIT.inventory(initial)["counts"]
+    assert any("fixture-additional-task" in r["additional_tag_candidates"] for r in a["orchestrators"])

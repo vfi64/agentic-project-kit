@@ -2,7 +2,7 @@
 
 Source: `cdcd5f53e690d37baeeeaab07693ee4d90d3a93c`; manifest `f2cdb65463e0`.
 Analysis: `COMPLETE_METADATA_INVENTORY`. Semantic coverage: `NOT_ASSESSED`.
-Generator: `scripts/task_tag_inventory.py`; SHA-256 `c95bb19a9fcbfa911ed88a3228b47327d00a1b3211be401249162ba6eee43c65`.
+Generator: `scripts/task_tag_inventory.py`; SHA-256 `7a478cd95b050d20ef67c9fbccdc374f95794320dcfbe4dbf727a544fb238c0f`.
 
 ## Counts and historical comparison
 
@@ -176,4 +176,4 @@ Use the listed missing assignments and collisions as input to the existing decom
 
 ## Reproduction
 
-Run the developer script scripts/task_tag_inventory.py with --source-commit set to the pinned source above and --out set to an output directory. It only reads Git/manifest data and writes inventory.json and README.md; it does not execute Kit commands or model runs. Tests are reported separately, never fabricated as part of metadata generation.
+Run the developer script scripts/task_tag_inventory.py with --source-commit set to the pinned source above and --out set to an output directory. Both source commits must exist locally; this developer tool does not fetch missing history. It only reads Git/manifest data and writes inventory.json and README.md; it does not execute Kit commands or model runs. Tests are reported separately, never fabricated as part of metadata generation.
