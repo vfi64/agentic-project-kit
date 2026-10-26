@@ -1,5 +1,17 @@
 # Test Gates
 
+## D1 proposed task selection contract
+
+`tests/test_task_selection_design.py` checks the inactive proposal against actual
+manifest commands, safety, planning capability and parameter names. Its pure design
+simulation covers MATCH, NEEDS_FACTS, NEEDS_INPUTS, BLOCKED, AMBIGUOUS, UNKNOWN_TASK
+and INVALID_INPUT. Every result has execution_authorized false; no selected
+command is run. Missing/stale identity, unknown alternatives, ambiguous matches,
+invalid facts, consent fields, missing commands and release-run planning mistakes
+fail closed. These structural tests do not adopt the matrix, prove fact provenance
+or establish semantic adequacy. Owner review of the proposed ADR is still required.
+
+
 ## W1-P0 task-tag metadata inventory
 
 `tests/test_task_tag_inventory.py` distinguishes any-tag coverage, producer-derived

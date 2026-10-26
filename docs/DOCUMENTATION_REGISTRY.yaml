@@ -1843,3 +1843,15 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: Machine-readable W1-P0 tag inventory, selector collisions and provenance
+  - path: docs/architecture/ADR_TASK_COMMAND_SELECTION.md
+    class: architecture
+    owner: maintainers
+  - path: docs/reference/TASK_COMMAND_SELECTION_CONTRACT.md
+    class: architecture
+    owner: maintainers
+  - path: docs/reference/TASK_COMMAND_SELECTION_PROPOSAL.yaml
+    class: architecture
+    owner: maintainers
+  - path: docs/reports/task_selection_design_20261026/README.md
+    class: generated artifact
+    owner: maintainers
