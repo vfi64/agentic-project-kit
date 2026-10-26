@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `1c3f216c4f1aa46decdaeb0e8cc32a20ce578bc1` (`1c3f216c`), after `Inventory orchestrator task tags without claiming semantic coverage (#2648)`.
-Last substantive work state is `1c3f216c4f1aa46decdaeb0e8cc32a20ce578bc1` (`1c3f216c`), after `Inventory orchestrator task tags without claiming semantic coverage (#2648)`.
+Current verified main/admin HEAD is `c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3` (`c1eca200`), after `Share identity-bound task selection between CLI and website (#2650)`.
+Last substantive work state is `c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3` (`c1eca200`), after `Share identity-bound task selection between CLI and website (#2650)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
