@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-26T16:24:55.331193+00:00",
+    "created_at_utc": "2026-10-26T17:05:49.303842+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -318,11 +318,11 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-26T16:24:55.548830+00:00",
+    "generated_at_utc": "2026-10-26T17:05:49.572211+00:00",
     "generated_from_current_repo": true,
     "git_state": {
       "branch": "codex/d1-task-selection-contract",
-      "head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd",
+      "head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -384,8 +384,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "12ee7b06f6538dfd09102902f9b49eec6cb4bab2e34ffac3ca5f07bf4c7f30c1",
-      "docs/reference/agentic-kit-commands.json": "e64fef3048cde197c8963358792bb0edde04c15a3fdfe085b068ff60d652073c"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "c71346d2ed5eea16b93257adddfb4ef772a53310c60ec61cc3ee14c951dd1dc1",
+      "docs/reference/agentic-kit-commands.json": "2df32bad2014936c1a20bc6873f958ce23105669b68c4e3b695085b7eae2b692"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -426,11 +426,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "c78f9ecc65867737b26f4b3fba039840d05a96d0a0f938bcc3cf18f0d40c2a02"
+        "sha256": "0695b55e005f7af726e8fc943b3d418e6e1e192999ac6c603f52d3e538a2fda2"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "f20455e278d257288e510e117b3c201d178de17298e60ab91828e561358c468a"
+        "sha256": "bfc1129202a49ff62f5d14b9a5c9bf25cf24dcdffbf7ccef7f22c021b55c65bd"
       }
     ],
     "canonical_cli_usage": {
@@ -933,10 +933,10 @@
     "repo_state": {
       "branch": "codex/d1-task-selection-contract",
       "dirty_status": "",
-      "head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd",
+      "head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa",
       "head_matches_upstream": true,
       "upstream": "origin/codex/d1-task-selection-contract",
-      "upstream_head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd"
+      "upstream_head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -998,11 +998,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "c78f9ecc65867737b26f4b3fba039840d05a96d0a0f938bcc3cf18f0d40c2a02"
+        "sha256": "0695b55e005f7af726e8fc943b3d418e6e1e192999ac6c603f52d3e538a2fda2"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "f20455e278d257288e510e117b3c201d178de17298e60ab91828e561358c468a"
+        "sha256": "bfc1129202a49ff62f5d14b9a5c9bf25cf24dcdffbf7ccef7f22c021b55c65bd"
       }
     ],
     "canonical_cli_usage": {
@@ -1505,10 +1505,10 @@
     "repo_state": {
       "branch": "codex/d1-task-selection-contract",
       "dirty_status": "",
-      "head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd",
+      "head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa",
       "head_matches_upstream": true,
       "upstream": "origin/codex/d1-task-selection-contract",
-      "upstream_head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd"
+      "upstream_head": "9db5e2b173bb63c5ad048e4768753bebe6e8bbfa"
     },
     "schema_version": 1,
     "terminal_block_rules": {
