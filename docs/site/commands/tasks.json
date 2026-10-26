@@ -1,0 +1,523 @@
+{
+  "execution_authorized": false,
+  "facts_schema": {
+    "branch_role": [
+      "main",
+      "work"
+    ],
+    "pr_state": [
+      "none",
+      "open",
+      "merged",
+      "closed"
+    ],
+    "release_state": [
+      "none",
+      "prepared",
+      "published",
+      "blocked",
+      "complete"
+    ],
+    "workspace_mode": [
+      "managed",
+      "unmanaged"
+    ],
+    "worktree_clean": "boolean"
+  },
+  "manifest_sha": "87ad8173f106",
+  "routes": [
+    {
+      "command": "agentic-kit check",
+      "contract": {
+        "dry_run_available": false,
+        "remote_effects": [
+          "none"
+        ],
+        "safety": "READ_ONLY",
+        "surface": "diagnostic"
+      },
+      "inputs": {},
+      "phase": "diagnostic",
+      "review_note": "Gate outcome is not proof that requirements are correct.",
+      "task": "check_work",
+      "when": {
+        "workspace_mode": "managed"
+      }
+    },
+    {
+      "command": "agentic-kit doctor",
+      "contract": {
+        "dry_run_available": false,
+        "remote_effects": [
+          "none"
+        ],
+        "safety": "READ_ONLY",
+        "surface": "diagnostic"
+      },
+      "inputs": {},
+      "phase": "diagnostic",
+      "review_note": "Inspect health; do not infer a repair or execute one.",
+      "task": "diagnose_repository",
+      "when": {
+        "workspace_mode": "managed"
+      }
+    },
+    {
+      "command": "agentic-kit workspace adopt",
+      "contract": {
+        "dry_run_available": false,
+        "remote_effects": [
+          "none"
+        ],
+        "safety": "READ_ONLY",
+        "surface": "orchestrator"
+      },
+      "inputs": {},
+      "phase": "diagnostic",
+      "review_note": "Assessment may recommend initialization; recommendation is not execution.",
+      "task": "assess_adoption",
+      "when": {
+        "workspace_mode": "unmanaged"
+      }
+    },
+    {
+      "command": "agentic-kit workspace init",
+      "contract": {
+        "dry_run_available": true,
+        "remote_effects": [
+          "none"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {},
+      "phase": "planning",
+      "review_note": "Inspect the installed command plan; do not add --execute from a selection result.",
+      "task": "initialize_workspace",
+      "when": {
+        "workspace_mode": "unmanaged"
+      }
+    },
+    {
+      "command": "agentic-kit work start",
+      "contract": {
+        "dry_run_available": false,
+        "remote_effects": [
+          "fetch"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {
+        "branch": "nonempty_string"
+      },
+      "phase": "guarded",
+      "review_note": "Fetch and branch effects require the existing operation authorization.",
+      "task": "start_work",
+      "when": {
+        "workspace_mode": "managed",
+        "worktree_clean": true
+      }
+    },
+    {
+      "command": "agentic-kit work finish",
+      "contract": {
+        "dry_run_available": true,
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {
+        "branch": "nonempty_string",
+        "message": "nonempty_string",
+        "paths": "nonempty_string_list",
+        "title": "nonempty_string"
+      },
+      "phase": "planning",
+      "review_note": "Whole-slice plan; an already open PR is a separate explicit intent, never inferred from closeout tags.",
+      "task": "finish_work",
+      "when": {
+        "branch_role": "work",
+        "workspace_mode": "managed"
+      }
+    },
+    {
+      "command": "agentic-kit transfer pr-complete",
+      "contract": {
+        "dry_run_available": false,
+        "remote_effects": [
+          "merge",
+          "push"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {
+        "expected_head_sha": "full_commit",
+        "pr_number": "positive_integer"
+      },
+      "phase": "guarded",
+      "review_note": "Pending CI is handled by the selected workflow; selection does not authorize its merge.",
+      "task": "complete_open_pr",
+      "when": {
+        "pr_state": "open",
+        "workspace_mode": "managed"
+      }
+    },
+    {
+      "command": "agentic-kit transfer pr-closeout-complete",
+      "contract": {
+        "dry_run_available": false,
+        "remote_effects": [
+          "merge"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {
+        "after_pr": "positive_integer"
+      },
+      "phase": "guarded",
+      "review_note": "Handoff refresh may itself merge an administrative PR; include that effect in operation consent.",
+      "task": "settle_merged_pr",
+      "when": {
+        "pr_state": "merged",
+        "workspace_mode": "managed"
+      }
+    },
+    {
+      "command": "agentic-kit transfer chat-switch-complete",
+      "contract": {
+        "dry_run_available": false,
+        "remote_effects": [
+          "none"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {},
+      "phase": "guarded",
+      "review_note": "Writes generated repository projections despite having no remote effect.",
+      "task": "prepare_handoff",
+      "when": {
+        "workspace_mode": "managed"
+      }
+    },
+    {
+      "command": "agentic-kit kit update",
+      "contract": {
+        "dry_run_available": true,
+        "remote_effects": [
+          "network_read"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {
+        "version": "stable_version"
+      },
+      "phase": "planning",
+      "review_note": "Planning can download wheels and write temporary reports; signature-gated install remains separate.",
+      "task": "update_kit",
+      "when": {
+        "branch_role": "work",
+        "workspace_mode": "managed",
+        "worktree_clean": true
+      }
+    },
+    {
+      "command": "agentic-kit release run",
+      "contract": {
+        "dry_run_available": true,
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
+        ],
+        "safety": "BOUNDED",
+        "surface": "orchestrator"
+      },
+      "inputs": {
+        "version": "stable_version"
+      },
+      "phase": "guarded",
+      "review_note": "Fresh release only; existing runs need a separate explicit resume/recovery intent. Without --execute the orchestrator still performs local A/B preparation; publication consent stays separate and version/tag/head-bound.",
+      "task": "release_version",
+      "when": {
+        "branch_role": "main",
+        "release_state": "none",
+        "workspace_mode": "managed",
+        "worktree_clean": true
+      }
+    }
+  ],
+  "schema_version": 1,
+  "unassigned_commands": [
+    "agentic-kit actions list",
+    "agentic-kit actions show",
+    "agentic-kit artifact-gc",
+    "agentic-kit audit-absolute-path-portability",
+    "agentic-kit audit-command-authority",
+    "agentic-kit audit-command-manifest",
+    "agentic-kit audit-doc-currency",
+    "agentic-kit audit-doc-orphans",
+    "agentic-kit audit-drift-signals",
+    "agentic-kit audit-mutation-lock-coverage",
+    "agentic-kit audit-ns-legacy-references",
+    "agentic-kit audit-patch-failure-discipline",
+    "agentic-kit audit-path-literals",
+    "agentic-kit audit-planning-docs-consolidation",
+    "agentic-kit audit-program-redundancy",
+    "agentic-kit audit-status-current-state",
+    "agentic-kit boot check",
+    "agentic-kit boot closeout",
+    "agentic-kit boot prompt",
+    "agentic-kit boot report",
+    "agentic-kit boot write",
+    "agentic-kit chat refresher",
+    "agentic-kit chat session-start",
+    "agentic-kit check-docs",
+    "agentic-kit check-todo",
+    "agentic-kit ci runtime-plan",
+    "agentic-kit ci status",
+    "agentic-kit cockpit actions",
+    "agentic-kit cockpit gatekeeper-status",
+    "agentic-kit cockpit run",
+    "agentic-kit cockpit select",
+    "agentic-kit cockpit status",
+    "agentic-kit command-for",
+    "agentic-kit command-taxonomy-check",
+    "agentic-kit commands render-md",
+    "agentic-kit commands sync-entrypoints",
+    "agentic-kit context render",
+    "agentic-kit context report",
+    "agentic-kit dev local-feature-gate",
+    "agentic-kit direction audit-drift",
+    "agentic-kit direction render",
+    "agentic-kit direction validate",
+    "agentic-kit doc-lifecycle-audit",
+    "agentic-kit doc-mesh-audit",
+    "agentic-kit doc-mesh-repair",
+    "agentic-kit doc-registry check-unregistered",
+    "agentic-kit doc-registry reconcile",
+    "agentic-kit doc-registry register",
+    "agentic-kit docs lifecycle apply",
+    "agentic-kit docs lifecycle bootstrap",
+    "agentic-kit docs lifecycle plan",
+    "agentic-kit docs lifecycle propose-delete",
+    "agentic-kit docs lifecycle report",
+    "agentic-kit docs lifecycle sweep",
+    "agentic-kit docs lifecycle triage",
+    "agentic-kit docs removed-source-audit",
+    "agentic-kit docs-audit",
+    "agentic-kit docs-registry",
+    "agentic-kit dpa current-handoff-refresh",
+    "agentic-kit dpa dp2-decision-readiness",
+    "agentic-kit dpa dp3-dp4-adjudication-check",
+    "agentic-kit dpa dp5-block-new-gate",
+    "agentic-kit dpa dp5-stage-check",
+    "agentic-kit dpa dp5-strict-gate",
+    "agentic-kit dpa final-closeout-check",
+    "agentic-kit dpa fixture-evidence",
+    "agentic-kit dpa maintainer-record-check",
+    "agentic-kit dpa post-dp2-scope-assessment",
+    "agentic-kit dpa probe-002-readiness",
+    "agentic-kit dpa probe-003-readiness",
+    "agentic-kit dpa probe-004-readiness",
+    "agentic-kit dpa readiness",
+    "agentic-kit dpa readonly-probe-execution",
+    "agentic-kit dpa renderer-readiness",
+    "agentic-kit dpa repo-adoption-assessment",
+    "agentic-kit dpa stable-readiness-check",
+    "agentic-kit dpa wrt-ch001-evidence",
+    "agentic-kit evidence classify-log",
+    "agentic-kit evidence clean",
+    "agentic-kit evidence clean-check",
+    "agentic-kit evidence commit-paths",
+    "agentic-kit evidence finalize-log",
+    "agentic-kit evidence guard",
+    "agentic-kit evidence inspect",
+    "agentic-kit evidence scope-check",
+    "agentic-kit executor plan",
+    "agentic-kit executor run",
+    "agentic-kit github-create",
+    "agentic-kit governance check",
+    "agentic-kit greenfield export",
+    "agentic-kit greenfield retest",
+    "agentic-kit greenfield status",
+    "agentic-kit gui initial-llm-prompt",
+    "agentic-kit gui-readiness-gate",
+    "agentic-kit handoff check",
+    "agentic-kit handoff post-merge-refresh-status",
+    "agentic-kit handoff prompt",
+    "agentic-kit handoff refresh",
+    "agentic-kit handoff show",
+    "agentic-kit init",
+    "agentic-kit instruction lint",
+    "agentic-kit kit status",
+    "agentic-kit ledger report",
+    "agentic-kit onboarding measure",
+    "agentic-kit pass-already-done classify",
+    "agentic-kit pass-already-done report",
+    "agentic-kit patch-preflight",
+    "agentic-kit patch-scope-preflight",
+    "agentic-kit patterns list",
+    "agentic-kit patterns show",
+    "agentic-kit post-release-check",
+    "agentic-kit post-release-doi-closeout",
+    "agentic-kit pr closeout-check",
+    "agentic-kit pr merge-if-green",
+    "agentic-kit pr rerun-checks",
+    "agentic-kit pr status",
+    "agentic-kit pr wait-ci",
+    "agentic-kit pr-closeout",
+    "agentic-kit pr-hygiene",
+    "agentic-kit profile-explain",
+    "agentic-kit project-direction",
+    "agentic-kit release abandon",
+    "agentic-kit release prepare",
+    "agentic-kit release ready",
+    "agentic-kit release-check",
+    "agentic-kit release-metadata-authority-gate",
+    "agentic-kit release-notes-generate",
+    "agentic-kit release-plan",
+    "agentic-kit release-preflight",
+    "agentic-kit release-prep",
+    "agentic-kit release-publish",
+    "agentic-kit release-status",
+    "agentic-kit remote-branch-hygiene",
+    "agentic-kit remote-branch-hygiene-apply",
+    "agentic-kit remote-branch-hygiene-report",
+    "agentic-kit remote-next",
+    "agentic-kit rn",
+    "agentic-kit rnc",
+    "agentic-kit rule-registry bootstrap",
+    "agentic-kit rule-registry check",
+    "agentic-kit rule-registry register",
+    "agentic-kit rule-registry report",
+    "agentic-kit rules acknowledge",
+    "agentic-kit rules acknowledge-communication-refresh",
+    "agentic-kit rules communication-refresh",
+    "agentic-kit rules handoff-refresh",
+    "agentic-kit rules require-current-communication-context",
+    "agentic-kit rules snapshot",
+    "agentic-kit rules validate-sources",
+    "agentic-kit scaffold planning-doc",
+    "agentic-kit slice gate",
+    "agentic-kit standard-gates-audit-suite",
+    "agentic-kit state freshness-check",
+    "agentic-kit state mode-check",
+    "agentic-kit state mode-write",
+    "agentic-kit todo complete",
+    "agentic-kit todo list",
+    "agentic-kit todo render",
+    "agentic-kit transfer admin-refresh-pr",
+    "agentic-kit transfer apply",
+    "agentic-kit transfer branch-create",
+    "agentic-kit transfer branch-delete",
+    "agentic-kit transfer branch-switch",
+    "agentic-kit transfer closeout",
+    "agentic-kit transfer command-composition-check",
+    "agentic-kit transfer command-reference-check",
+    "agentic-kit transfer command-reference-refresh",
+    "agentic-kit transfer command-stack-begin",
+    "agentic-kit transfer command-stack-end",
+    "agentic-kit transfer commit",
+    "agentic-kit transfer conflict-resolve-file",
+    "agentic-kit transfer conflict-status",
+    "agentic-kit transfer continue",
+    "agentic-kit transfer delete-merged-work-branch",
+    "agentic-kit transfer diagnose-removed-ns-commands",
+    "agentic-kit transfer divergence-status",
+    "agentic-kit transfer evidence-finalize-current-transfer",
+    "agentic-kit transfer evidence-inspect-latest",
+    "agentic-kit transfer evidence-pr-complete",
+    "agentic-kit transfer fetch-origin",
+    "agentic-kit transfer head-sha",
+    "agentic-kit transfer inspect",
+    "agentic-kit transfer list-refs",
+    "agentic-kit transfer log-header",
+    "agentic-kit transfer log-upload-hint",
+    "agentic-kit transfer normalize-files",
+    "agentic-kit transfer normalize-session",
+    "agentic-kit transfer order-create",
+    "agentic-kit transfer order-validate",
+    "agentic-kit transfer patch-cycle-status",
+    "agentic-kit transfer post-merge-check",
+    "agentic-kit transfer post-merge-complete",
+    "agentic-kit transfer post-merge-settle",
+    "agentic-kit transfer pr-close-superseded",
+    "agentic-kit transfer pr-create",
+    "agentic-kit transfer pr-create-complete",
+    "agentic-kit transfer pr-existing-for-branch",
+    "agentic-kit transfer pr-merge-safe",
+    "agentic-kit transfer pr-status",
+    "agentic-kit transfer pr-wait-ci",
+    "agentic-kit transfer prepare-successor-handoff",
+    "agentic-kit transfer protected-diff-plan",
+    "agentic-kit transfer publish-last-report",
+    "agentic-kit transfer pull-current",
+    "agentic-kit transfer push-current",
+    "agentic-kit transfer read-user-task",
+    "agentic-kit transfer rebase-on-upstream",
+    "agentic-kit transfer refresh-llm-context-carriers",
+    "agentic-kit transfer remote-next",
+    "agentic-kit transfer remote-work-start",
+    "agentic-kit transfer repo-diff",
+    "agentic-kit transfer repo-log",
+    "agentic-kit transfer repo-status",
+    "agentic-kit transfer require-fresh-llm-context",
+    "agentic-kit transfer restore-known-volatile",
+    "agentic-kit transfer run-and-log",
+    "agentic-kit transfer run-local",
+    "agentic-kit transfer run-sequence-and-log",
+    "agentic-kit transfer show-last-report",
+    "agentic-kit transfer standard-error-scan",
+    "agentic-kit transfer state",
+    "agentic-kit transfer status",
+    "agentic-kit transfer submit-user-task",
+    "agentic-kit transfer sync-main",
+    "agentic-kit transfer verify-llm-context-refresh",
+    "agentic-kit transfer work-order-patch",
+    "agentic-kit transfer workflow-next",
+    "agentic-kit validate-contract",
+    "agentic-kit validate-output-contract",
+    "agentic-kit validate-sections",
+    "agentic-kit work check",
+    "agentic-kit work discard-changes",
+    "agentic-kit work recover",
+    "agentic-kit work rescue",
+    "agentic-kit work-order check",
+    "agentic-kit work-order list",
+    "agentic-kit work-order prepare",
+    "agentic-kit work-order run",
+    "agentic-kit work-order show",
+    "agentic-kit work-order templates",
+    "agentic-kit work-order typed-next",
+    "agentic-kit work-order typed-queue-status",
+    "agentic-kit work-order typed-run",
+    "agentic-kit work-order upload",
+    "agentic-kit workflow cleanup",
+    "agentic-kit workflow fail-report",
+    "agentic-kit workflow go",
+    "agentic-kit workflow list",
+    "agentic-kit workflow request",
+    "agentic-kit workflow run",
+    "agentic-kit workflow show",
+    "agentic-kit workflow state",
+    "agentic-kit workflow status",
+    "agentic-kit workflow upload",
+    "agentic-kit workflow upload-output",
+    "agentic-kit workflow-guard check",
+    "agentic-kit workflow-guard diagnose",
+    "agentic-kit workspace ci-update",
+    "agentic-kit workspace dpa-intake",
+    "agentic-kit workspace remove",
+    "agentic-kit workspace upgrade"
+  ]
+}

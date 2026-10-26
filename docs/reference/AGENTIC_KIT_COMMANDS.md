@@ -1,10 +1,10 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f2cdb65463e0
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 87ad8173f106
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
-- Schema version: `2`
+- Schema version: `3`
 - Source: `generated_from_typer_click_registry`
 - Command count: `272`
 
@@ -488,16 +488,19 @@ _No parameters._
 
 - Safety: `READ_ONLY`
 - Surface: `diagnostic`
-- When to use: Select the deterministic wrapper command for a raw command or task tag.
+- When to use: Select by raw command, task tag or explicit state-aware intent; never execute.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `network_read`
 
-Select the deterministic wrapper command for a raw command or task tag.
+Select by raw command, task tag or explicit state-aware intent; never execute.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
 | `raw` | `TyperOption` | --raw | `False` |  | Raw command line to map to a wrapper. |
 | `task` | `TyperOption` | --task | `False` |  | Task tag to list matching commands. |
+| `intent` | `TyperOption` | --intent | `False` |  | Exact task ID from manifest task_routes; selection grants no execution authority. |
+| `inputs` | `TyperOption` | --inputs | `False` | `{}` | JSON object of explicit task parameters, never facts or consent. |
+| `observe_pr` | `TyperOption` | --observe-pr | `False` | `False` | Read exactly the explicitly named PR from origin; no discovery or mutation. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Repository root. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Print machine-readable JSON. |
 

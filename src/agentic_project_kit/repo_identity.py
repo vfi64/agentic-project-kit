@@ -150,3 +150,12 @@ def bind_github_cli_env_for_origin(root: Path) -> dict[str, str] | None:
 
 def default_local_path_hint(root: Path) -> str:
     return f"cd /path/to/{Path(root).name}"
+
+
+def github_pr_url_matches(value: str, repository: str, number: int) -> bool:
+    """Validate a remote PR observation against the resolved origin identity."""
+    parsed = urlparse(value)
+    return (parsed.scheme == "https" and parsed.hostname == "github.com"
+            and parsed.path == f"/{repository}/pull/{number}"
+            and not parsed.query and not parsed.fragment
+            and not parsed.username and not parsed.password)

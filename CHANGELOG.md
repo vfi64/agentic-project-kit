@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Share identity-bound task routes between command selection and website guidance, with explicit unknown states and no execution authority.
+
 - Present the historical work-order findings and offline gate comparison on a source-bound evidence page, with explicit applicability denominators, mitigation scope and benchmark limitations.
 
 - Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails.

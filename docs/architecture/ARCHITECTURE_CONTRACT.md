@@ -712,3 +712,14 @@ A change that violates one of these invariants needs an explicit architecture de
 - How much repository-map functionality is useful before adding non-Python profiles?
 - What deterministic document-quality heuristics should be enabled by default?
 - Which semantic review workflows can be useful without becoming false hard gates?
+
+## Shared task selection authority (D1)
+
+Owner-adopted ADR: `docs/architecture/ADR_TASK_COMMAND_SELECTION.md`. The existing
+command manifest exports `task_routes` for both command-for intent selection and
+the generated website. Manifest schema 3 binds command and route metadata to the
+same identity; schema 2 retains the historical command-only identity for legacy
+raw/tag selection. Selection is advisory, never an execution capability or consent.
+Missing or stale root/HEAD/PR facts stop matching. Diagnostics, complete command
+reference and existing mutation/release gates remain independent. No command is
+removed or deprecated by this matrix. Tests: `tests/test_task_selection_runtime.py`.

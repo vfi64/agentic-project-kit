@@ -9,7 +9,7 @@ from agentic_project_kit.workspace import load_workspace
 
 from agentic_project_kit.command_manifest import (
     build_current_reference,
-    manifest_sha,
+    manifest_identity,
     package_manifest_source_path,
     render_json,
     render_markdown,
@@ -357,7 +357,7 @@ def _refresh_command_reference_files(root: Path, *, write: bool = True) -> dict[
     try:
         data = build_current_reference()
         manifest = data.get("meta") if isinstance(data.get("meta"), dict) else {}
-        manifest_sha_value = str(manifest.get("manifest_sha") or manifest_sha(data.get("commands") or []))
+        manifest_sha_value = str(manifest.get("manifest_sha") or manifest_identity(data))
         rendered_json = render_json(data)
         rendered_md = render_markdown(data)
         workspace = load_workspace(root)

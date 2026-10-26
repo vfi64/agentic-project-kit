@@ -1812,7 +1812,7 @@
     {
       "dry_run_available": false,
       "group": "root",
-      "help": "Select the deterministic wrapper command for a raw command or task tag.",
+      "help": "Select by raw command, task tag or explicit state-aware intent; never execute.",
       "name": "command-for",
       "params": [
         {
@@ -1838,6 +1838,48 @@
           "name": "task",
           "opts": [
             "--task"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Exact task ID from manifest task_routes; selection grants no execution authority.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "intent",
+          "opts": [
+            "--intent"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "{}",
+          "help": "JSON object of explicit task parameters, never facts or consent.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "inputs",
+          "opts": [
+            "--inputs"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Read exactly the explicitly named PR from origin; no discovery or mutation.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "observe_pr",
+          "opts": [
+            "--observe-pr"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -1877,7 +1919,7 @@
       ],
       "qualified_name": "agentic-kit command-for",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
@@ -1885,7 +1927,7 @@
       "task_tags": [
         "read-only"
       ],
-      "when_to_use": "Select the deterministic wrapper command for a raw command or task tag."
+      "when_to_use": "Select by raw command, task tag or explicit state-aware intent; never execute."
     },
     {
       "dry_run_available": false,
@@ -20538,10 +20580,174 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "f2cdb65463e0",
-    "schema_version": 1
+    "manifest_sha": "87ad8173f106",
+    "schema_version": 2
   },
-  "schema_version": 2,
+  "schema_version": 3,
   "source": "generated_from_typer_click_registry",
-  "successor_execution_contract": "docs/reports/handoff-packages/latest/execution_contract.json"
+  "successor_execution_contract": "docs/reports/handoff-packages/latest/execution_contract.json",
+  "task_routes": {
+    "facts_schema": {
+      "branch_role": [
+        "main",
+        "work"
+      ],
+      "pr_state": [
+        "none",
+        "open",
+        "merged",
+        "closed"
+      ],
+      "release_state": [
+        "none",
+        "prepared",
+        "published",
+        "blocked",
+        "complete"
+      ],
+      "workspace_mode": [
+        "managed",
+        "unmanaged"
+      ],
+      "worktree_clean": "boolean"
+    },
+    "routes": [
+      {
+        "command": "agentic-kit check",
+        "inputs": {},
+        "phase": "diagnostic",
+        "review_note": "Gate outcome is not proof that requirements are correct.",
+        "task": "check_work",
+        "when": {
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit doctor",
+        "inputs": {},
+        "phase": "diagnostic",
+        "review_note": "Inspect health; do not infer a repair or execute one.",
+        "task": "diagnose_repository",
+        "when": {
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit workspace adopt",
+        "inputs": {},
+        "phase": "diagnostic",
+        "review_note": "Assessment may recommend initialization; recommendation is not execution.",
+        "task": "assess_adoption",
+        "when": {
+          "workspace_mode": "unmanaged"
+        }
+      },
+      {
+        "command": "agentic-kit workspace init",
+        "inputs": {},
+        "phase": "planning",
+        "review_note": "Inspect the installed command plan; do not add --execute from a selection result.",
+        "task": "initialize_workspace",
+        "when": {
+          "workspace_mode": "unmanaged"
+        }
+      },
+      {
+        "command": "agentic-kit work start",
+        "inputs": {
+          "branch": "nonempty_string"
+        },
+        "phase": "guarded",
+        "review_note": "Fetch and branch effects require the existing operation authorization.",
+        "task": "start_work",
+        "when": {
+          "workspace_mode": "managed",
+          "worktree_clean": true
+        }
+      },
+      {
+        "command": "agentic-kit work finish",
+        "inputs": {
+          "branch": "nonempty_string",
+          "message": "nonempty_string",
+          "paths": "nonempty_string_list",
+          "title": "nonempty_string"
+        },
+        "phase": "planning",
+        "review_note": "Whole-slice plan; an already open PR is a separate explicit intent, never inferred from closeout tags.",
+        "task": "finish_work",
+        "when": {
+          "branch_role": "work",
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit transfer pr-complete",
+        "inputs": {
+          "expected_head_sha": "full_commit",
+          "pr_number": "positive_integer"
+        },
+        "phase": "guarded",
+        "review_note": "Pending CI is handled by the selected workflow; selection does not authorize its merge.",
+        "task": "complete_open_pr",
+        "when": {
+          "pr_state": "open",
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit transfer pr-closeout-complete",
+        "inputs": {
+          "after_pr": "positive_integer"
+        },
+        "phase": "guarded",
+        "review_note": "Handoff refresh may itself merge an administrative PR; include that effect in operation consent.",
+        "task": "settle_merged_pr",
+        "when": {
+          "pr_state": "merged",
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit transfer chat-switch-complete",
+        "inputs": {},
+        "phase": "guarded",
+        "review_note": "Writes generated repository projections despite having no remote effect.",
+        "task": "prepare_handoff",
+        "when": {
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit kit update",
+        "inputs": {
+          "version": "stable_version"
+        },
+        "phase": "planning",
+        "review_note": "Planning can download wheels and write temporary reports; signature-gated install remains separate.",
+        "task": "update_kit",
+        "when": {
+          "branch_role": "work",
+          "workspace_mode": "managed",
+          "worktree_clean": true
+        }
+      },
+      {
+        "command": "agentic-kit release run",
+        "inputs": {
+          "version": "stable_version"
+        },
+        "phase": "guarded",
+        "review_note": "Fresh release only; existing runs need a separate explicit resume/recovery intent. Without --execute the orchestrator still performs local A/B preparation; publication consent stays separate and version/tag/head-bound.",
+        "task": "release_version",
+        "when": {
+          "branch_role": "main",
+          "release_state": "none",
+          "workspace_mode": "managed",
+          "worktree_clean": true
+        }
+      }
+    ],
+    "schema_version": 1
+  }
 }

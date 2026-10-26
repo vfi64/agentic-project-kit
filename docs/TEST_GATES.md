@@ -1,5 +1,9 @@
 # Test Gates
 
+## D1 shared task selection
+
+`tests/test_task_selection_runtime.py` exercises the shared manifest route schema and identity, pure matching, CLI fact observations, opt-in exact PR reads, stale root/HEAD/PR refusal, ambiguous alternatives, malformed inputs and legacy compatibility. Every outcome has execution_authorized false and never constructs an argv. Website task routes derive from the same export. `tests/test_task_selection_design.py` preserves the earlier inactive proposal as historical review material only; production never reads it. Owner review of the initial authority and matrix was accepted as option A on 2026-10-26. Semantic adequacy and agent-context effects remain separate from structural test PASS.
+
 ## W1-P0 task-tag metadata inventory
 
 `tests/test_task_tag_inventory.py` distinguishes any-tag coverage, producer-derived

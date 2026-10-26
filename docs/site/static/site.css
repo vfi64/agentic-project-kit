@@ -411,3 +411,7 @@ th {
 
 /* Evidence source identities remain readable on narrow screens. */
 .source-bindings code, .evidence-page code { overflow-wrap: anywhere; word-break: break-word; white-space: normal; }
+
+/* Task prerequisites and command identities wrap without horizontal page overflow. */
+.task-routes code, .task-routes p { overflow-wrap: anywhere; white-space: normal; }
+.task-routes article { border-top: 1px solid var(--line); padding: 12px 0; }

@@ -91,6 +91,10 @@ meta:
         scope: Owner approved W1-P0 on 2026-10-26. Inventory current metadata and
           actual selector multi-matches without changing task tags, command selection,
           permissions or the website task-navigation authority. D1 remains separate.
+      - id: website-evidence-and-command-navigation
+        step: d1-contract-and-matrix
+        status: done
+        scope: Owner accepted option A on 2026-10-26. Implement shared identity-bound selection and its website projection; no release or paid benchmark.
       - id: external-retest-machine-contracts
         status: blocked
         scope: Main item remains active; c1 and c3 are done. Release 1.1.6 meets
@@ -122,7 +126,8 @@ meta:
       e1_projection_fix_main: 90aadf70640861717b389a932b086f9aa16746a8
       e1_projection_boundary: The E1 rendering fix is merged after 1.1.6; it is not in that published package.
       consumer_boundary: 1.1.6 satisfies c2's later-release dependency, but adoption, consumer retests and ledger verification remain deferred and unperformed by this slice.
-      current_slice: Owner approved one combined planning refresh and W2 historical evidence page; no tag inventory, D1 implementation or paid benchmark reruns.
+      w2_authorization_scope: Owner approved one combined planning refresh and W2 historical evidence page; that slice included no tag inventory, D1 implementation or paid benchmark reruns.
+      current_slice: D1 option A implemented in PR2650 with one shared schema-3 manifest export, explicit intent selection and matching website projection. W1 layout and command-detail expansion remain separate; no release or paid benchmark.
     progress_update_20261022:
       release: Kit 1.1.5 completed (release PR2601, DOI PR2603, evidence PR2605, refresh PR2606).
       kit_baseline: 52f469f112a1ec4d5fceb8aec0a2657f185eacb4
@@ -2626,7 +2631,27 @@ plans:
     - Show unassigned commands explicitly; do not hide or infer missing mappings.
     - Feed findings into decomplexification and the existing agent context plan.
   - id: d1-shared-task-command-selection
-    status: planned
+    status: done
+    design_decision_status: accepted
+    implementation_authorized: true
+    design_artifacts:
+    - docs/architecture/ADR_TASK_COMMAND_SELECTION.md
+    - docs/reference/TASK_COMMAND_SELECTION_CONTRACT.md
+    - docs/reference/TASK_COMMAND_SELECTION_PROPOSAL.yaml
+    - docs/reports/task_selection_design_20261026/README.md
+    steps:
+    - id: d1-contract-and-matrix
+      status: done
+      decision_status: accepted
+      scope: Contract and initial matrix accepted by the owner as option A on 2026-10-26.
+      evidence:
+      - tests/test_task_selection_design.py
+    - id: d1-runtime-shared-selection
+      status: done
+      authorization: Owner accepted option A on 2026-10-26; implement in the existing PR with one shared manifest authority.
+
+    implementation_report: docs/reports/task_selection_design_20261026/IMPLEMENTATION.md
+    completion_boundary: Eleven reviewed intents only; no command removal, automatic execution, universal coverage or context-token benefit claim. W1 projection groundwork does not close the remaining navigation UX acceptance.
     evidence_inputs:
     - docs/reports/task_tag_inventory_20261026/inventory.json
     input_boundary: W1-P0 lists unassigned commands and candidate collisions only; D1 must still decide task meaning, state suitability and shared preferred routes.
