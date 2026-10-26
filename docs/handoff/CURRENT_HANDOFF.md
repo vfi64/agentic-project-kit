@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3` (`c1eca200`), after `Share identity-bound task selection between CLI and website (#2650)`.
-Last substantive work state is `c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3` (`c1eca200`), after `Share identity-bound task selection between CLI and website (#2650)`.
+Current verified main/admin HEAD is `f475c0b512c4e787515e0e1e6fedd284b15a50ee` (`f475c0b5`), after `Recover partial external workspaces and isolate Kit gates (KIT-GF-087/088) (#2652)`.
+Last substantive work state is `f475c0b512c4e787515e0e1e6fedd284b15a50ee` (`f475c0b5`), after `Recover partial external workspaces and isolate Kit gates (KIT-GF-087/088) (#2652)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

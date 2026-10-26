@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3
-  short: c1eca200
-  subject: Share identity-bound task selection between CLI and website (#2650)
+  full: f475c0b512c4e787515e0e1e6fedd284b15a50ee
+  short: f475c0b5
+  subject: Recover partial external workspaces and isolate Kit gates (KIT-GF-087/088) (#2652)
 last_substantive_work_state:
-  full: c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3
-  short: c1eca200
-  subject: Share identity-bound task selection between CLI and website (#2650)
+  full: f475c0b512c4e787515e0e1e6fedd284b15a50ee
+  short: f475c0b5
+  subject: Recover partial external workspaces and isolate Kit gates (KIT-GF-087/088) (#2652)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
