@@ -1835,3 +1835,11 @@ documents:
   - path: docs/reports/release/release-run-1.1.6.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/task_tag_inventory_20261026/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: Pinned W1-P0 task-tag metadata inventory and explicit semantic limits
+  - path: docs/reports/task_tag_inventory_20261026/inventory.json
+    class: evidence/log
+    owner: maintainers
+    summary: Machine-readable W1-P0 tag inventory, selector collisions and provenance
