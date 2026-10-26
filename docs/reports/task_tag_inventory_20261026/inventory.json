@@ -1,0 +1,1460 @@
+{
+  "analysis_status": "COMPLETE_METADATA_INVENTORY",
+  "artifact_type": "evidence",
+  "counts": {
+    "multi_orchestrator_tags": 8,
+    "orchestrators": 35,
+    "unassigned": 33,
+    "with_additional_tag_candidates": 2,
+    "with_any_tags": 35
+  },
+  "generator": {
+    "path": "scripts/task_tag_inventory.py",
+    "sha256": "c95bb19a9fcbfa911ed88a3228b47327d00a1b3211be401249162ba6eee43c65"
+  },
+  "historical_baseline": {
+    "counts": {
+      "multi_orchestrator_tags": 8,
+      "orchestrators": 34,
+      "unassigned": 32,
+      "with_additional_tag_candidates": 2,
+      "with_any_tags": 34
+    },
+    "method": "Same metadata lens on the committed historical manifest; no historical runtime execution.",
+    "source_commit": "83977b75d6cd26b171c623e633974c636eb6d424"
+  },
+  "identical_tag_sets": [
+    {
+      "commands": [
+        "agentic-kit artifact-gc",
+        "agentic-kit github-create",
+        "agentic-kit init",
+        "agentic-kit post-release-doi-closeout",
+        "agentic-kit release-prep"
+      ],
+      "tags": [
+        "bounded"
+      ]
+    },
+    {
+      "commands": [
+        "agentic-kit release prepare",
+        "agentic-kit release ready",
+        "agentic-kit release run"
+      ],
+      "tags": [
+        "bounded",
+        "release"
+      ]
+    },
+    {
+      "commands": [
+        "agentic-kit transfer admin-refresh-pr",
+        "agentic-kit transfer chat-switch-complete",
+        "agentic-kit transfer evidence-pr-complete",
+        "agentic-kit transfer pr-complete",
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer remote-next",
+        "agentic-kit transfer remote-work-start",
+        "agentic-kit transfer sync-main"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ]
+    },
+    {
+      "commands": [
+        "agentic-kit work recover",
+        "agentic-kit work rescue",
+        "agentic-kit work start"
+      ],
+      "tags": [
+        "bounded",
+        "work"
+      ]
+    },
+    {
+      "commands": [
+        "agentic-kit workspace dpa-intake",
+        "agentic-kit workspace init",
+        "agentic-kit workspace remove",
+        "agentic-kit workspace upgrade"
+      ],
+      "tags": [
+        "bounded",
+        "workspace"
+      ]
+    },
+    {
+      "commands": [
+        "agentic-kit transfer post-merge-complete",
+        "agentic-kit transfer post-merge-settle"
+      ],
+      "tags": [
+        "destructive",
+        "transfer"
+      ]
+    }
+  ],
+  "input_sha256": {
+    "docs/reference/agentic-kit-commands.json": "e64fef3048cde197c8963358792bb0edde04c15a3fdfe085b068ff60d652073c",
+    "src/agentic_project_kit/command_manifest.py": "69292b28323254e7e1c7cc5624422911a221f5d1880b8652e73f9168ab42c3ea",
+    "src/agentic_project_kit/command_selector.py": "1e84f3c8d249f18d0d8c185e04ae25dab9e39b36a7ea815f888763f37c2c57c4"
+  },
+  "kind": "task_tag_metadata_inventory",
+  "limits": [
+    "Any-tag coverage is not semantic task coverage.",
+    "Additional tags are candidates, not evidence of meaningful or complete task mapping.",
+    "Multi-match tags and identical tag sets are review inputs, not proven semantic conflicts.",
+    "Selector order is its current deterministic order, not a new preferred-route decision.",
+    "No authorization, workflow-state suitability, invocation frequency or context-token reduction is measured.",
+    "Manifest and selector are unchanged; D1 owns a later shared task authority."
+  ],
+  "manifest_sha": "f2cdb65463e0",
+  "orchestrators": [
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit artifact-gc",
+      "group": "root",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded"
+      ],
+      "tags": [
+        "bounded"
+      ],
+      "when_to_use": "Dry-run by default garbage collector for transient communication artifacts."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit chat session-start",
+      "group": "chat",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "READ_ONLY",
+      "structural_tags": [
+        "chat",
+        "read-only"
+      ],
+      "tags": [
+        "chat",
+        "read-only"
+      ],
+      "when_to_use": "Render the session-start refresher and full inline command list."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit docs lifecycle sweep",
+      "group": "docs lifecycle",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "docs-lifecycle"
+      ],
+      "tags": [
+        "bounded",
+        "docs-lifecycle"
+      ],
+      "when_to_use": "Build or apply a bounded documentation lifecycle sweep plan."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit dpa final-closeout-check",
+      "group": "dpa",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "dpa"
+      ],
+      "tags": [
+        "bounded",
+        "dpa"
+      ],
+      "when_to_use": "Validate the bounded DP1-DP5 final closeout record."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit github-create",
+      "group": "root",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded"
+      ],
+      "tags": [
+        "bounded"
+      ],
+      "when_to_use": "Create and push a GitHub repository for an initialized project."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit init",
+      "group": "root",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded"
+      ],
+      "tags": [
+        "bounded"
+      ],
+      "when_to_use": "Create a governed project skeleton with selected profiles and policy packs."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit kit update",
+      "group": "kit",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "kit"
+      ],
+      "tags": [
+        "bounded",
+        "kit"
+      ],
+      "when_to_use": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit post-release-doi-closeout",
+      "group": "root",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded"
+      ],
+      "tags": [
+        "bounded"
+      ],
+      "when_to_use": "Record verified DOI metadata after GitHub release and Zenodo publication."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit release abandon",
+      "group": "release",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "DESTRUCTIVE",
+      "structural_tags": [
+        "destructive",
+        "release"
+      ],
+      "tags": [
+        "destructive",
+        "release"
+      ],
+      "when_to_use": "Abandon a stopped, unpublished release run: delete its release branch and archive the run state."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit release prepare",
+      "group": "release",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "release"
+      ],
+      "tags": [
+        "bounded",
+        "release"
+      ],
+      "when_to_use": "Generate release summary evidence and run release-prep safely."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit release ready",
+      "group": "release",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "release"
+      ],
+      "tags": [
+        "bounded",
+        "release"
+      ],
+      "when_to_use": "Run release readiness through the standard-error scan wrapper."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit release run",
+      "group": "release",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "release"
+      ],
+      "tags": [
+        "bounded",
+        "release"
+      ],
+      "when_to_use": "Run the governed end-to-end release orchestrator with resumable approval gates."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit release-prep",
+      "group": "root",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded"
+      ],
+      "tags": [
+        "bounded"
+      ],
+      "when_to_use": "Prepare release metadata through the supported agentic-kit route."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit release-publish",
+      "group": "root",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "DESTRUCTIVE",
+      "structural_tags": [
+        "destructive"
+      ],
+      "tags": [
+        "destructive"
+      ],
+      "when_to_use": "Plan release publishing without live tag/release side effects."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer admin-refresh-pr",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Create or recover the administrative handoff refresh PR after a merged PR."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer chat-switch-complete",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Create a deterministic successor handoff package and prompt projections."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer evidence-pr-complete",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Finalize transfer evidence on an evidence branch and complete it through a PR."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer post-merge-complete",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "DESTRUCTIVE",
+      "structural_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Run the post-merge handoff refresh lifecycle after a merged PR."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer post-merge-settle",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "DESTRUCTIVE",
+      "structural_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Deterministically settle post-merge generated-output refresh state."
+    },
+    {
+      "additional_tag_candidates": [
+        "closeout",
+        "handoff-after-merge",
+        "post-merge-handoff",
+        "pr-closeout"
+      ],
+      "assignment": "candidate_tags_present",
+      "command": "agentic-kit transfer pr-closeout-complete",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "closeout",
+        "handoff-after-merge",
+        "post-merge-handoff",
+        "pr-closeout",
+        "transfer"
+      ],
+      "when_to_use": "Merge a substantive PR if needed, then finish post-merge handoff closeout."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer pr-complete",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Wait for CI, safely merge an existing PR, and synchronize main."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer pr-create-complete",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer remote-next",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Run the next repo-backed transfer order for local or remote work handoff."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer remote-work-start",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Prepare a remote work branch with freshness, status, and transfer safety checks."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit transfer sync-main",
+      "group": "transfer",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "transfer"
+      ],
+      "tags": [
+        "bounded",
+        "transfer"
+      ],
+      "when_to_use": "Synchronize main, acknowledge rules, and normalize the session."
+    },
+    {
+      "additional_tag_candidates": [
+        "closeout",
+        "finish",
+        "slice-closeout",
+        "slice-finish",
+        "work-finish"
+      ],
+      "assignment": "candidate_tags_present",
+      "command": "agentic-kit work finish",
+      "group": "work",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "work"
+      ],
+      "tags": [
+        "bounded",
+        "closeout",
+        "finish",
+        "slice-closeout",
+        "slice-finish",
+        "work",
+        "work-finish"
+      ],
+      "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit work recover",
+      "group": "work",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "work"
+      ],
+      "tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Run safe recovery/status commands after interrupted work."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit work rescue",
+      "group": "work",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "work"
+      ],
+      "tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Rescue local main work before realigning main to the local base ref."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit work start",
+      "group": "work",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "work"
+      ],
+      "tags": [
+        "bounded",
+        "work"
+      ],
+      "when_to_use": "Start a human patch/slice workflow with the safe standard startup sequence."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit workflow go",
+      "group": "workflow",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "workflow"
+      ],
+      "tags": [
+        "bounded",
+        "workflow"
+      ],
+      "when_to_use": "Request the configured workflow and run one bounded step."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit workspace adopt",
+      "group": "workspace",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "READ_ONLY",
+      "structural_tags": [
+        "read-only",
+        "workspace"
+      ],
+      "tags": [
+        "read-only",
+        "workspace"
+      ],
+      "when_to_use": "Analyze an existing repository without writing workspace files."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit workspace dpa-intake",
+      "group": "workspace",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Run the deterministic DPA repository-intake orchestration."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit workspace init",
+      "group": "workspace",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Plan or create a bounded operating-layer workspace."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit workspace remove",
+      "group": "workspace",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Plan or remove exact Kit-generated operating-layer workspace files."
+    },
+    {
+      "additional_tag_candidates": [],
+      "assignment": "unassigned",
+      "command": "agentic-kit workspace upgrade",
+      "group": "workspace",
+      "missing_structural_tags": [],
+      "producer_default_matches": true,
+      "safety": "BOUNDED",
+      "structural_tags": [
+        "bounded",
+        "workspace"
+      ],
+      "tags": [
+        "bounded",
+        "workspace"
+      ],
+      "when_to_use": "Plan or run deterministic workspace manifest schema upgrades."
+    }
+  ],
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "semantic_coverage": "NOT_ASSESSED",
+  "source_commit": "cdcd5f53e690d37baeeeaab07693ee4d90d3a93c",
+  "status": "active",
+  "tag_selections": [
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit artifact-gc",
+        "agentic-kit docs lifecycle sweep",
+        "agentic-kit dpa final-closeout-check",
+        "agentic-kit github-create",
+        "agentic-kit init",
+        "agentic-kit kit update",
+        "agentic-kit post-release-doi-closeout",
+        "agentic-kit release prepare",
+        "agentic-kit release ready",
+        "agentic-kit release run",
+        "agentic-kit release-prep",
+        "agentic-kit transfer admin-refresh-pr",
+        "agentic-kit transfer chat-switch-complete",
+        "agentic-kit transfer evidence-pr-complete",
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit transfer pr-complete",
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer remote-next",
+        "agentic-kit transfer remote-work-start",
+        "agentic-kit transfer sync-main",
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit work rescue",
+        "agentic-kit work start",
+        "agentic-kit workflow go",
+        "agentic-kit workspace dpa-intake",
+        "agentic-kit workspace init",
+        "agentic-kit workspace remove",
+        "agentic-kit workspace upgrade"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit artifact-gc",
+        "agentic-kit docs lifecycle sweep",
+        "agentic-kit dpa final-closeout-check",
+        "agentic-kit github-create",
+        "agentic-kit init",
+        "agentic-kit kit update",
+        "agentic-kit post-release-doi-closeout",
+        "agentic-kit release prepare",
+        "agentic-kit release ready",
+        "agentic-kit release run",
+        "agentic-kit release-prep",
+        "agentic-kit transfer admin-refresh-pr",
+        "agentic-kit transfer chat-switch-complete",
+        "agentic-kit transfer evidence-pr-complete",
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit transfer pr-complete",
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer remote-next",
+        "agentic-kit transfer remote-work-start",
+        "agentic-kit transfer sync-main",
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit work rescue",
+        "agentic-kit work start",
+        "agentic-kit workflow go",
+        "agentic-kit workspace dpa-intake",
+        "agentic-kit workspace init",
+        "agentic-kit workspace remove",
+        "agentic-kit workspace upgrade",
+        "agentic-kit ci runtime-plan",
+        "agentic-kit context render",
+        "agentic-kit direction render",
+        "agentic-kit doc-registry check-unregistered",
+        "agentic-kit dpa dp2-decision-readiness",
+        "agentic-kit dpa dp3-dp4-adjudication-check",
+        "agentic-kit dpa dp5-block-new-gate",
+        "agentic-kit dpa dp5-stage-check",
+        "agentic-kit dpa dp5-strict-gate",
+        "agentic-kit dpa maintainer-record-check",
+        "agentic-kit dpa post-dp2-scope-assessment",
+        "agentic-kit dpa probe-002-readiness",
+        "agentic-kit dpa probe-003-readiness",
+        "agentic-kit dpa probe-004-readiness",
+        "agentic-kit dpa readiness",
+        "agentic-kit dpa renderer-readiness",
+        "agentic-kit dpa repo-adoption-assessment",
+        "agentic-kit dpa stable-readiness-check",
+        "agentic-kit evidence classify-log",
+        "agentic-kit evidence clean-check",
+        "agentic-kit evidence scope-check",
+        "agentic-kit gui-readiness-gate",
+        "agentic-kit pass-already-done classify",
+        "agentic-kit post-release-check",
+        "agentic-kit pr closeout-check",
+        "agentic-kit pr rerun-checks",
+        "agentic-kit release-check",
+        "agentic-kit release-plan",
+        "agentic-kit release-status",
+        "agentic-kit remote-branch-hygiene-report",
+        "agentic-kit scaffold planning-doc",
+        "agentic-kit state freshness-check",
+        "agentic-kit state mode-check",
+        "agentic-kit todo render",
+        "agentic-kit transfer command-composition-check",
+        "agentic-kit transfer conflict-status",
+        "agentic-kit transfer diagnose-removed-ns-commands",
+        "agentic-kit transfer evidence-inspect-latest",
+        "agentic-kit transfer list-refs",
+        "agentic-kit transfer order-validate",
+        "agentic-kit transfer patch-cycle-status",
+        "agentic-kit transfer pr-status",
+        "agentic-kit transfer repo-status",
+        "agentic-kit transfer show-last-report",
+        "agentic-kit work-order typed-queue-status",
+        "agentic-kit workflow fail-report",
+        "agentic-kit workflow-guard diagnose",
+        "agentic-kit boot closeout",
+        "agentic-kit boot prompt",
+        "agentic-kit boot write",
+        "agentic-kit cockpit run",
+        "agentic-kit cockpit select",
+        "agentic-kit commands sync-entrypoints",
+        "agentic-kit dev local-feature-gate",
+        "agentic-kit doc-mesh-repair",
+        "agentic-kit doc-registry reconcile",
+        "agentic-kit doc-registry register",
+        "agentic-kit docs lifecycle apply",
+        "agentic-kit docs lifecycle bootstrap",
+        "agentic-kit docs-registry",
+        "agentic-kit dpa current-handoff-refresh",
+        "agentic-kit dpa fixture-evidence",
+        "agentic-kit dpa readonly-probe-execution",
+        "agentic-kit dpa wrt-ch001-evidence",
+        "agentic-kit evidence clean",
+        "agentic-kit evidence commit-paths",
+        "agentic-kit evidence finalize-log",
+        "agentic-kit evidence guard",
+        "agentic-kit executor run",
+        "agentic-kit greenfield export",
+        "agentic-kit gui initial-llm-prompt",
+        "agentic-kit handoff prompt",
+        "agentic-kit handoff refresh",
+        "agentic-kit patch-preflight",
+        "agentic-kit patch-scope-preflight",
+        "agentic-kit pr wait-ci",
+        "agentic-kit pr-closeout",
+        "agentic-kit pr-hygiene",
+        "agentic-kit profile-explain",
+        "agentic-kit project-direction",
+        "agentic-kit release-metadata-authority-gate",
+        "agentic-kit release-notes-generate",
+        "agentic-kit release-preflight",
+        "agentic-kit remote-branch-hygiene",
+        "agentic-kit remote-branch-hygiene-apply",
+        "agentic-kit remote-next",
+        "agentic-kit rn",
+        "agentic-kit rnc",
+        "agentic-kit rule-registry bootstrap",
+        "agentic-kit rule-registry register",
+        "agentic-kit rules acknowledge",
+        "agentic-kit rules acknowledge-communication-refresh",
+        "agentic-kit rules communication-refresh",
+        "agentic-kit rules handoff-refresh",
+        "agentic-kit rules require-current-communication-context",
+        "agentic-kit rules snapshot",
+        "agentic-kit slice gate",
+        "agentic-kit state mode-write",
+        "agentic-kit todo complete",
+        "agentic-kit transfer apply",
+        "agentic-kit transfer branch-create",
+        "agentic-kit transfer branch-switch",
+        "agentic-kit transfer closeout",
+        "agentic-kit transfer command-reference-refresh",
+        "agentic-kit transfer command-stack-begin",
+        "agentic-kit transfer command-stack-end",
+        "agentic-kit transfer commit",
+        "agentic-kit transfer conflict-resolve-file",
+        "agentic-kit transfer continue",
+        "agentic-kit transfer evidence-finalize-current-transfer",
+        "agentic-kit transfer fetch-origin",
+        "agentic-kit transfer log-header",
+        "agentic-kit transfer log-upload-hint",
+        "agentic-kit transfer normalize-files",
+        "agentic-kit transfer normalize-session",
+        "agentic-kit transfer order-create",
+        "agentic-kit transfer pr-close-superseded",
+        "agentic-kit transfer pr-create",
+        "agentic-kit transfer pr-existing-for-branch",
+        "agentic-kit transfer pr-wait-ci",
+        "agentic-kit transfer prepare-successor-handoff",
+        "agentic-kit transfer pull-current",
+        "agentic-kit transfer push-current",
+        "agentic-kit transfer read-user-task",
+        "agentic-kit transfer rebase-on-upstream",
+        "agentic-kit transfer refresh-llm-context-carriers",
+        "agentic-kit transfer restore-known-volatile",
+        "agentic-kit transfer run-and-log",
+        "agentic-kit transfer run-local",
+        "agentic-kit transfer run-sequence-and-log",
+        "agentic-kit transfer standard-error-scan",
+        "agentic-kit transfer submit-user-task",
+        "agentic-kit transfer work-order-patch",
+        "agentic-kit transfer workflow-next",
+        "agentic-kit work discard-changes",
+        "agentic-kit work-order prepare",
+        "agentic-kit work-order run",
+        "agentic-kit work-order templates",
+        "agentic-kit work-order typed-next",
+        "agentic-kit work-order typed-run",
+        "agentic-kit work-order upload",
+        "agentic-kit workflow cleanup",
+        "agentic-kit workflow request",
+        "agentic-kit workflow run",
+        "agentic-kit workflow upload",
+        "agentic-kit workflow upload-output",
+        "agentic-kit workspace ci-update"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "bounded"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit chat session-start"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit chat session-start",
+        "agentic-kit chat refresher"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "chat"
+    },
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit work finish"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit work finish"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "closeout"
+    },
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit release abandon",
+        "agentic-kit release-publish",
+        "agentic-kit transfer post-merge-complete",
+        "agentic-kit transfer post-merge-settle"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit release abandon",
+        "agentic-kit release-publish",
+        "agentic-kit transfer post-merge-complete",
+        "agentic-kit transfer post-merge-settle",
+        "agentic-kit docs lifecycle propose-delete",
+        "agentic-kit pr merge-if-green",
+        "agentic-kit transfer branch-delete",
+        "agentic-kit transfer delete-merged-work-branch",
+        "agentic-kit transfer pr-merge-safe",
+        "agentic-kit transfer publish-last-report"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "destructive"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit docs lifecycle sweep"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit docs lifecycle plan",
+        "agentic-kit docs lifecycle report",
+        "agentic-kit docs lifecycle triage",
+        "agentic-kit docs lifecycle sweep",
+        "agentic-kit docs lifecycle apply",
+        "agentic-kit docs lifecycle bootstrap",
+        "agentic-kit docs lifecycle propose-delete"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "docs-lifecycle"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit dpa final-closeout-check"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit dpa final-closeout-check",
+        "agentic-kit dpa dp2-decision-readiness",
+        "agentic-kit dpa dp3-dp4-adjudication-check",
+        "agentic-kit dpa dp5-block-new-gate",
+        "agentic-kit dpa dp5-stage-check",
+        "agentic-kit dpa dp5-strict-gate",
+        "agentic-kit dpa maintainer-record-check",
+        "agentic-kit dpa post-dp2-scope-assessment",
+        "agentic-kit dpa probe-002-readiness",
+        "agentic-kit dpa probe-003-readiness",
+        "agentic-kit dpa probe-004-readiness",
+        "agentic-kit dpa readiness",
+        "agentic-kit dpa renderer-readiness",
+        "agentic-kit dpa repo-adoption-assessment",
+        "agentic-kit dpa stable-readiness-check",
+        "agentic-kit dpa current-handoff-refresh",
+        "agentic-kit dpa fixture-evidence",
+        "agentic-kit dpa readonly-probe-execution",
+        "agentic-kit dpa wrt-ch001-evidence"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "dpa"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit work finish"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit work finish"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "finish"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit transfer pr-closeout-complete"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit transfer pr-closeout-complete"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "handoff-after-merge"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit kit update"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit kit status",
+        "agentic-kit kit update"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "kit"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit transfer pr-closeout-complete"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit transfer pr-closeout-complete"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "post-merge-handoff"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit transfer pr-closeout-complete"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit transfer pr-closeout-complete"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "pr-closeout"
+    },
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit chat session-start",
+        "agentic-kit workspace adopt"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit chat session-start",
+        "agentic-kit workspace adopt",
+        "agentic-kit actions list",
+        "agentic-kit actions show",
+        "agentic-kit audit-absolute-path-portability",
+        "agentic-kit audit-command-authority",
+        "agentic-kit audit-command-manifest",
+        "agentic-kit audit-doc-currency",
+        "agentic-kit audit-doc-orphans",
+        "agentic-kit audit-drift-signals",
+        "agentic-kit audit-mutation-lock-coverage",
+        "agentic-kit audit-ns-legacy-references",
+        "agentic-kit audit-patch-failure-discipline",
+        "agentic-kit audit-path-literals",
+        "agentic-kit audit-planning-docs-consolidation",
+        "agentic-kit audit-program-redundancy",
+        "agentic-kit audit-status-current-state",
+        "agentic-kit boot check",
+        "agentic-kit boot report",
+        "agentic-kit chat refresher",
+        "agentic-kit check",
+        "agentic-kit check-docs",
+        "agentic-kit check-todo",
+        "agentic-kit ci status",
+        "agentic-kit cockpit actions",
+        "agentic-kit cockpit gatekeeper-status",
+        "agentic-kit cockpit status",
+        "agentic-kit command-for",
+        "agentic-kit command-taxonomy-check",
+        "agentic-kit commands render-md",
+        "agentic-kit context report",
+        "agentic-kit direction audit-drift",
+        "agentic-kit direction validate",
+        "agentic-kit doc-lifecycle-audit",
+        "agentic-kit doc-mesh-audit",
+        "agentic-kit docs lifecycle plan",
+        "agentic-kit docs lifecycle report",
+        "agentic-kit docs lifecycle triage",
+        "agentic-kit docs removed-source-audit",
+        "agentic-kit docs-audit",
+        "agentic-kit doctor",
+        "agentic-kit evidence inspect",
+        "agentic-kit executor plan",
+        "agentic-kit governance check",
+        "agentic-kit greenfield retest",
+        "agentic-kit greenfield status",
+        "agentic-kit handoff check",
+        "agentic-kit handoff post-merge-refresh-status",
+        "agentic-kit handoff show",
+        "agentic-kit instruction lint",
+        "agentic-kit kit status",
+        "agentic-kit ledger report",
+        "agentic-kit onboarding measure",
+        "agentic-kit pass-already-done report",
+        "agentic-kit patterns list",
+        "agentic-kit patterns show",
+        "agentic-kit pr status",
+        "agentic-kit rule-registry check",
+        "agentic-kit rule-registry report",
+        "agentic-kit rules validate-sources",
+        "agentic-kit standard-gates-audit-suite",
+        "agentic-kit todo list",
+        "agentic-kit transfer command-reference-check",
+        "agentic-kit transfer divergence-status",
+        "agentic-kit transfer head-sha",
+        "agentic-kit transfer inspect",
+        "agentic-kit transfer post-merge-check",
+        "agentic-kit transfer protected-diff-plan",
+        "agentic-kit transfer repo-diff",
+        "agentic-kit transfer repo-log",
+        "agentic-kit transfer require-fresh-llm-context",
+        "agentic-kit transfer state",
+        "agentic-kit transfer status",
+        "agentic-kit transfer verify-llm-context-refresh",
+        "agentic-kit validate-contract",
+        "agentic-kit validate-output-contract",
+        "agentic-kit validate-sections",
+        "agentic-kit work check",
+        "agentic-kit work-order check",
+        "agentic-kit work-order list",
+        "agentic-kit work-order show",
+        "agentic-kit workflow list",
+        "agentic-kit workflow show",
+        "agentic-kit workflow state",
+        "agentic-kit workflow status",
+        "agentic-kit workflow-guard check"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "read-only"
+    },
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit release abandon",
+        "agentic-kit release prepare",
+        "agentic-kit release ready",
+        "agentic-kit release run"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit release prepare",
+        "agentic-kit release ready",
+        "agentic-kit release run",
+        "agentic-kit release abandon"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "release"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit work finish"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit work finish"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "slice-closeout"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit work finish"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit work finish"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "slice-finish"
+    },
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit transfer admin-refresh-pr",
+        "agentic-kit transfer chat-switch-complete",
+        "agentic-kit transfer evidence-pr-complete",
+        "agentic-kit transfer post-merge-complete",
+        "agentic-kit transfer post-merge-settle",
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit transfer pr-complete",
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer remote-next",
+        "agentic-kit transfer remote-work-start",
+        "agentic-kit transfer sync-main"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit transfer command-reference-check",
+        "agentic-kit transfer divergence-status",
+        "agentic-kit transfer head-sha",
+        "agentic-kit transfer inspect",
+        "agentic-kit transfer post-merge-check",
+        "agentic-kit transfer protected-diff-plan",
+        "agentic-kit transfer repo-diff",
+        "agentic-kit transfer repo-log",
+        "agentic-kit transfer require-fresh-llm-context",
+        "agentic-kit transfer state",
+        "agentic-kit transfer status",
+        "agentic-kit transfer verify-llm-context-refresh",
+        "agentic-kit transfer admin-refresh-pr",
+        "agentic-kit transfer chat-switch-complete",
+        "agentic-kit transfer evidence-pr-complete",
+        "agentic-kit transfer pr-closeout-complete",
+        "agentic-kit transfer pr-complete",
+        "agentic-kit transfer pr-create-complete",
+        "agentic-kit transfer remote-next",
+        "agentic-kit transfer remote-work-start",
+        "agentic-kit transfer sync-main",
+        "agentic-kit transfer command-composition-check",
+        "agentic-kit transfer conflict-status",
+        "agentic-kit transfer diagnose-removed-ns-commands",
+        "agentic-kit transfer evidence-inspect-latest",
+        "agentic-kit transfer list-refs",
+        "agentic-kit transfer order-validate",
+        "agentic-kit transfer patch-cycle-status",
+        "agentic-kit transfer pr-status",
+        "agentic-kit transfer repo-status",
+        "agentic-kit transfer show-last-report",
+        "agentic-kit transfer apply",
+        "agentic-kit transfer branch-create",
+        "agentic-kit transfer branch-switch",
+        "agentic-kit transfer closeout",
+        "agentic-kit transfer command-reference-refresh",
+        "agentic-kit transfer command-stack-begin",
+        "agentic-kit transfer command-stack-end",
+        "agentic-kit transfer commit",
+        "agentic-kit transfer conflict-resolve-file",
+        "agentic-kit transfer continue",
+        "agentic-kit transfer evidence-finalize-current-transfer",
+        "agentic-kit transfer fetch-origin",
+        "agentic-kit transfer log-header",
+        "agentic-kit transfer log-upload-hint",
+        "agentic-kit transfer normalize-files",
+        "agentic-kit transfer normalize-session",
+        "agentic-kit transfer order-create",
+        "agentic-kit transfer pr-close-superseded",
+        "agentic-kit transfer pr-create",
+        "agentic-kit transfer pr-existing-for-branch",
+        "agentic-kit transfer pr-wait-ci",
+        "agentic-kit transfer prepare-successor-handoff",
+        "agentic-kit transfer pull-current",
+        "agentic-kit transfer push-current",
+        "agentic-kit transfer read-user-task",
+        "agentic-kit transfer rebase-on-upstream",
+        "agentic-kit transfer refresh-llm-context-carriers",
+        "agentic-kit transfer restore-known-volatile",
+        "agentic-kit transfer run-and-log",
+        "agentic-kit transfer run-local",
+        "agentic-kit transfer run-sequence-and-log",
+        "agentic-kit transfer standard-error-scan",
+        "agentic-kit transfer submit-user-task",
+        "agentic-kit transfer work-order-patch",
+        "agentic-kit transfer workflow-next",
+        "agentic-kit transfer post-merge-complete",
+        "agentic-kit transfer post-merge-settle",
+        "agentic-kit transfer branch-delete",
+        "agentic-kit transfer delete-merged-work-branch",
+        "agentic-kit transfer pr-merge-safe",
+        "agentic-kit transfer publish-last-report"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "transfer"
+    },
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit work rescue",
+        "agentic-kit work start"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit work check",
+        "agentic-kit work finish",
+        "agentic-kit work recover",
+        "agentic-kit work rescue",
+        "agentic-kit work start",
+        "agentic-kit work discard-changes"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "work"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit work finish"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit work finish"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "work-finish"
+    },
+    {
+      "multiple_orchestrators": false,
+      "orchestrators": [
+        "agentic-kit workflow go"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit workflow list",
+        "agentic-kit workflow show",
+        "agentic-kit workflow state",
+        "agentic-kit workflow status",
+        "agentic-kit workflow go",
+        "agentic-kit workflow fail-report",
+        "agentic-kit workflow cleanup",
+        "agentic-kit workflow request",
+        "agentic-kit workflow run",
+        "agentic-kit workflow upload",
+        "agentic-kit workflow upload-output"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "workflow"
+    },
+    {
+      "multiple_orchestrators": true,
+      "orchestrators": [
+        "agentic-kit workspace adopt",
+        "agentic-kit workspace dpa-intake",
+        "agentic-kit workspace init",
+        "agentic-kit workspace remove",
+        "agentic-kit workspace upgrade"
+      ],
+      "selector_matches_all_surfaces": [
+        "agentic-kit workspace adopt",
+        "agentic-kit workspace dpa-intake",
+        "agentic-kit workspace init",
+        "agentic-kit workspace remove",
+        "agentic-kit workspace upgrade",
+        "agentic-kit workspace ci-update"
+      ],
+      "semantic_ambiguity": "NOT_ASSESSED",
+      "tag": "workspace"
+    }
+  ],
+  "unassigned": [
+    "agentic-kit artifact-gc",
+    "agentic-kit chat session-start",
+    "agentic-kit docs lifecycle sweep",
+    "agentic-kit dpa final-closeout-check",
+    "agentic-kit github-create",
+    "agentic-kit init",
+    "agentic-kit kit update",
+    "agentic-kit post-release-doi-closeout",
+    "agentic-kit release abandon",
+    "agentic-kit release prepare",
+    "agentic-kit release ready",
+    "agentic-kit release run",
+    "agentic-kit release-prep",
+    "agentic-kit release-publish",
+    "agentic-kit transfer admin-refresh-pr",
+    "agentic-kit transfer chat-switch-complete",
+    "agentic-kit transfer evidence-pr-complete",
+    "agentic-kit transfer post-merge-complete",
+    "agentic-kit transfer post-merge-settle",
+    "agentic-kit transfer pr-complete",
+    "agentic-kit transfer pr-create-complete",
+    "agentic-kit transfer remote-next",
+    "agentic-kit transfer remote-work-start",
+    "agentic-kit transfer sync-main",
+    "agentic-kit work recover",
+    "agentic-kit work rescue",
+    "agentic-kit work start",
+    "agentic-kit workflow go",
+    "agentic-kit workspace adopt",
+    "agentic-kit workspace dpa-intake",
+    "agentic-kit workspace init",
+    "agentic-kit workspace remove",
+    "agentic-kit workspace upgrade"
+  ]
+}

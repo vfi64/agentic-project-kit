@@ -85,6 +85,12 @@ meta:
         scope: Owner approved W2 with the 1.1.6/E1 planning refresh on 2026-10-26.
           Project pinned historical WOTB and offline benchmark evidence without
           a current security certification or any new benchmark execution.
+      - id: website-evidence-and-command-navigation
+        step: w1-p0-task-tag-inventory
+        status: done
+        scope: Owner approved W1-P0 on 2026-10-26. Inventory current metadata and
+          actual selector multi-matches without changing task tags, command selection,
+          permissions or the website task-navigation authority. D1 remains separate.
       - id: external-retest-machine-contracts
         status: blocked
         scope: Main item remains active; c1 and c3 are done. Release 1.1.6 meets
@@ -2044,6 +2050,9 @@ plans:
   - docs/archive/WORKFLOW_REDUCTION_FOCUS.md
 - id: decomplexification-audit-roadmap
   status: active
+  evidence_inputs:
+  - docs/reports/task_tag_inventory_20261026/inventory.json
+  input_boundary: Candidate tag collisions do not justify command deletion, a new taxonomy or a preferred-route decision.
   title: Reduce command-surface complexity through compatibility-preserving facades
   depends_on:
   - pre-gui-hardening-plan
@@ -2203,6 +2212,9 @@ plans:
   - docs/reports/DECOMPLEXIFICATION_AUDIT_20260815.json
 - id: context-budgeted-handoff-projections
   status: planned
+  evidence_inputs:
+  - docs/reports/task_tag_inventory_20261026/README.md
+  input_boundary: Task-tag availability is not measured context-token reduction; paid benchmark repetition remains deferred.
   title: Reduce agent token consumption through deterministic context projections
   depends_on:
   - next-turn-workflow-kernel
@@ -2599,7 +2611,12 @@ plans:
       generalization needs held-out independent review, not a reused test suite.
     - Reuse existing site claims and explanation projections where possible.
   - id: w1-p0-task-tag-inventory
-    status: planned
+    status: done
+    evidence:
+    - docs/reports/task_tag_inventory_20261026/README.md
+    - docs/reports/task_tag_inventory_20261026/inventory.json
+    - tests/test_task_tag_inventory.py
+    completion_boundary: Metadata inventory only; additional tags and multi-match sets are D1 review inputs, not preferred routes or semantic coverage.
     priority: parallel_with_w0_w2
     acceptance:
     - Report for all current orchestrators presence of any tags, structural
@@ -2610,6 +2627,9 @@ plans:
     - Feed findings into decomplexification and the existing agent context plan.
   - id: d1-shared-task-command-selection
     status: planned
+    evidence_inputs:
+    - docs/reports/task_tag_inventory_20261026/inventory.json
+    input_boundary: W1-P0 lists unassigned commands and candidate collisions only; D1 must still decide task meaning, state suitability and shared preferred routes.
     owner_plan: decomplexification-audit-roadmap
     acceptance:
     - Define preferred task-to-command routes once within the existing command

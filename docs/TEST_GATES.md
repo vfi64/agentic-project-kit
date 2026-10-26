@@ -1,5 +1,15 @@
 # Test Gates
 
+## W1-P0 task-tag metadata inventory
+
+`tests/test_task_tag_inventory.py` distinguishes any-tag coverage, producer-derived
+structural tags and explicit additional candidates. It checks unassigned commands,
+custom tag overrides, real selector ordering across surfaces, candidate collisions,
+malformed metadata, source drift, deterministic rendering and the historical
+34/34 tagged with 2/34 additional-tag baseline. This does not prove meaningful
+semantic coverage, preferred routes, permissions or context-token savings.
+
+
 ## Offline path observation and generated workflow figures
 
 `tests/test_offline_path_observation.py` checks callback-only direct edges, shared
