@@ -1,0 +1,132 @@
+"""Reviewed route metadata exported by the command manifest; never an executor."""
+
+from __future__ import annotations
+
+from copy import deepcopy
+
+# Owner adopted option A and the reviewed first matrix on 2026-10-26.
+_TASK_ROUTES = {
+    "schema_version": 1,
+    "facts_schema": {
+        "workspace_mode": ["managed", "unmanaged"],
+        "branch_role": ["main", "work"],
+        "worktree_clean": "boolean",
+        "pr_state": ["none", "open", "merged", "closed"],
+        "release_state": ["none", "prepared", "published", "blocked", "complete"],
+    },
+    "routes": [
+        {
+            "task": "check_work",
+            "command": "agentic-kit check",
+            "phase": "diagnostic",
+            "when": {"workspace_mode": "managed"},
+            "inputs": {},
+            "review_note": "Gate outcome is not proof that requirements are correct.",
+        },
+        {
+            "task": "diagnose_repository",
+            "command": "agentic-kit doctor",
+            "phase": "diagnostic",
+            "when": {"workspace_mode": "managed"},
+            "inputs": {},
+            "review_note": "Inspect health; do not infer a repair or execute one.",
+        },
+        {
+            "task": "assess_adoption",
+            "command": "agentic-kit workspace adopt",
+            "phase": "diagnostic",
+            "when": {"workspace_mode": "unmanaged"},
+            "inputs": {},
+            "review_note": "Assessment may recommend initialization; recommendation is not "
+            "execution.",
+        },
+        {
+            "task": "initialize_workspace",
+            "command": "agentic-kit workspace init",
+            "phase": "planning",
+            "when": {"workspace_mode": "unmanaged"},
+            "inputs": {},
+            "review_note": "Inspect the installed command plan; do not add --execute from a "
+            "selection result.",
+        },
+        {
+            "task": "start_work",
+            "command": "agentic-kit work start",
+            "phase": "guarded",
+            "when": {"workspace_mode": "managed", "worktree_clean": True},
+            "inputs": {"branch": "nonempty_string"},
+            "review_note": "Fetch and branch effects require the existing operation authorization.",
+        },
+        {
+            "task": "finish_work",
+            "command": "agentic-kit work finish",
+            "phase": "planning",
+            "when": {"workspace_mode": "managed", "branch_role": "work"},
+            "inputs": {
+                "branch": "nonempty_string",
+                "title": "nonempty_string",
+                "message": "nonempty_string",
+                "paths": "nonempty_string_list",
+            },
+            "review_note": "Whole-slice plan; an already open PR is a separate explicit intent, "
+            "never inferred from closeout tags.",
+        },
+        {
+            "task": "complete_open_pr",
+            "command": "agentic-kit transfer pr-complete",
+            "phase": "guarded",
+            "when": {"workspace_mode": "managed", "pr_state": "open"},
+            "inputs": {"pr_number": "positive_integer", "expected_head_sha": "full_commit"},
+            "review_note": "Pending CI is handled by the selected workflow; selection does not "
+            "authorize its merge.",
+        },
+        {
+            "task": "settle_merged_pr",
+            "command": "agentic-kit transfer pr-closeout-complete",
+            "phase": "guarded",
+            "when": {"workspace_mode": "managed", "pr_state": "merged"},
+            "inputs": {"after_pr": "positive_integer"},
+            "review_note": "Handoff refresh may itself merge an administrative PR; include that "
+            "effect in operation consent.",
+        },
+        {
+            "task": "prepare_handoff",
+            "command": "agentic-kit transfer chat-switch-complete",
+            "phase": "guarded",
+            "when": {"workspace_mode": "managed"},
+            "inputs": {},
+            "review_note": "Writes generated repository projections despite having no remote "
+            "effect.",
+        },
+        {
+            "task": "update_kit",
+            "command": "agentic-kit kit update",
+            "phase": "planning",
+            "when": {"workspace_mode": "managed", "branch_role": "work", "worktree_clean": True},
+            "inputs": {"version": "stable_version"},
+            "review_note": "Planning can download wheels and write temporary reports; "
+            "signature-gated install remains separate.",
+        },
+        {
+            "task": "release_version",
+            "command": "agentic-kit release run",
+            "phase": "guarded",
+            "when": {
+                "workspace_mode": "managed",
+                "branch_role": "main",
+                "worktree_clean": True,
+                "release_state": "none",
+            },
+            "inputs": {"version": "stable_version"},
+            "review_note": "Fresh release only; existing runs need a separate explicit "
+            "resume/recovery intent. Without --execute the orchestrator still "
+            "performs local A/B preparation; publication consent stays separate "
+            "and version/tag/head-bound.",
+        },
+    ],
+}
+
+
+def task_routes_export() -> dict:
+    """Return a detached export; consumers cannot mutate the authority."""
+    return deepcopy(_TASK_ROUTES)

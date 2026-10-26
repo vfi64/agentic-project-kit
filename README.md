@@ -513,7 +513,7 @@ sourced editorial snapshots; current Kit facts derive from repository sources.
 
 `site/scripts/build.py` uses `agentic_project_kit.site_generator` for ignored
 `site/dist/`: package version, Python requirement, command
-count, `meta.manifest_sha`, `manifest_sha(commands)`, and build commit. The
+count, `meta.manifest_sha`, `manifest_identity(manifest)` (schema 2: `manifest_sha(commands)`), and build commit. The
 site is not a second hand-maintained technical truth surface.
 
 Pages: <https://vfi64.github.io/agentic-project-kit/>. Workflow
@@ -811,3 +811,14 @@ Verified version-specific DOI history is maintained in `docs/releases/VERIFIED_R
 - `agentic-kit workflow upload`
 - `.agentic/workflow_state`
 Supported cockpit status check: `agentic-kit cockpit status`.
+
+### Shared task selection
+
+`agentic-kit command-for --intent check_work --root . --json` observes local
+repository facts and returns a conditional route, never execution permission.
+Explicit task parameters use `--inputs` with a JSON object. Exact PR observation
+requires `--observe-pr`; without it PR state remains unknown. The generated
+[task guide](https://vfi64.github.io/agentic-project-kit/commands/guided.html)
+and agent selection use the same identity-bound manifest export. Raw/tag lookup
+remains compatible; see `docs/reference/TASK_COMMAND_SELECTION_CONTRACT.md` for
+schema migration, result states and limits.

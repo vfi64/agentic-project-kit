@@ -40,8 +40,8 @@ def computed_command_manifest_sha(manifest: dict[str, Any]) -> str:
     commands = manifest.get("commands")
     if not isinstance(commands, list):
         return command_manifest_sha(manifest)
-    canonical = json.dumps(commands, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    return hashlib.sha256(canonical).hexdigest()[:12]
+    from .command_manifest import manifest_identity
+    return manifest_identity(manifest)
 
 
 def command_manifest_ack_line(manifest: dict[str, Any]) -> str:

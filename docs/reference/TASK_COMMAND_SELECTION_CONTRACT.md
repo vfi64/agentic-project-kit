@@ -1,20 +1,27 @@
 ---
 artifact_type: specification
-status: proposed
+status: accepted
 schema_version: 1
 ---
 
-Status: proposed
+Status: accepted
 Status-date: 2026-10-26
 Superseded-by: n/a
 Document class: architecture
 
-# D1 — Proposed task selection contract
+# D1 — Shared task selection contract
 
-**Not operational.** The requirements below apply to a future owner-approved
-implementation. Existing `command-for --raw` and `--task` behavior, manifest metadata,
-ACK, runtime capabilities and release gates are unchanged. See the proposed
-`docs/architecture/ADR_TASK_COMMAND_SELECTION.md` for the authority decision.
+Owner adopted option A on 2026-10-26. The source is `task_routes.py` inside the existing command metadata authority, exported as `task_routes` in manifest schema 3. There is no website-owned routing authority. Historical review YAML is archived and never read by production code.
+
+## CLI contract and compatibility
+
+`agentic-kit command-for --intent <exact-task-id> --inputs '<JSON object>' --root <repository> --json` selects a route only. `--inputs` defaults to `{}`. No shell command or argv is constructed. Exactly one of `--raw`, `--task`, `--intent` is required. Legacy raw/tag payloads, ordering and exit behavior remain unchanged. New intent mode exits 0 for MATCH, 2 for every other structured state; text and JSON carry the same result fields. Invalid mode combinations exit 2. No repository writes occur. The manifest conservatively declares network_read because of --observe-pr; local selection modes never contact a remote. A caller forbidding all declared network effects may therefore refuse the whole command family.
+
+Facts are observed by a read-only adapter using existing workspace configuration and origin identity. HEAD is read before and after observation, root must equal the Git root, and branch role uses the locally recorded origin default branch, never an assumed main. Detached/missing default branch stays unknown. Every existing release-run state or local version tag blocks fresh-release routing; remote tag absence is not asserted and release preflight remains mandatory.
+
+PR intents require `--observe-pr` to opt into a single read of the explicitly supplied PR number, pinned to origin repository. No listing/search/fetch fills gaps. The observed repository, number and full head must match the supplied identity; otherwise NEEDS_FACTS. With no opt-in the PR state remains unknown. Caller-provided facts, consent or expected signatures are never accepted as trusted observation.
+
+Manifest schema 3 / metadata schema 2 hashes `{schema_version, commands, task_routes}`; route schema 1 is mandatory for intent mode. Schema 2 keeps `manifest_sha(commands)` for legacy raw/tag clients but cannot supply intent selection. Route tampering changes the ACK; unsupported schemas and mismatched identities fail closed. This checksum detects drift and is not a cryptographic signature or proof of authenticity. Existing signed execution gates remain separate.
 
 ## Inputs and trust boundary
 
@@ -32,7 +39,7 @@ JSON fact is not automatically trustworthy; the production adapter owns observat
 and identity validation. The test-only evaluator models these conditions; it does not
 prove provenance or supply a runtime security guard.
 
-## Proposed result states
+## Result states
 
 | Result | Meaning | Executable authority |
 |---|---|---|
@@ -67,7 +74,7 @@ See `_step_b1`/`_step_b2` in release_run.py. Whole-release publication consent s
 version/tag/commit-bound and separate from task selection. Current prepare_handoff
 also writes projections; it is not a read-only diagnostic.
 
-The inactive matrix `docs/reference/TASK_COMMAND_SELECTION_PROPOSAL.yaml` includes
+The shared manifest export includes
 explicit intents covering diagnosis/adoption, initialization, work start/finish,
 open-PR completion, merged-PR settlement, handoff, Kit update and release preparation.
 It names parameter fields for validation, not command-line templates. A planning
@@ -85,12 +92,11 @@ produce NEEDS_FACTS; known mismatches are BLOCKED. If two routes match, return
 AMBIGUOUS even when they name the same command. Unknown task IDs remain UNKNOWN_TASK.
 Validate required input types and bind each named input to a real command parameter.
 
-The design evaluator is developer/test-only and has no execution path. Its fictional
-facts demonstrate expected decisions; they do not validate a real working tree.
+The pure evaluator has no execution path. Unit fixture facts demonstrate expected decisions; production observations remain the adapter’s responsibility.
 Document review remains necessary for whether each proposed task means what a user
 expects. Passing tests establish structural consistency, not semantic correctness.
 
-## Production implementation acceptance (after owner decision)
+## Production implementation acceptance
 
 1. Implement a single shared task_routes export under the existing manifest authority;
    bind it to manifest identity and a supported schema. Remove or archive the inactive
@@ -106,4 +112,4 @@ expects. Passing tests establish structural consistency, not semantic correctnes
 6. Review invocation evidence and dependencies before removal/deprecation. Measure
    agent-context effects separately; no paid pilot repetitions are authorized here.
 
-No public CLI change, release, live recovery or publication is part of this design slice.
+No release, live recovery or publication is authorized by selection. No public CLI change is made to legacy raw/tag modes.

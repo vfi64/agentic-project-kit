@@ -1403,7 +1403,7 @@
         "diagnostic_priority": "advanced_diagnostic",
         "dry_run_available": false,
         "group": "root",
-        "help": "Select the deterministic wrapper command for a raw command or task tag.",
+        "help": "Select by raw command, task tag or explicit state-aware intent; never execute.",
         "lifecycle_rank": null,
         "params": [
           {
@@ -1421,6 +1421,33 @@
             "name": "task",
             "opts": [
               "--task"
+            ],
+            "required": false
+          },
+          {
+            "default": null,
+            "help": "Exact task ID from manifest task_routes; selection grants no execution authority.",
+            "name": "intent",
+            "opts": [
+              "--intent"
+            ],
+            "required": false
+          },
+          {
+            "default": "{}",
+            "help": "JSON object of explicit task parameters, never facts or consent.",
+            "name": "inputs",
+            "opts": [
+              "--inputs"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Read exactly the explicitly named PR from origin; no discovery or mutation.",
+            "name": "observe_pr",
+            "opts": [
+              "--observe-pr"
             ],
             "required": false
           },
@@ -1446,7 +1473,7 @@
         "qualified_name": "agentic-kit command-for",
         "safety": "READ_ONLY",
         "surface": "diagnostic",
-        "when_to_use": "Select the deterministic wrapper command for a raw command or task tag."
+        "when_to_use": "Select by raw command, task tag or explicit state-aware intent; never execute."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -14044,7 +14071,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "b2cf971eebd1e0a6e57255fb359fd0c91c4006eb70c2d855de0bbb0b2b1241cc",
-        "docs/reference/agentic-kit-commands.json": "e64fef3048cde197c8963358792bb0edde04c15a3fdfe085b068ff60d652073c",
+        "docs/reference/agentic-kit-commands.json": "2df32bad2014936c1a20bc6873f958ce23105669b68c4e3b695085b7eae2b692",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -14069,14 +14096,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "f2cdb65463e0",
+    "manifest_sha": "87ad8173f106",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.6",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.6",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "f2cdb65463e0",
+    "reproduced_manifest_sha": "87ad8173f106",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
@@ -14255,7 +14282,7 @@
             "qualified_name": "agentic-kit command-for",
             "safety": "READ_ONLY",
             "surface": "diagnostic",
-            "when_to_use": "Select the deterministic wrapper command for a raw command or task tag."
+            "when_to_use": "Select by raw command, task tag or explicit state-aware intent; never execute."
           },
           {
             "dry_run_available": false,

@@ -94,9 +94,7 @@ meta:
       - id: website-evidence-and-command-navigation
         step: d1-contract-and-matrix
         status: done
-        scope: D1 contract and inactive matrix prepared for owner review. Proposed
-          architecture is not adopted; runtime selection and website task navigation
-          remain blocked on that explicit decision. No new release or benchmark.
+        scope: Owner accepted option A on 2026-10-26. Implement shared identity-bound selection and its website projection; no release or paid benchmark.
       - id: external-retest-machine-contracts
         status: blocked
         scope: Main item remains active; c1 and c3 are done. Release 1.1.6 meets
@@ -129,7 +127,7 @@ meta:
       e1_projection_boundary: The E1 rendering fix is merged after 1.1.6; it is not in that published package.
       consumer_boundary: 1.1.6 satisfies c2's later-release dependency, but adoption, consumer retests and ledger verification remain deferred and unperformed by this slice.
       w2_authorization_scope: Owner approved one combined planning refresh and W2 historical evidence page; that slice included no tag inventory, D1 implementation or paid benchmark reruns.
-      current_slice: W1-P0 is complete; D1 contract and inactive task matrix are prepared for owner decision. Runtime selection, manifest migration and website navigation remain unimplemented.
+      current_slice: D1 option A is owner-adopted; shared runtime selection and website projection are under implementation and validation in PR2650.
     progress_update_20261022:
       release: Kit 1.1.5 completed (release PR2601, DOI PR2603, evidence PR2605, refresh PR2606).
       kit_baseline: 52f469f112a1ec4d5fceb8aec0a2657f185eacb4
@@ -2634,8 +2632,8 @@ plans:
     - Feed findings into decomplexification and the existing agent context plan.
   - id: d1-shared-task-command-selection
     status: active
-    design_decision_status: proposed
-    implementation_authorized: false
+    design_decision_status: accepted
+    implementation_authorized: true
     design_artifacts:
     - docs/architecture/ADR_TASK_COMMAND_SELECTION.md
     - docs/reference/TASK_COMMAND_SELECTION_CONTRACT.md
@@ -2644,13 +2642,13 @@ plans:
     steps:
     - id: d1-contract-and-matrix
       status: done
-      decision_status: proposed
-      scope: Owner requested a reviewable contract and matrix first; this completes design preparation, not adoption or runtime behavior.
+      decision_status: accepted
+      scope: Contract and initial matrix accepted by the owner as option A on 2026-10-26.
       evidence:
       - tests/test_task_selection_design.py
     - id: d1-runtime-shared-selection
-      status: blocked
-      blocker: Owner must accept the authority/identity boundary and proposed matrix before runtime implementation or website navigation consumes it.
+      status: active
+      authorization: Owner accepted option A on 2026-10-26; implement in the existing PR with one shared manifest authority.
 
     evidence_inputs:
     - docs/reports/task_tag_inventory_20261026/inventory.json

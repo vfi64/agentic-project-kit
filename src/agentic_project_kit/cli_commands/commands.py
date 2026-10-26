@@ -137,16 +137,28 @@ def audit_command_authority_command(
 def command_for_command(
     raw: str | None = typer.Option(None, "--raw", help="Raw command line to map to a wrapper."),
     task: str | None = typer.Option(None, "--task", help="Task tag to list matching commands."),
+    intent: str | None = typer.Option(None, "--intent", help="Exact task ID from manifest task_routes; selection grants no execution authority."),
+    inputs: str = typer.Option("{}", "--inputs", help="JSON object of explicit task parameters, never facts or consent."),
+    observe_pr: bool = typer.Option(False, "--observe-pr", help="Read exactly the explicitly named PR from origin; no discovery or mutation."),
     root: Path = typer.Option(Path("."), "--root", help="Repository root."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
-    """Select the deterministic wrapper command for a raw command or task tag."""
-    if bool(raw) == bool(task):
-        typer.echo("Provide exactly one of --raw or --task.", err=True)
+    """Select by raw command, task tag or explicit state-aware intent; never execute."""
+    if sum(value is not None for value in (raw, task, intent)) != 1:
+        typer.echo("Provide exactly one of --raw, --task or --intent.", err=True)
         raise typer.Exit(code=2)
-    manifest = load_manifest(root.resolve(), suppress_legacy_profile_warning=True)
-    selection = select_for_raw(manifest, raw) if raw is not None else select_for_task(manifest, str(task))
+    if intent is None and (inputs != "{}" or observe_pr):
+        typer.echo("--inputs and --observe-pr require --intent.", err=True)
+        raise typer.Exit(code=2)
+    if intent is not None:
+        from ..task_selection_facts import select_observed_intent
+        selection = select_observed_intent(root, intent, inputs, observe_pr=observe_pr)
+    else:
+        manifest = load_manifest(root.resolve(), suppress_legacy_profile_warning=True)
+        selection = select_for_raw(manifest, raw) if raw is not None else select_for_task(manifest, str(task))
     if json_output:
         typer.echo(json.dumps(selection.payload, indent=2, sort_keys=True))
     else:
         typer.echo(render_command_selection(selection), nl=False)
+    if intent is not None and selection.status != "MATCH":
+        raise typer.Exit(code=2)

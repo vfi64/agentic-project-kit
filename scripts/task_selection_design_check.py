@@ -142,7 +142,7 @@ def render_matrix(proposal: dict, manifest: dict) -> str:
     if problems:
         raise ValueError("; ".join(problems))
     commands = {c["qualified_name"]: c for c in manifest["commands"]}
-    lines = ["# D1 — Proposed task matrix", "", "**Proposed and inactive. Owner review required.**",
+    lines = ["<!-- Historical proposal before owner adoption; runtime authority is the generated manifest task_routes export. -->", "# D1 — Proposed task matrix", "", "**Proposed and inactive. Owner review required.**",
              "No runtime reads this fixture; no MATCH grants execution or selects an argv.", "",
              f"Reviewed base: `{proposal['base_commit']}`; current manifest `{manifest['meta']['manifest_sha']}`.", "",
              "| Intent | Existing command | Phase | Known-state conditions | Inputs | Manifest safety |",

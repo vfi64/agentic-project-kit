@@ -1,3 +1,5 @@
+# Archived pre-adoption review fixture; never a runtime authority.
+# Current rows are exported from src/agentic_project_kit/task_routes.py through the manifest.
 artifact_type: design_proposal
 schema_version: 1
 status: proposed

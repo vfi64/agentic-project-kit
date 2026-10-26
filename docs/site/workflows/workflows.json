@@ -136,7 +136,7 @@
           "qualified_name": "agentic-kit command-for",
           "safety": "READ_ONLY",
           "surface": "diagnostic",
-          "when_to_use": "Select the deterministic wrapper command for a raw command or task tag."
+          "when_to_use": "Select by raw command, task tag or explicit state-aware intent; never execute."
         },
         {
           "dry_run_available": false,

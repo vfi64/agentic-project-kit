@@ -191,8 +191,19 @@ def select_for_task(manifest: dict[str, Any], task_tag: str) -> CommandSelection
     )
 
 
+def select_for_intent(manifest: dict[str, Any], intent: str, facts: dict,
+                      inputs: dict, context: dict) -> CommandSelection:
+    from .task_selection import evaluate_routes
+    payload = evaluate_routes(manifest, intent, facts, inputs, context)
+    payload.update(mode="intent", intent=intent)
+    return CommandSelection(payload["result_status"], payload)
+
+
 def render_command_selection(selection: CommandSelection) -> str:
     payload = selection.payload
+    if payload["mode"] == "intent":
+        import json
+        return "COMMAND_FOR_INTENT\n" + json.dumps(payload, indent=2, sort_keys=True) + "\n"
     if payload["mode"] == "raw":
         lines = [
             "COMMAND_FOR",

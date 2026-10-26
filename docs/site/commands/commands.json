@@ -1108,7 +1108,7 @@
       "diagnostic_priority": "advanced_diagnostic",
       "dry_run_available": false,
       "group": "root",
-      "help": "Select the deterministic wrapper command for a raw command or task tag.",
+      "help": "Select by raw command, task tag or explicit state-aware intent; never execute.",
       "lifecycle_rank": null,
       "params": [
         {
@@ -1126,6 +1126,33 @@
           "name": "task",
           "opts": [
             "--task"
+          ],
+          "required": false
+        },
+        {
+          "default": null,
+          "help": "Exact task ID from manifest task_routes; selection grants no execution authority.",
+          "name": "intent",
+          "opts": [
+            "--intent"
+          ],
+          "required": false
+        },
+        {
+          "default": "{}",
+          "help": "JSON object of explicit task parameters, never facts or consent.",
+          "name": "inputs",
+          "opts": [
+            "--inputs"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Read exactly the explicitly named PR from origin; no discovery or mutation.",
+          "name": "observe_pr",
+          "opts": [
+            "--observe-pr"
           ],
           "required": false
         },
@@ -1151,7 +1178,7 @@
       "qualified_name": "agentic-kit command-for",
       "safety": "READ_ONLY",
       "surface": "diagnostic",
-      "when_to_use": "Select the deterministic wrapper command for a raw command or task tag."
+      "when_to_use": "Select by raw command, task tag or explicit state-aware intent; never execute."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",

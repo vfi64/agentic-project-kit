@@ -17,7 +17,7 @@ from agentic_project_kit.command_manifest import (
     SAFETY_VALUES,
     SURFACE_VALUES,
     load_manifest,
-    manifest_sha,
+    manifest_identity as computed_manifest_identity,
 )
 from agentic_project_kit.site_workflow_figures import svg
 from agentic_project_kit.gui_command_projection import diagnostic_priority_for_command
@@ -340,7 +340,7 @@ def collect_site_foundation_metadata(
         commands = []
     meta = committed_manifest.get("meta") if isinstance(committed_manifest, dict) else {}
     manifest_identity = _string(meta.get("manifest_sha")) if isinstance(meta, dict) else ""
-    reproduced_manifest_identity = manifest_sha(commands)
+    reproduced_manifest_identity = computed_manifest_identity(committed_manifest)
     if not manifest_identity:
         blockers.append("command manifest meta.manifest_sha is missing")
     elif manifest_identity != reproduced_manifest_identity:
@@ -352,6 +352,11 @@ def collect_site_foundation_metadata(
     if not commit:
         blockers.append("build commit is not available")
 
+    from .site_task_routes import task_navigation
+    try:
+        task_navigation(committed_manifest)
+    except ValueError as exc:
+        blockers.append(str(exc))
     command_catalog = _build_command_catalog(commands, blockers)
     status_projection = status_projection or _read_status_projection(root)
     roadmap_projection = _read_roadmap_projection(root)
@@ -456,6 +461,10 @@ def build_site(
     (output / "quickstart").mkdir(parents=True, exist_ok=True)
     (output / "workflows").mkdir(parents=True, exist_ok=True)
 
+    from .site_task_routes import task_navigation
+    navigation = task_navigation(load_manifest(root))
+    (output / "commands" / "tasks.json").write_text(
+        json.dumps(navigation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     index_html = render_index_html(root, report)
     quickstart_projection = _build_quickstart_projection(metadata, command_catalog)
     workflow_projection = report.workflow_projection
@@ -1349,6 +1358,8 @@ def render_command_view_html(
     description: str,
     entries: tuple[SiteCommandEntry, ...],
 ) -> str:
+    from .site_task_routes import task_navigation, render_task_navigation
+    navigation = task_navigation(load_manifest(root))
     template_path = root / "site" / "templates" / "commands.html"
     template = Template(template_path.read_text(encoding="utf-8"))
     rows = "\n".join(_command_table_row(entry, metadata) for entry in entries)
@@ -1360,6 +1371,7 @@ def render_command_view_html(
         "package_version": escape(metadata.package_version),
         "command_count": str(len(entries)),
         "rows": rows,
+        "task_navigation": render_task_navigation(navigation) if "Guided" in title else "",
     }
     return template.safe_substitute(values).rstrip() + "\n"
 

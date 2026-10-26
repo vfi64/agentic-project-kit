@@ -145,9 +145,17 @@ class CommandManifestAudit:
         }
 
 
-def manifest_sha(commands: list[dict[str, Any]]) -> str:
-    canonical = json.dumps(commands, sort_keys=True, separators=(",", ":")).encode("utf-8")
+def manifest_sha(commands: list[dict[str, Any]], task_routes: dict | None = None) -> str:
+    content = commands if task_routes is None else {"schema_version": 3, "commands": commands, "task_routes": task_routes}
+    canonical = json.dumps(content, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return hashlib.sha256(canonical).hexdigest()[:12]
+
+
+def manifest_identity(manifest: dict[str, Any]) -> str:
+    """Schema 2 keeps its historical command hash; schema 3 binds both exports."""
+    if manifest.get("schema_version") == 3:
+        return manifest_sha(manifest.get("commands", []), manifest.get("task_routes", {}))
+    return manifest_sha(manifest.get("commands", []))
 
 
 def _jsonable(value: Any) -> Any:
@@ -414,6 +422,7 @@ def _dry_run_available(command: dict[str, Any]) -> bool:
 def infer_remote_effects(command: dict[str, Any]) -> list[str]:
     qualified = str(command.get("qualified_name") or "")
     implementation_effects = {
+        "agentic-kit command-for": ["network_read"],  # explicit --observe-pr only; local modes do not access the network
         "agentic-kit ci runtime-plan": ["none"],
         "agentic-kit greenfield status": ["none"],
         "agentic-kit greenfield export": ["none"],
@@ -566,7 +575,13 @@ def build_reference_from_app(app: Any) -> dict[str, Any]:
 def build_current_reference() -> dict[str, Any]:
     from agentic_project_kit.cli import app
 
-    return build_reference_from_app(app)
+    from .task_routes import task_routes_export
+    data = build_reference_from_app(app)
+    data["schema_version"] = 3
+    data["task_routes"] = task_routes_export()
+    data["meta"]["schema_version"] = 2
+    data["meta"]["manifest_sha"] = manifest_identity(data)
+    return data
 
 
 def render_markdown(data: dict[str, Any]) -> str:
@@ -747,7 +762,7 @@ def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
             )
 
     meta = committed.get("meta") if isinstance(committed.get("meta"), dict) else {}
-    expected_sha = manifest_sha(commands)
+    expected_sha = manifest_identity(committed)
     if meta.get("manifest_sha") != expected_sha:
         findings.append(
             CommandManifestFinding(
@@ -765,6 +780,10 @@ def evaluate_command_manifest(root: Path = Path(".")) -> CommandManifestAudit:
             )
         )
 
+    if committed.get("schema_version") == 3:
+        from .task_selection import validate_routes
+        for reason in validate_routes(committed.get("task_routes"), committed):
+            findings.append(CommandManifestFinding("BLOCK", "TASK_ROUTES_INVALID", reason))
     if committed != current:
         findings.append(
             CommandManifestFinding("BLOCK", "JSON_DRIFT", f"{json_path.as_posix()} differs from CLI")

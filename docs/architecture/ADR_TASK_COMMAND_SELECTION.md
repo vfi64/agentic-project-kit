@@ -1,18 +1,17 @@
 ---
 artifact_type: architecture_decision
-status: proposed
+status: accepted
 schema_version: 1
 ---
 
-Status: proposed
+Status: accepted
 Status-date: 2026-10-26
 Superseded-by: n/a
 Document class: architecture
 
 # D1 ADR — Shared task-to-command selection
 
-Date: 2026-10-26. **Proposed, not adopted.** This document requests an owner decision;
-it changes neither command selection nor authorization. Canonical planning remains
+Date: 2026-10-26. **Accepted by the owner: option A.** Selection is advisory; it never changes execution authorization. Canonical planning remains
 `docs/planning/PROJECT_DIRECTION.yaml#d1-shared-task-command-selection`.
 
 ## Problem and evidence
@@ -30,15 +29,11 @@ export. Define each route once next to the existing command metadata; export it 
 both the human website and model-facing `command-for` consumer. Reuse the current
 selector module for pure evaluation, not a parallel runtime selector or policy engine.
 
-The accompanying YAML is an **inactive review fixture**, not that runtime export.
-Only tests and the design renderer read it. After adoption, implementation must
-move the reviewed rows into the existing authority and generate any documentation
-matrix from that export. Never leave both files as writable runtime authorities.
+The original YAML remains an **archived inactive review fixture**. Only historical tests and the design renderer read it. Current rows live in task_routes.py and are generated into the manifest. Never edit the historical fixture to change runtime routing. The website and CLI share that manifest export.
 
 Preserve existing `--raw` and `--task` behavior: task tags still list candidates.
-Propose an explicit future intent-selection mode on `command-for`; do not silently
-reinterpret broad tags such as closeout or transfer. The exact CLI interface and
-manifest schema migration are implementation acceptance decisions, not shipped flags.
+Use the explicit intent-selection mode on `command-for`; do not silently
+reinterpret broad tags such as closeout or transfer. The CLI and schema migration are specified and tested in the shared selection contract.
 
 ## Alternatives
 
@@ -55,8 +50,7 @@ manifest schema migration are implementation acceptance decisions, not shipped f
 Routes must be covered by the **same authenticated manifest identity** as the command
 metadata before production use. Adding an unhashed root field is unacceptable.
 Implementation must explicitly version the manifest/selection contract, test old
-consumers, and refuse unsupported route schemas or identity mismatch. This proposal
-does not change the current manifest hash algorithm, ACK or schema.
+consumers, and refuse unsupported route schemas or identity mismatch. The implementation uses manifest schema 3 / metadata schema 2 and route schema 1. Its identity hashes commands and task_routes together; schema 2 retains the historical command-only hash. Older consumers cannot verify schema 3 through the old command-only hash and must upgrade before intent selection.
 
 ## Scope and non-goals
 
@@ -68,10 +62,9 @@ command removal, GUI execution, a benchmark, or a claim of context-token savings
 A typed, small fixture is useful here because routes and failure outcomes can be
 checked independently. No DCO repair platform or additional planning authority is needed.
 
-## Adoption gate
+## Recorded adoption
 
-The owner must accept direction A, the fact/identity boundary and the initial matrix
-before runtime implementation or website navigation uses it. A merged **proposed**
+The owner accepted direction A, the fact/identity boundary and the initial matrix on 2026-10-26 (reply “A”). A merged **proposed**
 ADR is preserved review material, not that acceptance. The next implementation slice
 must include shared export, consumer agreement, capability/identity checks and migration
 tests as specified in `docs/reference/TASK_COMMAND_SELECTION_CONTRACT.md`.
