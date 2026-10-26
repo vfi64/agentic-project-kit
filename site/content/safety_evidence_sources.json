@@ -1,0 +1,27 @@
+{
+  "review": {
+    "path": "docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md",
+    "sha256": "f09e272f073aceb6de78f1d3cdf934851df4bea9ecb8dab10b80adeceec4cc1c",
+    "revision": "0902ccf9427e6d080de189cbe9f35245c6126b59"
+  },
+  "baseline": {
+    "path": "docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_BASELINE_1.0.25.json",
+    "sha256": "3120313d823a4e31b867126688519903e4583a32237827b5640576f4b8e0bf1e",
+    "revision": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7"
+  },
+  "development": {
+    "path": "docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_RESULTS.json",
+    "sha256": "8ba1e1f64df329e02e48a4231c83d5d20d4e1b7f71330e0ebe05a26bd9fa0495",
+    "revision": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7"
+  },
+  "method": {
+    "path": "docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_20261016.md",
+    "sha256": "513e0ee9c2e3d87b2b7c962606d0503fef57c364c66fd3a3e28ea63b963fc1cc",
+    "revision": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7"
+  },
+  "context_pilot": {
+    "path": "docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_20261016.md",
+    "sha256": "b9c9225a2f582666fd715dbadfc3e20e006e628c2fdad79fdba9e52a389c2c2a",
+    "revision": "2d2ac7b7b440677dc67a38933f6ad254367f1579"
+  }
+}

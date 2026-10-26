@@ -3,6 +3,18 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: historical-safety-evidence-projection
+  description: Historical WOTB and offline benchmark observations remain source-bound and distinct from current security certification.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_site_safety_evidence.py
+    - 5/10
+    - 11/11
+  - path: site/README.md
+    terms:
+    - safety_evidence_sources.json
+    - historical
 - id: kit-ci-pin-downgrade-guard
   description: Older installed runtimes cannot overwrite newer pinned command entrypoints or prepare a release.
   documents:

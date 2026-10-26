@@ -79,11 +79,17 @@ meta:
           flow review. G2/G3 are current contract views; G0 is callback evidence
           from one isolated work/B4 fixture, intentionally stopped before C2.
           No live release, full publication graph, D1 expansion or kernel rename.
+      - id: website-evidence-and-command-navigation
+        step: w2-evidence-page
+        status: done
+        scope: Owner approved W2 with the 1.1.6/E1 planning refresh on 2026-10-26.
+          Project pinned historical WOTB and offline benchmark evidence without
+          a current security certification or any new benchmark execution.
       - id: external-retest-machine-contracts
         status: blocked
-        scope: Main item remains active; c1 and c3 are done, c2 is blocked pending
-          a later released Kit and consumer/owner-remote verification. Execution
-          is explicitly deferred while the command/website planning line proceeds.
+        scope: Main item remains active; c1 and c3 are done. Release 1.1.6 meets
+          the later-release dependency, but c2 still needs consumer/owner-remote
+          verification. Execution remains explicitly deferred.
       - id: kit-control-effectiveness-measurement
         step: gate-and-context-benchmark
         status: deferred
@@ -97,6 +103,20 @@ meta:
           to start K0, website implementation, a release or owner-remote retests.
         status_semantics: Queue status and an item's lifecycle status are distinct;
           explicit deferral does not close an active item or satisfy blocked acceptance.
+    progress_update_20261026:
+      release: Kit 1.1.6 is published and fully closed out; no new release is authorized by this slice.
+      release_evidence: docs/reports/release/release-run-1.1.6.json
+      release_pr: 2638
+      doi_pr: 2640
+      archive_pr: 2642
+      final_release_handoff_pr: 2643
+      release_final_main: 2c9ee7a6b574b6896726e5ab87213edfdb97b19d
+      e1_projection_fix_pr: 2644
+      e1_projection_fix_handoff_pr: 2645
+      e1_projection_fix_main: 90aadf70640861717b389a932b086f9aa16746a8
+      e1_projection_boundary: The E1 rendering fix is merged after 1.1.6; it is not in that published package.
+      consumer_boundary: 1.1.6 satisfies c2's later-release dependency, but adoption, consumer retests and ledger verification remain deferred and unperformed by this slice.
+      current_slice: Owner approved one combined planning refresh and W2 historical evidence page; no tag inventory, D1 implementation or paid benchmark reruns.
     progress_update_20261022:
       release: Kit 1.1.5 completed (release PR2601, DOI PR2603, evidence PR2605, refresh PR2606).
       kit_baseline: 52f469f112a1ec4d5fceb8aec0a2657f185eacb4
@@ -124,8 +144,8 @@ meta:
     - 'GF current progress: the development catalog completes KIT-GF-070 local contracts after
       1.1.5 (44 local PASS, no missing contract); publication and consumer verification remain
       separate. Cockpit PR376/377 resynced the ledger with 1.1.5. The remaining c2 verification
-      is deferred, not done, while owner_order prioritizes command/website planning. A later
-      release and owner-remote retests require their own owner decisions; never infer
+      is deferred, not done, while owner_order prioritizes command/website planning. Release
+      1.1.6 now meets the release prerequisite; owner-remote retests still require decisions; never infer
       VERIFIED_FIXED from a Kit closure.'
     - Clear or explicitly defer lifecycle backlog and review remaining governance registrations
       before strict lifecycle adoption.
@@ -2440,7 +2460,7 @@ plans:
   - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
   - docs/reports/self-hosting/DRIFT_QUALITY_AUDIT_20261015.md
 - id: website-evidence-and-command-navigation
-  status: planned
+  status: active
   title: Improve the public website with gated quickstart, evidence and governed command navigation
   decision_status: accepted_by_owner
   integrated_at: '2026-10-17'
@@ -2482,7 +2502,7 @@ plans:
   - W4 is independent but lower priority than quickstart and measured evidence.
   steps:
   - id: w0-home-and-quickstart
-    status: planned
+    status: done
     priority: phased_after_p0
     scope: Retained W0 umbrella; W0a and W0b below separate integrity from new selection.
     steps:
@@ -2561,7 +2581,12 @@ plans:
       - docs/reports/workflow_templates_20261025/README.md
       - tests/test_site_workflow_figures.py
   - id: w2-evidence-page
-    status: planned
+    status: done
+    evidence:
+    - src/agentic_project_kit/site_safety_evidence.py
+    - site/content/safety_evidence_sources.json
+    - tests/test_site_safety_evidence.py
+    completion_scope: Historical projection only; no new security or model benchmark, consumer verification or current-release certification.
     priority: after_w0
     acceptance:
     - Explain WOTB-01 through WOTB-09, their scoped mitigations, the offline
@@ -4841,7 +4866,7 @@ plans:
     status: done
     progress: c1a and c1b shipped in 1.1.5; c1c completes the remaining six contracts in a development
       wheel. Installed-wheel all-family run has 44 PASS, 0 FAIL, 0 NO_MACHINE_CONTRACT and
-      40 NOT_RUN_LOCALLY; overall INCOMPLETE (rc 3). Consumer verification still awaits release.
+      40 NOT_RUN_LOCALLY; overall INCOMPLETE (rc 3). The contracts subsequently shipped in 1.1.6; consumer verification remains deferred.
     evidence:
     - docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
     acceptance:
@@ -4857,8 +4882,8 @@ plans:
     progress: The released-1.1.5 adoption and ledger resync already landed in Cockpit PR376 and
       refresh PR377. Committed evidence records 38 PASS, no FAIL, six missing contracts and
       40 non-local families; GF-081/082 are FIXED in 1.1.5, not VERIFIED_FIXED.
-    blocker: The six new contracts need a later released Kit and a consumer retest; owner-remote
-      families need their own authorized observations. Do not relabel unrun cases VERIFIED_FIXED.
+    blocker: The six contracts shipped in 1.1.6; consumer adoption and retest remain required.
+      Owner-remote families need their own authorized observations. Do not relabel unrun cases VERIFIED_FIXED.
     external_evidence: vfi64/agp-cockpit docs/validation/evidence/kit-1.1.5-adoption.json
     acceptance:
     - The Cockpit retests the 16 OPEN-against-Kit-closure families with the released contracts and

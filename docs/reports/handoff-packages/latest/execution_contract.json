@@ -137,7 +137,7 @@
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
         "id": "website-evidence-and-command-navigation",
-        "status": "planned",
+        "status": "active",
         "summary": "Improve the public website with gated quickstart, evidence and governed command navigation"
       },
       {
@@ -332,14 +332,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2644-handoff-refresh",
+      "branch": "codex/w2-evidence-and-plan-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "9d04eaad6e5dc3192417c85ac3978b2d97b78c08",
-      "head_matches_origin_main": true,
+      "head": "e65472c35287aaedf5a7d8641b19effd311e334e",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "9d04eaad6e5dc3192417c85ac3978b2d97b78c08",
-      "worktree_clean": false
+      "origin_main": "90aadf70640861717b389a932b086f9aa16746a8",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -519,14 +519,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2644-handoff-refresh",
+    "branch": "codex/w2-evidence-and-plan-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "9d04eaad6e5dc3192417c85ac3978b2d97b78c08",
-    "head_matches_origin_main": true,
+    "head": "e65472c35287aaedf5a7d8641b19effd311e334e",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "9d04eaad6e5dc3192417c85ac3978b2d97b78c08",
-    "worktree_clean": false
+    "origin_main": "90aadf70640861717b389a932b086f9aa16746a8",
+    "worktree_clean": true
   },
   "rules": [
     {

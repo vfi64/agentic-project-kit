@@ -49,6 +49,7 @@
     "tests/test_site_explanation.py",
     "tests/test_site_evidence_contract.py",
     "tests/test_site_public_contract.py",
-    "tests/test_site_quickstart_path.py"
+    "tests/test_site_quickstart_path.py",
+    "tests/test_site_safety_evidence.py"
   ]
 }
