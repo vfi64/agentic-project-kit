@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-08-28T03:25:22.061197+00:00",
+    "created_at_utc": "2026-10-26T16:24:55.331193+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -15,7 +15,7 @@
     "canonical_lifecycle": {
       "do_not_use_stale_prompt_text_as_handoff_source": true,
       "existing_pr_requires_concrete_number": [
-        "./.venv/bin/agentic-kit",
+        "agentic-kit",
         "transfer",
         "pr-complete",
         "use-the-concrete-pr-number-from-wrapper-output",
@@ -27,12 +27,12 @@
       "feature_branch_pre_pr_gate": "agentic-kit transfer repo-status",
       "forbidden_feature_branch_pre_pr_gate": "agentic-kit transfer post-merge-check",
       "fresh_llm_context_before_pr": [
-        "./.venv/bin/agentic-kit transfer prepare-successor-handoff --render-prompt",
-        "./.venv/bin/agentic-kit transfer publish-last-report",
-        "./.venv/bin/agentic-kit transfer require-fresh-llm-context --json"
+        "agentic-kit transfer prepare-successor-handoff --render-prompt",
+        "agentic-kit transfer publish-last-report",
+        "agentic-kit transfer require-fresh-llm-context --json"
       ],
       "new_pr_single_command": [
-        "./.venv/bin/agentic-kit",
+        "agentic-kit",
         "transfer",
         "pr-create-complete",
         "--post-merge-complete",
@@ -47,9 +47,9 @@
       "post_merge_check_after_merge_only": true,
       "post_merge_checks_belong_to_main": true,
       "post_merge_requires_concrete_number": [
-        "./.venv/bin/agentic-kit transfer sync-main",
-        "./.venv/bin/agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
-        "./.venv/bin/agentic-kit transfer repo-status"
+        "agentic-kit transfer sync-main",
+        "agentic-kit transfer post-merge-settle --after-pr use-the-concrete-pr-number-from-wrapper-output",
+        "agentic-kit transfer repo-status"
       ],
       "shell_placeholder_policy": {
         "if_pr_number_unknown_first_run_diagnostic_not_shell_placeholder": true,
@@ -93,12 +93,13 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 254,
+      "command_count": 272,
       "generated_by": "",
       "important_wrappers": [
         {
           "help": "Continue chat/local transfer communication through the safest available wrapper path.",
           "options": [
+            "--allow-unlisted",
             "--json",
             "--skip-llm-context-gate"
           ],
@@ -108,6 +109,7 @@
         {
           "help": "Run the next repo-backed transfer order for local or remote work handoff.",
           "options": [
+            "--allow-unlisted",
             "--json"
           ],
           "present": true,
@@ -159,7 +161,7 @@
           "qualified_name": "agentic-kit transfer remote-work-start"
         },
         {
-          "help": "Write the current diff to /tmp and run the Python protected change planner on it.",
+          "help": "Write the current diff to the OS temp directory and run the Python protected change planner on it.",
           "options": [
             "--cached",
             "--json",
@@ -179,7 +181,9 @@
             "--merge-method",
             "--poll-seconds",
             "--post-merge-complete",
+            "--release-note-category",
             "--skip-llm-context-gate",
+            "--summary",
             "--timeout-seconds",
             "--title"
           ],
@@ -203,6 +207,7 @@
             "--poll-seconds",
             "--post-merge-complete",
             "--skip-llm-context-gate",
+            "--summary",
             "--timeout-seconds"
           ],
           "present": true,
@@ -313,11 +318,11 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-08-28T03:25:22.308255+00:00",
+    "generated_at_utc": "2026-10-26T16:24:55.548830+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/deterministic-ci-runtime-plan",
-      "head": "cc5776a73607fd29d6caa661fdebd72c1e54ddcf",
+      "branch": "codex/d1-task-selection-contract",
+      "head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -329,6 +334,8 @@
       "rules": [
         "LLM-to-local transfer payloads must be written as Python source files with the .py.txt suffix.",
         "The Python payload must remain syntactically compilable before local execution.",
+        "A transfer order names the HEAD it was written on in expected_current_head as the full 40-character hash and is committed directly on top of that commit; changing the order later needs a new anchor (WOTB-07, WOTB-08).",
+        "Transfer and typed orders run only READ_ONLY agentic-kit commands and read-only git/gh queries unless the maintainer passes --allow-unlisted locally; raw git/gh mutations, interpreters and DESTRUCTIVE agentic-kit commands are always refused.",
         "Do not put raw gh, GitHub API, or direct GitHub shell commands into LLM-to-local payloads or user copy/paste blocks.",
         "GitHub, PR, merge, evidence, release, and transfer operations should be invoked through repo-backed agentic-kit wrappers.",
         "Direct gh or GitHub commands are allowed only inside audited repo-backed wrappers or explicit recovery/diagnostic implementation work.",
@@ -376,9 +383,9 @@
     "source_hashes": {
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
-      ".agentic/transfer_safety_rules.yaml": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "b5957725bd1fb58d95bc69505e4323f1898065a7002ed5054796994eab8a6a88",
-      "docs/reference/agentic-kit-commands.json": "d0f29397fd033ec4d29c12eb5d15e810b448c3c752c84472b99632042239c7e5"
+      ".agentic/transfer_safety_rules.yaml": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b",
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "12ee7b06f6538dfd09102902f9b49eec6cb4bab2e34ffac3ca5f07bf4c7f30c1",
+      "docs/reference/agentic-kit-commands.json": "e64fef3048cde197c8963358792bb0edde04c15a3fdfe085b068ff60d652073c"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -397,13 +404,13 @@
       "must_not_discard_substantive_changes": true,
       "only_when_not_target_changes": true
     },
-    "workspace_mode": "self_hosting"
+    "workspace_mode": "generated_project"
   },
   "protocol_header": {
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7"
+        "sha256": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
@@ -411,19 +418,19 @@
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "710ad60e1a52becc149719fd681f7699e243ba2b48ce70a4e0c4adeb07880f57"
+        "sha256": "0c51fa1e0266787f1db8f977c4198df63102886f9bd13d86a50483070e5ce110"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
-        "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39"
+        "sha256": "5463b7a2eb35670e591a41fa6383d98bd20c5d14b94f1bced1b934e0257ba16a"
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "e18cca966b8fb575512ce472183063a93ada75154a57ffb9ceda503dcf9b0b86"
+        "sha256": "c78f9ecc65867737b26f4b3fba039840d05a96d0a0f938bcc3cf18f0d40c2a02"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "267a96fdf5752b154b214793635b9b2cd0d0e198a54e2564120adb73c5d8e2d8"
+        "sha256": "f20455e278d257288e510e117b3c201d178de17298e60ab91828e561358c468a"
       }
     ],
     "canonical_cli_usage": {
@@ -924,12 +931,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/deterministic-ci-runtime-plan",
+      "branch": "codex/d1-task-selection-contract",
       "dirty_status": "",
-      "head": "cc5776a73607fd29d6caa661fdebd72c1e54ddcf",
-      "head_matches_upstream": false,
-      "upstream": "origin/codex/deterministic-ci-runtime-plan",
-      "upstream_head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a"
+      "head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd",
+      "head_matches_upstream": true,
+      "upstream": "origin/codex/d1-task-selection-contract",
+      "upstream_head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -975,7 +982,7 @@
     "authoritative_sources": [
       {
         "path": ".agentic/transfer_safety_rules.yaml",
-        "sha256": "44d6cbcff3b727dea59ae5cfeaa491fce8851e9025949cf44d6e9ddebf60c8f7"
+        "sha256": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b"
       },
       {
         "path": ".agentic/transfer/one_command_transfer_protocol.yaml",
@@ -983,19 +990,19 @@
       },
       {
         "path": ".agentic/rule_mechanism_inventory.yaml",
-        "sha256": "710ad60e1a52becc149719fd681f7699e243ba2b48ce70a4e0c4adeb07880f57"
+        "sha256": "0c51fa1e0266787f1db8f977c4198df63102886f9bd13d86a50483070e5ce110"
       },
       {
         "path": ".agentic/rule_preservation.yaml",
-        "sha256": "817319e295674992e6665df25778b5c9cb767d1e393e5402df708d52ec79ff39"
+        "sha256": "5463b7a2eb35670e591a41fa6383d98bd20c5d14b94f1bced1b934e0257ba16a"
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "e18cca966b8fb575512ce472183063a93ada75154a57ffb9ceda503dcf9b0b86"
+        "sha256": "c78f9ecc65867737b26f4b3fba039840d05a96d0a0f938bcc3cf18f0d40c2a02"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "267a96fdf5752b154b214793635b9b2cd0d0e198a54e2564120adb73c5d8e2d8"
+        "sha256": "f20455e278d257288e510e117b3c201d178de17298e60ab91828e561358c468a"
       }
     ],
     "canonical_cli_usage": {
@@ -1496,12 +1503,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/deterministic-ci-runtime-plan",
+      "branch": "codex/d1-task-selection-contract",
       "dirty_status": "",
-      "head": "cc5776a73607fd29d6caa661fdebd72c1e54ddcf",
-      "head_matches_upstream": false,
-      "upstream": "origin/codex/deterministic-ci-runtime-plan",
-      "upstream_head": "5aa04936b6b6bf6b255b09ed9c97a0065ee8326a"
+      "head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd",
+      "head_matches_upstream": true,
+      "upstream": "origin/codex/d1-task-selection-contract",
+      "upstream_head": "5c93786e6d73fbbb1410d4e45654d4048cc8dccd"
     },
     "schema_version": 1,
     "terminal_block_rules": {
