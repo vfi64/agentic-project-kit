@@ -7,6 +7,11 @@ import json
 from pathlib import Path
 import re
 
+from agentic_project_kit.docs_pages_projection import (
+    DOCS_PAGES_BUILD_SCRIPT,
+    DOCS_PAGES_FALLBACK_EXPECTED_PATHS,
+    refresh_docs_pages_fallback as _refresh_docs_pages_fallback,
+)
 from agentic_project_kit.dpa_current_handoff_lifecycle import evaluate_current_handoff_text_lifecycle
 from agentic_project_kit.dpa_readiness import DEFAULT_READINESS_PATH
 from agentic_project_kit.post_release import build_post_release_report
@@ -25,12 +30,6 @@ EXPECTED_DOI_CLOSEOUT_PATHS: tuple[str, ...] = (
     "docs/STATUS.md",
     "docs/handoff/CURRENT_HANDOFF.md",
     "docs/releases/VERIFIED_RELEASES.md",
-)
-DOCS_PAGES_BUILD_SCRIPT = "site/scripts/build.py"
-DOCS_PAGES_FALLBACK_EXPECTED_PATHS: tuple[str, ...] = (
-    "docs/.nojekyll",
-    "docs/index.html",
-    "docs/site/",
 )
 
 _ALLOWED_WRITE_PATHS = frozenset(EXPECTED_DOI_CLOSEOUT_PATHS)
@@ -282,16 +281,6 @@ def _expected_closeout_paths(project_root: Path) -> tuple[str, ...]:
         return (*EXPECTED_DOI_CLOSEOUT_PATHS, *DOCS_PAGES_FALLBACK_EXPECTED_PATHS)
     return EXPECTED_DOI_CLOSEOUT_PATHS
 
-
-def _refresh_docs_pages_fallback(project_root: Path) -> tuple[tuple[str, ...], tuple[str, ...]]:
-    if not (project_root / DOCS_PAGES_BUILD_SCRIPT).exists():
-        return (), ()
-    from agentic_project_kit.site_generator import build_docs_pages_fallback
-
-    result = build_docs_pages_fallback(project_root)
-    if not result.ok:
-        return tuple(f"docs_pages_fallback:{blocker}" for blocker in result.blockers), ()
-    return (), tuple(f"docs/{path}" for path in result.files)
 
 
 def render_post_release_doi_closeout_result(result: PostReleaseDoiCloseoutResult) -> str:

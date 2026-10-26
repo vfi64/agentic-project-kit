@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails.
+
 ## v1.1.6 - 2026-10-25
 
 - Fixed: Prevent entrypoint synchronization and release preparation with an installed Kit older than workspace CI pins (KIT-GF-086).

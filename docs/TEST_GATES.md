@@ -39,6 +39,12 @@ is not proof that every mutating route acquires a lock.
 
 ## Website evidence integrity
 
+`tests/test_release_archive_projection.py` exercises the real canonical generator
+inside E1: current C3 evidence changes publication wording before work finish,
+projection paths are signed and committed, missing optional sites are skipped,
+and rendering errors stop before commit or push without changing signed evidence.
+
+
 `tests/test_site_evidence_contract.py` injects circular template evidence, missing
 historical scope, uncovered new evidence paths and removed selected commands.
 It checks all current direct claim inputs and conservative transitive code/test
