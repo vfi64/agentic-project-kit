@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 79d8d63e81a6ff2a4a81b97178fe805f520d14cbbeebab0577c2c83b3182ccf8
 - docs/reference/agentic-kit-commands.json: 98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d
-## Operational documentation refresh state after PR #2650
+## Operational documentation refresh state after PR #2652
 
-Current administrative handoff refresh state is `c1eca200` (`Share identity-bound task selection between CLI and website (#2650)`). Continue next only after this post-PR2650 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f475c0b5` (`Recover partial external workspaces and isolate Kit gates (KIT-GF-087/088) (#2652)`). Continue next only after this post-PR2652 refresh is committed and merged; the next substantive slice must be created from fresh main.
