@@ -4,6 +4,11 @@ status: proposed
 schema_version: 1
 ---
 
+Status: proposed
+Status-date: 2026-10-26
+Superseded-by: n/a
+Document class: architecture
+
 # D1 ADR — Shared task-to-command selection
 
 Date: 2026-10-26. **Proposed, not adopted.** This document requests an owner decision;

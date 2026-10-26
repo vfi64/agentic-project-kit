@@ -4,6 +4,11 @@ status: proposed
 schema_version: 1
 ---
 
+Status: proposed
+Status-date: 2026-10-26
+Superseded-by: n/a
+Document class: architecture
+
 # D1 — Proposed task selection contract
 
 **Not operational.** The requirements below apply to a future owner-approved
