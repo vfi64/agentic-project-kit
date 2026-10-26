@@ -7,6 +7,8 @@ verify that the file is committed through the archive PR and its handoff.
 import hashlib
 from typing import TYPE_CHECKING
 from agentic_project_kit.greenfield_status import encoded
+from agentic_project_kit.docs_pages_projection import docs_pages_projection_paths
+from agentic_project_kit.release_archive_projection import refresh_archive_projection
 
 if TYPE_CHECKING:
     from agentic_project_kit.release_run import ReleaseRun
@@ -76,6 +78,7 @@ def archive_gate(run: "ReleaseRun") -> dict:
         "action": "archive completed release evidence through work finish and post-merge handoff",
         "branch": run.branch + "-evidence",
         "paths": [path],
+        "projection_paths": list(docs_pages_projection_paths(run.root)),
         "target_commit": run._current_head(),
         "evidence_sha256": hashlib.sha256(content).hexdigest(),
     }
@@ -166,6 +169,16 @@ def archive_completed_run(run: "ReleaseRun") -> dict:
             "docs/DOCUMENTATION_REGISTRY.yaml",
             "docs/governance/DOC_REGISTRY_SCOPE_DECISION.md",
         ]
+    # Evidence must exist before rendering: it is the source of the current C3 claim.
+    # Projection scope is part of the signed gate, not a new implicit write surface.
+    projection_paths = tuple(gate.get("projection_paths") or ())
+    projection = refresh_archive_projection(run.root, projection_paths, target, content)
+    run._append_log(projection)
+    if projection["result_status"] != "PASS":
+        progress.update({"result_status": "BLOCKED", "path": path})
+        run._save_state()
+        return projection
+    paths += list(projection_paths)
     argv = [
         run.executable,
         "work",

@@ -17,7 +17,11 @@ from consumer VERIFIED_FIXED. Maintainers regenerate it through a signed
 `agentic-kit greenfield export` plan. Opt-in `release.evidence_archive: true`
 adds the separately signed final E1 archive gate to release run, after publishing
 and DOI checks pass; committed evidence contains bounded step results and gate
-attribution. See `docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md`.
+attribution. When the workspace has `site/scripts/build.py`, E1 declares
+`projection_paths` in its signature, regenerates the canonical Pages fallback after
+writing evidence, and includes it in the archive commit. A rendering failure stops
+before commit or push; workspaces without that optional site are unchanged.
+See `docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md`.
 `release.changelog_summary: curated` writes only the curated summary lines into a
 release's CHANGELOG section (by default the Unreleased entries, which must all be
 covered) instead of combining them with the generated PR-title list. Release run
