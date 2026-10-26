@@ -112,12 +112,16 @@ def select_observed_intent(root: Path, intent: str, inputs: str, *, observe_pr: 
     """CLI boundary: no caller facts, structured errors for invalid workspaces."""
     from .command_manifest import load_manifest
     from .command_selector import CommandSelection, select_for_intent
+    from .task_selection import manifest_route_errors
 
     try:
         parameters = json.loads(inputs)
         if not isinstance(parameters, dict):
             raise ValueError("inputs must be an object")
         manifest = load_manifest(root.resolve(), suppress_legacy_profile_warning=True)
+        errors = manifest_route_errors(manifest)
+        if errors:
+            raise ValueError("; ".join(errors))
         facts, context = observe_facts(root, manifest, parameters, observe_pr=observe_pr)
         return select_for_intent(manifest, intent, facts, parameters, context)
     except (ValueError, OSError, RuntimeError) as exc:

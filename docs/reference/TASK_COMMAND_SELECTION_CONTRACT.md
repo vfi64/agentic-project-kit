@@ -51,7 +51,7 @@ prove provenance or supply a runtime security guard.
 | UNKNOWN_TASK | No explicit task ID exists | none |
 | INVALID_INPUT | Unsupported schema, malformed facts/inputs, stale manifest identity or invalid command binding | none |
 
-Every result carries `execution_authorized: false`. MATCH returns the exact command
+Every result carries `execution_authorized: false`. This source-tree feature does not assert availability in previously published wheels; no release is performed by this slice. MATCH returns the exact command
 identity plus safety, surface, declared effects and dry-run availability derived from
 the manifest. These fields describe that command; they are not new permission rules.
 Do not synthesize an executable argv, append --execute or choose any alternate route

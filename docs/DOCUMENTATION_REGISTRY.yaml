@@ -1855,3 +1855,7 @@ documents:
   - path: docs/reports/task_selection_design_20261026/README.md
     class: generated artifact
     owner: maintainers
+  - path: docs/reports/task_selection_design_20261026/IMPLEMENTATION.md
+    class: evidence/log
+    owner: maintainers
+    summary: D1 shared task selection implementation, validation and bounded scope.

@@ -5,20 +5,17 @@ from __future__ import annotations
 from html import escape
 import json
 
-from .command_manifest import manifest_identity
-from .task_selection import validate_routes
+from .task_selection import manifest_route_errors
 
 
 def task_navigation(manifest: dict) -> dict:
-    if manifest.get("schema_version") == 2 and "task_routes" not in manifest:
-        return {"schema_version": 1, "availability": "legacy_manifest", "routes": []}
     if (
-        manifest.get("schema_version") != 3
-        or manifest.get("meta", {}).get("schema_version") != 2
-        or manifest.get("meta", {}).get("manifest_sha") != manifest_identity(manifest)
+        isinstance(manifest, dict)
+        and manifest.get("schema_version") == 2
+        and "task_routes" not in manifest
     ):
-        raise ValueError("task navigation manifest schema or identity mismatch")
-    errors = validate_routes(manifest.get("task_routes"), manifest)
+        return {"schema_version": 1, "availability": "legacy_manifest", "routes": []}
+    errors = manifest_route_errors(manifest)
     if errors:
         raise ValueError("; ".join(errors))
     commands = {c["qualified_name"]: c for c in manifest["commands"]}
@@ -69,7 +66,7 @@ def render_task_navigation(projection: dict) -> str:
         '<section class="task-routes" aria-label="Task routes"><h2>Start from your task</h2>'
         "<p>Generated from the same manifest as command-for intent selection. "
         "These are conditional routes, not an observation of your repository or execution permission. "
-        "Unknown facts stop selection; existing command gates remain in force.</p>"
+        "Unknown facts stop selection; existing command gates remain in force. Intent-mode availability describes this source tree, not an assertion about previously published wheels.</p>"
         + "".join(rows)
         + f"<p>{len(projection.get('unassigned_commands', []))} commands are unassigned in this bounded task matrix; "
         '<a href="index.html">complete catalog</a> and <a href="diagnostics.html">diagnostics</a> remain accessible.</p></section>'

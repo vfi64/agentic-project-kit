@@ -412,3 +412,32 @@ def test_website_partition_keeps_unassigned_commands_discoverable():
     assert assigned | unassigned == {c["qualified_name"] for c in m["commands"]}
     assert 'href="index.html"' in render_task_navigation(navigation)
     assert 'href="diagnostics.html"' in render_task_navigation(navigation)
+
+
+@pytest.mark.parametrize(
+    "manifest", [None, [], {"schema_version": 3, "meta": []}, {"schema_version": 99, "meta": {}}]
+)
+def test_malformed_manifest_envelope_stops_before_observation(monkeypatch, tmp_path, manifest):
+    import agentic_project_kit.command_manifest as metadata
+    import agentic_project_kit.task_selection_facts as adapter
+
+    monkeypatch.setattr(metadata, "load_manifest", lambda *a, **k: manifest)
+    monkeypatch.setattr(
+        adapter,
+        "observe_facts",
+        lambda *a, **k: pytest.fail("invalid manifest triggered observation"),
+    )
+    result = adapter.select_observed_intent(tmp_path, "check_work", "{}")
+    assert result.status == "INVALID_INPUT"
+    assert result.payload["execution_authorized"] is False
+
+
+@pytest.mark.parametrize("field", ["safety", "surface"])
+def test_malformed_command_contract_is_invalid_not_an_exception(field):
+    m, c = fixture()
+    m["commands"][0][field] = []
+    rehash(m)
+    c["manifest_sha"] = m["meta"]["manifest_sha"]
+    assert select_for_intent(m, "check_work", {}, {}, c).status == "INVALID_INPUT"
+    with pytest.raises(ValueError):
+        task_navigation(m)

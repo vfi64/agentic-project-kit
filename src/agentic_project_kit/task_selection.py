@@ -54,8 +54,8 @@ def validate_routes(proposal: dict, manifest: dict) -> list[str]:
     for command in entries:
         params = command.get("params")
         if (
-            command.get("safety") not in {"READ_ONLY", "BOUNDED", "DESTRUCTIVE"}
-            or command.get("surface") not in {"orchestrator", "primitive", "diagnostic"}
+            command.get("safety") not in ("READ_ONLY", "BOUNDED", "DESTRUCTIVE")
+            or command.get("surface") not in ("orchestrator", "primitive", "diagnostic")
             or type(command.get("dry_run_available")) is not bool
             or not isinstance(command.get("remote_effects"), list)
             or not command["remote_effects"]
@@ -131,23 +131,32 @@ def result(status: str, **detail) -> dict:
     }
 
 
-def evaluate_routes(manifest: dict, task: str, facts: dict, inputs: dict, context: dict) -> dict:
+def manifest_route_errors(manifest: dict) -> list[str]:
+    """Shared envelope validation for both consumers, including malformed JSON shapes."""
     from .command_manifest import manifest_identity
 
     if not isinstance(manifest, dict) or not isinstance(manifest.get("meta"), dict):
-        return result("INVALID_INPUT", reasons=["invalid manifest envelope"])
-    proposal = manifest.get("task_routes")
+        return ["invalid manifest envelope"]
     if (
         manifest.get("schema_version") != 3
         or manifest["meta"].get("schema_version") != 2
-        or not isinstance(proposal, dict)
+        or not isinstance(manifest.get("task_routes"), dict)
     ):
-        return result("INVALID_INPUT", reasons=["task selection requires manifest schema 3"])
-    if manifest.get("meta", {}).get("manifest_sha") != manifest_identity(manifest):
-        return result("INVALID_INPUT", reasons=["manifest identity mismatch"])
-    problems = validate_routes(proposal, manifest)
+        return ["task selection requires manifest schema 3 / metadata schema 2"]
+    try:
+        identity = manifest_identity(manifest)
+    except (TypeError, ValueError):
+        return ["invalid manifest identity content"]
+    if manifest["meta"].get("manifest_sha") != identity:
+        return ["manifest identity mismatch"]
+    return validate_routes(manifest["task_routes"], manifest)
+
+
+def evaluate_routes(manifest: dict, task: str, facts: dict, inputs: dict, context: dict) -> dict:
+    problems = manifest_route_errors(manifest)
     if problems:
         return result("INVALID_INPUT", reasons=problems)
+    proposal = manifest["task_routes"]
     if not isinstance(task, str) or not re.fullmatch(r"[a-z][a-z0-9_]*", task):
         return result("INVALID_INPUT", reasons=["malformed task identity"])
     routes = [r for r in proposal["routes"] if r["task"] == task]
