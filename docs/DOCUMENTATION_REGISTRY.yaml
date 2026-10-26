@@ -1832,3 +1832,6 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: KIT-GF-086 CI pin guard evidence and machine retest.
+  - path: docs/reports/release/release-run-1.1.6.json
+    class: evidence/log
+    owner: maintainers
