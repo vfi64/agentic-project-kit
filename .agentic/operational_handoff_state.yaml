@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4e87aa4e36345a9babf9a4ec47cc077f77499519
-  short: 4e87aa4e
-  subject: Present scoped historical safety evidence and reconcile completed release planning (#2646)
+  full: 1c3f216c4f1aa46decdaeb0e8cc32a20ce578bc1
+  short: 1c3f216c
+  subject: Inventory orchestrator task tags without claiming semantic coverage (#2648)
 last_substantive_work_state:
-  full: 4e87aa4e36345a9babf9a4ec47cc077f77499519
-  short: 4e87aa4e
-  subject: Present scoped historical safety evidence and reconcile completed release planning (#2646)
+  full: 1c3f216c4f1aa46decdaeb0e8cc32a20ce578bc1
+  short: 1c3f216c
+  subject: Inventory orchestrator task tags without claiming semantic coverage (#2648)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
