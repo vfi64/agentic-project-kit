@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 12ee7b06f6538dfd09102902f9b49eec6cb4bab2e34ffac3ca5f07bf4c7f30c1
 - docs/reference/agentic-kit-commands.json: e64fef3048cde197c8963358792bb0edde04c15a3fdfe085b068ff60d652073c
-## Operational documentation refresh state after PR #2642
+## Operational documentation refresh state after PR #2644
 
-Current administrative handoff refresh state is `e81521e4` (`Archive release 1.1.6 evidence (#2642)`). Continue next only after this post-PR2642 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `9d04eaad` (`Refresh the dependent website projection in release evidence archives (#2644)`). Continue next only after this post-PR2644 refresh is committed and merged; the next substantive slice must be created from fresh main.

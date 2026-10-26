@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e81521e4530ba6c2a086f84ce8e231552404f17c
-  short: e81521e4
-  subject: Archive release 1.1.6 evidence (#2642)
+  full: 9d04eaad6e5dc3192417c85ac3978b2d97b78c08
+  short: 9d04eaad
+  subject: Refresh the dependent website projection in release evidence archives (#2644)
 last_substantive_work_state:
-  full: e81521e4530ba6c2a086f84ce8e231552404f17c
-  short: e81521e4
-  subject: Archive release 1.1.6 evidence (#2642)
+  full: 9d04eaad6e5dc3192417c85ac3978b2d97b78c08
+  short: 9d04eaad
+  subject: Refresh the dependent website projection in release evidence archives (#2644)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
