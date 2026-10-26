@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c71346d2ed5eea16b93257adddfb4ef772a53310c60ec61cc3ee14c951dd1dc1
 - docs/reference/agentic-kit-commands.json: 2df32bad2014936c1a20bc6873f958ce23105669b68c4e3b695085b7eae2b692
-## Operational documentation refresh state after PR #2648
+## Operational documentation refresh state after PR #2650
 
-Current administrative handoff refresh state is `1c3f216c` (`Inventory orchestrator task tags without claiming semantic coverage (#2648)`). Continue next only after this post-PR2648 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `c1eca200` (`Share identity-bound task selection between CLI and website (#2650)`). Continue next only after this post-PR2650 refresh is committed and merged; the next substantive slice must be created from fresh main.

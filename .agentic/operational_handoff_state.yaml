@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 1c3f216c4f1aa46decdaeb0e8cc32a20ce578bc1
-  short: 1c3f216c
-  subject: Inventory orchestrator task tags without claiming semantic coverage (#2648)
+  full: c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3
+  short: c1eca200
+  subject: Share identity-bound task selection between CLI and website (#2650)
 last_substantive_work_state:
-  full: 1c3f216c4f1aa46decdaeb0e8cc32a20ce578bc1
-  short: 1c3f216c
-  subject: Inventory orchestrator task tags without claiming semantic coverage (#2648)
+  full: c1eca200e3a55ef338f4ca8e9423ddc3d86ef6d3
+  short: c1eca200
+  subject: Share identity-bound task selection between CLI and website (#2650)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
