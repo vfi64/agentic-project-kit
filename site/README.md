@@ -215,3 +215,14 @@ That observation is a build input, so shallow checkouts reproduce the same card.
 It does not claim every recovery path was executed or consumer VERIFIED_FIXED.
 E freshness policy, N4 Pages simplification, D1, lock triage and new graphics remain
 outside W0b.
+
+## Historical safety evidence (W2)
+
+The generated evidence/index.html page reads its historical report and benchmark
+inputs through site/content/safety_evidence_sources.json. Reviewed source hashes
+and exact source-file revisions are required; changed or missing sources block
+the build until their binding is deliberately reviewed. Counts are derived from
+scenario rows and clean controls, with skipped scenarios excluded only from the
+applicable denominator. The development sandbox SHA does not pin its editable
+runtime. Raw logs and personal/consumer data are not projected. This is not a
+current security certification or a new benchmark.

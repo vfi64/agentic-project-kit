@@ -89,6 +89,9 @@ def collect_explanation(root: Path, *, version: str) -> dict[str, object]:
     template = root / 'site/templates/understand.html'
     if template.is_file() and '${workflow_figures}' in template.read_text():
         result['workflow_figures'] = collect_figures(root)
+    if (root / "site/templates/evidence.html").is_file():
+        from agentic_project_kit.site_safety_evidence import collect_safety_evidence
+        result["safety_evidence"] = collect_safety_evidence(root)
     return result
 
 

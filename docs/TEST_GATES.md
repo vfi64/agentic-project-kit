@@ -39,6 +39,12 @@ is not proof that every mutating route acquires a lock.
 
 ## Website evidence integrity
 
+`tests/test_site_safety_evidence.py` checks W2 source hashes and pinned revisions,
+all nine historical WOTB findings and mitigations, clean-control detection logic,
+the distinct 5/10 and 11/11 denominators, malformed or missing sources, output
+privacy, historical limits and deterministic rendering. No new benchmark runs.
+
+
 `tests/test_release_archive_projection.py` exercises the real canonical generator
 inside E1: current C3 evidence changes publication wording before work finish,
 projection paths are signed and committed, missing optional sites are skipped,

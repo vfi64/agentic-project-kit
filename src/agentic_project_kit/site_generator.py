@@ -493,6 +493,16 @@ def build_site(
         (explanation_output / "evidence.json").write_text(
             json.dumps(report.explanation_projection, indent=2, sort_keys=True) + "\n",
             encoding="utf-8")
+    if report.explanation_projection is not None and "safety_evidence" in report.explanation_projection:
+        from agentic_project_kit.site_safety_evidence import render_safety_evidence
+        evidence_output = output / "evidence"
+        evidence_output.mkdir()
+        evidence = report.explanation_projection["safety_evidence"]
+        (evidence_output / "index.html").write_text(
+            render_safety_evidence(root, evidence, repository_url=metadata.repository_url,
+                                   product_name=metadata.product_name), encoding="utf-8")
+        (evidence_output / "evidence.json").write_text(
+            json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (output / "commands" / "commands.json").write_text(
         json.dumps(command_catalog.as_dict(), indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

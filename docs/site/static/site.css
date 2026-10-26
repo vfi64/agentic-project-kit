@@ -408,3 +408,6 @@ th {
 .workflow-map { margin: 1rem auto; }
 @media (max-width: 480px) { #workflow-figures > .panel { padding: 10px; } .workflow-map { margin-inline: -6px; } }
 
+
+/* Evidence source identities remain readable on narrow screens. */
+.source-bindings code, .evidence-page code { overflow-wrap: anywhere; word-break: break-word; white-space: normal; }

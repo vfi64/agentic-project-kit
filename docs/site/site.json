@@ -12913,6 +12913,324 @@
       "status": "recorded",
       "version": "1.1.6"
     },
+    "safety_evidence": {
+      "baseline": {
+        "applicable": 10,
+        "detected": 5,
+        "runtime": "agentic-kit 1.0.25",
+        "sandbox_revision": "4e784b6a751ccdddf6cbc7636c6ad4b3b65326bd",
+        "scenario_count": 11,
+        "scenarios": [
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "stale command authority",
+            "id": "S01"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": false,
+            "fault_class": "raw git bypass",
+            "id": "S02"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": false,
+            "fault_class": "path escape",
+            "id": "S03"
+          },
+          {
+            "applicable": true,
+            "control_quiet": false,
+            "control_returncode": 1,
+            "detected": false,
+            "fault_class": "stale order",
+            "id": "S04"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": false,
+            "fault_class": "order self-authorisation",
+            "id": "S05"
+          },
+          {
+            "applicable": false,
+            "control_quiet": false,
+            "control_returncode": null,
+            "detected": false,
+            "fault_class": "projection drift",
+            "id": "S06"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "stale entrypoint",
+            "id": "S07"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "invalid planning state",
+            "id": "S08"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "unregistered document",
+            "id": "S09"
+          },
+          {
+            "applicable": true,
+            "control_quiet": false,
+            "control_returncode": 4,
+            "detected": false,
+            "fault_class": "direct git mutation",
+            "id": "S10"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "commit on main",
+            "id": "S11"
+          }
+        ]
+      },
+      "development": {
+        "applicable": 11,
+        "detected": 11,
+        "runtime": "Editable development runtime; exact runtime revision not recorded",
+        "sandbox_revision": "04976227b4e36dc75cf2520dd99f06e136e65cde",
+        "scenario_count": 11,
+        "scenarios": [
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "stale command authority",
+            "id": "S01"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "raw git bypass",
+            "id": "S02"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "path escape",
+            "id": "S03"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "stale order",
+            "id": "S04"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "order self-authorisation",
+            "id": "S05"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "projection drift",
+            "id": "S06"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "stale entrypoint",
+            "id": "S07"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "invalid planning state",
+            "id": "S08"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "unregistered document",
+            "id": "S09"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "direct git mutation",
+            "id": "S10"
+          },
+          {
+            "applicable": true,
+            "control_quiet": true,
+            "control_returncode": 0,
+            "detected": true,
+            "fault_class": "commit on main",
+            "id": "S11"
+          }
+        ]
+      },
+      "findings": [
+        {
+          "area": "typed orders",
+          "gap": "command_argv executes any argv. safety: READ_ONLY is a label and is not enforced. remote-next/rn and typed-next run the queued order without an --execute step.",
+          "id": "WOTB-01",
+          "probe": "touch EXECUTED ran under safety: READ_ONLY",
+          "severity": "high"
+        },
+        {
+          "area": "typed orders",
+          "gap": "cockpit_action passes the order's own allow_bounded to run_cockpit_action, so an order authorises its own BOUNDED actions, for example dialog.rnc (commit and push closeout paths) or dialog.rn (run the next order).",
+          "id": "WOTB-02",
+          "probe": "allow_bounded=True reached the cockpit call",
+          "severity": "medium"
+        },
+        {
+          "area": "typed orders, work-order run",
+          "gap": "log_path is checked with startswith(\"docs/reports/terminal/\") only; docs/reports/terminal/../../../../x writes outside the repository.",
+          "id": "WOTB-03",
+          "probe": "log file created outside the repository root for both runners",
+          "severity": "medium"
+        },
+        {
+          "area": "work-order run",
+          "gap": "The required gates are substring checks on the command; echo pytest ruff check check-docs doctor; \u2026 satisfies the contract without running a gate. This defeats the gate contract, not a security boundary, because the lane executes shell by design.",
+          "id": "WOTB-04",
+          "probe": "check_work_order returned no errors",
+          "severity": "low"
+        },
+        {
+          "area": "transfer run_command",
+          "gap": "Raw git/gh and interpreters are recognised only by literal argv[0] or text prefix. env git push --force, /usr/bin/git push, git -c \u2026 push, git -C . push, env gh pr merge, /usr/bin/python3 -c, .venv/bin/python -c pass parsing and lint; git -c/git -C produce only a WARN. This contradicts transfer_safety_rules.yaml (\"Do not put raw gh \u2026 into LLM-to-local payloads\").",
+          "id": "WOTB-05",
+          "probe": "all seven argv vectors reach execution",
+          "severity": "medium"
+        },
+        {
+          "area": "transfer write_text_file",
+          "gap": "Paths are checked lexically; symlinks are followed. A payload symlink copies any readable file into the repository, where a later commit can publish it, and a symlinked directory makes the write land outside the repository.",
+          "id": "WOTB-06",
+          "probe": "secret copied into docs/leak.txt; file planted outside the root",
+          "severity": "high"
+        },
+        {
+          "area": "transfer freshness guard",
+          "gap": "_head_matches accepts any prefix of HEAD, including one character (short_head.startswith(value)), so an anchor matches about one HEAD in sixteen without any knowledge of the current state.",
+          "id": "WOTB-07",
+          "probe": "_head_matches(\"a\", \u2026) is true for a HEAD starting with a",
+          "severity": "medium"
+        },
+        {
+          "area": "transfer remote-next / transfer continue",
+          "gap": "(a) The freshness guard (status, kind, expected branch, anchor) runs only when no branch is given; transfer continue always passes the inferred branch, so on the canonical path the guard is skipped. (b) Without a branch, the guard validates the order in the current checkout, and the order executed is re-read after git switch and git pull of the order's branch, with no re-validation.",
+          "id": "WOTB-08",
+          "probe": "an order without status, kind or anchor executed with branch=; a different order executed than the one validated",
+          "severity": "high"
+        },
+        {
+          "area": "next-turn.py lane",
+          "gap": "The validator is a text denylist over an arbitrary Python script ('git push', 'os.system(', \u2026). subprocess.run([\"git\", \"push\", \u2026]) or __import__(\"o\"+\"s\") pass. The lane is unrestricted by nature; the validator must not be presented as a safety boundary.",
+          "id": "WOTB-09",
+          "probe": "validator returned ok=true",
+          "severity": "low"
+        }
+      ],
+      "kind": "historical_safety_evidence",
+      "mitigations": [
+        {
+          "ids": [
+            "WOTB-01",
+            "WOTB-02",
+            "WOTB-03",
+            "WOTB-05",
+            "WOTB-06"
+          ],
+          "summary": "Typed command_argv and transfer run_command run READ_ONLY Kit commands and read-only git/gh queries. BOUNDED Kit commands, BOUNDED cockpit actions and commands outside the manifest need the local --allow-unlisted flag on transfer continue, transfer remote-next, transfer apply, transfer run-local, remote-next/rn, work-order typed-next and work-order typed-run. DESTRUCTIVE Kit commands, raw git/gh mutations and interpreters are refused even with the flag. The refusal happens before any action of the order runs."
+        },
+        {
+          "ids": [
+            "WOTB-07",
+            "WOTB-08"
+          ],
+          "summary": "The anchor must be a full 40-character hash. It must equal HEAD for an uncommitted order, and otherwise the first parent of the commit that last changed the order file. transfer remote-next checks status, kind, branch and anchor again after switch and pull, on every path including an explicit or inferred branch (transfer continue). The order that runs is therefore the order that was checked. transfer order-validate uses the same binding."
+        },
+        {
+          "ids": [
+            "WOTB-04",
+            "WOTB-09"
+          ],
+          "summary": "work-order run --execute, the next-turn.py fixed slot (next_turn_runner, GUI work-order run) and current.sh (agent_command_runner) no longer execute anything. They report BLOCKED_RETIRED_LANE, keep their evidence and point to typed work orders, transfer orders and the planner executor. The validators stay as format checks. The commands are removed after the deprecation window."
+        }
+      ],
+      "observation_date": "2026-10-16",
+      "schema_version": 1,
+      "scope": "historical-observation",
+      "sources": {
+        "baseline": {
+          "path": "docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_BASELINE_1.0.25.json",
+          "revision": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7",
+          "sha256": "3120313d823a4e31b867126688519903e4583a32237827b5640576f4b8e0bf1e"
+        },
+        "context_pilot": {
+          "path": "docs/reports/context_budget_20261016/CONTEXT_BENCHMARK_PART2_20261016.md",
+          "revision": "2d2ac7b7b440677dc67a38933f6ad254367f1579",
+          "sha256": "b9c9225a2f582666fd715dbadfc3e20e006e628c2fdad79fdba9e52a389c2c2a"
+        },
+        "development": {
+          "path": "docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_RESULTS.json",
+          "revision": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7",
+          "sha256": "8ba1e1f64df329e02e48a4231c83d5d20d4e1b7f71330e0ebe05a26bd9fa0495"
+        },
+        "method": {
+          "path": "docs/reports/gate_benchmark_20261016/GATE_BENCHMARK_PART1_20261016.md",
+          "revision": "9dd637ebfa3bfe5c5385bed6ed08d8538d5ec6b7",
+          "sha256": "513e0ee9c2e3d87b2b7c962606d0503fef57c364c66fd3a3e28ea63b963fc1cc"
+        },
+        "review": {
+          "path": "docs/reports/WORK_ORDER_TRUST_BOUNDARY_REVIEW_20261016.md",
+          "revision": "0902ccf9427e6d080de189cbe9f35245c6126b59",
+          "sha256": "f09e272f073aceb6de78f1d3cdf934851df4bea9ecb8dab10b80adeceec4cc1c"
+        }
+      }
+    },
     "schema_version": 1,
     "workflow_figures": {
       "boundary": "G2/G3 are contract views, not observed nested calls. G0 shows one observed work-finish execution.",

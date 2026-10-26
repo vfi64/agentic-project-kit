@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Present the historical work-order findings and offline gate comparison on a source-bound evidence page, with explicit applicability denominators, mitigation scope and benchmark limitations.
+
 - Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails.
 
 ## v1.1.6 - 2026-10-25
