@@ -468,9 +468,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/w1-p0-task-tag-inventory",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f714953c194795d0b37a9f5aeac8722f7a545f69",
+    "head": "f7043f160c56a9c716c151f4c57a9f6ecf5506e4",
     "head_matches_origin_main": false,
-    "head_short": "f714953c",
+    "head_short": "f7043f16",
     "local_path": "cd /path/to/",
     "origin_main": "cdcd5f53e690d37baeeeaab07693ee4d90d3a93c",
     "origin_main_short": "cdcd5f53",
