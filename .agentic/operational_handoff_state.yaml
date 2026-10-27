@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f475c0b512c4e787515e0e1e6fedd284b15a50ee
-  short: f475c0b5
-  subject: Recover partial external workspaces and isolate Kit gates (KIT-GF-087/088) (#2652)
+  full: 94769b20ed0b19fbe389a728a53e2b99164efcf0
+  short: 94769b20
+  subject: Verify external bootstrap across versions and all work-check profiles (#2654)
 last_substantive_work_state:
-  full: f475c0b512c4e787515e0e1e6fedd284b15a50ee
-  short: f475c0b5
-  subject: Recover partial external workspaces and isolate Kit gates (KIT-GF-087/088) (#2652)
+  full: 94769b20ed0b19fbe389a728a53e2b99164efcf0
+  short: 94769b20
+  subject: Verify external bootstrap across versions and all work-check profiles (#2654)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
