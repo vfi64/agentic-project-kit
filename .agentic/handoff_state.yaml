@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 5a81ebad
-  commit_subject: Release 1.1.7 (#2667)
+  commit: d542c0bb
+  commit_subject: Record DOI for release 1.1.7 (#2669)
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -87,14 +87,14 @@ safe_state:
   - 897
   - 968
 release:
-  current_version: 1.1.6
-  previous_version: 1.1.5
-  tag: v1.1.6
+  current_version: 1.1.7
+  previous_version: 1.1.6
+  tag: v1.1.7
   github_release_exists: true
   zenodo_concept_doi: 10.5281/zenodo.20101359
-  zenodo_version_doi: 10.5281/zenodo.23651539
+  zenodo_version_doi: 10.5281/zenodo.23698043
   post_release_check: PASS
-  post_release_evidence: docs/reports/release/post-release-doi-closeout-1.1.6.json
+  post_release_evidence: docs/reports/release/post-release-doi-closeout-1.1.7.json
 open_items:
   prs: []
   next_expected_chat_action: Continue after PR892 with post-merge gate visibility
@@ -433,7 +433,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr2667-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2669-successor-chat-handoff.md
   first_instruction: 'Review PR #1436 and the refreshed successor handoff package
     for the release command authority planning slice. After merge, start from fresh
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
@@ -444,6 +444,6 @@ next_step:
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
     before DOI, legacy-doc, absolute-path, or GUI work.'
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr2667-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2669-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
