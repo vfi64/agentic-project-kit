@@ -3,6 +3,8 @@
 Copy the running distribution, never project sources or tests, into a separate
 interpreter. Dependencies remain shared with the invoking environment; the Kit
 package and metadata are local. No pip, network or consumer files are touched.
+Dependencies that sit beside the Kit (an installed wheel's site-packages) are
+shared through a filtered view without the Kit (KIT-GF-089).
 """
 from __future__ import annotations
 
@@ -13,6 +15,43 @@ import shutil
 import subprocess
 import sys
 import venv
+
+
+def _is_kit_entry(name: str) -> bool:
+    return name in {"agentic_project_kit", "agentic_project_kit.egg-info"} or (
+        name.startswith("agentic_project_kit-") and name.endswith((".dist-info", ".egg-info")))
+
+
+def _dependency_paths(paths: list[str], kit_parent: Path, view: Path) -> list[str]:
+    """The invoking environment's import paths without the running Kit (KIT-GF-089).
+
+    From a source checkout the Kit's parent is ``src/`` and holds nothing else, so it was simply
+    left out. From an installed wheel the Kit's parent is ``site-packages``, which also holds every
+    dependency: leaving it out left the owned runtime without typer, and the GF-021/032/045/067
+    contracts failed under the released 1.1.6 wheel. That directory is now replaced by a view of
+    symbolic links to every entry except the Kit's own package and distribution metadata.
+    """
+    kit_parent = kit_parent.resolve()
+    cwd = Path.cwd().resolve()
+    result: list[str] = []
+    for raw in paths:
+        if not raw or not Path(raw).is_dir():
+            continue
+        resolved = Path(raw).resolve()
+        if resolved == cwd:
+            continue
+        if resolved != kit_parent:
+            result.append(raw)
+            continue
+        view.mkdir(parents=True, exist_ok=True)
+        for entry in sorted(resolved.iterdir()):
+            if _is_kit_entry(entry.name) or entry.suffix == ".pth" or entry.name == "__pycache__":
+                continue
+            link = view / entry.name
+            if not link.exists():
+                link.symlink_to(entry, target_is_directory=entry.is_dir())
+        result.append(str(view))
+    return list(dict.fromkeys(result))
 
 
 def prepare_owned_runtime(base: Path, env: dict[str, str], *, console: bool = True) -> Path:
@@ -36,8 +75,7 @@ def prepare_owned_runtime(base: Path, env: dict[str, str], *, console: bool = Tr
     if metadata is None:
         raise RuntimeError("running Kit distribution metadata is missing")
     shutil.copytree(metadata, site / metadata.name)
-    dependencies = [p for p in sys.path if p and Path(p).is_dir()
-                    and Path(p).resolve() not in {package.parent, Path.cwd().resolve()}]
+    dependencies = _dependency_paths(sys.path, package.parent, base.resolve() / "owned-runtime-dependencies")
     (site / "retest-dependencies.pth").write_text("\n".join(dependencies) + "\n", encoding="utf-8")
     if os.name == "nt" and console:
         raise RuntimeError("owned runtime retest currently requires a POSIX console entry point")

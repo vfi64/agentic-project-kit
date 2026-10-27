@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-27T14:16:51.391947+00:00",
+    "created_at_utc": "2026-10-27T15:43:22.807471+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -318,12 +318,12 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-27T14:16:51.591031+00:00",
+    "generated_at_utc": "2026-10-27T15:43:23.041090+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/kit-merge-abort-content-binding",
-      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
-      "status_short": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
+      "branch": "fix/kit-gf-089-owned-runtime-dependencies",
+      "head": "bb8d0ecd72e1831f4276a2b9ab7e42de7103c812",
+      "status_short": "M docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md"
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -426,7 +426,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "85839aab08860bad930e14be040f24fbb623a848f0b6c3abd4fa0b49c13ee3cc"
+        "sha256": "41b680f054c63a7a02c86b14acba31696646ef17a9f610faae3cb97b81e27745"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -931,12 +931,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/kit-merge-abort-content-binding",
-      "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
+      "branch": "fix/kit-gf-089-owned-runtime-dependencies",
+      "dirty_status": "M docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
+      "head": "bb8d0ecd72e1831f4276a2b9ab7e42de7103c812",
       "head_matches_upstream": false,
-      "upstream": "",
-      "upstream_head": ""
+      "upstream": "origin/fix/kit-gf-089-owned-runtime-dependencies",
+      "upstream_head": "4f9f1d536ec1d0a78617d2f69bb7121e7157bd22"
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -998,7 +998,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "85839aab08860bad930e14be040f24fbb623a848f0b6c3abd4fa0b49c13ee3cc"
+        "sha256": "41b680f054c63a7a02c86b14acba31696646ef17a9f610faae3cb97b81e27745"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1503,12 +1503,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/kit-merge-abort-content-binding",
-      "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
+      "branch": "fix/kit-gf-089-owned-runtime-dependencies",
+      "dirty_status": "M docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
+      "head": "bb8d0ecd72e1831f4276a2b9ab7e42de7103c812",
       "head_matches_upstream": false,
-      "upstream": "",
-      "upstream_head": ""
+      "upstream": "origin/fix/kit-gf-089-owned-runtime-dependencies",
+      "upstream_head": "4f9f1d536ec1d0a78617d2f69bb7121e7157bd22"
     },
     "schema_version": 1,
     "terminal_block_rules": {

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).
+
 - Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.
 
 - Generate task-first website navigation, metadata-bound command detail pages and a source-bound self-hosting history with explicit evidence and authorization limits.
