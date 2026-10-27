@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 87,
+    "CLOSED": 88,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 47,
+    "local": 48,
     "owner_remote": 33
   },
   "findings": [
@@ -6675,6 +6675,58 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit greenfield retest --id KIT-GF-021 --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "The owned-runtime contract KIT-GF-021 runs to PASS from the installed wheel; the owned runtime imports its dependencies and the Kit from its own copy."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "nested greenfield retest KIT-GF-021 PASS under the installed wheel"
+          ]
+        },
+        "machine": {
+          "covers": "The owned-runtime retest fixture keeps the invoking environment's dependencies when the Kit is installed as a wheel beside them.",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--id",
+                "KIT-GF-021",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Installed Kit wheel whose dependencies share its site-packages directory; no Kit source checkout on sys.path."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Run against the built wheel in a clean virtual environment; the Kit's own CI runs from the checkout and cannot show the defect (tests/test_greenfield_retest_owned_runtime_wheel.py models the wheel layout).",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-089",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -6811,7 +6863,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 47,
+  "machine_contracts": 48,
   "schema_version": 1,
-  "source_sha256": "3794f41c0654437b73436dcf8eb2bc3c73a0c55dd6f5f41f44c61597199062da"
+  "source_sha256": "eb4e7b8c1bfc026fe090c83af6915e5947a284d7f649266606cd26109c860626"
 }

@@ -6045,6 +6045,54 @@
       "prs": []
     },
     {
+      "id": "KIT-GF-089",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Installed Kit wheel whose dependencies share its site-packages directory; no Kit source checkout on sys.path."
+        ],
+        "commands": [
+          "agentic-kit greenfield retest --id KIT-GF-021 --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "The owned-runtime contract KIT-GF-021 runs to PASS from the installed wheel; the owned runtime imports its dependencies and the Kit from its own copy."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "nested greenfield retest KIT-GF-021 PASS under the installed wheel"
+          ]
+        },
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "The owned-runtime retest fixture keeps the invoking environment's dependencies when the Kit is installed as a wheel beside them.",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "retest",
+                "--id",
+                "KIT-GF-021",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            }
+          ]
+        },
+        "verification": "Run against the built wheel in a clean virtual environment; the Kit's own CI runs from the checkout and cannot show the defect (tests/test_greenfield_retest_owned_runtime_wheel.py models the wheel layout)."
+      }
+    },
+    {
       "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."

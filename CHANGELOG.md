@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).
+
 - Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.
 
 - Recover partially generated external workspaces through a signed additive initialization plan, preserve project documents and provenance, and block Kit-internal gates until the external rule basis is initialized and valid (KIT-GF-087, KIT-GF-088).

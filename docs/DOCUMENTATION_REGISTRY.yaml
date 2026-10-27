@@ -1864,3 +1864,7 @@ documents:
     owner: maintainers
     summary: Partial external bootstrap recovery and gate isolation with independent fixture
       evidence
+  - path: docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md
+    class: evidence/log
+    owner: maintainers
+    summary: KIT-GF-089 owned-runtime retest dependencies under an installed wheel.

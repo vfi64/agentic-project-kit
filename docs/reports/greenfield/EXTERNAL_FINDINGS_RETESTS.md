@@ -1501,6 +1501,23 @@ Expected: Partial bootstrap blocks explicitly; initialized generic workspace pas
 
 Expected result fields: `{"assertions": ["partial work-check BLOCKED, recovery PASS, external work-check PASS"]}`.
 
+## KIT-GF-089
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md
+
+Execution class: local (effects: none); machine contract: The owned-runtime retest fixture keeps the invoking environment's dependencies when the Kit is installed as a wheel beside them.
+
+Preconditions: Installed Kit wheel whose dependencies share its site-packages directory; no Kit source checkout on sys.path.
+
+```text
+agentic-kit greenfield retest --id KIT-GF-021 --json
+```
+
+Expected: The owned-runtime contract KIT-GF-021 runs to PASS from the installed wheel; the owned runtime imports its dependencies and the Kit from its own copy.
+
+Expected result fields: `{"assertions": ["nested greenfield retest KIT-GF-021 PASS under the installed wheel"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

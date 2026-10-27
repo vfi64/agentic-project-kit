@@ -144,6 +144,10 @@ may remain untracked; tracked state must stay clean and root tmp summary files
 must remain absent. These fixtures never operate on the consumer checkout.
 The owned-console fixture currently fails explicitly on Windows rather than
 claiming a verification without a supported console launcher.
+`tests/test_greenfield_retest_owned_runtime_wheel.py` models an installed wheel,
+whose dependencies share the Kit's site-packages directory (KIT-GF-089): the owned
+runtime must import typer and the Kit from its own copy. The extracted-wheel fixture
+above keeps the dependencies elsewhere and cannot show this.
 
 ## Workspace Kit adoption gate
 
