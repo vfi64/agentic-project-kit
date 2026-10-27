@@ -56,3 +56,7 @@ leave both status and index unchanged. The first abort preview fingerprint did
 not capture their bytes. A reproducing regression failed before correction.
 The plan now also hashes the unstaged binary diff, so a stale abort signature
 blocks and preserves the late resolution. There are no new flags or effects.
+The full follow-up suite passed: 4296 tests, 545 warnings, 346.92 seconds.
+The 22 targeted lifecycle/rebase tests, lint, check-docs and doctor passed.
+A non-editable candidate controller independently confirmed that changing the
+unstaged resolution changes the abort signature. No safety check was skipped.
