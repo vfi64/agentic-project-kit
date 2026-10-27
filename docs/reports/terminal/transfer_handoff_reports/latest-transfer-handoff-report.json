@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-27T11:29:23.247242+00:00",
+    "created_at_utc": "2026-10-27T13:46:18.500560+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -93,7 +93,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 272,
+      "command_count": 273,
       "generated_by": "",
       "important_wrappers": [
         {
@@ -318,12 +318,12 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-27T11:29:23.482420+00:00",
+    "generated_at_utc": "2026-10-27T13:46:18.701022+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/w1-w3-w4-generated-site",
-      "head": "70ce7580e9291744b3e5786cac5cf3572fd4d56c",
-      "status_short": ""
+      "branch": "codex/kit-merge-upstream",
+      "head": "190add0a28bada8f5c002f49eb0799b30d800c58",
+      "status_short": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -384,8 +384,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "79d8d63e81a6ff2a4a81b97178fe805f520d14cbbeebab0577c2c83b3182ccf8",
-      "docs/reference/agentic-kit-commands.json": "98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "178b381c8e8341240c488612ef9dbedcdf50df5fa2cd7d9197bcedb9d56da63e",
+      "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -426,7 +426,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "31703898b63f5ef38405367206f6a8a0e93831b7a30656cce36437a70afd6771"
+        "sha256": "85839aab08860bad930e14be040f24fbb623a848f0b6c3abd4fa0b49c13ee3cc"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -931,12 +931,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/w1-w3-w4-generated-site",
-      "dirty_status": "",
-      "head": "70ce7580e9291744b3e5786cac5cf3572fd4d56c",
+      "branch": "codex/kit-merge-upstream",
+      "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "head": "190add0a28bada8f5c002f49eb0799b30d800c58",
       "head_matches_upstream": false,
-      "upstream": "origin/codex/w1-w3-w4-generated-site",
-      "upstream_head": "810e954c8b88eae1bcb76e1910dc4fe8242c1996"
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -998,7 +998,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "31703898b63f5ef38405367206f6a8a0e93831b7a30656cce36437a70afd6771"
+        "sha256": "85839aab08860bad930e14be040f24fbb623a848f0b6c3abd4fa0b49c13ee3cc"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1503,12 +1503,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/w1-w3-w4-generated-site",
-      "dirty_status": "",
-      "head": "70ce7580e9291744b3e5786cac5cf3572fd4d56c",
+      "branch": "codex/kit-merge-upstream",
+      "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "head": "190add0a28bada8f5c002f49eb0799b30d800c58",
       "head_matches_upstream": false,
-      "upstream": "origin/codex/w1-w3-w4-generated-site",
-      "upstream_head": "810e954c8b88eae1bcb76e1910dc4fe8242c1996"
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {

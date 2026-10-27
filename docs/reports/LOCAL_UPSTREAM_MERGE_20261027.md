@@ -39,5 +39,12 @@ index/head/upstream signature drift, dirty/protected/wrong branches, linked
 worktrees, continuation, abort and untracked preservation. An explicit boundary
 test verifies the rules-confirmed check before CLI execution.
 
-Full gates and the exact CI head are reported by the PR closeout. No release is
+The full local suite passed: 4295 tests, 545 warnings, 159.98 seconds with
+`python -m pytest -q -n 4 --dist worksteal`. Focused lifecycle, inventory, rebase
+and release-content coverage passed (44 tests); the generated D1 matrix tests
+passed (38). The first full run identified its stale manifest identity; the
+existing matrix renderer regenerated that projection without changing its test.
+Lint, check-docs and doctor passed after canonical handoff regeneration.
+
+The exact CI head is reported by the PR closeout. No release is
 part of this repair. No private consumer identity or raw local paths are included.
