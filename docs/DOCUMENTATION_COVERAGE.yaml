@@ -71,6 +71,8 @@ rules:
     terms:
     - tests/test_task_selection_design.py
     - tests/test_task_selection_runtime.py
+    - tests/test_release_review_projection.py
+    - task-selection-review-refresh
 - id: task-tag-metadata-inventory-boundary
   description: W1-P0 metadata counts remain separate from D1 task authority and context effectiveness.
   documents:

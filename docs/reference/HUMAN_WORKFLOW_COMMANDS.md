@@ -268,6 +268,13 @@ report records them as `explicit_summary_lines` (KIT-GF-045).
 Use --write only when readiness checks are clean. A successful write also refreshes command entrypoints and writes
 `docs/reports/release/release-prepare-<version>.json` as release-metadata authority evidence for PR and CI gates.
 
+In the Kit development checkout, `task-selection-review-refresh` runs the canonical
+`scripts/task_selection_design_check.py` generator after entrypoint synchronization
+and before successor handoff and Pages rendering. This keeps the archived review
+matrix bound to the synchronized manifest. A missing or failing generator blocks
+later preparation steps. Dry-run preparation does not render the matrix; consumer
+workspaces skip this Kit-only projection even if they contain a same-named script.
+
 In the Kit repository and external workspaces, creating a release section consumes exactly the matching
 Unreleased bullets carried into that release, keeping the Unreleased heading.
 Unmatched entries and historical sections are preserved. The dry run lists

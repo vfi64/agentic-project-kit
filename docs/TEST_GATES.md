@@ -1,5 +1,14 @@
 # Test Gates
 
+### Release review projection freshness
+
+`tests/test_release_review_projection.py` reproduces a release manifest change and
+executes the canonical review-matrix generator in an isolated fixture. It verifies
+the `task-selection-review-refresh` ordering after entrypoint synchronization and
+before handoff, deterministic rerendering, missing/failed-generator refusal before
+handoff, Pages or release evidence, and dry-run/consumer isolation. The existing
+`tests/test_task_selection_design.py` byte-equality assertion remains unchanged.
+
 ### Local upstream merge lifecycle
 
 `tests/test_transfer_merge_upstream.py` first reproduces the missing route, then
