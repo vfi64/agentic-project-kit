@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 79d8d63e81a6ff2a4a81b97178fe805f520d14cbbeebab0577c2c83b3182ccf8
 - docs/reference/agentic-kit-commands.json: 98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d
-## Operational documentation refresh state after PR #2654
+## Operational documentation refresh state after PR #2656
 
-Current administrative handoff refresh state is `94769b20` (`Verify external bootstrap across versions and all work-check profiles (#2654)`). Continue next only after this post-PR2654 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `36562d72` (`Generate task-first navigation, command details and bounded Kit history (#2656)`). Continue next only after this post-PR2656 refresh is committed and merged; the next substantive slice must be created from fresh main.
