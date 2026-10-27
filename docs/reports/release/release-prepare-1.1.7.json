@@ -1,0 +1,274 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/reports/task_selection_design_20261026/README.md",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/detail-check.html",
+    "docs/site/commands/detail-doctor.html",
+    "docs/site/commands/detail-init.html",
+    "docs/site/commands/detail-kit-update.html",
+    "docs/site/commands/detail-release-run.html",
+    "docs/site/commands/detail-transfer-chat-switch-complete.html",
+    "docs/site/commands/detail-transfer-pr-closeout-complete.html",
+    "docs/site/commands/detail-transfer-pr-complete.html",
+    "docs/site/commands/detail-work-finish.html",
+    "docs/site/commands/detail-work-start.html",
+    "docs/site/commands/detail-workspace-adopt.html",
+    "docs/site/commands/detail-workspace-init.html",
+    "docs/site/commands/details.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/commands/tasks.json",
+    "docs/site/history/history.json",
+    "docs/site/history/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/understand/workflow-figures.json",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json"
+  ],
+  "date": "2026-10-27",
+  "explicit_summary_lines": [
+    "Fixed: Refresh the Kit review matrix after release manifest synchronization and stop preparation if its generator fails, while leaving consumer workspaces and dry runs unchanged.",
+    "Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).",
+    "Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.",
+    "Generate task-first website navigation, metadata-bound command detail pages and a source-bound self-hosting history with explicit evidence and authorization limits.",
+    "Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.",
+    "Recover partially generated external workspaces through a signed additive initialization plan, preserve project documents and provenance, and block Kit-internal gates until the external rule basis is initialized and valid (KIT-GF-087, KIT-GF-088).",
+    "Share identity-bound task routes between command selection and website guidance, with explicit unknown states and no execution authority.",
+    "Present the historical work-order findings and offline gate comparison on a source-bound evidence page, with explicit applicability denominators, mitigation scope and benchmark limitations.",
+    "Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails."
+  ],
+  "from_tag": "v1.1.6",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": null,
+      "argv": [
+        "kit-ci-pin-guard"
+      ],
+      "name": "kit-ci-pin-guard",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "{\"next_action\": null, \"reasons\": [], \"result_status\": \"PASS\", \"unreadable_files\": [], \"versions\": {\"highest_pin\": null, \"installed\": \"1.1.6\", \"pins\": []}}",
+      "stdout_length": 154,
+      "stdout_sha256": "fdf7e9c5135ebd94d8a6674bbd3f108b95165668c0e5c5788848bf38cb3bc4b6"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.1.7",
+        "--from-tag",
+        "v1.1.6",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-117-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 54938,
+      "stdout_sha256": "fc9391427fccb04e99f2ec4a32c7d1cfa3cc09a8433933dbf5c408d45ed7f57b"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.1.7",
+        "--date",
+        "2026-10-27",
+        "--summary-line",
+        "Fixed: Refresh the Kit review matrix after release manifest synchronization and stop preparation if its generator fails, while leaving consumer workspaces and dry runs unchanged.",
+        "--summary-line",
+        "Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).",
+        "--summary-line",
+        "Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.",
+        "--summary-line",
+        "Generate task-first website navigation, metadata-bound command detail pages and a source-bound self-hosting history with explicit evidence and authorization limits.",
+        "--summary-line",
+        "Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.",
+        "--summary-line",
+        "Recover partially generated external workspaces through a signed additive initialization plan, preserve project documents and provenance, and block Kit-internal gates until the external rule basis is initialized and valid (KIT-GF-087, KIT-GF-088).",
+        "--summary-line",
+        "Share identity-bound task routes between command selection and website guidance, with explicit unknown states and no execution authority.",
+        "--summary-line",
+        "Present the historical work-order findings and offline gate comparison on a source-bound evidence page, with explicit applicability denominators, mitigation scope and benchmark limitations.",
+        "--summary-line",
+        "Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails.",
+        "--summary-lines-from",
+        "tmp/release-117-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 291,
+      "stdout_sha256": "3dd8e51a5efffea9dfdd8c25c7194d9f4e9dd2472c0bfa5848f1b6dbfc3012ea"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 507,
+      "stdout_sha256": "853e58fc9b0fdd1ce7bab0eb9499cc6f946f4336df3b70d0de80f7471653f515"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "scripts/task_selection_design_check.py",
+        "--out",
+        "docs/reports/task_selection_design_20261026/README.md"
+      ],
+      "name": "task-selection-review-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "{\"result_status\": \"PASS\", \"scope\": \"proposal structure only\", \"routes\": 11, \"runtime_enabled\": false}",
+      "stdout_length": 102,
+      "stdout_sha256": "53416fd4e80adf3a813ac4b576c481977745c461080b56f20947a8efb172c713"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 260,
+      "stdout_sha256": "976183f2b1a747e7c5aefaf0056469955ba35c4ee98c7e36f40ad5a828e43751"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10634,
+      "stdout_sha256": "cf58dbd366db23d3e92d9491ccdefd1bdc6e7c561948cfeaa4ba4e0c3d48fa38"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 6434,
+      "stdout_sha256": "aba22f9f51a0bf89f7ba0bc116b851b2fff9192fb10f311007f83564c6dee2e1"
+    }
+  ],
+  "summary_lines_path": "tmp/release-117-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.1.7"
+}
