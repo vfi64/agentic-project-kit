@@ -14790,9 +14790,8 @@
     },
     "release": {
       "date": "2026-10-27",
-      "entry_count": 10,
+      "entry_count": 9,
       "notes": [
-        "Zenodo DOI verification pending for v1.1.7.",
         "Fixed: Refresh the Kit review matrix after release manifest synchronization and stop preparation if its generator fails, while leaving consumer workspaces and dry runs unchanged.",
         "Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).",
         "Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.",
@@ -16035,7 +16034,7 @@
     "package_version": "1.1.7",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
-    "release_tag": "v1.1.6",
+    "release_tag": "v1.1.7",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "019d0f970c2c",
     "requires_python": ">=3.10",
@@ -16050,7 +16049,7 @@
       "orchestrator": 35,
       "primitive": 107
     },
-    "version_doi": "10.5281/zenodo.23651539"
+    "version_doi": "10.5281/zenodo.23698043"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -16070,13 +16069,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.6",
+    "current_release_tag": "v1.1.7",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.6",
+    "current_verified_release": "1.1.7",
     "current_version": "1.1.7",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23651539"
+    "version_doi": "10.5281/zenodo.23698043"
   },
   "task_projection": {
     "execution_authorized": false,
