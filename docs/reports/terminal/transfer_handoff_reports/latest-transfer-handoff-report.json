@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-26T22:05:51.791765+00:00",
+    "created_at_utc": "2026-10-27T04:35:22.521689+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -318,11 +318,11 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-26T22:05:51.993241+00:00",
+    "generated_at_utc": "2026-10-27T04:35:22.722267+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "fix/kit-ios-foreign-workspace-bootstrap",
-      "head": "298311bc31d56fcfaa9884d0eb46310aa86dc02e",
+      "branch": "codex/foreign-bootstrap-delta-acceptance",
+      "head": "c596def353088db56dd5e88ab9f864f51d29daba",
       "status_short": ""
     },
     "kind": "llm_execution_context",
@@ -931,9 +931,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "fix/kit-ios-foreign-workspace-bootstrap",
+      "branch": "codex/foreign-bootstrap-delta-acceptance",
       "dirty_status": "",
-      "head": "298311bc31d56fcfaa9884d0eb46310aa86dc02e",
+      "head": "c596def353088db56dd5e88ab9f864f51d29daba",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
@@ -1503,9 +1503,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "fix/kit-ios-foreign-workspace-bootstrap",
+      "branch": "codex/foreign-bootstrap-delta-acceptance",
       "dirty_status": "",
-      "head": "298311bc31d56fcfaa9884d0eb46310aa86dc02e",
+      "head": "c596def353088db56dd5e88ab9f864f51d29daba",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
