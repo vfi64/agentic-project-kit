@@ -14699,6 +14699,128 @@
     {
       "dry_run_available": true,
       "group": "transfer",
+      "help": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort.",
+      "name": "merge-upstream",
+      "params": [
+        {
+          "default": null,
+          "help": "Expected current work branch; main is refused.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "origin/main",
+          "help": "Already fetched origin ref; never fetched or pushed here.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "upstream",
+          "opts": [
+            "--upstream"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Preview/finish the resolved active merge.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "continue_merge",
+          "opts": [
+            "--continue"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Preview/discard tracked progress of the active merge; preserve untracked files.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "abort",
+          "opts": [
+            "--abort"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Execute one approved action; preview is the default.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Approval signature from this action's preview.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print the same structured result as JSON.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "transfer",
+        "merge-upstream"
+      ],
+      "qualified_name": "agentic-kit transfer merge-upstream",
+      "remote_effects": [
+        "none"
+      ],
+      "replaces_raw": [],
+      "safety": "DESTRUCTIVE",
+      "surface": "primitive",
+      "task_tags": [
+        "destructive",
+        "transfer"
+      ],
+      "when_to_use": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort."
+    },
+    {
+      "dry_run_available": true,
+      "group": "transfer",
       "help": "Normalize active transfer files by adding missing command IDs and archiving stale active files.",
       "name": "normalize-files",
       "params": [
@@ -20636,7 +20758,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "c53db88c5322",
+    "manifest_sha": "afb7c5e544e0",
     "schema_version": 2
   },
   "schema_version": 3,

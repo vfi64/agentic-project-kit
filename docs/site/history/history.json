@@ -6,7 +6,7 @@
   "current_command_surfaces": {
     "diagnostic": 131,
     "orchestrator": 35,
-    "primitive": 106
+    "primitive": 107
   },
   "first_commit": {
     "date": "2026-05-09",
@@ -19,7 +19,7 @@
     "version": "0.2.0"
   },
   "kind": "bounded_history_projection",
-  "manifest_sha": "c53db88c5322",
+  "manifest_sha": "afb7c5e544e0",
   "overhead": {
     "admin_refresh_prs": 83,
     "evidence_class": "historical classification",

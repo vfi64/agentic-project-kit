@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.
+
 - Generate task-first website navigation, metadata-bound command detail pages and a source-bound self-hosting history with explicit evidence and authorization limits.
 
 - Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.

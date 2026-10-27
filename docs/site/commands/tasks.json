@@ -24,7 +24,7 @@
     ],
     "worktree_clean": "boolean"
   },
-  "manifest_sha": "c53db88c5322",
+  "manifest_sha": "afb7c5e544e0",
   "routes": [
     {
       "command": "agentic-kit check",
@@ -443,6 +443,7 @@
     "agentic-kit transfer list-refs",
     "agentic-kit transfer log-header",
     "agentic-kit transfer log-upload-hint",
+    "agentic-kit transfer merge-upstream",
     "agentic-kit transfer normalize-files",
     "agentic-kit transfer normalize-session",
     "agentic-kit transfer order-create",

@@ -226,7 +226,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=272",
+            "detail": "commands=273",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -294,7 +294,7 @@
     }
   },
   "command_catalog": {
-    "command_count": 272,
+    "command_count": 273,
     "diagnostic_count": 131,
     "entries": [
       {
@@ -9291,6 +9291,82 @@
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": true,
         "group": "transfer",
+        "help": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": null,
+            "help": "Expected current work branch; main is refused.",
+            "name": "branch",
+            "opts": [
+              "--branch"
+            ],
+            "required": true
+          },
+          {
+            "default": "origin/main",
+            "help": "Already fetched origin ref; never fetched or pushed here.",
+            "name": "upstream",
+            "opts": [
+              "--upstream"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Preview/finish the resolved active merge.",
+            "name": "continue_merge",
+            "opts": [
+              "--continue"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Preview/discard tracked progress of the active merge; preserve untracked files.",
+            "name": "abort",
+            "opts": [
+              "--abort"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Execute one approved action; preview is the default.",
+            "name": "execute",
+            "opts": [
+              "--execute"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Approval signature from this action's preview.",
+            "name": "expected_signature",
+            "opts": [
+              "--expected-signature"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Print the same structured result as JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit transfer merge-upstream",
+        "safety": "DESTRUCTIVE",
+        "surface": "primitive",
+        "when_to_use": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort."
+      },
+      {
+        "diagnostic_priority": "not_diagnostic",
+        "dry_run_available": true,
+        "group": "transfer",
         "help": "Normalize active transfer files by adding missing command IDs and archiving stale active files.",
         "lifecycle_rank": null,
         "params": [
@@ -12886,7 +12962,7 @@
       "slice": 1,
       "state": 3,
       "todo": 3,
-      "transfer": 72,
+      "transfer": 73,
       "work": 6,
       "work-order": 10,
       "workflow": 11,
@@ -12897,14 +12973,14 @@
     "kind": "site_command_catalog",
     "safety_counts": {
       "BOUNDED": 176,
-      "DESTRUCTIVE": 10,
+      "DESTRUCTIVE": 11,
       "READ_ONLY": 86
     },
     "schema_version": 1,
     "surface_counts": {
       "diagnostic": 131,
       "orchestrator": 35,
-      "primitive": 106
+      "primitive": 107
     }
   },
   "detail_projection": {
@@ -14650,7 +14726,7 @@
     ],
     "execution_authorized": false,
     "kind": "command_detail_projection",
-    "manifest_sha": "c53db88c5322",
+    "manifest_sha": "afb7c5e544e0",
     "schema_version": 1
   },
   "explanation_projection": {
@@ -15852,8 +15928,8 @@
       },
       "schema_version": 1,
       "sources": {
-        "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "b2cf971eebd1e0a6e57255fb359fd0c91c4006eb70c2d855de0bbb0b2b1241cc",
-        "docs/reference/agentic-kit-commands.json": "98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d",
+        "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "05a4595353fbba6f0a9b894eac61c5c3625e0a91beff4a2cbd1c507874464f1e",
+        "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -15876,7 +15952,7 @@
     "current_command_surfaces": {
       "diagnostic": 131,
       "orchestrator": 35,
-      "primitive": 106
+      "primitive": 107
     },
     "first_commit": {
       "date": "2026-05-09",
@@ -15889,7 +15965,7 @@
       "version": "0.2.0"
     },
     "kind": "bounded_history_projection",
-    "manifest_sha": "c53db88c5322",
+    "manifest_sha": "afb7c5e544e0",
     "overhead": {
       "admin_refresh_prs": 83,
       "evidence_class": "historical classification",
@@ -15939,31 +16015,31 @@
   "metadata": {
     "build_commit": null,
     "build_label": "docs-pages-fallback",
-    "command_count": 272,
+    "command_count": 273,
     "command_group_count": 40,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "c53db88c5322",
+    "manifest_sha": "afb7c5e544e0",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.6",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.6",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "c53db88c5322",
+    "reproduced_manifest_sha": "afb7c5e544e0",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
-      "DESTRUCTIVE": 10,
+      "DESTRUCTIVE": 11,
       "READ_ONLY": 86
     },
     "source_commit": null,
     "surface_counts": {
       "diagnostic": 131,
       "orchestrator": 35,
-      "primitive": 106
+      "primitive": 107
     },
     "version_doi": "10.5281/zenodo.23651539"
   },
@@ -16019,7 +16095,7 @@
       ],
       "worktree_clean": "boolean"
     },
-    "manifest_sha": "c53db88c5322",
+    "manifest_sha": "afb7c5e544e0",
     "routes": [
       {
         "command": "agentic-kit check",
@@ -16438,6 +16514,7 @@
       "agentic-kit transfer list-refs",
       "agentic-kit transfer log-header",
       "agentic-kit transfer log-upload-hint",
+      "agentic-kit transfer merge-upstream",
       "agentic-kit transfer normalize-files",
       "agentic-kit transfer normalize-session",
       "agentic-kit transfer order-create",

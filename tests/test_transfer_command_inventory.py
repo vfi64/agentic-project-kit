@@ -33,6 +33,7 @@ EXPECTED_TRANSFER_COMMANDS = (
     "pull-current",
     "delete-merged-work-branch",
     "branch-delete",
+    "merge-upstream",
     "pr-wait-ci",
     "pr-merge-safe",
     "pr-complete",
@@ -132,7 +133,7 @@ def test_transfer_app_command_inventory_stable() -> None:
     command_names = tuple(_fresh_transfer_module_probe()["command_names"])
 
     assert command_names == EXPECTED_TRANSFER_COMMANDS
-    assert len(command_names) == 68
+    assert len(command_names) == 69
 
 
 def test_transfer_module_importable_without_side_effects() -> None:

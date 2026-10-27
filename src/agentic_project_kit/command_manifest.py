@@ -464,6 +464,7 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit transfer continue": ["fetch", "push"],
         "agentic-kit transfer patch-cycle-status": ["network_read"],
         "agentic-kit transfer rebase-on-upstream": ["fetch"],
+        "agentic-kit transfer merge-upstream": ["none"],  # Local Git merge only; no GitHub merge, fetch or push.
         "agentic-kit transfer branch-delete": ["delete_remote", "push"],
         # KIT-GF-081: deletes the release branch through transfer branch-delete, reads tags, releases and PRs.
         "agentic-kit release abandon": ["delete_remote", "network_read", "push"],

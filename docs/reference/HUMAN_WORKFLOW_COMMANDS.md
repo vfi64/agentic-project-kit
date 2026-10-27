@@ -1,5 +1,32 @@
 # Human Workflow Meta Commands
 
+## Local upstream merge without rewriting history
+
+Use `agentic-kit transfer merge-upstream --branch <work-branch> --json` to preview
+merging the already fetched `origin/main` (or `--upstream origin/<branch>`).
+There is no fetch, push, GitHub PR merge or rebase in this command. Main, detached
+HEAD, dirty start state and another active Git operation are refused.
+
+The plan binds branch, HEAD, target commit, index content, worktree status and
+merge message. Review it, then repeat the action with `--execute
+--expected-signature <approval_signature>`. Execution rechecks under the workspace
+mutation lock and requires the existing rule acknowledgement. Changed state needs
+a new preview. Preview: AWAITING_APPROVAL, rc 0; invalid state/signature: BLOCKED,
+rc 2. A failed Git action preserves evidence as FAIL, rc 2; do not bypass it.
+
+Start stops before the commit: READY_TO_COMMIT (rc 0), or CONFLICT (rc 2) with
+unmerged files retained. Resolve ordinary conflicts through
+`agentic-kit transfer conflict-resolve-file`; generated artifacts still belong to
+their generators. Do not hand-edit registry, entrypoint or handoff projections.
+
+Once resolved and staged, preview `--continue` and approve its new signature to
+create the merge commit. Unstaged or untracked work blocks continuation.
+Alternatively preview `--abort`: explicitly approved execution discards tracked
+merge progress and preserves untracked files. Abort also keeps the rules-confirmed
+gate; if it blocks, diagnose it rather than bypassing it. Successful continue/abort:
+PASS, rc 0; already integrated start: NOOP, rc 0. Repeated continuation blocks
+because no merge is active. Inspect status, then use guarded push/PR closeout.
+
 These commands provide a small human-facing layer over the lower-level agentic-kit wrappers. They do not replace the lower-level commands. They bundle the safest common sequences for command-line use and future GUI orchestration.
 
 The meta commands are intentionally conservative:
