@@ -17,6 +17,8 @@ rules:
     - tests/test_workspace_recovery.py
     - KIT-GF-087
     - KIT-GF-088
+    - scripts/foreign_workspace_delta_check.py
+    - tests/test_foreign_workspace_delta_check.py
 - id: shared-task-selection-boundary
   description: D1 shares one identity-bound manifest authority while selection never grants execution permission.
   documents:

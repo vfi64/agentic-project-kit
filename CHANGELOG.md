@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.
+
 - Recover partially generated external workspaces through a signed additive initialization plan, preserve project documents and provenance, and block Kit-internal gates until the external rule basis is initialized and valid (KIT-GF-087, KIT-GF-088).
 
 - Share identity-bound task routes between command selection and website guidance, with explicit unknown states and no execution authority.

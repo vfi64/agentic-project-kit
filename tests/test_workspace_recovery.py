@@ -13,6 +13,7 @@ from agentic_project_kit.rule_source_validator import validate_rule_sources
 from agentic_project_kit.standard_gates_audit_suite import _standard_gate_commands_for_root
 from agentic_project_kit.workspace_recovery import recover_workspace
 from agentic_project_kit import workspace_recovery
+from agentic_project_kit.workspace_detection import is_external_operating_workspace, is_partial_external_workspace
 from agentic_project_kit.dpa_workspace_init_projection import render_workspace_init_projection_manifest, DPA_WORKSPACE_INIT_MANIFEST_PATH
 
 
@@ -54,6 +55,14 @@ def test_empty_repository_normal_init_still_works(tmp_path):
     result = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--type", "generic", "--execute", "--json"])
     assert result.exit_code == 0
     assert validate_rule_sources(tmp_path).is_valid
+
+
+def test_external_and_partial_predicates_overlap_then_partial_clears(partial):
+    assert is_external_operating_workspace(partial)
+    assert is_partial_external_workspace(partial)
+    assert execute(partial)["result_status"] == "PASS"
+    assert is_external_operating_workspace(partial)
+    assert not is_partial_external_workspace(partial)
 
 
 def test_recovery_is_additive_signed_and_idempotent(partial):
@@ -144,12 +153,13 @@ def test_historical_generator_provenance_is_preserved_and_disclosed(partial):
     assert path.read_bytes() == before
 
 
-def test_partial_work_check_never_runs_kit_tests(partial, monkeypatch):
+@pytest.mark.parametrize("profile", ["minimal", "code", "docs", "release"])
+def test_partial_work_check_never_runs_kit_tests(partial, monkeypatch, profile):
     monkeypatch.chdir(partial)
     def forbidden(*args, **kwargs):
         pytest.fail("partial bootstrap must stop before any subprocess gate")
     monkeypatch.setattr(human_workflows, "_run_step", forbidden)
-    result = CliRunner().invoke(app, ["work", "check", "--json"])
+    result = CliRunner().invoke(app, ["work", "check", "--profile", profile, "--json"])
     assert result.exit_code == 2
     payload = json.loads(result.stdout)
     assert payload["blockers"] == ["workspace-bootstrap-required"]
@@ -158,7 +168,8 @@ def test_partial_work_check_never_runs_kit_tests(partial, monkeypatch):
     assert validate_rule_sources(partial).workspace_mode == "partial_external_workspace"
 
 
-def test_complete_generic_workspace_gate_preserves_project_checks(partial, monkeypatch):
+@pytest.mark.parametrize("profile", ["minimal", "code", "docs", "release"])
+def test_complete_generic_workspace_gate_preserves_project_checks(partial, monkeypatch, profile):
     assert execute(partial)["result_status"] == "PASS"
     monkeypatch.chdir(partial)
     calls = []
@@ -166,7 +177,7 @@ def test_complete_generic_workspace_gate_preserves_project_checks(partial, monke
         calls.append(name)
         return {"name": name, "ok": name != "check", "returncode": 1 if name == "check" else 0}
     monkeypatch.setattr(human_workflows, "_run_step", gate)
-    result = CliRunner().invoke(app, ["work", "check", "--json"])
+    result = CliRunner().invoke(app, ["work", "check", "--profile", profile, "--json"])
     assert result.exit_code == 2
     assert calls == ["repo-status", "check", "governance-check", "doctor", "standard-gates-audit-suite"]
     assert "check" in json.loads(result.stdout)["blockers"]
