@@ -7,16 +7,16 @@ Current verified release: 1.1.7.
 Current release tag: v1.1.7.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.23698043`.
-Current verified main: `5a81ebad` (`Release 1.1.7 (#2667)`).
-Latest substantive work: PR #2667 (`Release 1.1.7 (#2667)`).
-Latest administrative refresh-only descendant: post-PR2667 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
+Current verified main: `d542c0bb` (`Record DOI for release 1.1.7 (#2669)`).
+Latest substantive work: PR #2669 (`Record DOI for release 1.1.7 (#2669)`).
+Latest administrative refresh-only descendant: post-PR2669 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Latest Brownfield external evidence: Cycle 007 report
 `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
 Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
-Post-merge handoff status: PASS/NOOP after PR #2667 administrative refresh.
+Post-merge handoff status: PASS/NOOP after PR #2669 administrative refresh.
 Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
@@ -422,6 +422,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2667
+## Operational documentation refresh state after PR #2669
 
-Current administrative handoff refresh state is `5a81ebad` (`Release 1.1.7 (#2667)`). Continue next only after this post-PR2667 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d542c0bb` (`Record DOI for release 1.1.7 (#2669)`). Continue next only after this post-PR2669 refresh is committed and merged; the next substantive slice must be created from fresh main.
