@@ -1,4 +1,18 @@
 {
+  "detail_links": {
+    "agentic-kit check": "detail-check.html",
+    "agentic-kit doctor": "detail-doctor.html",
+    "agentic-kit init": "detail-init.html",
+    "agentic-kit kit update": "detail-kit-update.html",
+    "agentic-kit release run": "detail-release-run.html",
+    "agentic-kit transfer chat-switch-complete": "detail-transfer-chat-switch-complete.html",
+    "agentic-kit transfer pr-closeout-complete": "detail-transfer-pr-closeout-complete.html",
+    "agentic-kit transfer pr-complete": "detail-transfer-pr-complete.html",
+    "agentic-kit work finish": "detail-work-finish.html",
+    "agentic-kit work start": "detail-work-start.html",
+    "agentic-kit workspace adopt": "detail-workspace-adopt.html",
+    "agentic-kit workspace init": "detail-workspace-init.html"
+  },
   "docs": [
     {
       "label": "First-chat onboarding",

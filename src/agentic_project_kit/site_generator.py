@@ -203,6 +203,9 @@ class SiteFoundationReport:
     claim_report: ClaimEvaluationReport
     blockers: tuple[str, ...]
     explanation_projection: dict[str, object] | None = None
+    task_projection: dict[str, object] | None = None
+    detail_projection: dict[str, object] | None = None
+    history_projection: dict[str, object] | None = None
 
     @property
     def ok(self) -> bool:
@@ -231,6 +234,9 @@ class SiteFoundationReport:
             "workflow_projection": self.workflow_projection,
             "claim_report": self.claim_report.as_dict(),
             "explanation_projection": self.explanation_projection,
+            "task_projection": self.task_projection,
+            "detail_projection": self.detail_projection,
+            "history_projection": self.history_projection,
             "blockers": list(self.blockers),
             "blocker_count": len(self.blockers),
         }
@@ -353,8 +359,9 @@ def collect_site_foundation_metadata(
         blockers.append("build commit is not available")
 
     from .site_task_routes import task_navigation
+    navigation = None
     try:
-        task_navigation(committed_manifest)
+        navigation = task_navigation(committed_manifest)
     except ValueError as exc:
         blockers.append(str(exc))
     command_catalog = _build_command_catalog(commands, blockers)
@@ -408,6 +415,21 @@ def collect_site_foundation_metadata(
                 workflow_projection, _build_quickstart_projection(metadata, command_catalog)
             )
         )
+    details, history = None, None
+    if metadata is not None and command_catalog is not None:
+        try:
+            if (root / "site/templates/command-detail.html").is_file():
+                from .site_command_details import collect_command_details
+                details = collect_command_details(committed_manifest, _build_quickstart_projection(metadata, command_catalog))
+            elif navigation and navigation["routes"]:
+                raise ValueError("task routes require the command-detail template")
+            if (root / "site/templates/history.html").is_file():
+                from .site_history import collect_history
+                if explanation is None or not explanation.get("workflow_figures"):
+                    raise ValueError("history requires the reviewed workflow figure projection")
+                history = collect_history(root, committed_manifest)
+        except (ValueError, OSError, KeyError, TypeError, StopIteration) as exc:
+            blockers.append(f"navigation/history projection invalid: {exc}")
     if blockers:
         metadata = None
 
@@ -421,6 +443,9 @@ def collect_site_foundation_metadata(
         claim_report=claim_report,
         blockers=tuple(blockers),
         explanation_projection=explanation,
+        task_projection=navigation,
+        detail_projection=details,
+        history_projection=history,
     )
 
 
@@ -461,12 +486,25 @@ def build_site(
     (output / "quickstart").mkdir(parents=True, exist_ok=True)
     (output / "workflows").mkdir(parents=True, exist_ok=True)
 
-    from .site_task_routes import task_navigation
-    navigation = task_navigation(load_manifest(root))
+    navigation = report.task_projection
     (output / "commands" / "tasks.json").write_text(
         json.dumps(navigation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     index_html = render_index_html(root, report)
     quickstart_projection = _build_quickstart_projection(metadata, command_catalog)
+    detail_files = {r["command"]: r["file"] for r in (report.detail_projection or {}).get("commands", [])}
+    quickstart_projection["detail_links"] = detail_files
+    if report.detail_projection is not None:
+        from .site_command_details import render_command_detail
+        (output / "commands/details.json").write_text(json.dumps(report.detail_projection, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        for row in report.detail_projection["commands"]:
+            (output / "commands" / row["file"]).write_text(render_command_detail(root, row,
+                product_name=metadata.product_name, version=metadata.package_version, manifest_sha=metadata.manifest_sha, build_commit=metadata.build_commit), encoding="utf-8")
+    if report.history_projection is not None:
+        from .site_history import render_history
+        (output / "history").mkdir()
+        (output / "history/index.html").write_text(render_history(root, report.history_projection,
+            product_name=metadata.product_name, version=metadata.package_version, repository_url=metadata.repository_url, build_commit=metadata.build_commit), encoding="utf-8")
+        (output / "history/history.json").write_text(json.dumps(report.history_projection, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     workflow_projection = report.workflow_projection
     site_json = json.dumps(
         {
@@ -479,6 +517,9 @@ def build_site(
             "workflow_projection": workflow_projection,
             "claim_report": report.claim_report.as_dict(),
             "explanation_projection": report.explanation_projection,
+            "task_projection": navigation,
+            "detail_projection": report.detail_projection,
+            "history_projection": report.history_projection,
         },
         indent=2,
         sort_keys=True,
@@ -547,6 +588,7 @@ def build_site(
             title="Guided Commands",
             description="Primary user and lifecycle operations generated from surface=orchestrator.",
             entries=command_catalog.guided_entries,
+            navigation=navigation, detail_files=detail_files,
         ),
         encoding="utf-8",
     )
@@ -557,6 +599,7 @@ def build_site(
             title="Diagnostic Commands",
             description="Inspection and blocker-analysis operations generated from surface=diagnostic.",
             entries=command_catalog.diagnostic_entries,
+            navigation=navigation, detail_files=detail_files,
         ),
         encoding="utf-8",
     )
@@ -567,6 +610,7 @@ def build_site(
             title="Complete Command Reference",
             description="All registered commands generated from the current command manifest.",
             entries=command_catalog.entries,
+            navigation=navigation, detail_files=detail_files,
         ),
         encoding="utf-8",
     )
@@ -1276,9 +1320,13 @@ def _quickstart_flow_command_items(projection: dict[str, object], flow_id: str) 
             )
             if part
         )
+        detail = projection.get("detail_links", {}).get(name)
+        name_html = f"<code>{escape(name)}</code>"
+        if detail:
+            name_html = f'<a href="../commands/{escape(detail, quote=True)}">{name_html}</a>'
         rows.append(
             "          <li>"
-            f"<code>{escape(name)}</code>"
+            + name_html +
             f"<span>{escape(when_to_use)}</span>"
             f"<small>{escape(metadata or 'manifest metadata unavailable')}</small>"
             "</li>"
@@ -1357,12 +1405,14 @@ def render_command_view_html(
     title: str,
     description: str,
     entries: tuple[SiteCommandEntry, ...],
+    navigation: dict | None = None,
+    detail_files: dict | None = None,
 ) -> str:
     from .site_task_routes import task_navigation, render_task_navigation
-    navigation = task_navigation(load_manifest(root))
+    navigation = navigation if navigation is not None else task_navigation(load_manifest(root))
     template_path = root / "site" / "templates" / "commands.html"
     template = Template(template_path.read_text(encoding="utf-8"))
-    rows = "\n".join(_command_table_row(entry, metadata) for entry in entries)
+    rows = "\n".join(_command_table_row(entry, metadata, detail_file=(detail_files or {}).get(entry.qualified_name)) for entry in entries)
     values = {
         "product_name": escape(metadata.product_name),
         "title": escape(title),
@@ -1372,11 +1422,14 @@ def render_command_view_html(
         "command_count": str(len(entries)),
         "rows": rows,
         "task_navigation": render_task_navigation(navigation) if "Guided" in title else "",
+        "catalog_open": '<details class="catalog-disclosure"><summary>All orchestrators and filters</summary>' if "Guided" in title else "",
+        "catalog_close": "</details>" if "Guided" in title else "",
+        "provenance": escape(projection_provenance(metadata.build_commit)),
     }
     return template.safe_substitute(values).rstrip() + "\n"
 
 
-def _command_table_row(entry: SiteCommandEntry, metadata: SiteFoundationMetadata) -> str:
+def _command_table_row(entry: SiteCommandEntry, metadata: SiteFoundationMetadata, *, detail_file: str | None = None) -> str:
     dry_run = "yes" if entry.dry_run_available else "no"
     params = "; ".join(_format_param(param) for param in entry.params) or "none"
     command_text = " ".join(
@@ -1390,12 +1443,15 @@ def _command_table_row(entry: SiteCommandEntry, metadata: SiteFoundationMetadata
             params,
         )
     ).lower()
+    name = f"<code>{escape(entry.qualified_name)}</code>"
+    if detail_file:
+        name = f'<a href="{escape(detail_file, quote=True)}">{name}</a>'
     return (
         "          <tr"
         f" data-command-text=\"{escape(command_text, quote=True)}\""
         f" data-safety=\"{escape(entry.safety, quote=True)}\""
         f" data-surface=\"{escape(entry.surface, quote=True)}\">"
-        f"<td><code>{escape(entry.qualified_name)}</code></td>"
+        f"<td>{name}</td>"
         f"<td>{escape(entry.group)}</td>"
         f"<td>{escape(entry.surface)}</td>"
         f"<td>{escape(entry.safety)}</td>"

@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${command} — ${product_name}</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to command</a>
+    <main class="page command-detail" id="content">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a><a href="../quickstart/index.html">Quickstart</a>
+        <a href="guided.html">Tasks</a><a href="diagnostics.html">Diagnostics</a>
+        <a href="index.html">Complete reference</a><a href="../history/index.html">History and architecture</a>
+      </nav>
+      <header>
+        <p class="eyebrow">Current source-tree command contract</p>
+        <h1>${command}</h1><p class="lede">${description}</p>
+        <p>Package version ${package_version} · Manifest <code>${manifest_sha}</code>.</p>
+        <p>These options describe this source tree. Check your installed Kit's help;
+          a previously published wheel may expose a different interface.</p>
+      </header>
+      <section aria-labelledby="contract"><h2 id="contract">Effects and safety</h2>
+        <dl class="command-contract">${contracts}</dl>
+        <p>Effects are declared for the command family. A task match does not grant
+          consent or execute a command. Inspect the actual plan and existing gates.</p>
+      </section>
+      <section aria-labelledby="conditions"><h2 id="conditions">When this route applies</h2>${routes}</section>
+      <section aria-labelledby="options"><h2 id="options">Options and arguments</h2><dl class="parameters">${parameters}</dl></section>
+      <section aria-labelledby="example"><h2 id="example">Inspect local help</h2>
+        <pre><code>${help_example}</code></pre>
+        <p>This help example is tested in a local fixture. It does not run the workflow.
+          Execution examples depend on the repository, its state and your approval.</p>
+      </section>
+      <p><a href="../understand/index.html#workflow-figures">Work cycle and handoff diagrams</a>
+        · <a href="../claims/index.html">Claim evidence and limits</a></p>
+      <footer><p>${provenance}</p></footer>
+    </main>
+  </body>
+</html>

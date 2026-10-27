@@ -1864,3 +1864,7 @@ documents:
     owner: maintainers
     summary: Partial external bootstrap recovery and gate isolation with independent fixture
       evidence
+  - path: docs/reports/WEBSITE_W1_W3_W4_20261027.md
+    class: evidence/log
+    owner: maintainers
+    summary: Combined W1 W3 W4 generated website scope and validation boundaries
