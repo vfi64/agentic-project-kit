@@ -12,6 +12,15 @@ local contracts; a local PASS never assigns consumer VERIFIED_FIXED or proves
 Swift/Xcode compilation. See the combined greenfield report for isolated
 consumer-snapshot evidence and its limits.
 
+The reproducible follow-up `scripts/foreign_workspace_delta_check.py` compares
+the pinned v1.1.6 sources with the candidate on identical temporary Swift
+fixtures (shared dependencies; no wheel-packaging claim). All four profiles
+minimal/code/docs/release are checked before and after recovery.
+`tests/test_foreign_workspace_delta_check.py` exercises actual CLI processes,
+refusal before rule acknowledgement, preserved dirty planning state and a
+selective local commit. Workspace predicates overlap; they are not a disjoint
+state enum. No consumer checkout or paid model is involved.
+
 ## D1 shared task selection
 
 `tests/test_task_selection_runtime.py` exercises the shared manifest route schema and identity, pure matching, CLI fact observations, opt-in exact PR reads, stale root/HEAD/PR refusal, ambiguous alternatives, malformed inputs and legacy compatibility. Every outcome has execution_authorized false and never constructs an argv. Website task routes derive from the same export. `tests/test_task_selection_design.py` preserves the earlier inactive proposal as historical review material only; production never reads it. Owner review of the initial authority and matrix was accepted as option A on 2026-10-26. Semantic adequacy and agent-context effects remain separate from structural test PASS.

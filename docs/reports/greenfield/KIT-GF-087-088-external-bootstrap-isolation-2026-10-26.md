@@ -100,3 +100,60 @@ without injecting artificial tests. Generated finding-status copies and retest
 index are produced only by greenfield export. CI and PR identifiers are carried
 by the final PR rather than predicted in this report. No merge or release is
 part of this task.
+
+## Delta acceptance follow-up — 2026-10-27
+
+The GitHub default branch was verified as main, at
+c1a919e1afad1626552efa049e7f9be0171b649a, after repair PR #2652 and
+handoff #2653. The reviewer correctly requested a version comparison and
+explicit profile coverage. Its suggestion that these fixes still needed
+implementation was already superseded by those merges. The first report above
+also contains executable-test and independent consumer-snapshot evidence,
+rather than source inspection alone.
+
+The workspace detection functions are predicates, not a disjoint three-state
+partition. A generated project without config satisfies both
+is_external_operating_workspace and is_partial_external_workspace. After
+approved completion it remains external and ceases to be partial. The new
+regression explicitly checks that transition. The partial predicate itself was
+introduced by the repair and does not exist in the v1.1.6 tag.
+
+`scripts/foreign_workspace_delta_check.py` now reproduces the comparison in
+separate CLI processes with identical synthetic Swift fixtures. Baseline:
+v1.1.6 commit 8e2bbef307b813068c8053b8b326467d08ab0dbd; archive SHA256
+685f960dca8a7d6a341610afb963570effe38a838b2011750bb440961ee42f97.
+The candidate product code was c1a919e1afad1626552efa049e7f9be0171b649a.
+The result is PASS: this means the old failures were reproduced and the new
+acceptance succeeded, not that the old version passed bootstrap.
+
+| Acceptance | 1.1.6 pinned source | Current product code |
+|---|---|---|
+| Normal init over existing generated .agentic | FOREIGN_AGENTIC | FOREIGN_AGENTIC retained |
+| Read-only adoption / DPA boundary | generic / DPA assessment blocked | Same; recovery does not claim DPA conformance |
+| Rule bootstrap before config | BLOCKED, rc 1 | BLOCKED, rc 1 |
+| Partial rule validation | fail_closed, self_hosting sources | fail_closed, partial_external_workspace sources |
+| Acknowledge / commit before recovery | Refused, HEAD unchanged | Refused, HEAD unchanged |
+| Work-check minimal/code/docs/release before recovery | BLOCKED with internal reference gate | BLOCKED at workspace-bootstrap-required |
+| Signed recovery and generator-owned reference/inventory | No recovery route | PASS |
+| Work-check minimal/code/docs/release after recovery | Not applicable | Each PASS with external gates |
+| Selective local commit with dirty project planning | Not applicable | PASS; planning bytes and uncommitted change preserved |
+| Repeat initialization | Not applicable | PASS without writes |
+
+Reproduction: with this checkout's installed console on PATH, run
+`python scripts/foreign_workspace_delta_check.py --baseline-ref v1.1.6 --output /tmp/foreign-bootstrap-delta.json`.
+No consumer checkout or remote service is used. The test models the original
+Swift repository's relevant shape without fabricating Python test files.
+The baseline uses pinned Git source and the same installed dependencies as the
+candidate; this is deliberately not a released-wheel packaging test. An initial
+harness assumption that rule bootstrap returned rc 2 was corrected to its
+actual nonzero/explicit-BLOCKED contract (rc 1), with no product change.
+
+`tests/test_foreign_workspace_delta_check.py` runs the candidate sequence in CI
+and rejects rc-0 BLOCKED payloads. `tests/test_workspace_recovery.py` separately
+parametrizes every work-check profile for early refusal and propagation of
+project-check failures. Together these files pass 27 tests. The four external
+profile labels use the existing external gate family; they do not certify a
+Swift build or release publication. The previous actual consumer-snapshot
+retest remains separate evidence. Cockpit UI continuation, wheel delivery and
+an in-place consumer adoption remain separate acceptance steps; no consumer
+ledger is automatically assigned VERIFIED_FIXED by this audit.
