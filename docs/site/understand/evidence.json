@@ -56,16 +56,22 @@
     "status": "planned"
   },
   "release": {
-    "date": "2026-10-25",
-    "entry_count": 3,
+    "date": "2026-10-27",
+    "entry_count": 9,
     "notes": [
-      "Fixed: Prevent entrypoint synchronization and release preparation with an installed Kit older than workspace CI pins (KIT-GF-086).",
-      "Repair the context benchmark's planning fault injection and isolate reference solutions from agent-visible Git history; require T1's actual target gate to fail before accepting its self-test, preserve failed-run evidence, and record the pilot's validity limitations.",
-      "Complete the six remaining local finding machine contracts (KIT-GF-014, 015, 021, 032, 045 and 067): exercise the repaired continuation/fact checks, isolate the installed Kit in an owned interpreter, and run real release readiness with a local origin and committed successor package. Keep missing-contract and remote/release cases fail-closed; consumer VERIFIED_FIXED remains evidence-owned."
+      "Zenodo DOI verification pending for v1.1.7.",
+      "Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).",
+      "Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.",
+      "Generate task-first website navigation, metadata-bound command detail pages and a source-bound self-hosting history with explicit evidence and authorization limits.",
+      "Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.",
+      "Recover partially generated external workspaces through a signed additive initialization plan, preserve project documents and provenance, and block Kit-internal gates until the external rule basis is initialized and valid (KIT-GF-087, KIT-GF-088).",
+      "Share identity-bound task routes between command selection and website guidance, with explicit unknown states and no execution authority.",
+      "Present the historical work-order findings and offline gate comparison on a source-bound evidence page, with explicit applicability denominators, mitigation scope and benchmark limitations.",
+      "Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails."
     ],
     "source": "CHANGELOG.md",
     "status": "recorded",
-    "version": "1.1.6"
+    "version": "1.1.7"
   },
   "safety_evidence": {
     "baseline": {
@@ -1198,7 +1204,7 @@
     "schema_version": 1,
     "sources": {
       "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "05a4595353fbba6f0a9b894eac61c5c3625e0a91beff4a2cbd1c507874464f1e",
-      "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4",
+      "docs/reference/agentic-kit-commands.json": "6a5f531d113e182851b6a68f1012901ee96e19cd10a11fcc5ee334a875984330",
       "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
       "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
       "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",

@@ -24,7 +24,7 @@
     ],
     "worktree_clean": "boolean"
   },
-  "manifest_sha": "afb7c5e544e0",
+  "manifest_sha": "019d0f970c2c",
   "routes": [
     {
       "command": "agentic-kit check",
