@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `94769b20ed0b19fbe389a728a53e2b99164efcf0` (`94769b20`)
-- Handoff freshness marker: `94769b20`
-- Branch at generation: `docs/post-pr2654-handoff-refresh`
+- HEAD: `11be8356207b5db021648e76881dc537e721d80d` (`11be8356`)
+- Handoff freshness marker: `11be8356`
+- Branch at generation: `docs/post-pr2661-handoff-refresh`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -109,7 +109,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: c53db88c5322). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK c53db88c5322. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: afb7c5e544e0). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK afb7c5e544e0. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -119,5 +119,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 79d8d63e81a6ff2a4a81b97178fe805f520d14cbbeebab0577c2c83b3182ccf8
-- docs/reference/agentic-kit-commands.json: 98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 178b381c8e8341240c488612ef9dbedcdf50df5fa2cd7d9197bcedb9d56da63e
+- docs/reference/agentic-kit-commands.json: 61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4

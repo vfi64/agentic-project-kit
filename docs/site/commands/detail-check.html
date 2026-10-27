@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>agentic-kit check — Agentic Project Kit</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to command</a>
+    <main class="page command-detail" id="content">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a><a href="../quickstart/index.html">Quickstart</a>
+        <a href="guided.html">Tasks</a><a href="diagnostics.html">Diagnostics</a>
+        <a href="index.html">Complete reference</a><a href="../history/index.html">History and architecture</a>
+      </nav>
+      <header>
+        <p class="eyebrow">Current source-tree command contract</p>
+        <h1>agentic-kit check</h1><p class="lede">Validate the project contract and required repository files without changing them.</p>
+        <p>Package version 1.1.6 · Manifest <code>afb7c5e544e0</code>.</p>
+        <p>These options describe this source tree. Check your installed Kit's help;
+          a previously published wheel may expose a different interface.</p>
+      </header>
+      <section aria-labelledby="contract"><h2 id="contract">Effects and safety</h2>
+        <dl class="command-contract"><dt>safety</dt><dd>&quot;READ_ONLY&quot;</dd><dt>surface</dt><dd>&quot;diagnostic&quot;</dd><dt>remote effects</dt><dd>[&quot;none&quot;]</dd><dt>dry run available</dt><dd>false</dd></dl>
+        <p>Effects are declared for the command family. A task match does not grant
+          consent or execute a command. Inspect the actual plan and existing gates.</p>
+      </section>
+      <section aria-labelledby="conditions"><h2 id="conditions">When this route applies</h2><article class="panel"><h3>Check work</h3><p>Phase: diagnostic. Required state: workspace mode = &quot;managed&quot;.</p><p>Required task inputs: none.</p><p>Gate outcome is not proof that requirements are correct.</p></article></section>
+      <section aria-labelledby="options"><h2 id="options">Options and arguments</h2><dl class="parameters"><div class="parameter"><dt><code>--root</code></dt><dd>No description supplied by the manifest.<br>Required: false · Default: <code>PosixPath(&#x27;.&#x27;)</code></dd></div><div class="parameter"><dt><code>--json</code></dt><dd>Emit machine-readable check result with execution context.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--context</code></dt><dd>Print check execution context before the text result.<br>Required: false · Default: <code>False</code></dd></div></dl></section>
+      <section aria-labelledby="example"><h2 id="example">Inspect local help</h2>
+        <pre><code>agentic-kit check --help</code></pre>
+        <p>This help example is tested in a local fixture. It does not run the workflow.
+          Execution examples depend on the repository, its state and your approval.</p>
+      </section>
+      <p><a href="../understand/index.html#workflow-figures">Work cycle and handoff diagrams</a>
+        · <a href="../claims/index.html">Claim evidence and limits</a></p>
+      <footer><p>Projection: Pages fallback · Source commit: not provided</p></footer>
+    </main>
+  </body>
+</html>

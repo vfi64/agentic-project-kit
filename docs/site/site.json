@@ -226,7 +226,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "commands=272",
+            "detail": "commands=273",
             "evidence_type": "generated-artifact",
             "status": "verified"
           }
@@ -294,7 +294,7 @@
     }
   },
   "command_catalog": {
-    "command_count": 272,
+    "command_count": 273,
     "diagnostic_count": 131,
     "entries": [
       {
@@ -9291,6 +9291,82 @@
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": true,
         "group": "transfer",
+        "help": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort.",
+        "lifecycle_rank": null,
+        "params": [
+          {
+            "default": null,
+            "help": "Expected current work branch; main is refused.",
+            "name": "branch",
+            "opts": [
+              "--branch"
+            ],
+            "required": true
+          },
+          {
+            "default": "origin/main",
+            "help": "Already fetched origin ref; never fetched or pushed here.",
+            "name": "upstream",
+            "opts": [
+              "--upstream"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Preview/finish the resolved active merge.",
+            "name": "continue_merge",
+            "opts": [
+              "--continue"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Preview/discard tracked progress of the active merge; preserve untracked files.",
+            "name": "abort",
+            "opts": [
+              "--abort"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Execute one approved action; preview is the default.",
+            "name": "execute",
+            "opts": [
+              "--execute"
+            ],
+            "required": false
+          },
+          {
+            "default": "",
+            "help": "Approval signature from this action's preview.",
+            "name": "expected_signature",
+            "opts": [
+              "--expected-signature"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Print the same structured result as JSON.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          }
+        ],
+        "qualified_name": "agentic-kit transfer merge-upstream",
+        "safety": "DESTRUCTIVE",
+        "surface": "primitive",
+        "when_to_use": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort."
+      },
+      {
+        "diagnostic_priority": "not_diagnostic",
+        "dry_run_available": true,
+        "group": "transfer",
         "help": "Normalize active transfer files by adding missing command IDs and archiving stale active files.",
         "lifecycle_rank": null,
         "params": [
@@ -12886,7 +12962,7 @@
       "slice": 1,
       "state": 3,
       "todo": 3,
-      "transfer": 72,
+      "transfer": 73,
       "work": 6,
       "work-order": 10,
       "workflow": 11,
@@ -12897,15 +12973,1761 @@
     "kind": "site_command_catalog",
     "safety_counts": {
       "BOUNDED": 176,
-      "DESTRUCTIVE": 10,
+      "DESTRUCTIVE": 11,
       "READ_ONLY": 86
     },
     "schema_version": 1,
     "surface_counts": {
       "diagnostic": 131,
       "orchestrator": 35,
-      "primitive": 106
+      "primitive": 107
     }
+  },
+  "detail_projection": {
+    "commands": [
+      {
+        "command": "agentic-kit check",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "READ_ONLY",
+          "surface": "diagnostic"
+        },
+        "description": "Validate the project contract and required repository files without changing them.",
+        "file": "detail-check.html",
+        "help": "Validate the project contract and required repository files without changing them.",
+        "help_example": [
+          "agentic-kit",
+          "check",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "project_root",
+            "opts": [
+              "--root"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Emit machine-readable check result with execution context.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print check execution context before the text result.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "show_context",
+            "opts": [
+              "--context"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit check",
+            "contract": {
+              "dry_run_available": false,
+              "remote_effects": [
+                "none"
+              ],
+              "safety": "READ_ONLY",
+              "surface": "diagnostic"
+            },
+            "inputs": {},
+            "phase": "diagnostic",
+            "review_note": "Gate outcome is not proof that requirements are correct.",
+            "task": "check_work",
+            "when": {
+              "workspace_mode": "managed"
+            }
+          }
+        ],
+        "selection_sources": [
+          "tested_quickstart",
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit doctor",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "READ_ONLY",
+          "surface": "diagnostic"
+        },
+        "description": "Run a compact project health check.",
+        "file": "detail-doctor.html",
+        "help": "Run a compact project health check.",
+        "help_example": [
+          "agentic-kit",
+          "doctor",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "project_root",
+            "opts": [
+              "--root"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit doctor",
+            "contract": {
+              "dry_run_available": false,
+              "remote_effects": [
+                "none"
+              ],
+              "safety": "READ_ONLY",
+              "surface": "diagnostic"
+            },
+            "inputs": {},
+            "phase": "diagnostic",
+            "review_note": "Inspect health; do not infer a repair or execute one.",
+            "task": "diagnose_repository",
+            "when": {
+              "workspace_mode": "managed"
+            }
+          }
+        ],
+        "selection_sources": [
+          "tested_quickstart",
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit init",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Create a governed project skeleton with selected profiles and policy packs.",
+        "file": "detail-init.html",
+        "help": "Create a governed project skeleton with selected profiles and policy packs.",
+        "help_example": [
+          "agentic-kit",
+          "init",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": null,
+            "help": "Project directory/name.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "name",
+            "opts": [
+              "name"
+            ],
+            "param_type": "TyperArgument",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "python-cli",
+            "help": "python-cli, python-lib, generic, governance-wrapper",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "project_type",
+            "opts": [
+              "--type"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "description",
+            "opts": [
+              "--description"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "MIT",
+            "help": "",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "license_name",
+            "opts": [
+              "--license"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": true,
+            "help": "",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "github_actions",
+            "opts": [
+              "--github-actions"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--no-github-actions"
+            ]
+          },
+          {
+            "default": true,
+            "help": "",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "pre_commit",
+            "opts": [
+              "--pre-commit"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--no-pre-commit"
+            ]
+          },
+          {
+            "default": true,
+            "help": "",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "agent_docs",
+            "opts": [
+              "--agent-docs"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--no-agent-docs"
+            ]
+          },
+          {
+            "default": true,
+            "help": "",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "logging_evidence",
+            "opts": [
+              "--logging-evidence"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--no-logging-evidence"
+            ]
+          },
+          {
+            "default": null,
+            "help": "Comma-separated profile ids. Defaults are recommended from project type.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "profiles",
+            "opts": [
+              "--profiles"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Comma-separated policy pack ids. Defaults are recommended from project type.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "policy_packs",
+            "opts": [
+              "--policy-packs"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "github",
+            "opts": [
+              "--github"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--no-github"
+            ]
+          },
+          {
+            "default": null,
+            "help": "",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "github_owner",
+            "opts": [
+              "--owner"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "private",
+            "help": "private or public",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "visibility",
+            "opts": [
+              "--visibility"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "pypi",
+            "help": "agentic-kit install source for generated CI: pypi, testpypi, or none",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "kit_source",
+            "opts": [
+              "--kit-source"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [],
+        "selection_sources": [
+          "tested_quickstart"
+        ]
+      },
+      {
+        "command": "agentic-kit kit update",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "network_read"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace.",
+        "file": "detail-kit-update.html",
+        "help": "Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace.",
+        "help_example": [
+          "agentic-kit",
+          "kit",
+          "update",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": null,
+            "help": "Exact released stable Kit version (X.Y.Z).",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "version",
+            "opts": [
+              "--version"
+            ],
+            "param_type": "TyperOption",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": "PosixPath('.')",
+            "help": "External workspace on a work branch.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Execute the exactly signed update plan.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "execute",
+            "opts": [
+              "--execute"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Approval signature from the current dry run.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "expected_signature",
+            "opts": [
+              "--expected-signature"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Emit one JSON document.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit kit update",
+            "contract": {
+              "dry_run_available": true,
+              "remote_effects": [
+                "network_read"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {
+              "version": "stable_version"
+            },
+            "phase": "planning",
+            "review_note": "Planning can download wheels and write temporary reports; signature-gated install remains separate.",
+            "task": "update_kit",
+            "when": {
+              "branch_role": "work",
+              "workspace_mode": "managed",
+              "worktree_clean": true
+            }
+          }
+        ],
+        "selection_sources": [
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit release run",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "merge",
+            "pull_request",
+            "push",
+            "release_publish"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Run the governed end-to-end release orchestrator with resumable approval gates.",
+        "file": "detail-release-run.html",
+        "help": "Run the governed end-to-end release orchestrator with resumable approval gates.",
+        "help_example": [
+          "agentic-kit",
+          "release",
+          "run",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": null,
+            "help": "Target release version.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "version",
+            "opts": [
+              "--version"
+            ],
+            "param_type": "TyperOption",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Release changelog summary line. Repeatable.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": true,
+            "name": "summary_lines",
+            "opts": [
+              "--summary-line"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Execute the next approved release-run gate.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "execute",
+            "opts": [
+              "--execute"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Approval signature for the next release-run gate.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "expected_signature",
+            "opts": [
+              "--expected-signature"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Name or identifier of the human approving the release.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "approved_by",
+            "opts": [
+              "--approved-by"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Reference to the owner consent, such as a work order or start click.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "consent_source",
+            "opts": [
+              "--consent-source"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print machine-readable JSON.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit release run",
+            "contract": {
+              "dry_run_available": true,
+              "remote_effects": [
+                "merge",
+                "pull_request",
+                "push",
+                "release_publish"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {
+              "version": "stable_version"
+            },
+            "phase": "guarded",
+            "review_note": "Fresh release only; existing runs need a separate explicit resume/recovery intent. Without --execute the orchestrator still performs local A/B preparation; publication consent stays separate and version/tag/head-bound.",
+            "task": "release_version",
+            "when": {
+              "branch_role": "main",
+              "release_state": "none",
+              "workspace_mode": "managed",
+              "worktree_clean": true
+            }
+          }
+        ],
+        "selection_sources": [
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit transfer chat-switch-complete",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Create a deterministic successor handoff package and prompt projections.",
+        "file": "detail-transfer-chat-switch-complete.html",
+        "help": "Create a deterministic successor handoff package and prompt projections.",
+        "help_example": [
+          "agentic-kit",
+          "transfer",
+          "chat-switch-complete",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": false,
+            "help": "Print machine-readable JSON only.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print the generated copy-and-paste successor chat prompt.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "render_prompt",
+            "opts": [
+              "--render-prompt"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Directory for the generated successor handoff package. Defaults to the workspace handoff package path.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "output_dir",
+            "opts": [
+              "--output-dir"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": true,
+            "help": "Update NEXT_CHAT_BOOTSTRAP, START_NEW_CHAT_PROMPT, and CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "update_canonical_prompts",
+            "opts": [
+              "--update-canonical-prompts"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--no-update-canonical-prompts"
+            ]
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit transfer chat-switch-complete",
+            "contract": {
+              "dry_run_available": false,
+              "remote_effects": [
+                "none"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {},
+            "phase": "guarded",
+            "review_note": "Writes generated repository projections despite having no remote effect.",
+            "task": "prepare_handoff",
+            "when": {
+              "workspace_mode": "managed"
+            }
+          }
+        ],
+        "selection_sources": [
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit transfer pr-closeout-complete",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "merge"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Merge a substantive PR if needed, then finish post-merge handoff closeout.",
+        "file": "detail-transfer-pr-closeout-complete.html",
+        "help": "Merge a substantive PR if needed, then finish post-merge handoff closeout.",
+        "help_example": [
+          "agentic-kit",
+          "transfer",
+          "pr-closeout-complete",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": null,
+            "help": "Substantive PR number to merge if needed and close out with post-merge handoff refresh.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "after_pr",
+            "opts": [
+              "--after-pr"
+            ],
+            "param_type": "TyperOption",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": "main",
+            "help": "Main branch to synchronize and verify.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "main_branch",
+            "opts": [
+              "--main-branch"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "squash",
+            "help": "Merge method for the substantive PR and any administrative refresh PR.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "merge_method",
+            "opts": [
+              "--merge-method"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": 300,
+            "help": "CI wait timeout for the substantive PR and refresh PR.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "timeout_seconds",
+            "opts": [
+              "--timeout-seconds"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": 10,
+            "help": "CI polling interval for the substantive PR and refresh PR.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "poll_seconds",
+            "opts": [
+              "--poll-seconds"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": 60,
+            "help": "",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "merge_state_timeout_seconds",
+            "opts": [
+              "--merge-state-timeout-seconds"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": 5,
+            "help": "",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "merge_state_poll_seconds",
+            "opts": [
+              "--merge-state-poll-seconds"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print bounded JSON with a full local evidence file.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "summary",
+            "opts": [
+              "--summary"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print JSON instead of text.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit transfer pr-closeout-complete",
+            "contract": {
+              "dry_run_available": false,
+              "remote_effects": [
+                "merge"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {
+              "after_pr": "positive_integer"
+            },
+            "phase": "guarded",
+            "review_note": "Handoff refresh may itself merge an administrative PR; include that effect in operation consent.",
+            "task": "settle_merged_pr",
+            "when": {
+              "pr_state": "merged",
+              "workspace_mode": "managed"
+            }
+          }
+        ],
+        "selection_sources": [
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit transfer pr-complete",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "merge",
+            "push"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Wait for CI, safely merge an existing PR, and synchronize main.",
+        "file": "detail-transfer-pr-complete.html",
+        "help": "Wait for CI, safely merge an existing PR, and synchronize main.",
+        "help_example": [
+          "agentic-kit",
+          "transfer",
+          "pr-complete",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": null,
+            "help": "Pull request number to complete.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "pr_number",
+            "opts": [
+              "pr_number"
+            ],
+            "param_type": "TyperArgument",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Expected PR head SHA, or current to use git rev-parse HEAD before the merge.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "expected_head_sha",
+            "opts": [
+              "--expected-head-sha"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "main",
+            "help": "Main branch to sync after the merge.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "main_branch",
+            "opts": [
+              "--main-branch"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "squash",
+            "help": "GitHub merge method.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "merge_method",
+            "opts": [
+              "--merge-method"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": 300,
+            "help": "Maximum CI wait time.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "timeout_seconds",
+            "opts": [
+              "--timeout-seconds"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": 10,
+            "help": "CI polling interval.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "poll_seconds",
+            "opts": [
+              "--interval-seconds",
+              "--poll-seconds"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print a bounded projection; save full step evidence locally.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "summary",
+            "opts": [
+              "--summary"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print JSON instead of text.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Recovery-only: run PR completion without requiring fresh generated LLM context.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "skip_llm_context_gate",
+            "opts": [
+              "--skip-llm-context-gate"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Accepted compatibility flag: pr-complete already runs post-merge-complete after a successful merge.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "post_merge_complete",
+            "opts": [
+              "--post-merge-complete"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit transfer pr-complete",
+            "contract": {
+              "dry_run_available": false,
+              "remote_effects": [
+                "merge",
+                "push"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {
+              "expected_head_sha": "full_commit",
+              "pr_number": "positive_integer"
+            },
+            "phase": "guarded",
+            "review_note": "Pending CI is handled by the selected workflow; selection does not authorize its merge.",
+            "task": "complete_open_pr",
+            "when": {
+              "pr_state": "open",
+              "workspace_mode": "managed"
+            }
+          }
+        ],
+        "selection_sources": [
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit work finish",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "merge",
+            "pull_request",
+            "push"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
+        "file": "detail-work-finish.html",
+        "help": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks.",
+        "help_example": [
+          "agentic-kit",
+          "work",
+          "finish",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": null,
+            "help": "Feature branch to finish.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "branch",
+            "opts": [
+              "--branch"
+            ],
+            "param_type": "TyperOption",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Pull request title.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "title",
+            "opts": [
+              "--title"
+            ],
+            "param_type": "TyperOption",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Commit message.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "message",
+            "opts": [
+              "--message"
+            ],
+            "param_type": "TyperOption",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Pull request body; mutually exclusive with --body-file.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "body",
+            "opts": [
+              "--body"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "UTF-8 pull request body file.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "body_file",
+            "opts": [
+              "--body-file"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Release-note category, for example Fixed; validated before any action.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "release_note_category",
+            "opts": [
+              "--release-note-category"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Path to include in the commit. Repeatable.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": true,
+            "name": "paths",
+            "opts": [
+              "--path"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "squash",
+            "help": "PR merge method.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "merge_method",
+            "opts": [
+              "--merge-method"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": true,
+            "help": "Run the full PR, merge, and post-merge handoff closeout by default. Use --no-merge only for an explicitly review-only PR.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "merge",
+            "opts": [
+              "--merge"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--no-merge"
+            ]
+          },
+          {
+            "default": true,
+            "help": "Plan by default. Use --execute to commit, push, and publish.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "dry_run",
+            "opts": [
+              "--dry-run"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": [
+              "--execute"
+            ]
+          },
+          {
+            "default": 900,
+            "help": "Maximum wait for the pull request's CI (KIT-GF-078: the Kit's own full CI takes more than 300 s).",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "ci_timeout_seconds",
+            "opts": [
+              "--ci-timeout-seconds"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print machine-readable JSON.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit work finish",
+            "contract": {
+              "dry_run_available": true,
+              "remote_effects": [
+                "merge",
+                "pull_request",
+                "push"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {
+              "branch": "nonempty_string",
+              "message": "nonempty_string",
+              "paths": "nonempty_string_list",
+              "title": "nonempty_string"
+            },
+            "phase": "planning",
+            "review_note": "Whole-slice plan; an already open PR is a separate explicit intent, never inferred from closeout tags.",
+            "task": "finish_work",
+            "when": {
+              "branch_role": "work",
+              "workspace_mode": "managed"
+            }
+          }
+        ],
+        "selection_sources": [
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit work start",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "fetch"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Start a human patch/slice workflow with the safe standard startup sequence.",
+        "file": "detail-work-start.html",
+        "help": "Start a human patch/slice workflow with the safe standard startup sequence.",
+        "help_example": [
+          "agentic-kit",
+          "work",
+          "start",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": null,
+            "help": "Feature branch to create or switch to.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "branch",
+            "opts": [
+              "--branch"
+            ],
+            "param_type": "TyperOption",
+            "required": true,
+            "secondary_opts": []
+          },
+          {
+            "default": "patch",
+            "help": "Human label for the work kind.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "kind",
+            "opts": [
+              "--kind"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "main",
+            "help": "Start new work from this tag or branch ref.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "from_ref",
+            "opts": [
+              "--from-ref"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print machine-readable JSON.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit work start",
+            "contract": {
+              "dry_run_available": false,
+              "remote_effects": [
+                "fetch"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {
+              "branch": "nonempty_string"
+            },
+            "phase": "guarded",
+            "review_note": "Fetch and branch effects require the existing operation authorization.",
+            "task": "start_work",
+            "when": {
+              "workspace_mode": "managed",
+              "worktree_clean": true
+            }
+          }
+        ],
+        "selection_sources": [
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit workspace adopt",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "READ_ONLY",
+          "surface": "orchestrator"
+        },
+        "description": "Analyze an existing repository without writing workspace files.",
+        "file": "detail-workspace-adopt.html",
+        "help": "Analyze an existing repository without writing workspace files.",
+        "help_example": [
+          "agentic-kit",
+          "workspace",
+          "adopt",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "Target repository root.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Emit machine-readable JSON.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit workspace adopt",
+            "contract": {
+              "dry_run_available": false,
+              "remote_effects": [
+                "none"
+              ],
+              "safety": "READ_ONLY",
+              "surface": "orchestrator"
+            },
+            "inputs": {},
+            "phase": "diagnostic",
+            "review_note": "Assessment may recommend initialization; recommendation is not execution.",
+            "task": "assess_adoption",
+            "when": {
+              "workspace_mode": "unmanaged"
+            }
+          }
+        ],
+        "selection_sources": [
+          "tested_quickstart",
+          "task_routes"
+        ]
+      },
+      {
+        "command": "agentic-kit workspace init",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "description": "Plan or create a bounded operating-layer workspace.",
+        "file": "detail-workspace-init.html",
+        "help": "Plan or create a bounded operating-layer workspace.",
+        "help_example": [
+          "agentic-kit",
+          "workspace",
+          "init",
+          "--help"
+        ],
+        "params": [
+          {
+            "default": "PosixPath('.')",
+            "help": "Target repository root.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "root",
+            "opts": [
+              "--root"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Project name override.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "name",
+            "opts": [
+              "--name"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Project type override: python, node, or generic.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "project_type",
+            "opts": [
+              "--type"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": null,
+            "help": "Workspace profile override.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "profile",
+            "opts": [
+              "--profile"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Write the planned workspace files.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "execute",
+            "opts": [
+              "--execute"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Opt in to GitHub Actions workflow injection.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "inject_ci",
+            "opts": [
+              "--inject-ci"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Opt in to pre-commit snippet injection.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "inject_pre_commit",
+            "opts": [
+              "--inject-pre-commit"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Emit machine-readable JSON.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Plan signed additive recovery of a generated external project.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "recover_partial",
+            "opts": [
+              "--recover-partial"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Reviewed recovery plan signature.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "expected_signature",
+            "opts": [
+              "--expected-signature"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Maintainer approving recovery.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "approved_by",
+            "opts": [
+              "--approved-by"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": "",
+            "help": "Source of explicit recovery consent.",
+            "is_flag": false,
+            "metavar": null,
+            "multiple": false,
+            "name": "consent_source",
+            "opts": [
+              "--consent-source"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          }
+        ],
+        "routes": [
+          {
+            "command": "agentic-kit workspace init",
+            "contract": {
+              "dry_run_available": true,
+              "remote_effects": [
+                "none"
+              ],
+              "safety": "BOUNDED",
+              "surface": "orchestrator"
+            },
+            "inputs": {},
+            "phase": "planning",
+            "review_note": "Inspect the installed command plan; do not add --execute from a selection result.",
+            "task": "initialize_workspace",
+            "when": {
+              "workspace_mode": "unmanaged"
+            }
+          }
+        ],
+        "selection_sources": [
+          "tested_quickstart",
+          "task_routes"
+        ]
+      }
+    ],
+    "execution_authorized": false,
+    "kind": "command_detail_projection",
+    "manifest_sha": "afb7c5e544e0",
+    "schema_version": 1
   },
   "explanation_projection": {
     "brownfield": {
@@ -14106,8 +15928,8 @@
       },
       "schema_version": 1,
       "sources": {
-        "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "b2cf971eebd1e0a6e57255fb359fd0c91c4006eb70c2d855de0bbb0b2b1241cc",
-        "docs/reference/agentic-kit-commands.json": "98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d",
+        "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "05a4595353fbba6f0a9b894eac61c5c3625e0a91beff4a2cbd1c507874464f1e",
+        "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -14122,35 +15944,102 @@
       }
     }
   },
+  "history_projection": {
+    "architecture_adoption": {
+      "date": "2026-07-04",
+      "evidence_class": "normative decision"
+    },
+    "current_command_surfaces": {
+      "diagnostic": 131,
+      "orchestrator": 35,
+      "primitive": 107
+    },
+    "first_commit": {
+      "date": "2026-05-09",
+      "evidence_class": "archive-reported Git event",
+      "version": "0.1.0"
+    },
+    "first_release": {
+      "date": "2026-05-09",
+      "evidence_class": "archive-reported Git event",
+      "version": "0.2.0"
+    },
+    "kind": "bounded_history_projection",
+    "manifest_sha": "afb7c5e544e0",
+    "overhead": {
+      "admin_refresh_prs": 83,
+      "evidence_class": "historical classification",
+      "total_prs": 166,
+      "window": [
+        "2026-10-01",
+        "2026-10-15"
+      ]
+    },
+    "schema_version": 1,
+    "snapshot": {
+      "analysis_base": "ef78a255b22346fd5a583b8978da605542f4dabd",
+      "audit_date": "2026-10-15",
+      "measurement_date": "2026-10-16",
+      "version": "1.0.25"
+    },
+    "sources": {
+      "DRIFT_METRICS_20261015.json": {
+        "path": "docs/reports/self-hosting/DRIFT_METRICS_20261015.json",
+        "revision": "31608ff5393d3cc861117a150e1ab5b0eda95758",
+        "sha256": "9d7709488057f9a2b992abab151b96b3b7b7f9286fc55eb0faa7f93e175eaae7"
+      },
+      "HISTORICAL_DEVELOPMENT_20261015.md": {
+        "path": "docs/reports/self-hosting/HISTORICAL_DEVELOPMENT_20261015.md",
+        "revision": "31608ff5393d3cc861117a150e1ab5b0eda95758",
+        "sha256": "a408d87e132e999bdb48518167718b152dfc59ee9f2a250a289c6f5529f2dfe9"
+      },
+      "architecture": {
+        "path": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md",
+        "revision": "main",
+        "scope": "current moving source",
+        "sha256": "3d2358fbeb2bd9432c4a57c3adbaf8ca01f06e71fdc3a3e268ac28a33ba3a9b9"
+      },
+      "archive": {
+        "path": "docs/reports/self-hosting/SOURCE_MANIFEST.json",
+        "revision": "31608ff5393d3cc861117a150e1ab5b0eda95758",
+        "sha256": "2008e0bcbf39c8936a5eaa5ef7c2a20848b9008be3493887e280a6423ddf1ba0"
+      }
+    },
+    "testimony": {
+      "evidence_class": "author testimony",
+      "source_marker": "AU03",
+      "summary": "The author describes self-hosting as a major contributor to solo development speed. That counterfactual has not been quantified."
+    }
+  },
   "kind": "agentic_project_kit_generated_site",
   "metadata": {
     "build_commit": null,
     "build_label": "docs-pages-fallback",
-    "command_count": 272,
+    "command_count": 273,
     "command_group_count": 40,
     "concept_doi": "10.5281/zenodo.20101359",
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "c53db88c5322",
+    "manifest_sha": "afb7c5e544e0",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.6",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.6",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "c53db88c5322",
+    "reproduced_manifest_sha": "afb7c5e544e0",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
-      "DESTRUCTIVE": 10,
+      "DESTRUCTIVE": 11,
       "READ_ONLY": 86
     },
     "source_commit": null,
     "surface_counts": {
       "diagnostic": 131,
       "orchestrator": 35,
-      "primitive": 106
+      "primitive": 107
     },
     "version_doi": "10.5281/zenodo.23651539"
   },
@@ -14179,6 +16068,530 @@
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.23651539"
+  },
+  "task_projection": {
+    "execution_authorized": false,
+    "facts_schema": {
+      "branch_role": [
+        "main",
+        "work"
+      ],
+      "pr_state": [
+        "none",
+        "open",
+        "merged",
+        "closed"
+      ],
+      "release_state": [
+        "none",
+        "prepared",
+        "published",
+        "blocked",
+        "complete"
+      ],
+      "workspace_mode": [
+        "managed",
+        "unmanaged"
+      ],
+      "worktree_clean": "boolean"
+    },
+    "manifest_sha": "afb7c5e544e0",
+    "routes": [
+      {
+        "command": "agentic-kit check",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "READ_ONLY",
+          "surface": "diagnostic"
+        },
+        "inputs": {},
+        "phase": "diagnostic",
+        "review_note": "Gate outcome is not proof that requirements are correct.",
+        "task": "check_work",
+        "when": {
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit doctor",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "READ_ONLY",
+          "surface": "diagnostic"
+        },
+        "inputs": {},
+        "phase": "diagnostic",
+        "review_note": "Inspect health; do not infer a repair or execute one.",
+        "task": "diagnose_repository",
+        "when": {
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit workspace adopt",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "READ_ONLY",
+          "surface": "orchestrator"
+        },
+        "inputs": {},
+        "phase": "diagnostic",
+        "review_note": "Assessment may recommend initialization; recommendation is not execution.",
+        "task": "assess_adoption",
+        "when": {
+          "workspace_mode": "unmanaged"
+        }
+      },
+      {
+        "command": "agentic-kit workspace init",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {},
+        "phase": "planning",
+        "review_note": "Inspect the installed command plan; do not add --execute from a selection result.",
+        "task": "initialize_workspace",
+        "when": {
+          "workspace_mode": "unmanaged"
+        }
+      },
+      {
+        "command": "agentic-kit work start",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "fetch"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {
+          "branch": "nonempty_string"
+        },
+        "phase": "guarded",
+        "review_note": "Fetch and branch effects require the existing operation authorization.",
+        "task": "start_work",
+        "when": {
+          "workspace_mode": "managed",
+          "worktree_clean": true
+        }
+      },
+      {
+        "command": "agentic-kit work finish",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "merge",
+            "pull_request",
+            "push"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {
+          "branch": "nonempty_string",
+          "message": "nonempty_string",
+          "paths": "nonempty_string_list",
+          "title": "nonempty_string"
+        },
+        "phase": "planning",
+        "review_note": "Whole-slice plan; an already open PR is a separate explicit intent, never inferred from closeout tags.",
+        "task": "finish_work",
+        "when": {
+          "branch_role": "work",
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit transfer pr-complete",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "merge",
+            "push"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {
+          "expected_head_sha": "full_commit",
+          "pr_number": "positive_integer"
+        },
+        "phase": "guarded",
+        "review_note": "Pending CI is handled by the selected workflow; selection does not authorize its merge.",
+        "task": "complete_open_pr",
+        "when": {
+          "pr_state": "open",
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit transfer pr-closeout-complete",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "merge"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {
+          "after_pr": "positive_integer"
+        },
+        "phase": "guarded",
+        "review_note": "Handoff refresh may itself merge an administrative PR; include that effect in operation consent.",
+        "task": "settle_merged_pr",
+        "when": {
+          "pr_state": "merged",
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit transfer chat-switch-complete",
+        "contract": {
+          "dry_run_available": false,
+          "remote_effects": [
+            "none"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {},
+        "phase": "guarded",
+        "review_note": "Writes generated repository projections despite having no remote effect.",
+        "task": "prepare_handoff",
+        "when": {
+          "workspace_mode": "managed"
+        }
+      },
+      {
+        "command": "agentic-kit kit update",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "network_read"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {
+          "version": "stable_version"
+        },
+        "phase": "planning",
+        "review_note": "Planning can download wheels and write temporary reports; signature-gated install remains separate.",
+        "task": "update_kit",
+        "when": {
+          "branch_role": "work",
+          "workspace_mode": "managed",
+          "worktree_clean": true
+        }
+      },
+      {
+        "command": "agentic-kit release run",
+        "contract": {
+          "dry_run_available": true,
+          "remote_effects": [
+            "merge",
+            "pull_request",
+            "push",
+            "release_publish"
+          ],
+          "safety": "BOUNDED",
+          "surface": "orchestrator"
+        },
+        "inputs": {
+          "version": "stable_version"
+        },
+        "phase": "guarded",
+        "review_note": "Fresh release only; existing runs need a separate explicit resume/recovery intent. Without --execute the orchestrator still performs local A/B preparation; publication consent stays separate and version/tag/head-bound.",
+        "task": "release_version",
+        "when": {
+          "branch_role": "main",
+          "release_state": "none",
+          "workspace_mode": "managed",
+          "worktree_clean": true
+        }
+      }
+    ],
+    "schema_version": 1,
+    "unassigned_commands": [
+      "agentic-kit actions list",
+      "agentic-kit actions show",
+      "agentic-kit artifact-gc",
+      "agentic-kit audit-absolute-path-portability",
+      "agentic-kit audit-command-authority",
+      "agentic-kit audit-command-manifest",
+      "agentic-kit audit-doc-currency",
+      "agentic-kit audit-doc-orphans",
+      "agentic-kit audit-drift-signals",
+      "agentic-kit audit-mutation-lock-coverage",
+      "agentic-kit audit-ns-legacy-references",
+      "agentic-kit audit-patch-failure-discipline",
+      "agentic-kit audit-path-literals",
+      "agentic-kit audit-planning-docs-consolidation",
+      "agentic-kit audit-program-redundancy",
+      "agentic-kit audit-status-current-state",
+      "agentic-kit boot check",
+      "agentic-kit boot closeout",
+      "agentic-kit boot prompt",
+      "agentic-kit boot report",
+      "agentic-kit boot write",
+      "agentic-kit chat refresher",
+      "agentic-kit chat session-start",
+      "agentic-kit check-docs",
+      "agentic-kit check-todo",
+      "agentic-kit ci runtime-plan",
+      "agentic-kit ci status",
+      "agentic-kit cockpit actions",
+      "agentic-kit cockpit gatekeeper-status",
+      "agentic-kit cockpit run",
+      "agentic-kit cockpit select",
+      "agentic-kit cockpit status",
+      "agentic-kit command-for",
+      "agentic-kit command-taxonomy-check",
+      "agentic-kit commands render-md",
+      "agentic-kit commands sync-entrypoints",
+      "agentic-kit context render",
+      "agentic-kit context report",
+      "agentic-kit dev local-feature-gate",
+      "agentic-kit direction audit-drift",
+      "agentic-kit direction render",
+      "agentic-kit direction validate",
+      "agentic-kit doc-lifecycle-audit",
+      "agentic-kit doc-mesh-audit",
+      "agentic-kit doc-mesh-repair",
+      "agentic-kit doc-registry check-unregistered",
+      "agentic-kit doc-registry reconcile",
+      "agentic-kit doc-registry register",
+      "agentic-kit docs lifecycle apply",
+      "agentic-kit docs lifecycle bootstrap",
+      "agentic-kit docs lifecycle plan",
+      "agentic-kit docs lifecycle propose-delete",
+      "agentic-kit docs lifecycle report",
+      "agentic-kit docs lifecycle sweep",
+      "agentic-kit docs lifecycle triage",
+      "agentic-kit docs removed-source-audit",
+      "agentic-kit docs-audit",
+      "agentic-kit docs-registry",
+      "agentic-kit dpa current-handoff-refresh",
+      "agentic-kit dpa dp2-decision-readiness",
+      "agentic-kit dpa dp3-dp4-adjudication-check",
+      "agentic-kit dpa dp5-block-new-gate",
+      "agentic-kit dpa dp5-stage-check",
+      "agentic-kit dpa dp5-strict-gate",
+      "agentic-kit dpa final-closeout-check",
+      "agentic-kit dpa fixture-evidence",
+      "agentic-kit dpa maintainer-record-check",
+      "agentic-kit dpa post-dp2-scope-assessment",
+      "agentic-kit dpa probe-002-readiness",
+      "agentic-kit dpa probe-003-readiness",
+      "agentic-kit dpa probe-004-readiness",
+      "agentic-kit dpa readiness",
+      "agentic-kit dpa readonly-probe-execution",
+      "agentic-kit dpa renderer-readiness",
+      "agentic-kit dpa repo-adoption-assessment",
+      "agentic-kit dpa stable-readiness-check",
+      "agentic-kit dpa wrt-ch001-evidence",
+      "agentic-kit evidence classify-log",
+      "agentic-kit evidence clean",
+      "agentic-kit evidence clean-check",
+      "agentic-kit evidence commit-paths",
+      "agentic-kit evidence finalize-log",
+      "agentic-kit evidence guard",
+      "agentic-kit evidence inspect",
+      "agentic-kit evidence scope-check",
+      "agentic-kit executor plan",
+      "agentic-kit executor run",
+      "agentic-kit github-create",
+      "agentic-kit governance check",
+      "agentic-kit greenfield export",
+      "agentic-kit greenfield retest",
+      "agentic-kit greenfield status",
+      "agentic-kit gui initial-llm-prompt",
+      "agentic-kit gui-readiness-gate",
+      "agentic-kit handoff check",
+      "agentic-kit handoff post-merge-refresh-status",
+      "agentic-kit handoff prompt",
+      "agentic-kit handoff refresh",
+      "agentic-kit handoff show",
+      "agentic-kit init",
+      "agentic-kit instruction lint",
+      "agentic-kit kit status",
+      "agentic-kit ledger report",
+      "agentic-kit onboarding measure",
+      "agentic-kit pass-already-done classify",
+      "agentic-kit pass-already-done report",
+      "agentic-kit patch-preflight",
+      "agentic-kit patch-scope-preflight",
+      "agentic-kit patterns list",
+      "agentic-kit patterns show",
+      "agentic-kit post-release-check",
+      "agentic-kit post-release-doi-closeout",
+      "agentic-kit pr closeout-check",
+      "agentic-kit pr merge-if-green",
+      "agentic-kit pr rerun-checks",
+      "agentic-kit pr status",
+      "agentic-kit pr wait-ci",
+      "agentic-kit pr-closeout",
+      "agentic-kit pr-hygiene",
+      "agentic-kit profile-explain",
+      "agentic-kit project-direction",
+      "agentic-kit release abandon",
+      "agentic-kit release prepare",
+      "agentic-kit release ready",
+      "agentic-kit release-check",
+      "agentic-kit release-metadata-authority-gate",
+      "agentic-kit release-notes-generate",
+      "agentic-kit release-plan",
+      "agentic-kit release-preflight",
+      "agentic-kit release-prep",
+      "agentic-kit release-publish",
+      "agentic-kit release-status",
+      "agentic-kit remote-branch-hygiene",
+      "agentic-kit remote-branch-hygiene-apply",
+      "agentic-kit remote-branch-hygiene-report",
+      "agentic-kit remote-next",
+      "agentic-kit rn",
+      "agentic-kit rnc",
+      "agentic-kit rule-registry bootstrap",
+      "agentic-kit rule-registry check",
+      "agentic-kit rule-registry register",
+      "agentic-kit rule-registry report",
+      "agentic-kit rules acknowledge",
+      "agentic-kit rules acknowledge-communication-refresh",
+      "agentic-kit rules communication-refresh",
+      "agentic-kit rules handoff-refresh",
+      "agentic-kit rules require-current-communication-context",
+      "agentic-kit rules snapshot",
+      "agentic-kit rules validate-sources",
+      "agentic-kit scaffold planning-doc",
+      "agentic-kit slice gate",
+      "agentic-kit standard-gates-audit-suite",
+      "agentic-kit state freshness-check",
+      "agentic-kit state mode-check",
+      "agentic-kit state mode-write",
+      "agentic-kit todo complete",
+      "agentic-kit todo list",
+      "agentic-kit todo render",
+      "agentic-kit transfer admin-refresh-pr",
+      "agentic-kit transfer apply",
+      "agentic-kit transfer branch-create",
+      "agentic-kit transfer branch-delete",
+      "agentic-kit transfer branch-switch",
+      "agentic-kit transfer closeout",
+      "agentic-kit transfer command-composition-check",
+      "agentic-kit transfer command-reference-check",
+      "agentic-kit transfer command-reference-refresh",
+      "agentic-kit transfer command-stack-begin",
+      "agentic-kit transfer command-stack-end",
+      "agentic-kit transfer commit",
+      "agentic-kit transfer conflict-resolve-file",
+      "agentic-kit transfer conflict-status",
+      "agentic-kit transfer continue",
+      "agentic-kit transfer delete-merged-work-branch",
+      "agentic-kit transfer diagnose-removed-ns-commands",
+      "agentic-kit transfer divergence-status",
+      "agentic-kit transfer evidence-finalize-current-transfer",
+      "agentic-kit transfer evidence-inspect-latest",
+      "agentic-kit transfer evidence-pr-complete",
+      "agentic-kit transfer fetch-origin",
+      "agentic-kit transfer head-sha",
+      "agentic-kit transfer inspect",
+      "agentic-kit transfer list-refs",
+      "agentic-kit transfer log-header",
+      "agentic-kit transfer log-upload-hint",
+      "agentic-kit transfer merge-upstream",
+      "agentic-kit transfer normalize-files",
+      "agentic-kit transfer normalize-session",
+      "agentic-kit transfer order-create",
+      "agentic-kit transfer order-validate",
+      "agentic-kit transfer patch-cycle-status",
+      "agentic-kit transfer post-merge-check",
+      "agentic-kit transfer post-merge-complete",
+      "agentic-kit transfer post-merge-settle",
+      "agentic-kit transfer pr-close-superseded",
+      "agentic-kit transfer pr-create",
+      "agentic-kit transfer pr-create-complete",
+      "agentic-kit transfer pr-existing-for-branch",
+      "agentic-kit transfer pr-merge-safe",
+      "agentic-kit transfer pr-status",
+      "agentic-kit transfer pr-wait-ci",
+      "agentic-kit transfer prepare-successor-handoff",
+      "agentic-kit transfer protected-diff-plan",
+      "agentic-kit transfer publish-last-report",
+      "agentic-kit transfer pull-current",
+      "agentic-kit transfer push-current",
+      "agentic-kit transfer read-user-task",
+      "agentic-kit transfer rebase-on-upstream",
+      "agentic-kit transfer refresh-llm-context-carriers",
+      "agentic-kit transfer remote-next",
+      "agentic-kit transfer remote-work-start",
+      "agentic-kit transfer repo-diff",
+      "agentic-kit transfer repo-log",
+      "agentic-kit transfer repo-status",
+      "agentic-kit transfer require-fresh-llm-context",
+      "agentic-kit transfer restore-known-volatile",
+      "agentic-kit transfer run-and-log",
+      "agentic-kit transfer run-local",
+      "agentic-kit transfer run-sequence-and-log",
+      "agentic-kit transfer show-last-report",
+      "agentic-kit transfer standard-error-scan",
+      "agentic-kit transfer state",
+      "agentic-kit transfer status",
+      "agentic-kit transfer submit-user-task",
+      "agentic-kit transfer sync-main",
+      "agentic-kit transfer verify-llm-context-refresh",
+      "agentic-kit transfer work-order-patch",
+      "agentic-kit transfer workflow-next",
+      "agentic-kit validate-contract",
+      "agentic-kit validate-output-contract",
+      "agentic-kit validate-sections",
+      "agentic-kit work check",
+      "agentic-kit work discard-changes",
+      "agentic-kit work recover",
+      "agentic-kit work rescue",
+      "agentic-kit work-order check",
+      "agentic-kit work-order list",
+      "agentic-kit work-order prepare",
+      "agentic-kit work-order run",
+      "agentic-kit work-order show",
+      "agentic-kit work-order templates",
+      "agentic-kit work-order typed-next",
+      "agentic-kit work-order typed-queue-status",
+      "agentic-kit work-order typed-run",
+      "agentic-kit work-order upload",
+      "agentic-kit workflow cleanup",
+      "agentic-kit workflow fail-report",
+      "agentic-kit workflow go",
+      "agentic-kit workflow list",
+      "agentic-kit workflow request",
+      "agentic-kit workflow run",
+      "agentic-kit workflow show",
+      "agentic-kit workflow state",
+      "agentic-kit workflow status",
+      "agentic-kit workflow upload",
+      "agentic-kit workflow upload-output",
+      "agentic-kit workflow-guard check",
+      "agentic-kit workflow-guard diagnose",
+      "agentic-kit workspace ci-update",
+      "agentic-kit workspace dpa-intake",
+      "agentic-kit workspace remove",
+      "agentic-kit workspace upgrade"
+    ]
   },
   "workflow_projection": {
     "boundaries": [

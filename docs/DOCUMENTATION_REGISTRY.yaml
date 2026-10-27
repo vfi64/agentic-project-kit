@@ -1864,6 +1864,15 @@ documents:
     owner: maintainers
     summary: Partial external bootstrap recovery and gate isolation with independent fixture
       evidence
+  - path: docs/reports/WEBSITE_W1_W3_W4_20261027.md
+    class: evidence/log
+    owner: maintainers
+    summary: Combined W1 W3 W4 generated website scope and validation boundaries
+  - path: docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md
+    class: evidence/log
+    owner: maintainers
+    summary: Local upstream merge completion, signatures, conflict preservation and regression
+      evidence
   - path: docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md
     class: evidence/log
     owner: maintainers

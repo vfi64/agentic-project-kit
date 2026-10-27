@@ -128,6 +128,11 @@ meta:
       consumer_boundary: 1.1.6 satisfies c2's later-release dependency, but adoption, consumer retests and ledger verification remain deferred and unperformed by this slice.
       w2_authorization_scope: Owner approved one combined planning refresh and W2 historical evidence page; that slice included no tag inventory, D1 implementation or paid benchmark reruns.
       current_slice: D1 option A implemented in PR2650 with one shared schema-3 manifest export, explicit intent selection and matching website projection. W1 layout and command-detail expansion remain separate; no release or paid benchmark.
+    progress_update_20261027:
+      current_slice: W1, W3 and W4 implemented together after D1 and the foreign-workspace repair closeout.
+      website_scope: Eleven shared task cards, twelve metadata-derived command details, and a bounded source-bound public history with current architecture.
+      evidence: docs/reports/WEBSITE_W1_W3_W4_20261027.md
+      boundary: No release, paid benchmark, consumer retest, new command authority or kernel-isolation claim.
     progress_update_20261022:
       release: Kit 1.1.5 completed (release PR2601, DOI PR2603, evidence PR2605, refresh PR2606).
       kit_baseline: 52f469f112a1ec4d5fceb8aec0a2657f185eacb4
@@ -2666,7 +2671,8 @@ plans:
     - Retain ACK, mutation and evidence gates and evaluate agent context costs
       independently of website readability.
   - id: w1-task-navigation
-    status: planned
+    status: done
+    completion_scope: Shared D1 phases, conditions and inputs; searchable cards and visible unassigned commands. Local links and keyboard disclosure tested; 375/1280 px browser acceptance passed.
     depends_on_step: d1-shared-task-command-selection
     acceptance:
     - Render tasks, command groups and preferred orchestrators from the shared,
@@ -2675,7 +2681,8 @@ plans:
     - Validate internal links, mobile layout, accessibility and projection
       freshness; never maintain a separate manual website taxonomy.
   - id: w3-command-detail-pages
-    status: planned
+    status: done
+    completion_scope: Exact union of reviewed task routes and tested quickstart commands, twelve detail pages. Manifest-bound safety/options/conditions and fixture-tested inert help examples; no inferred call graph.
     depends_on_step: d1-shared-task-command-selection
     acceptance:
     - Start with quickstart and preferred orchestrator commands; defer detailed
@@ -2685,7 +2692,8 @@ plans:
     - Display call relationships only when trace or static code evidence supports
       them. Otherwise omit the claim instead of guessing.
   - id: w4-history-and-architecture
-    status: planned
+    status: done
+    completion_scope: Public allowlist from hash-bound historical archive plus current normative architecture, distinct evidence classes and reused reviewed figures; private-source inventories excluded.
     priority: lower
     acceptance:
     - Reuse selected cleared figures and bounded historical statements from

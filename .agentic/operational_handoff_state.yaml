@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 94769b20ed0b19fbe389a728a53e2b99164efcf0
-  short: 94769b20
-  subject: Verify external bootstrap across versions and all work-check profiles (#2654)
+  full: 11be8356207b5db021648e76881dc537e721d80d
+  short: 11be8356
+  subject: Bind merge abort approval to unstaged resolution content (#2661)
 last_substantive_work_state:
-  full: 94769b20ed0b19fbe389a728a53e2b99164efcf0
-  short: 94769b20
-  subject: Verify external bootstrap across versions and all work-check profiles (#2654)
+  full: 11be8356207b5db021648e76881dc537e721d80d
+  short: 11be8356
+  subject: Bind merge abort approval to unstaged resolution content (#2661)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

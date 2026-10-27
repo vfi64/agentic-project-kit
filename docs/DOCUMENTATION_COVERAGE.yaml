@@ -10,6 +10,33 @@ rules:
     terms:
     - KIT-GF-089
     - tests/test_greenfield_retest_owned_runtime_wheel.py
+- id: local-upstream-merge-lifecycle
+  description: Local merge start, continuation and abort preserve history and require explicit state-bound approval.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - merge-upstream
+    - --expected-signature
+    - READY_TO_COMMIT
+    - CONFLICT
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_transfer_merge_upstream.py
+    - linked worktree
+- id: generated-website-navigation-details-history
+  description: Website tasks and details share command authority while public history preserves source and evidence boundaries.
+  documents:
+  - path: site/README.md
+    terms:
+    - task_routes
+    - commands/details.json
+    - history/history.json
+    - Private-source
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_site_navigation_details_history.py
+    - source-bound
+    - 375/1280
 - id: partial-external-bootstrap-recovery
   description: Signed additive recovery preserves external project state and isolates Kit-only gates.
   documents:
@@ -2426,7 +2453,7 @@ rules:
     - README H1
     - release-pypi-workflow
     - entries in the CHANGELOG section
-    - D1 remains deferred
+    - D1 now supplies
   - path: docs/TEST_GATES.md
     terms:
     - tests/test_site_public_contract.py

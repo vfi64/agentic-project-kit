@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-27T04:35:22.521689+00:00",
+    "created_at_utc": "2026-10-27T14:16:51.391947+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -93,7 +93,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 272,
+      "command_count": 273,
       "generated_by": "",
       "important_wrappers": [
         {
@@ -318,12 +318,12 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-27T04:35:22.722267+00:00",
+    "generated_at_utc": "2026-10-27T14:16:51.591031+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/foreign-bootstrap-delta-acceptance",
-      "head": "c596def353088db56dd5e88ab9f864f51d29daba",
-      "status_short": ""
+      "branch": "codex/kit-merge-abort-content-binding",
+      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
+      "status_short": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -384,8 +384,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "79d8d63e81a6ff2a4a81b97178fe805f520d14cbbeebab0577c2c83b3182ccf8",
-      "docs/reference/agentic-kit-commands.json": "98f8ced192af24480e14a3623a1f8a0b3171d6aeb690ee9917e1fa7a60b75e5d"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "178b381c8e8341240c488612ef9dbedcdf50df5fa2cd7d9197bcedb9d56da63e",
+      "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -426,11 +426,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "6f66909218c515e9026885c9ee365777b9a699df82cc9032dd2ae3d3de0e3779"
+        "sha256": "85839aab08860bad930e14be040f24fbb623a848f0b6c3abd4fa0b49c13ee3cc"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "bfc1129202a49ff62f5d14b9a5c9bf25cf24dcdffbf7ccef7f22c021b55c65bd"
+        "sha256": "b7f8c6f6e94f55c31358f5bf467206f173066cec4d8c2fc110c7970f1a377fb6"
       }
     ],
     "canonical_cli_usage": {
@@ -931,9 +931,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/foreign-bootstrap-delta-acceptance",
-      "dirty_status": "",
-      "head": "c596def353088db56dd5e88ab9f864f51d29daba",
+      "branch": "codex/kit-merge-abort-content-binding",
+      "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
@@ -998,11 +998,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "6f66909218c515e9026885c9ee365777b9a699df82cc9032dd2ae3d3de0e3779"
+        "sha256": "85839aab08860bad930e14be040f24fbb623a848f0b6c3abd4fa0b49c13ee3cc"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "bfc1129202a49ff62f5d14b9a5c9bf25cf24dcdffbf7ccef7f22c021b55c65bd"
+        "sha256": "b7f8c6f6e94f55c31358f5bf467206f173066cec4d8c2fc110c7970f1a377fb6"
       }
     ],
     "canonical_cli_usage": {
@@ -1503,9 +1503,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/foreign-bootstrap-delta-acceptance",
-      "dirty_status": "",
-      "head": "c596def353088db56dd5e88ab9f864f51d29daba",
+      "branch": "codex/kit-merge-abort-content-binding",
+      "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
+      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
