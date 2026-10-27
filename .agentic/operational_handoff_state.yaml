@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 11be8356207b5db021648e76881dc537e721d80d
-  short: 11be8356
-  subject: Bind merge abort approval to unstaged resolution content (#2661)
+  full: 02d8065173b4dd4170b59c1dc0dd15775b82ac76
+  short: 02d80651
+  subject: Run owned-runtime finding retests from an installed wheel (KIT-GF-089) (#2658)
 last_substantive_work_state:
-  full: 11be8356207b5db021648e76881dc537e721d80d
-  short: 11be8356
-  subject: Bind merge abort approval to unstaged resolution content (#2661)
+  full: 02d8065173b4dd4170b59c1dc0dd15775b82ac76
+  short: 02d80651
+  subject: Run owned-runtime finding retests from an installed wheel (KIT-GF-089) (#2658)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
