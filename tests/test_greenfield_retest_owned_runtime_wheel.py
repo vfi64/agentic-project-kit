@@ -23,7 +23,7 @@ from agentic_project_kit.greenfield_retest_runtime import _dependency_paths
 
 def test_the_kit_directory_is_replaced_by_a_view_without_the_kit(tmp_path):
     site = tmp_path / "site-packages"
-    for name in ("agentic_project_kit", "agentic_project_kit-1.1.6.dist-info", "typer", "click",
+    for name in ("agentic_project_kit", "agentic_project_kit-1.1.6.dist-info", "agentic_project_kit.egg-info", "typer", "click",
                  "typer-0.27.3.dist-info", "__pycache__"):
         (site / name).mkdir(parents=True)
     (site / "distutils-precedence.pth").write_text("import os\n", encoding="utf-8")

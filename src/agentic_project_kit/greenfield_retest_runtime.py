@@ -18,7 +18,7 @@ import venv
 
 
 def _is_kit_entry(name: str) -> bool:
-    return name == "agentic_project_kit" or (
+    return name in {"agentic_project_kit", "agentic_project_kit.egg-info"} or (
         name.startswith("agentic_project_kit-") and name.endswith((".dist-info", ".egg-info")))
 
 

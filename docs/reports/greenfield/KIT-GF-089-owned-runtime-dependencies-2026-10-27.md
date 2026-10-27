@@ -58,3 +58,19 @@ involved.
 Unreleased, category Fixed. A consumer may record the four families as verified
 only after re-running them under the released wheel that contains this repair.
 No consumer-identifying material is included.
+
+## Closeout follow-up
+
+The work branch was integrated with current main through the Kit's local merge
+lifecycle, retaining its original commit and main as parents; no history rewrite
+or force push was used. CHANGELOG and coverage retain both additions. Registry
+and scope resolutions came from the existing generator on an isolated public-tree
+copy, preserving all main registry entries and adding this report.
+
+The two owned-runtime regressions and six recovery-smoke tests passed in the
+independent environment, including both previously reported smoke failures.
+Review also found that unversioned `agentic_project_kit.egg-info` was not excluded
+by the version-prefixed metadata predicate. The expanded fixture failed before
+the one-line correction; the filter now excludes that own metadata as intended.
+Dependencies remain unchanged. Final wheel, full-suite and CI results are
+recorded in the PR closeout; no release is performed here.
