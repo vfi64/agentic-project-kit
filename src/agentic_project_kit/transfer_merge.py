@@ -74,6 +74,7 @@ def _observe(root: Path, branch: str, upstream: str, action: str) -> tuple[dict,
     plan = {"action": action, "branch": current, "head": head, "upstream": upstream,
             "target_commit": target, "merge_active": merging, "status": status,
             "unmerged_files": unmerged, "index_sha256": digest,
+            "worktree_sha256": hashlib.sha256(_read(root, "diff", "--binary").encode()).hexdigest(),
             "message_sha256": hashlib.sha256(message.read_bytes()).hexdigest() if message.exists() else None}
     return plan, reasons
 

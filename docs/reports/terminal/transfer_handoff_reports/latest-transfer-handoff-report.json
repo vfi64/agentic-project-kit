@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-27T13:46:18.500560+00:00",
+    "created_at_utc": "2026-10-27T14:16:51.391947+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -318,11 +318,11 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-27T13:46:18.701022+00:00",
+    "generated_at_utc": "2026-10-27T14:16:51.591031+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/kit-merge-upstream",
-      "head": "190add0a28bada8f5c002f49eb0799b30d800c58",
+      "branch": "codex/kit-merge-abort-content-binding",
+      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
       "status_short": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json"
     },
     "kind": "llm_execution_context",
@@ -931,9 +931,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/kit-merge-upstream",
+      "branch": "codex/kit-merge-abort-content-binding",
       "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-      "head": "190add0a28bada8f5c002f49eb0799b30d800c58",
+      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
@@ -1503,9 +1503,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/kit-merge-upstream",
+      "branch": "codex/kit-merge-abort-content-binding",
       "dirty_status": "M docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md\n M docs/reports/terminal/transfer_handoff_reports/latest-transfer-handoff-report.json",
-      "head": "190add0a28bada8f5c002f49eb0799b30d800c58",
+      "head": "1b30b4c8388246a5bf1df76037a6501f4dfdad04",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
