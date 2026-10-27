@@ -56,7 +56,7 @@ def render_command_detail(root: Path, row: dict, *, product_name: str, version: 
                       f'<p>Required task inputs: {escape(inputs)}.</p><p>{escape(route["review_note"])}</p></article>')
     params = []
     for param in row["params"]:
-        flags = ", ".join(param.get("opts", [])) or param["name"]
+        flags = ", ".join([*param.get("opts", []), *param.get("secondary_opts", [])]) or param["name"]
         params.append(f'<div class="parameter"><dt><code>{escape(flags)}</code></dt>'
                       f'<dd>{escape(str(param.get("help") or "No description supplied by the manifest."))}'
                       f'<br>Required: {str(bool(param.get("required"))).lower()} · Default: '

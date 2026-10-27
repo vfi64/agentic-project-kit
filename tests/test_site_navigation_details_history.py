@@ -38,6 +38,9 @@ def test_detail_selection_is_exact_union_of_shared_routes_and_tested_quickstart(
     assert len({c["file"] for c in details["commands"]}) == len(expected)
     for c in details["commands"]:
         assert (built / "commands" / c["file"]).is_file()
+    finish = (built / "commands" / detail_filename("agentic-kit work finish")).read_text()
+    assert "<code>--dry-run, --execute</code>" in finish
+    assert "<code>--merge, --no-merge</code>" in finish
     tasks = json.loads((built / "commands/tasks.json").read_text())
     assigned = {r["command"] for r in tasks["routes"]}
     assert assigned.isdisjoint(tasks["unassigned_commands"])
