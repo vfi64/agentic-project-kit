@@ -74,3 +74,20 @@ by the version-prefixed metadata predicate. The expanded fixture failed before
 the one-line correction; the filter now excludes that own metadata as intended.
 Dependencies remain unchanged. Final wheel, full-suite and CI results are
 recorded in the PR closeout; no release is performed here.
+
+Final local verification of the integrated candidate:
+
+- Fresh non-editable installation from the integrated branch, invoked outside
+  the source checkout: KIT-GF-089/021/032/045/067 all PASS (5), FAIL 0. The
+  runtime was loaded from the installed distribution's site-packages.
+- `python -m pytest -q -n 4 --dist worksteal`: 4299 passed, 545 warnings,
+  160.48 seconds. The 22 targeted wheel, recovery and merge-lifecycle cases pass.
+- `ruff check .`, `agentic-kit check-docs`, `agentic-kit doctor`: PASS.
+  Doctor retains 76 report-only lifecycle findings.
+- `greenfield export`: PASS, no changed paths; registry/scope reconciliation:
+  PASS. The canonical site generator completed successfully with no fallback
+  drift. No generated artifact was edited by hand.
+
+The candidate still carries development version metadata 1.1.6; it is not a new
+published 1.1.6 build. Release target remains 1.1.7, with the Fixed entry under
+Unreleased. No release, tag, package upload or consumer-workspace mutation occurred.
