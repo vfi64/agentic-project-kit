@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 02d8065173b4dd4170b59c1dc0dd15775b82ac76
-  short: 02d80651
-  subject: Run owned-runtime finding retests from an installed wheel (KIT-GF-089) (#2658)
+  full: 38f44619143d3c874e53d8d478b620dfde01ac67
+  short: 38f44619
+  subject: Refresh the review matrix after release manifest synchronization (#2665)
 last_substantive_work_state:
-  full: 02d8065173b4dd4170b59c1dc0dd15775b82ac76
-  short: 02d80651
-  subject: Run owned-runtime finding retests from an installed wheel (KIT-GF-089) (#2658)
+  full: 38f44619143d3c874e53d8d478b620dfde01ac67
+  short: 38f44619
+  subject: Refresh the review matrix after release manifest synchronization (#2665)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
