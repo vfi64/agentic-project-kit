@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Refresh the Kit review matrix after release manifest synchronization and stop preparation if its generator fails, while leaving consumer workspaces and dry runs unchanged.
+
 - Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).
 
 - Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.

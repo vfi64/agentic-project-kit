@@ -809,7 +809,7 @@
   },
   "schema_version": 1,
   "sources": {
-    "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "05a4595353fbba6f0a9b894eac61c5c3625e0a91beff4a2cbd1c507874464f1e",
+    "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "b4865b6eb771d5b8ee84f0ccb29583b409884f84cbebb677bdddc761a5b572c5",
     "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4",
     "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
     "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
@@ -820,7 +820,7 @@
     "site/templates/figures/G2.svg": "8765be0ba0e6d94c6c9448905e816211583ff3fdb1fb457fbde766c3dba1ec60",
     "site/templates/figures/G3-mobile.svg": "6d9cccea1ddf7b43fb34bec25c215175c40becb2497b9cd71ebc9de8293a5e72",
     "site/templates/figures/G3.svg": "52ba78e99e8496b7c3de1ccb04889f860afdcea8566c448a40d5a555b8c82152",
-    "src/agentic_project_kit/cli_commands/human_workflows.py": "c4e18b86356691f191ab2a43a1dbdaff930d9a9d438da94f4d375a1fedf76003",
+    "src/agentic_project_kit/cli_commands/human_workflows.py": "e45d058b20cc55eeb8b4223ae67cee00117585a6cb7aea8b1bfb05a416fd3f99",
     "src/agentic_project_kit/successor_handoff_package.py": "053a96a55182ff05d3e801c56dfc74535a4205de67ecd4db1ba837c2494f81f2"
   }
 }

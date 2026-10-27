@@ -14,6 +14,7 @@ from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blocke
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
 from agentic_project_kit.release_prepare import refresh_dpa_readiness_command_manifest_ack
 from agentic_project_kit.release_run import ReleaseRunOptions, run_release
+from agentic_project_kit.release_review_projection import review_projection_command
 from agentic_project_kit.work_discard_changes import discard_all_changes
 from agentic_project_kit.work_rescue import rescue_main_work
 from agentic_project_kit.workspace import load_workspace
@@ -1056,6 +1057,13 @@ def release_prepare_command(
                 "commands-sync-entrypoints",
                 _agentic("commands", "sync-entrypoints", "--execute", "--json"),
             )
+        )
+    if not dry_run and all(step["ok"] for step in steps):
+        review_command = review_projection_command(Path("."), default_python(Path(".")))
+        steps.append(
+            _run_step("task-selection-review-refresh", review_command)
+            if review_command is not None else
+            _noop_step("task-selection-review-refresh", "Skipped: Kit development projection is not applicable.")
         )
     if not dry_run and all(step["ok"] for step in steps):
         steps.append(_dpa_readiness_ack_refresh_step())

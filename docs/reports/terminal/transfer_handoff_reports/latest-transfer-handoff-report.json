@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-27T15:43:22.807471+00:00",
+    "created_at_utc": "2026-10-27T16:50:30.026052+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -318,12 +318,12 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-27T15:43:23.041090+00:00",
+    "generated_at_utc": "2026-10-27T16:50:30.242939+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "fix/kit-gf-089-owned-runtime-dependencies",
-      "head": "bb8d0ecd72e1831f4276a2b9ab7e42de7103c812",
-      "status_short": "M docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md"
+      "branch": "codex/fix-release-review-matrix",
+      "head": "bfcee4c68c0745319ec10dd34ea58935b90e54d1",
+      "status_short": ""
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -931,12 +931,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "fix/kit-gf-089-owned-runtime-dependencies",
-      "dirty_status": "M docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
-      "head": "bb8d0ecd72e1831f4276a2b9ab7e42de7103c812",
+      "branch": "codex/fix-release-review-matrix",
+      "dirty_status": "",
+      "head": "bfcee4c68c0745319ec10dd34ea58935b90e54d1",
       "head_matches_upstream": false,
-      "upstream": "origin/fix/kit-gf-089-owned-runtime-dependencies",
-      "upstream_head": "4f9f1d536ec1d0a78617d2f69bb7121e7157bd22"
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {
@@ -1503,12 +1503,12 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "fix/kit-gf-089-owned-runtime-dependencies",
-      "dirty_status": "M docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
-      "head": "bb8d0ecd72e1831f4276a2b9ab7e42de7103c812",
+      "branch": "codex/fix-release-review-matrix",
+      "dirty_status": "",
+      "head": "bfcee4c68c0745319ec10dd34ea58935b90e54d1",
       "head_matches_upstream": false,
-      "upstream": "origin/fix/kit-gf-089-owned-runtime-dependencies",
-      "upstream_head": "4f9f1d536ec1d0a78617d2f69bb7121e7157bd22"
+      "upstream": "",
+      "upstream_head": ""
     },
     "schema_version": 1,
     "terminal_block_rules": {
