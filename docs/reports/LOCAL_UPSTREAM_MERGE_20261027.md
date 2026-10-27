@@ -48,3 +48,11 @@ Lint, check-docs and doctor passed after canonical handoff regeneration.
 
 The exact CI head is reported by the PR closeout. No release is
 part of this repair. No private consumer identity or raw local paths are included.
+
+## Exact-state safety follow-up
+
+An additional isolated fixture found that late, unstaged resolution edits could
+leave both status and index unchanged. The first abort preview fingerprint did
+not capture their bytes. A reproducing regression failed before correction.
+The plan now also hashes the unstaged binary diff, so a stale abort signature
+blocks and preserves the late resolution. There are no new flags or effects.

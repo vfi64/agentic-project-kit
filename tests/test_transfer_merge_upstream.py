@@ -95,6 +95,19 @@ def test_abort_is_explicit_and_preserves_untracked_files(repo):
     assert (root / "keep.txt").exists()
 
 
+def test_abort_rejects_late_unstaged_resolution_content(repo):
+    root, head = repo
+    execute()
+    plan = core(action="abort")
+    (root / "shared.txt").write_text("Late uncommitted resolution\n")
+    result = core(action="abort", execute=True, expected_signature=plan["approval_signature"])
+    assert result["result_status"] == "BLOCKED"
+    assert "approval_signature_mismatch" in result["reasons"]
+    assert (root / "shared.txt").read_text() == "Late uncommitted resolution\n"
+    assert (root / ".git/MERGE_HEAD").exists()
+    assert git(root, "rev-parse", "HEAD") == head
+
+
 @pytest.mark.parametrize("changed", ["head", "upstream"])
 def test_stale_head_or_upstream_never_mutates(repo, changed):
     root, _ = repo
