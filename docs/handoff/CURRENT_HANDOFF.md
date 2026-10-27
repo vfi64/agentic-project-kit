@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `02d8065173b4dd4170b59c1dc0dd15775b82ac76` (`02d80651`), after `Run owned-runtime finding retests from an installed wheel (KIT-GF-089) (#2658)`.
-Last substantive work state is `02d8065173b4dd4170b59c1dc0dd15775b82ac76` (`02d80651`), after `Run owned-runtime finding retests from an installed wheel (KIT-GF-089) (#2658)`.
+Current verified main/admin HEAD is `38f44619143d3c874e53d8d478b620dfde01ac67` (`38f44619`), after `Refresh the review matrix after release manifest synchronization (#2665)`.
+Last substantive work state is `38f44619143d3c874e53d8d478b620dfde01ac67` (`38f44619`), after `Refresh the review matrix after release manifest synchronization (#2665)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
