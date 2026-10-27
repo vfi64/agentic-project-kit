@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 178b381c8e8341240c488612ef9dbedcdf50df5fa2cd7d9197bcedb9d56da63e
 - docs/reference/agentic-kit-commands.json: 61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4
-## Operational documentation refresh state after PR #2656
+## Operational documentation refresh state after PR #2659
 
-Current administrative handoff refresh state is `36562d72` (`Generate task-first navigation, command details and bounded Kit history (#2656)`). Continue next only after this post-PR2656 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d9f2d6b6` (`Complete local upstream merges with bound previews and explicit recovery (#2659)`). Continue next only after this post-PR2659 refresh is committed and merged; the next substantive slice must be created from fresh main.

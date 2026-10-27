@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 36562d72e8a7012ae21ba9a37d79cda14306af89
-  short: 36562d72
-  subject: Generate task-first navigation, command details and bounded Kit history (#2656)
+  full: d9f2d6b6a40886b0456eb91d1fc889289a12a6cf
+  short: d9f2d6b6
+  subject: Complete local upstream merges with bound previews and explicit recovery (#2659)
 last_substantive_work_state:
-  full: 36562d72e8a7012ae21ba9a37d79cda14306af89
-  short: 36562d72
-  subject: Generate task-first navigation, command details and bounded Kit history (#2656)
+  full: d9f2d6b6a40886b0456eb91d1fc889289a12a6cf
+  short: d9f2d6b6
+  subject: Complete local upstream merges with bound previews and explicit recovery (#2659)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

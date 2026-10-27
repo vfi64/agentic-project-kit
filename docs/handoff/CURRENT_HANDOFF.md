@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `36562d72e8a7012ae21ba9a37d79cda14306af89` (`36562d72`), after `Generate task-first navigation, command details and bounded Kit history (#2656)`.
-Last substantive work state is `36562d72e8a7012ae21ba9a37d79cda14306af89` (`36562d72`), after `Generate task-first navigation, command details and bounded Kit history (#2656)`.
+Current verified main/admin HEAD is `d9f2d6b6a40886b0456eb91d1fc889289a12a6cf` (`d9f2d6b6`), after `Complete local upstream merges with bound previews and explicit recovery (#2659)`.
+Last substantive work state is `d9f2d6b6a40886b0456eb91d1fc889289a12a6cf` (`d9f2d6b6`), after `Complete local upstream merges with bound previews and explicit recovery (#2659)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
