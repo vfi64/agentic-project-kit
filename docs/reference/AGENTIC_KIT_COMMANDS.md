@@ -1,12 +1,12 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: c53db88c5322
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: afb7c5e544e0
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
 - Schema version: `3`
 - Source: `generated_from_typer_click_registry`
-- Command count: `272`
+- Command count: `273`
 
 ## Commands
 
@@ -3100,6 +3100,26 @@ Render the terminal hint for copy/paste communication with the LLM.
 |---|---:|---|---:|---|---|
 | `log_path` | `TyperOption` | --log-path | `True` |  | Log file path to mention in the terminal upload hint. |
 | `return_code` | `TyperOption` | --rc | `False` |  | Optional return code to explain in the upload hint. |
+
+### `agentic-kit transfer merge-upstream`
+
+- Safety: `DESTRUCTIVE`
+- Surface: `primitive`
+- When to use: Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort.
+- Dry-run available: `True`
+- Remote effects: `none`
+
+Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort.
+
+| Parameter | Type | Options | Required | Default | Help |
+|---|---:|---|---:|---|---|
+| `branch` | `TyperOption` | --branch | `True` |  | Expected current work branch; main is refused. |
+| `upstream` | `TyperOption` | --upstream | `False` | `origin/main` | Already fetched origin ref; never fetched or pushed here. |
+| `continue_merge` | `TyperOption` | --continue | `False` | `False` | Preview/finish the resolved active merge. |
+| `abort` | `TyperOption` | --abort | `False` | `False` | Preview/discard tracked progress of the active merge; preserve untracked files. |
+| `execute` | `TyperOption` | --execute | `False` | `False` | Execute one approved action; preview is the default. |
+| `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Approval signature from this action's preview. |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print the same structured result as JSON. |
 
 ### `agentic-kit transfer normalize-files`
 

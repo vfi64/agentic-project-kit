@@ -1,5 +1,14 @@
 # Test Gates
 
+### Local upstream merge lifecycle
+
+`tests/test_transfer_merge_upstream.py` first reproduces the missing route, then
+checks real local Git conflicts, explicit continuation/abort, unchanged parents,
+stale head/upstream/index signatures, dirty and protected branches, active rebase,
+untracked preservation on abort and linked worktree Git paths. Execution keeps
+the existing rules-confirmed capability; previews do not mutate the repository.
+The previous rebase and conflict-file regression tests remain unchanged.
+
 ### Generated task navigation, command details and history
 
 `tests/test_site_navigation_details_history.py` validates the shared task-route

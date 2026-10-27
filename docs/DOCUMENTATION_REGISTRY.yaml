@@ -1868,3 +1868,8 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: Combined W1 W3 W4 generated website scope and validation boundaries
+  - path: docs/reports/LOCAL_UPSTREAM_MERGE_20261027.md
+    class: evidence/log
+    owner: maintainers
+    summary: Local upstream merge completion, signatures, conflict preservation and regression
+      evidence

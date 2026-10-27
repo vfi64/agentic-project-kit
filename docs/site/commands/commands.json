@@ -1,5 +1,5 @@
 {
-  "command_count": 272,
+  "command_count": 273,
   "diagnostic_count": 131,
   "entries": [
     {
@@ -8996,6 +8996,82 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": true,
       "group": "transfer",
+      "help": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": null,
+          "help": "Expected current work branch; main is refused.",
+          "name": "branch",
+          "opts": [
+            "--branch"
+          ],
+          "required": true
+        },
+        {
+          "default": "origin/main",
+          "help": "Already fetched origin ref; never fetched or pushed here.",
+          "name": "upstream",
+          "opts": [
+            "--upstream"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Preview/finish the resolved active merge.",
+          "name": "continue_merge",
+          "opts": [
+            "--continue"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Preview/discard tracked progress of the active merge; preserve untracked files.",
+          "name": "abort",
+          "opts": [
+            "--abort"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Execute one approved action; preview is the default.",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Approval signature from this action's preview.",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Print the same structured result as JSON.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit transfer merge-upstream",
+      "safety": "DESTRUCTIVE",
+      "surface": "primitive",
+      "when_to_use": "Merge a fetched upstream locally, preserve conflicts, then explicitly continue or abort."
+    },
+    {
+      "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "transfer",
       "help": "Normalize active transfer files by adding missing command IDs and archiving stale active files.",
       "lifecycle_rank": null,
       "params": [
@@ -12591,7 +12667,7 @@
     "slice": 1,
     "state": 3,
     "todo": 3,
-    "transfer": 72,
+    "transfer": 73,
     "work": 6,
     "work-order": 10,
     "workflow": 11,
@@ -12602,13 +12678,13 @@
   "kind": "site_command_catalog",
   "safety_counts": {
     "BOUNDED": 176,
-    "DESTRUCTIVE": 10,
+    "DESTRUCTIVE": 11,
     "READ_ONLY": 86
   },
   "schema_version": 1,
   "surface_counts": {
     "diagnostic": 131,
     "orchestrator": 35,
-    "primitive": 106
+    "primitive": 107
   }
 }

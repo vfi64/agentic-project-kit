@@ -7,6 +7,7 @@ from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_commands.transfer_diagnostics import *
 from agentic_project_kit.cli_commands.transfer_runtime_initial import *
 from agentic_project_kit.cli_commands.transfer_repo_pre_pr import *
+from agentic_project_kit.cli_commands.transfer_merge import *
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import *
 from agentic_project_kit.cli_commands.transfer_repo_after_pr import *
 from agentic_project_kit.cli_commands.transfer_pr_create_flow import *
