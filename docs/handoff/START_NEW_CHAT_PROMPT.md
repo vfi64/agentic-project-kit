@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 178b381c8e8341240c488612ef9dbedcdf50df5fa2cd7d9197bcedb9d56da63e
 - docs/reference/agentic-kit-commands.json: 61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4
-## Operational documentation refresh state after PR #2659
+## Operational documentation refresh state after PR #2661
 
-Current administrative handoff refresh state is `d9f2d6b6` (`Complete local upstream merges with bound previews and explicit recovery (#2659)`). Continue next only after this post-PR2659 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `11be8356` (`Bind merge abort approval to unstaged resolution content (#2661)`). Continue next only after this post-PR2661 refresh is committed and merged; the next substantive slice must be created from fresh main.

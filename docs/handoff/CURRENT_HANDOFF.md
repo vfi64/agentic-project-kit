@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d9f2d6b6a40886b0456eb91d1fc889289a12a6cf` (`d9f2d6b6`), after `Complete local upstream merges with bound previews and explicit recovery (#2659)`.
-Last substantive work state is `d9f2d6b6a40886b0456eb91d1fc889289a12a6cf` (`d9f2d6b6`), after `Complete local upstream merges with bound previews and explicit recovery (#2659)`.
+Current verified main/admin HEAD is `11be8356207b5db021648e76881dc537e721d80d` (`11be8356`), after `Bind merge abort approval to unstaged resolution content (#2661)`.
+Last substantive work state is `11be8356207b5db021648e76881dc537e721d80d` (`11be8356`), after `Bind merge abort approval to unstaged resolution content (#2661)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
