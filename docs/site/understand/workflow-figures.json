@@ -810,7 +810,7 @@
   "schema_version": 1,
   "sources": {
     "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "b4865b6eb771d5b8ee84f0ccb29583b409884f84cbebb677bdddc761a5b572c5",
-    "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4",
+    "docs/reference/agentic-kit-commands.json": "6a5f531d113e182851b6a68f1012901ee96e19cd10a11fcc5ee334a875984330",
     "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
     "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
     "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",

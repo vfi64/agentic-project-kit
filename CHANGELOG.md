@@ -1,21 +1,16 @@
 ## Unreleased
 
+## v1.1.7 - 2026-10-27
+
+- Zenodo DOI verification pending for v1.1.7.
 - Fixed: Refresh the Kit review matrix after release manifest synchronization and stop preparation if its generator fails, while leaving consumer workspaces and dry runs unchanged.
-
 - Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).
-
 - Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.
-
 - Generate task-first website navigation, metadata-bound command detail pages and a source-bound self-hosting history with explicit evidence and authorization limits.
-
 - Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.
-
 - Recover partially generated external workspaces through a signed additive initialization plan, preserve project documents and provenance, and block Kit-internal gates until the external rule basis is initialized and valid (KIT-GF-087, KIT-GF-088).
-
 - Share identity-bound task routes between command selection and website guidance, with explicit unknown states and no execution authority.
-
 - Present the historical work-order findings and offline gate comparison on a source-bound evidence page, with explicit applicability denominators, mitigation scope and benchmark limitations.
-
 - Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails.
 
 ## v1.1.6 - 2026-10-25

@@ -75,20 +75,20 @@
           <p class="eyebrow">Install</p>
           <h2>Start Locally</h2>
           <p><code>python -m pip install agentic-project-kit</code></p>
-          <p>The PyPI publication workflow for version 1.1.6 completed successfully in the release run (C3). Index visibility and installability are separate checks. Git is still a system prerequisite for <code>agentic-kit init</code> and Git-backed workflows; <code>pip</code> cannot install Git portably. After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
+          <p>PyPI publication workflow evidence for this version is unverified. Git is still a system prerequisite for <code>agentic-kit init</code> and Git-backed workflows; <code>pip</code> cannot install Git portably. After installation, run <code>agentic-kit --version</code>, then choose <code>agentic-kit init</code> for a new governed repository or <code>agentic-kit workspace adopt</code> for an existing one.</p>
           <p><a href="quickstart/index.html">Generated quickstart</a> · <a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/guides/BROWNFIELD_EXTERNAL_REPO_15_MINUTES.md">Brownfield guide</a></p>
         </article>
       </section>
 
       <section aria-labelledby="practice-title"><p class="eyebrow">Evidence from actual use</p><h2 id="practice-title">Self-hosting, Greenfield and Brownfield</h2>
         <p>Using the Kit on itself exercises its own workflow. External adoption and maintenance tests exposed additional boundary defects and informed later repairs. Historical retests, recorded maintenance and current release notes are different evidence classes.</p>
-        <div class="section-grid evidence-grid"><article class="panel"><p class="eyebrow">Release record</p><h3>Version 1.1.6</h3><p>Date: 2026-10-25 · 3 entries in the CHANGELOG section.</p><p>This counts top-level bullet lines, not the size of the changes.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/CHANGELOG.md#v116---2026-10-25">Full release notes</a></p></article><article class="panel"><p class="eyebrow">Self-hosting case: KIT-GF-078</p><h3>CI needed longer than the release waited</h3><p>The 300-second CI wait interrupted DOI and archive closeout in an earlier release. The finding records the repair in 1.1.4: a 900-second wait and bounded resume checks.</p><p>Regression boundary: <a href="https://github.com/vfi64/agentic-project-kit/blob/main/tests/test_release_run_ci_wait.py">CI-wait regression tests</a>. Release 1.1.6: completed release steps B4, D4 and D5. Archive merge: no matching retained Git/PR observation.</p><p>This does not prove every recovery branch ran, general failure prevention, or a consumer retest.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/greenfield/KIT-GF-078-release-ci-wait-2026-10-20.md">Finding report</a> · <a href="https://github.com/vfi64/agentic-project-kit/blob/main/docs/reports/release/release-run-1.1.6.json">Release-step evidence</a></p></article></div>
+        <div class="section-grid evidence-grid"><article class="panel"><p class="eyebrow">Release record</p><h3>Version 1.1.7</h3><p>Date: 2026-10-27 · 10 entries in the CHANGELOG section.</p><p>This counts top-level bullet lines, not the size of the changes.</p><p><a href="https://github.com/vfi64/agentic-project-kit/blob/main/CHANGELOG.md#v117---2026-10-27">Full release notes</a></p></article></div>
         <p><a href="understand/index.html#evidence">Methods and generalization limits</a> · <a href="understand/index.html#comparison">Comparison with open-source and commercial tools</a></p>
       </section>
 
       <section class="metrics" aria-label="Claim counts by scope"><article data-claim-scope="technical"><h3>Technical</h3><p>11 verified · 0 unverified · 0 planned</p></article>
 <article data-claim-scope="documentation"><h3>Documentation</h3><p>1 verified · 0 unverified · 0 planned</p></article>
-<article data-claim-scope="historical-observation"><h3>Historical observations</h3><p>3 verified · 0 unverified · 0 planned</p></article></section>
+<article data-claim-scope="historical-observation"><h3>Historical observations</h3><p>2 verified · 1 unverified · 0 planned</p></article></section>
 
       <section class="status-board" aria-labelledby="status-title">
         <div class="status-board-head">
@@ -112,7 +112,6 @@
           <h3>Optional evidence checks</h3>
           <ul class="summary-list">
           <li><code>artifact-gc-dry-run</code><span>agentic-kit artifact-gc supports dry-run behavior. (technical)</span></li>
-          <li><code>current-release-pypi-workflow</code><span>The PyPI publication workflow for the current package version completed successfully in its release run (C3). (historical-observation)</span></li>
           <li><code>gui-entry-point</code><span>The package provides the agentic-kit-gui graphical entry point. (technical)</span></li>
           <li><code>pypi-trusted-publishing-ready</code><span>The release workflow configures the PyPI publishing action; this is configuration evidence, not a publication or installation test. (technical)</span></li>
           <li><code>successor-handoff-package</code><span>The Kit can produce a structured successor handoff package for continuing work in another session or model. (technical)</span></li>
@@ -139,7 +138,7 @@
         </article>
       </section>
 
-      <section class="details"><p>Version 1.1.6 · Python &gt;=3.10</p>
+      <section class="details"><p>Version 1.1.7 · Python &gt;=3.10</p>
         <p>Projection: Pages fallback · Source commit: not provided</p><p><a href="claims/index.html">Scoped evidence</a> · <a href="commands/index.html">Complete command reference</a></p></section>
     </main>
   </body>
