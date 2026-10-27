@@ -1,0 +1,163 @@
+{
+  "approvals": [
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner go 2026-10-27 in Codex: merge patch PR2665 and its handoff then release 1.1.7; continue. Fresh run on main 4dae2c0456c4b981e36ec9b1dda6b3afbbb7258a; tag v1.1.7; B4 C2 C3 D4 E1, GitHub PyPI Zenodo; no D2R.",
+      "result_status": "AUTHORIZED",
+      "signature": "26d87d7b781bdd8aac927a3d",
+      "step_id": "B4",
+      "tag": "v1.1.7",
+      "target_commit": "4dae2c0456c4b981e36ec9b1dda6b3afbbb7258a",
+      "version": "1.1.7"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner go 2026-10-27 in Codex: merge patch PR2665 and its handoff then release 1.1.7; continue. Fresh run on main 4dae2c0456c4b981e36ec9b1dda6b3afbbb7258a; tag v1.1.7; B4 C2 C3 D4 E1, GitHub PyPI Zenodo; no D2R.",
+      "result_status": "AUTHORIZED",
+      "signature": "858039b153aa5d0e018930fe",
+      "step_id": "C2",
+      "tag": "v1.1.7",
+      "target_commit": "94375c0e21a75c5a2bb5f9e5c5a1f5e2fc415902",
+      "version": "1.1.7"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner go 2026-10-27 in Codex: merge patch PR2665 and its handoff then release 1.1.7; continue. Fresh run on main 4dae2c0456c4b981e36ec9b1dda6b3afbbb7258a; tag v1.1.7; B4 C2 C3 D4 E1, GitHub PyPI Zenodo; no D2R.",
+      "result_status": "AUTHORIZED",
+      "signature": "582996291c1d819334b8ba08",
+      "step_id": "C3",
+      "tag": "v1.1.7",
+      "target_commit": "94375c0e21a75c5a2bb5f9e5c5a1f5e2fc415902",
+      "version": "1.1.7"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner go 2026-10-27 in Codex: merge patch PR2665 and its handoff then release 1.1.7; continue. Fresh run on main 4dae2c0456c4b981e36ec9b1dda6b3afbbb7258a; tag v1.1.7; B4 C2 C3 D4 E1, GitHub PyPI Zenodo; no D2R.",
+      "result_status": "AUTHORIZED",
+      "signature": "34f8c07015e883c395e3f73b",
+      "step_id": "D4",
+      "tag": "v1.1.7",
+      "target_commit": "94375c0e21a75c5a2bb5f9e5c5a1f5e2fc415902",
+      "version": "1.1.7"
+    }
+  ],
+  "archive_boundary": "Snapshot of completed release steps; archive merge is verified from Git/PR evidence.",
+  "artifact_type": "evidence",
+  "finished_steps": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+  ],
+  "kind": "release_run_evidence",
+  "package_index_dispatch": {
+    "dispatched": true,
+    "head_sha": "94375c0e21a75c5a2bb5f9e5c5a1f5e2fc415902",
+    "run_id": "40553908548"
+  },
+  "package_index_workflow": {
+    "file": "release.yml",
+    "publish_target_pypi": true
+  },
+  "publication_policy": "github+pypi+zenodo",
+  "publication_target": "94375c0e21a75c5a2bb5f9e5c5a1f5e2fc415902",
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "status": "active",
+  "steps": {
+    "A1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D5": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    }
+  },
+  "tag": "v1.1.7",
+  "version": "1.1.7"
+}

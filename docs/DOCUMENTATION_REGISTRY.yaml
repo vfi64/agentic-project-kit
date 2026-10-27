@@ -1877,3 +1877,6 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: KIT-GF-089 owned-runtime retest dependencies under an installed wheel.
+  - path: docs/reports/release/release-run-1.1.7.json
+    class: evidence/log
+    owner: maintainers
