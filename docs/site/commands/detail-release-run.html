@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>agentic-kit release run — Agentic Project Kit</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to command</a>
+    <main class="page command-detail" id="content">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a><a href="../quickstart/index.html">Quickstart</a>
+        <a href="guided.html">Tasks</a><a href="diagnostics.html">Diagnostics</a>
+        <a href="index.html">Complete reference</a><a href="../history/index.html">History and architecture</a>
+      </nav>
+      <header>
+        <p class="eyebrow">Current source-tree command contract</p>
+        <h1>agentic-kit release run</h1><p class="lede">Run the governed end-to-end release orchestrator with resumable approval gates.</p>
+        <p>Package version 1.1.6 · Manifest <code>c53db88c5322</code>.</p>
+        <p>These options describe this source tree. Check your installed Kit's help;
+          a previously published wheel may expose a different interface.</p>
+      </header>
+      <section aria-labelledby="contract"><h2 id="contract">Effects and safety</h2>
+        <dl class="command-contract"><dt>safety</dt><dd>&quot;BOUNDED&quot;</dd><dt>surface</dt><dd>&quot;orchestrator&quot;</dd><dt>remote effects</dt><dd>[&quot;merge&quot;, &quot;pull_request&quot;, &quot;push&quot;, &quot;release_publish&quot;]</dd><dt>dry run available</dt><dd>true</dd></dl>
+        <p>Effects are declared for the command family. A task match does not grant
+          consent or execute a command. Inspect the actual plan and existing gates.</p>
+      </section>
+      <section aria-labelledby="conditions"><h2 id="conditions">When this route applies</h2><article class="panel"><h3>Release version</h3><p>Phase: guarded. Required state: branch role = &quot;main&quot;, release state = &quot;none&quot;, workspace mode = &quot;managed&quot;, worktree clean = true.</p><p>Required task inputs: version: stable_version.</p><p>Fresh release only; existing runs need a separate explicit resume/recovery intent. Without --execute the orchestrator still performs local A/B preparation; publication consent stays separate and version/tag/head-bound.</p></article></section>
+      <section aria-labelledby="options"><h2 id="options">Options and arguments</h2><dl class="parameters"><div class="parameter"><dt><code>--version</code></dt><dd>Target release version.<br>Required: true · Default: <code>None</code></dd></div><div class="parameter"><dt><code>--summary-line</code></dt><dd>Release changelog summary line. Repeatable.<br>Required: false · Default: <code>None</code></dd></div><div class="parameter"><dt><code>--execute</code></dt><dd>Execute the next approved release-run gate.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--expected-signature</code></dt><dd>Approval signature for the next release-run gate.<br>Required: false · Default: <code></code></dd></div><div class="parameter"><dt><code>--approved-by</code></dt><dd>Name or identifier of the human approving the release.<br>Required: false · Default: <code></code></dd></div><div class="parameter"><dt><code>--consent-source</code></dt><dd>Reference to the owner consent, such as a work order or start click.<br>Required: false · Default: <code></code></dd></div><div class="parameter"><dt><code>--json</code></dt><dd>Print machine-readable JSON.<br>Required: false · Default: <code>False</code></dd></div></dl></section>
+      <section aria-labelledby="example"><h2 id="example">Inspect local help</h2>
+        <pre><code>agentic-kit release run --help</code></pre>
+        <p>This help example is tested in a local fixture. It does not run the workflow.
+          Execution examples depend on the repository, its state and your approval.</p>
+      </section>
+      <p><a href="../understand/index.html#workflow-figures">Work cycle and handoff diagrams</a>
+        · <a href="../claims/index.html">Claim evidence and limits</a></p>
+      <footer><p>Projection: Pages fallback · Source commit: not provided</p></footer>
+    </main>
+  </body>
+</html>

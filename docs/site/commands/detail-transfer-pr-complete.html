@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>agentic-kit transfer pr-complete — Agentic Project Kit</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to command</a>
+    <main class="page command-detail" id="content">
+      <nav class="topnav" aria-label="Site">
+        <a href="../index.html">Overview</a><a href="../quickstart/index.html">Quickstart</a>
+        <a href="guided.html">Tasks</a><a href="diagnostics.html">Diagnostics</a>
+        <a href="index.html">Complete reference</a><a href="../history/index.html">History and architecture</a>
+      </nav>
+      <header>
+        <p class="eyebrow">Current source-tree command contract</p>
+        <h1>agentic-kit transfer pr-complete</h1><p class="lede">Wait for CI, safely merge an existing PR, and synchronize main.</p>
+        <p>Package version 1.1.6 · Manifest <code>c53db88c5322</code>.</p>
+        <p>These options describe this source tree. Check your installed Kit's help;
+          a previously published wheel may expose a different interface.</p>
+      </header>
+      <section aria-labelledby="contract"><h2 id="contract">Effects and safety</h2>
+        <dl class="command-contract"><dt>safety</dt><dd>&quot;BOUNDED&quot;</dd><dt>surface</dt><dd>&quot;orchestrator&quot;</dd><dt>remote effects</dt><dd>[&quot;merge&quot;, &quot;push&quot;]</dd><dt>dry run available</dt><dd>false</dd></dl>
+        <p>Effects are declared for the command family. A task match does not grant
+          consent or execute a command. Inspect the actual plan and existing gates.</p>
+      </section>
+      <section aria-labelledby="conditions"><h2 id="conditions">When this route applies</h2><article class="panel"><h3>Complete open pr</h3><p>Phase: guarded. Required state: pr state = &quot;open&quot;, workspace mode = &quot;managed&quot;.</p><p>Required task inputs: expected_head_sha: full_commit, pr_number: positive_integer.</p><p>Pending CI is handled by the selected workflow; selection does not authorize its merge.</p></article></section>
+      <section aria-labelledby="options"><h2 id="options">Options and arguments</h2><dl class="parameters"><div class="parameter"><dt><code>pr_number</code></dt><dd>Pull request number to complete.<br>Required: true · Default: <code>None</code></dd></div><div class="parameter"><dt><code>--expected-head-sha</code></dt><dd>Expected PR head SHA, or current to use git rev-parse HEAD before the merge.<br>Required: false · Default: <code></code></dd></div><div class="parameter"><dt><code>--main-branch</code></dt><dd>Main branch to sync after the merge.<br>Required: false · Default: <code>main</code></dd></div><div class="parameter"><dt><code>--merge-method</code></dt><dd>GitHub merge method.<br>Required: false · Default: <code>squash</code></dd></div><div class="parameter"><dt><code>--timeout-seconds</code></dt><dd>Maximum CI wait time.<br>Required: false · Default: <code>300</code></dd></div><div class="parameter"><dt><code>--interval-seconds, --poll-seconds</code></dt><dd>CI polling interval.<br>Required: false · Default: <code>10</code></dd></div><div class="parameter"><dt><code>--summary</code></dt><dd>Print a bounded projection; save full step evidence locally.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--json</code></dt><dd>Print JSON instead of text.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--skip-llm-context-gate</code></dt><dd>Recovery-only: run PR completion without requiring fresh generated LLM context.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--post-merge-complete</code></dt><dd>Accepted compatibility flag: pr-complete already runs post-merge-complete after a successful merge.<br>Required: false · Default: <code>False</code></dd></div></dl></section>
+      <section aria-labelledby="example"><h2 id="example">Inspect local help</h2>
+        <pre><code>agentic-kit transfer pr-complete --help</code></pre>
+        <p>This help example is tested in a local fixture. It does not run the workflow.
+          Execution examples depend on the repository, its state and your approval.</p>
+      </section>
+      <p><a href="../understand/index.html#workflow-figures">Work cycle and handoff diagrams</a>
+        · <a href="../claims/index.html">Claim evidence and limits</a></p>
+      <footer><p>Projection: Pages fallback · Source commit: not provided</p></footer>
+    </main>
+  </body>
+</html>

@@ -1,5 +1,15 @@
 # Test Gates
 
+### Generated task navigation, command details and history
+
+`tests/test_site_navigation_details_history.py` validates the shared task-route
+partition, detail selection, inert help examples, escaping, all local links and
+anchors, and source-bound public history. Historical source tampering blocks the
+build. Private-source records never enter the exported history projection.
+`tests/test_site_fallback_staleness.py` checks the canonical generated fallback.
+Browser acceptance covers keyboard disclosure, search feedback and 375/1280 px
+layout for task navigation, a command detail page and history.
+
 ## External bootstrap recovery and gate isolation
 
 `tests/test_workspace_recovery.py` covers empty, partial and complete workspaces,

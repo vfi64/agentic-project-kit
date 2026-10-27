@@ -194,7 +194,8 @@ This is a line count, not a measure of change size.
 The first existing-repository path contains four editorial command families:
 workspace adopt, workspace init (preview and explicit execute), check, doctor.
 The manifest supplies safety and availability, not this editorial ordering.
-D1 remains deferred as the future shared task-to-preferred-command authority.
+D1 now supplies the shared task-to-preferred-command authority; the quickstart
+retains its separately tested editorial sequence.
 The generator path remains separate; removal is not an onboarding step.
 The fixture runs the actual local sequence with no models or remote actions and
 checks read-only previews, preservation of project files, bounded writes and gates.
@@ -208,6 +209,33 @@ with returncode zero and no blockers. This proves successful workflow completion
 not index visibility or installability. Missing evidence is unverified and removes
 PyPI assurances from the quickstart. No network or installation test runs in the
 site build, and no historical archive is rewritten.
+
+## Task navigation, command details and history (W1/W3/W4)
+
+Guided navigation projects the shared manifest task_routes once, grouped by their
+existing phase. Search is progressive enhancement; all cards, state predicates,
+required inputs and review boundaries remain readable without JavaScript.
+Unassigned commands remain visible in a disclosure and the full catalog remains
+available. Selection never authorizes execution.
+
+commands/details.json selects the union of reviewed task routes and existing
+tested quickstart commands. Each detail page derives options, descriptions,
+safety and state conditions from that same manifest. Only inert help examples
+are added; these are run in an empty fixture. No new call-graph claim is made.
+The displayed source-tree version does not promise availability in a released wheel.
+
+history/history.json exports a public field allowlist from the source-bound
+self-hosting archive. site/content/history_sources.json binds the archived source
+manifest to a reviewed revision and digest; archive members are hash checked.
+Reported Git events, author testimony, historical measurements and current
+normative architecture remain distinct. The current architecture link is marked
+as a moving main source with its content digest. Private-source inventories and
+raw consumer prose are never exported. Existing reviewed figures are reused.
+This is not a productivity measurement or a universal-lock/kernel claim.
+
+tests/test_site_navigation_details_history.py checks source changes, identity,
+escaping, source tampering, local links/anchors and all help examples. Generate
+the tracked fallback only with python site/scripts/build.py --docs-pages-fallback --json.
 
 The GF-078 case separates the finding/repair, regression coverage, recorded release
 steps and a bounded archive merge observation captured from GitHub and local Git.

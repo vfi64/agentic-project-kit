@@ -1,0 +1,67 @@
+{
+  "architecture_adoption": {
+    "date": "2026-07-04",
+    "evidence_class": "normative decision"
+  },
+  "current_command_surfaces": {
+    "diagnostic": 131,
+    "orchestrator": 35,
+    "primitive": 106
+  },
+  "first_commit": {
+    "date": "2026-05-09",
+    "evidence_class": "archive-reported Git event",
+    "version": "0.1.0"
+  },
+  "first_release": {
+    "date": "2026-05-09",
+    "evidence_class": "archive-reported Git event",
+    "version": "0.2.0"
+  },
+  "kind": "bounded_history_projection",
+  "manifest_sha": "c53db88c5322",
+  "overhead": {
+    "admin_refresh_prs": 83,
+    "evidence_class": "historical classification",
+    "total_prs": 166,
+    "window": [
+      "2026-10-01",
+      "2026-10-15"
+    ]
+  },
+  "schema_version": 1,
+  "snapshot": {
+    "analysis_base": "ef78a255b22346fd5a583b8978da605542f4dabd",
+    "audit_date": "2026-10-15",
+    "measurement_date": "2026-10-16",
+    "version": "1.0.25"
+  },
+  "sources": {
+    "DRIFT_METRICS_20261015.json": {
+      "path": "docs/reports/self-hosting/DRIFT_METRICS_20261015.json",
+      "revision": "31608ff5393d3cc861117a150e1ab5b0eda95758",
+      "sha256": "9d7709488057f9a2b992abab151b96b3b7b7f9286fc55eb0faa7f93e175eaae7"
+    },
+    "HISTORICAL_DEVELOPMENT_20261015.md": {
+      "path": "docs/reports/self-hosting/HISTORICAL_DEVELOPMENT_20261015.md",
+      "revision": "31608ff5393d3cc861117a150e1ab5b0eda95758",
+      "sha256": "a408d87e132e999bdb48518167718b152dfc59ee9f2a250a289c6f5529f2dfe9"
+    },
+    "architecture": {
+      "path": "docs/architecture/KIT_AS_OS_ARCHITECTURE.md",
+      "revision": "main",
+      "scope": "current moving source",
+      "sha256": "3d2358fbeb2bd9432c4a57c3adbaf8ca01f06e71fdc3a3e268ac28a33ba3a9b9"
+    },
+    "archive": {
+      "path": "docs/reports/self-hosting/SOURCE_MANIFEST.json",
+      "revision": "31608ff5393d3cc861117a150e1ab5b0eda95758",
+      "sha256": "2008e0bcbf39c8936a5eaa5ef7c2a20848b9008be3493887e280a6423ddf1ba0"
+    }
+  },
+  "testimony": {
+    "evidence_class": "author testimony",
+    "source_marker": "AU03",
+    "summary": "The author describes self-hosting as a major contributor to solo development speed. That counterfactual has not been quantified."
+  }
+}

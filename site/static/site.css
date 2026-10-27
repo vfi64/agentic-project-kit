@@ -415,3 +415,24 @@ th {
 /* Task prerequisites and command identities wrap without horizontal page overflow. */
 .task-routes code, .task-routes p { overflow-wrap: anywhere; white-space: normal; }
 .task-routes article { border-top: 1px solid var(--line); padding: 12px 0; }
+
+/* Task-first navigation stays usable without JavaScript. */
+[hidden] { display: none !important; }
+.task-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.task-routes .task-card { padding: 20px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); min-width: 0; }
+.task-card h4 { margin: 0 0 12px; font-size: 1.2rem; }
+.task-card details { margin-block: 12px; }
+summary { cursor: pointer; padding-block: 10px; }
+.catalog-disclosure { margin-top: 28px; border-top: 1px solid var(--line); }
+.command-detail h1 { overflow-wrap: anywhere; font-size: clamp(1.6rem, 4vw, 2.6rem); }
+.command-detail code, .command-detail dd, .history-page code { overflow-wrap: anywhere; white-space: normal; }
+.command-detail .parameters { display: block; }
+.parameters .parameter { padding: 16px 0; border-top: 1px solid var(--line); }
+.parameter dd { margin: 8px 0 0; }
+.command-contract { grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); }
+.history-events li { margin-block: 16px; }
+.history-page .source-bindings a { overflow-wrap: anywhere; }
+.skip-link { position: absolute; left: -10000px; }
+.skip-link:focus { position: static; display: inline-block; padding: 12px; }
+input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+@media (max-width: 680px) { .task-grid, .command-contract { grid-template-columns: minmax(0, 1fr); } }
