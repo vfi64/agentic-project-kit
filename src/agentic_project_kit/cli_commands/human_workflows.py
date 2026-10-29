@@ -26,9 +26,9 @@ work_app = typer.Typer(help="Human-friendly meta commands for patch, PR, and rec
 release_flow_app = typer.Typer(help="Human-friendly meta commands for release readiness and preparation.")
 
 
-def _run_step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None) -> dict[str, object]:
+def _run_step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None, runner=None) -> dict[str, object]:
     allowed = allowed_returncodes or {0}
-    completed = run_with_tag_sync(argv, text=True, capture_output=True)
+    completed = (runner or subprocess.run)(argv, text=True, capture_output=True)
     return {
         "name": name,
         "argv": argv,
@@ -582,7 +582,7 @@ def work_start_command(
             else:
                 steps.append(_run_step("post-merge-check", _agentic("transfer", "post-merge-check", "--main-branch", "main")))
     else:
-        steps = [_run_step("fetch-start-ref", ["git", "fetch", "--all", "--prune", "--tags"])]
+        steps = [_run_step("fetch-start-ref", ["git", "fetch", "--all", "--prune", "--tags"], runner=run_with_tag_sync)]
         if _workflow_steps_ok(steps):
             steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
         if _workflow_steps_ok(steps):

@@ -1531,6 +1531,8 @@ def test_branch_switch_refuses_branch_drift_after_pull(monkeypatch):
         return PassingMonitor()
 
     def fake_run(command, cwd=None):
+        if command == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "switch", "feature/drift"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "pull", "--ff-only", "origin", "feature/drift"]:
@@ -1573,6 +1575,8 @@ def test_lc3_branch_lifecycle_mutators_acquire_workspace_mutation_lock(monkeypat
         return PassingMonitor()
 
     def fake_run(command, cwd=None):
+        if command == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "switch", "feature/demo"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "branch", "--show-current"]:

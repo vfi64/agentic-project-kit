@@ -73,5 +73,11 @@ Validation completed so far:
 - Ruff, check-docs and standard-gates-audit-suite: PASS, rc 0. The 76 existing
   document-lifecycle findings remain report-only.
 
-Full-suite and final PR CI outcomes are recorded when those runs finish. Local
-Kit evidence does not assign consumer VERIFIED_FIXED. No release is performed.
+The first full run found one effect-boundary regression (4324 passed, one failed).
+The general transfer runner and workflow step runner were narrowed so only their
+actual origin-update call sites reach tag synchronization. The original static
+remote-effect implementation test and manifest declarations remain unchanged.
+The follow-up selection passed 234 tests, including the original failure and
+the existing branch-drift and workspace-lock assertions. Final full-suite and
+PR CI outcomes are recorded when those runs finish. Local Kit evidence does not
+assign consumer VERIFIED_FIXED. No release is performed.
