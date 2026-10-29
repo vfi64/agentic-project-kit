@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9fcfe82d75c25e3d1d3445c46eb1f7dec12419ab
-  short: 9fcfe82d
-  subject: Archive release 1.1.8 evidence (#2682)
+  full: 351498868b39023b08669cb4b1ef0cfc9501a6cc
+  short: 35149886
+  subject: Reconcile consumer retest planning with committed evidence (#2684)
 last_substantive_work_state:
-  full: 9fcfe82d75c25e3d1d3445c46eb1f7dec12419ab
-  short: 9fcfe82d
-  subject: Archive release 1.1.8 evidence (#2682)
+  full: 351498868b39023b08669cb4b1ef0cfc9501a6cc
+  short: 35149886
+  subject: Reconcile consumer retest planning with committed evidence (#2684)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
