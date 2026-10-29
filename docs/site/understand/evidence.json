@@ -56,22 +56,16 @@
     "status": "planned"
   },
   "release": {
-    "date": "2026-10-27",
-    "entry_count": 9,
+    "date": "2026-10-29",
+    "entry_count": 3,
     "notes": [
-      "Fixed: Refresh the Kit review matrix after release manifest synchronization and stop preparation if its generator fails, while leaving consumer workspaces and dry runs unchanged.",
-      "Fixed: Run the four owned-runtime finding retests from an installed wheel; the owned interpreter now shares the dependencies beside the Kit in site-packages instead of starting without typer (KIT-GF-089).",
-      "Fixed: Complete local upstream merges through explicit Kit previews and bound approvals, preserving conflicts and history with guarded continue and abort actions.",
-      "Generate task-first website navigation, metadata-bound command detail pages and a source-bound self-hosting history with explicit evidence and authorization limits.",
-      "Add reproducible version-delta acceptance for external bootstrap recovery, including all work-check profiles, preserved dirty planning state and selective local commits, while retaining the unknown-file collision guard.",
-      "Recover partially generated external workspaces through a signed additive initialization plan, preserve project documents and provenance, and block Kit-internal gates until the external rule basis is initialized and valid (KIT-GF-087, KIT-GF-088).",
-      "Share identity-bound task routes between command selection and website guidance, with explicit unknown states and no execution authority.",
-      "Present the historical work-order findings and offline gate comparison on a source-bound evidence page, with explicit applicability denominators, mitigation scope and benchmark limitations.",
-      "Refresh the optional generated website after archiving release evidence, include its declared projection paths in the signed E1 gate and archive commit, and stop before the archive commit or push if rendering fails."
+      "Zenodo DOI verification pending for v1.1.8.",
+      "Fixed: Kit synchronization fetches release tags without overwriting local tags, and release-status reports a missing local release tag instead of falling back silently to prepared (KIT-GF-090).",
+      "Preserve annotated local tags during atomic synchronization and diagnose divergent tag targets; regression tests cover conflicts, idempotency and current_verified recovery with local bare origins (KIT-GF-090)."
     ],
     "source": "CHANGELOG.md",
     "status": "recorded",
-    "version": "1.1.7"
+    "version": "1.1.8"
   },
   "safety_evidence": {
     "baseline": {
@@ -1204,7 +1198,7 @@
     "schema_version": 1,
     "sources": {
       "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "9bcf663af7f0f0fe9414b8c878fdbd0909df2410148d53e035e5df09ec0d5b44",
-      "docs/reference/agentic-kit-commands.json": "6a5f531d113e182851b6a68f1012901ee96e19cd10a11fcc5ee334a875984330",
+      "docs/reference/agentic-kit-commands.json": "3383329cf21f71f199ad2a6fbe0d8870e15f76a31fd6f2583bfe774a2a47a66d",
       "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
       "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
       "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
