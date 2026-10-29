@@ -4,7 +4,7 @@
 **Proposed and inactive. Owner review required.**
 No runtime reads this fixture; no MATCH grants execution or selects an argv.
 
-Reviewed base: `94ee01063ea6e92bd6552b2e22fb1d57a8300e56`; current manifest `019d0f970c2c`.
+Reviewed base: `94ee01063ea6e92bd6552b2e22fb1d57a8300e56`; current manifest `abe3d2533d28`.
 
 | Intent | Existing command | Phase | Known-state conditions | Inputs | Manifest safety |
 |---|---|---|---|---|---|
