@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `113dd252719ed863059336df7e9314c02427a9db` (`113dd252`), after `Synchronize release tags without overwriting local tags (KIT-GF-090) (#2673)`.
-Last substantive work state is `113dd252719ed863059336df7e9314c02427a9db` (`113dd252`), after `Synchronize release tags without overwriting local tags (KIT-GF-090) (#2673)`.
+Current verified main/admin HEAD is `fa6ffa432c2a8f0dac4dfd2cca902c7e8e559dfa` (`fa6ffa43`), after `Isolate release tag regression fixtures from checkout metadata (#2676)`.
+Last substantive work state is `fa6ffa432c2a8f0dac4dfd2cca902c7e8e559dfa` (`fa6ffa43`), after `Isolate release tag regression fixtures from checkout metadata (#2676)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

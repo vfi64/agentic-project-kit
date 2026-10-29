@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: f528efb911e8a938f11f70eadf992fefee08a6ce882392e7addb32815ab44b46
 - docs/reference/agentic-kit-commands.json: 6a5f531d113e182851b6a68f1012901ee96e19cd10a11fcc5ee334a875984330
-## Operational documentation refresh state after PR #2673
+## Operational documentation refresh state after PR #2676
 
-Current administrative handoff refresh state is `113dd252` (`Synchronize release tags without overwriting local tags (KIT-GF-090) (#2673)`). Continue next only after this post-PR2673 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `fa6ffa43` (`Isolate release tag regression fixtures from checkout metadata (#2676)`). Continue next only after this post-PR2676 refresh is committed and merged; the next substantive slice must be created from fresh main.
