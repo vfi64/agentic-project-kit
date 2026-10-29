@@ -3,10 +3,10 @@
 ## Current State
 
 Current version: 1.1.8
-Current verified release: 1.1.7.
-Current release tag: v1.1.7.
+Current verified release: 1.1.8.
+Current release tag: v1.1.8.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
-Verified Zenodo version DOI: `10.5281/zenodo.23698043`.
+Verified Zenodo version DOI: `10.5281/zenodo.23771530`.
 Current verified main: `cd51c780` (`Release 1.1.8 (#2678)`).
 Latest substantive work: PR #2678 (`Release 1.1.8 (#2678)`).
 Latest administrative refresh-only descendant: post-PR2678 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
