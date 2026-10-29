@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-27T16:50:30.026052+00:00",
+    "created_at_utc": "2026-10-29T10:46:25.166036+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -318,12 +318,12 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-27T16:50:30.242939+00:00",
+    "generated_at_utc": "2026-10-29T10:46:25.559091+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/fix-release-review-matrix",
-      "head": "bfcee4c68c0745319ec10dd34ea58935b90e54d1",
-      "status_short": ""
+      "branch": "codex/fix-release-tag-sync",
+      "head": "0524bca6bc0d6b027b590a307bc9b4ceb72f8dce",
+      "status_short": "M docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md"
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -384,8 +384,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "178b381c8e8341240c488612ef9dbedcdf50df5fa2cd7d9197bcedb9d56da63e",
-      "docs/reference/agentic-kit-commands.json": "61813a1ca9fc62e977f31c73c304fd8ea776376192cf132489f1921e89ef52c4"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "f528efb911e8a938f11f70eadf992fefee08a6ce882392e7addb32815ab44b46",
+      "docs/reference/agentic-kit-commands.json": "6a5f531d113e182851b6a68f1012901ee96e19cd10a11fcc5ee334a875984330"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -426,7 +426,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "41b680f054c63a7a02c86b14acba31696646ef17a9f610faae3cb97b81e27745"
+        "sha256": "638efa892febfd71684933dab409863ad2dd19d289beffa9736f0a304a6633b9"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -931,9 +931,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/fix-release-review-matrix",
-      "dirty_status": "",
-      "head": "bfcee4c68c0745319ec10dd34ea58935b90e54d1",
+      "branch": "codex/fix-release-tag-sync",
+      "dirty_status": "M docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
+      "head": "0524bca6bc0d6b027b590a307bc9b4ceb72f8dce",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
@@ -998,7 +998,7 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "41b680f054c63a7a02c86b14acba31696646ef17a9f610faae3cb97b81e27745"
+        "sha256": "638efa892febfd71684933dab409863ad2dd19d289beffa9736f0a304a6633b9"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -1503,9 +1503,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/fix-release-review-matrix",
-      "dirty_status": "",
-      "head": "bfcee4c68c0745319ec10dd34ea58935b90e54d1",
+      "branch": "codex/fix-release-tag-sync",
+      "dirty_status": "M docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
+      "head": "0524bca6bc0d6b027b590a307bc9b4ceb72f8dce",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""

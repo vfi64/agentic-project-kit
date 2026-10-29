@@ -78,6 +78,9 @@ The general transfer runner and workflow step runner were narrowed so only their
 actual origin-update call sites reach tag synchronization. The original static
 remote-effect implementation test and manifest declarations remain unchanged.
 The follow-up selection passed 234 tests, including the original failure and
-the existing branch-drift and workspace-lock assertions. Final full-suite and
-PR CI outcomes are recorded when those runs finish. Local Kit evidence does not
-assign consumer VERIFIED_FIXED. No release is performed.
+the existing branch-drift and workspace-lock assertions. The final complete
+`python -m pytest -q` run passed 4325 tests (550 legacy-profile warnings), rc 0,
+in 1097.83 seconds. The machine contract and original disposable Kit-clone replay
+both passed again after the runner correction. PR CI is checked separately on
+the exact published head. Local Kit evidence does not assign consumer
+VERIFIED_FIXED. No release is performed.
