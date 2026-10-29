@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 from dataclasses import dataclass
 from pathlib import Path
 import re
@@ -34,7 +36,7 @@ def normalize_version(version: str) -> tuple[str, str]:
 
 
 def run_command(repo_root: Path, args: list[str]) -> CommandResult:
-    completed = subprocess.run(
+    completed = run_with_tag_sync(
         args,
         cwd=repo_root,
         text=True,

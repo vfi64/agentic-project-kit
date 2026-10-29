@@ -2342,6 +2342,8 @@ def test_transfer_rebase_on_upstream_rebases_current_branch(monkeypatch):
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
+        if list(argv) == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(list(argv), 0, "", "")
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
@@ -2392,6 +2394,8 @@ def test_transfer_rebase_on_upstream_reports_conflict(monkeypatch):
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
+        if list(argv) == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(list(argv), 0, "", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "fetch", "origin", "feature/demo"]:
@@ -2931,8 +2935,10 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
         lambda root: default_agentic_kit(Path.cwd()),
     )
 
-    def fake_run(command, text=True, capture_output=True, timeout=None):
+    def fake_run(command, text=True, capture_output=True, timeout=None, **kwargs):
         calls.append(command)
+        if command == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "pr-wait-ci"]:

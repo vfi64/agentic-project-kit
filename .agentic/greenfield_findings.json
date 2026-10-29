@@ -6223,6 +6223,108 @@
         2485
       ],
       "report": "docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md"
+    },
+    {
+      "id": "KIT-GF-090",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "A clean workspace with a local bare origin and a release tag absent locally. Preserve divergent local tags."
+        ],
+        "commands": [
+          "agentic-kit transfer sync-main",
+          "agentic-kit doctor"
+        ],
+        "bindings": {},
+        "expected": [
+          "Synchronization restores missing tags without overwriting existing tags; conflicts block with both targets.",
+          "The independent Kit-checkout replay verifies release-status current_verified and doctor."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "release tag restored",
+            "external doctor passes"
+          ]
+        },
+        "machine": {
+          "fixture": "external_release",
+          "origin": true,
+          "covers": "Local bare-origin tag recovery and external doctor; publication disabled. Full Kit-checkout lifecycle replay is separately evidenced.",
+          "steps": [
+            {
+              "run": [
+                "git",
+                "push",
+                "origin",
+                "refs/tags/v0.1.0"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "tag",
+                "-d",
+                "v0.1.0"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "tag",
+                "-l",
+                "v0.1.0"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "sync-main"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "PASS"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "rev-parse",
+                "--verify",
+                "refs/tags/v0.1.0"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "doctor"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "Overall: PASS"
+              }
+            }
+          ]
+        },
+        "verification": "release-status declares network_read, so local-runner authority remains unchanged. Direct lifecycle tests and independent checkout replay cover current_verified. Consumer VERIFIED_FIXED requires a consumer retest."
+      }
     }
   ],
   "kind": "external_findings_catalog",

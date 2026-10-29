@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 import subprocess
 from collections.abc import Mapping
 
@@ -23,7 +25,7 @@ def run_observed_subprocess(
         kwargs: dict[str, object] = {}
         if env is not None:
             kwargs["env"] = dict(env)
-        completed = subprocess.run(
+        completed = run_with_tag_sync(
             argv,
             text=True,
             capture_output=True,

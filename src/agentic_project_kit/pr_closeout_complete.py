@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 from agentic_project_kit.cli_executable import default_agentic_kit
 
 import json
@@ -48,7 +50,7 @@ class PrCloseoutCompleteResult:
 
 
 def _run_command(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
+    return run_with_tag_sync(
         command,
         cwd=cwd,
         check=False,

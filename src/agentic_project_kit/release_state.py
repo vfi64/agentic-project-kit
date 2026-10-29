@@ -7,7 +7,7 @@ import re
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from agentic_project_kit.post_release_closeout import EXPECTED_DOI_CLOSEOUT_PATHS
+from agentic_project_kit.post_release_closeout import EXPECTED_DOI_CLOSEOUT_PATHS, doi_closeout_evidence_relative_path
 from agentic_project_kit.release import CommandResult, run_command
 
 
@@ -177,6 +177,8 @@ def build_release_lifecycle_status(
         current_verified_version=current_verified_version,
         current_verified_doi=current_verified_doi,
     ) + remote.blockers
+    if not local_tag_exists and (project_root / doi_closeout_evidence_relative_path(resolved_version)).is_file():
+        blockers += ("local_release_tag_missing",)
     warnings = (
         _warnings(prepared=prepared, local_tag_exists=local_tag_exists, version_doi=version_doi, closed_out=closed_out)
         + (remote.warnings if remote.checked else ())
@@ -601,6 +603,8 @@ def _current_state(steps: tuple[ReleaseLifecycleStep, ...]) -> str:
 
 
 def _next_action(blockers: tuple[str, ...], current_state: str) -> str:
+    if "local_release_tag_missing" in blockers:
+        return "agentic-kit transfer sync-main"
     if blockers:
         return "Resolve release-state blockers before continuing: " + ", ".join(blockers)
     mapping = {

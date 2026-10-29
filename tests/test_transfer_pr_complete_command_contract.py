@@ -126,8 +126,9 @@ def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(mo
     assert "--skip-llm-context-gate" in calls[2]
     assert calls[3] == ["git", "switch", "main"]
     assert calls[4] == ["git", "pull", "--ff-only", "origin", "main"]
-    assert calls[5] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]
-    assert calls[6] == [
+    assert calls[5] == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]
+    assert calls[6] == ["./.venv/bin/agentic-kit", "rules", "acknowledge"]
+    assert calls[7] == [
         "./.venv/bin/agentic-kit",
         "transfer",
         "post-merge-complete",

@@ -133,8 +133,9 @@ def test_work_start_from_ref_creates_branch_based_on_chosen_ref(monkeypatch):
     assert payload["from_ref"] == "v0.4.11"
     assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"] for call in calls)
     assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"] for call in calls)
-    assert calls[:4] == [
+    assert calls[:5] == [
         ["git", "fetch", "--all", "--prune", "--tags"],
+        ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"],
         ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "repo-status"],
         ["git", "show-ref", "--verify", "--quiet", "refs/heads/codex/from-release"],

@@ -3,6 +3,18 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: release-tag-synchronization
+  description: Synchronization preserves existing local tags and diagnoses missing closeout tags.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - local_release_tag_missing
+    - atomic
+    - KIT-GF-090
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_git_tag_sync.py
+    - current_verified
 - id: owned-runtime-wheel-dependencies
   description: Owned-runtime retests keep their dependencies when the Kit is installed as a wheel.
   documents:

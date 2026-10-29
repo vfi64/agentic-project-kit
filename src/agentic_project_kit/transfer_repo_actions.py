@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 import json
 import re
 import subprocess
@@ -401,7 +403,7 @@ def _existing_successor_package_refresh_pr(refresh_branch: str) -> RepoActionRes
 
 
 def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
+    return run_with_tag_sync(
         command,
         cwd=cwd,
         check=False,
@@ -412,7 +414,7 @@ def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.Completed
 
 
 def _result(action: str, command: list[str], completed: subprocess.CompletedProcess[str], next_action: str) -> RepoActionResult:
-    status = "PASS" if completed.returncode == 0 else "FAIL"
+    status = "PASS" if completed.returncode == 0 else ("BLOCKED" if "TAG_SYNC_BLOCKED" in (completed.stderr or "") else "FAIL")
     return RepoActionResult(
         action=action,
         result_status=status,

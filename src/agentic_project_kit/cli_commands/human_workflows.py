@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 from datetime import date as date_cls
 import hashlib
 import json
@@ -26,7 +28,7 @@ release_flow_app = typer.Typer(help="Human-friendly meta commands for release re
 
 def _run_step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None) -> dict[str, object]:
     allowed = allowed_returncodes or {0}
-    completed = subprocess.run(argv, text=True, capture_output=True)
+    completed = run_with_tag_sync(argv, text=True, capture_output=True)
     return {
         "name": name,
         "argv": argv,

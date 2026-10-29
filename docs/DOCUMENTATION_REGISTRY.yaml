@@ -1880,3 +1880,9 @@ documents:
   - path: docs/reports/release/release-run-1.1.7.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Release-tag synchronization, conflict refusal and lifecycle recovery evidence
+      (KIT-GF-090).
