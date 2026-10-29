@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Kit synchronization fetches release tags without overwriting local tags, and release-status reports a missing local release tag instead of falling back silently to prepared (KIT-GF-090).
+
 ## v1.1.7 - 2026-10-27
 
 - Fixed: Refresh the Kit review matrix after release manifest synchronization and stop preparation if its generator fails, while leaving consumer workspaces and dry runs unchanged.

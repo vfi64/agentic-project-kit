@@ -1,5 +1,15 @@
 # Human Workflow Meta Commands
 
+## Release tags during synchronization
+
+Origin fetch/pull paths synchronize tags through a shared, atomic, non-forcing
+fetch. Existing local tags are never replaced. A conflict blocks further work
+and reports the tag name and local/remote targets; it does not authorize force,
+tag deletion, a rebase fallback or publication. Resolve the conflict explicitly
+with the maintainer. `release-status` reports `local_release_tag_missing` and
+recommends `agentic-kit transfer sync-main` when a closeout receipt exists but
+the corresponding local version tag is missing (KIT-GF-090).
+
 ## Local upstream merge without rewriting history
 
 Use `agentic-kit transfer merge-upstream --branch <work-branch> --json` to preview

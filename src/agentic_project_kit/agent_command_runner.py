@@ -14,6 +14,8 @@ It is intentionally conservative:
 
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 import dataclasses
 import datetime as _dt
 import hashlib
@@ -445,7 +447,7 @@ def agent_next_postcondition_failures() -> list[str]:
 
 def git_pull_ff_only() -> int:
     branch = current_branch()
-    return subprocess.run(["git", "pull", "--ff-only", "origin", branch], check=False).returncode
+    return run_with_tag_sync(["git", "pull", "--ff-only", "origin", branch], check=False).returncode
 
 
 def agent_next() -> int:

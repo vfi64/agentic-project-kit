@@ -1,5 +1,15 @@
 # Test Gates
 
+### Release tag synchronization
+
+`tests/test_git_tag_sync.py` uses local bare origins to verify non-forcing atomic
+tag fetches, annotated-tag preservation, divergent-tag refusal with both target
+IDs, idempotency and the release-status `local_release_tag_missing` recovery.
+Transfer, closeout, observed merge, remote-next and release-preparation adapters
+share the primitive. KIT-GF-090 has a bounded external machine contract; the real
+Kit-checkout replay separately covers current_verified and doctor's standard
+audit suite. No release-publish skip or audit-list change is part of this fix.
+
 ### Release review projection freshness
 
 `tests/test_release_review_projection.py` reproduces a release manifest change and

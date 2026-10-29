@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 from agentic_project_kit.cli_executable import default_agentic_kit
 
 import json
@@ -205,7 +207,7 @@ class RemoteNextBlocked(RuntimeError):
 
 def _command(argv: list[str], cwd: Path) -> _CommandResult:
     try:
-        process = subprocess.run(
+        process = run_with_tag_sync(
             argv,
             cwd=cwd,
             text=True,

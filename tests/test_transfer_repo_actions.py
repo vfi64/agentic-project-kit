@@ -1531,6 +1531,8 @@ def test_branch_switch_refuses_branch_drift_after_pull(monkeypatch):
         return PassingMonitor()
 
     def fake_run(command, cwd=None):
+        if command == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "switch", "feature/drift"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "pull", "--ff-only", "origin", "feature/drift"]:
@@ -1573,6 +1575,8 @@ def test_lc3_branch_lifecycle_mutators_acquire_workspace_mutation_lock(monkeypat
         return PassingMonitor()
 
     def fake_run(command, cwd=None):
+        if command == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "switch", "feature/demo"]:
             return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "branch", "--show-current"]:
@@ -2342,6 +2346,8 @@ def test_transfer_rebase_on_upstream_rebases_current_branch(monkeypatch):
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
+        if list(argv) == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(list(argv), 0, "", "")
         calls.append(command)
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
@@ -2392,6 +2398,8 @@ def test_transfer_rebase_on_upstream_reports_conflict(monkeypatch):
 
     def fake_run(argv, *args, **kwargs):
         command = list(argv)
+        if list(argv) == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(list(argv), 0, "", "")
         if command == ["git", "branch", "--show-current"]:
             return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
         if command == ["git", "fetch", "origin", "feature/demo"]:
@@ -2931,8 +2939,10 @@ def test_transfer_pr_complete_treats_post_merge_complete_failure_as_automatic_ad
         lambda root: default_agentic_kit(Path.cwd()),
     )
 
-    def fake_run(command, text=True, capture_output=True, timeout=None):
+    def fake_run(command, text=True, capture_output=True, timeout=None, **kwargs):
         calls.append(command)
+        if command == ["git", "fetch", "--atomic", "--no-tags", "origin", "refs/tags/*:refs/tags/*"]:
+            return subprocess.CompletedProcess(command, 0, "", "")
         if command == ["git", "ls-remote", "--exit-code", "origin", "HEAD"]:
             return subprocess.CompletedProcess(command, 0, "ref\tHEAD\n", "")
         if command[:3] == [default_agentic_kit(Path.cwd()), "transfer", "pr-wait-ci"]:

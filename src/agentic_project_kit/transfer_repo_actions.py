@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 import json
 import re
 import subprocess
@@ -412,7 +414,7 @@ def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.Completed
 
 
 def _result(action: str, command: list[str], completed: subprocess.CompletedProcess[str], next_action: str) -> RepoActionResult:
-    status = "PASS" if completed.returncode == 0 else "FAIL"
+    status = "PASS" if completed.returncode == 0 else ("BLOCKED" if "TAG_SYNC_BLOCKED" in (completed.stderr or "") else "FAIL")
     return RepoActionResult(
         action=action,
         result_status=status,
@@ -989,7 +991,7 @@ def branch_switch(branch: str, *, pull: bool = False) -> RepoActionResult:
 
         if pull:
             pull_command = ["git", "pull", "--ff-only", "origin", branch]
-            pulled = _run(pull_command)
+            pulled = run_with_tag_sync(pull_command, runner=_run)
             if pulled.returncode != 0:
                 return _result("branch-switch", pull_command, pulled, "Inspect pull failure before continuing.")
             drift = _verify_current_branch("branch-switch", branch, command=pull_command)
@@ -1603,7 +1605,7 @@ def repo_diff(*, cached: bool = False, name_only: bool = False) -> RepoActionRes
 
 def fetch_origin(branch: str = "main") -> RepoActionResult:
     command = ["git", "fetch", "origin", branch]
-    completed = _run(command)
+    completed = run_with_tag_sync(command, runner=_run)
     return _result("fetch-origin", command, completed, "Fast-forward pull, switch branch, or inspect PR state.")
 
 
@@ -1617,7 +1619,7 @@ def pull_current() -> RepoActionResult:
             completed = subprocess.CompletedProcess(["git", "pull"], 2, "", "No current branch detected.\n")
             return _result("pull-current", ["git", "pull"], completed, "Switch to a named branch first.")
         command = ["git", "pull", "--ff-only", "origin", branch]
-        completed = _run(command)
+        completed = run_with_tag_sync(command, runner=_run)
         return _result("pull-current", command, completed, "Run transfer state or continue with queued work.")
 
 

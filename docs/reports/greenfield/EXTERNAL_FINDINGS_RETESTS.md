@@ -1518,6 +1518,24 @@ Expected: The owned-runtime contract KIT-GF-021 runs to PASS from the installed 
 
 Expected result fields: `{"assertions": ["nested greenfield retest KIT-GF-021 PASS under the installed wheel"]}`.
 
+## KIT-GF-090
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md
+
+Execution class: local (effects: fetch, none); machine contract: Local bare-origin tag recovery and external doctor; publication disabled. Full Kit-checkout lifecycle replay is separately evidenced.
+
+Preconditions: A clean workspace with a local bare origin and a release tag absent locally. Preserve divergent local tags.
+
+```text
+agentic-kit transfer sync-main
+agentic-kit doctor
+```
+
+Expected: Synchronization restores missing tags without overwriting existing tags; conflicts block with both targets. The independent Kit-checkout replay verifies release-status current_verified and doctor.
+
+Expected result fields: `{"assertions": ["release tag restored", "external doctor passes"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

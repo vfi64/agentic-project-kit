@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 88,
+    "CLOSED": 89,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 48,
+    "local": 49,
     "owner_remote": 33
   },
   "findings": [
@@ -6727,6 +6727,113 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer sync-main",
+          "agentic-kit doctor"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Synchronization restores missing tags without overwriting existing tags; conflicts block with both targets.",
+          "The independent Kit-checkout replay verifies release-status current_verified and doctor."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "release tag restored",
+            "external doctor passes"
+          ]
+        },
+        "machine": {
+          "covers": "Local bare-origin tag recovery and external doctor; publication disabled. Full Kit-checkout lifecycle replay is separately evidenced.",
+          "fixture": "external_release",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "push",
+                "origin",
+                "refs/tags/v0.1.0"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "tag",
+                "-d",
+                "v0.1.0"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              },
+              "run": [
+                "git",
+                "tag",
+                "-l",
+                "v0.1.0"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "PASS"
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "sync-main"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "rev-parse",
+                "--verify",
+                "refs/tags/v0.1.0"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "Overall: PASS"
+              },
+              "run": [
+                "agentic-kit",
+                "doctor"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "A clean workspace with a local bare origin and a release tag absent locally. Preserve divergent local tags."
+        ],
+        "remote_effects": [
+          "fetch",
+          "none"
+        ],
+        "verification": "release-status declares network_read, so local-runner authority remains unchanged. Direct lifecycle tests and independent checkout replay cover current_verified. Consumer VERIFIED_FIXED requires a consumer retest.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-090",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -6863,7 +6970,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 48,
+  "machine_contracts": 49,
   "schema_version": 1,
-  "source_sha256": "eb4e7b8c1bfc026fe090c83af6915e5947a284d7f649266606cd26109c860626"
+  "source_sha256": "3e6344d4f506b5b4756cf5b03545f1fcd0b0dbf5f49007bc9e9235f329676346"
 }

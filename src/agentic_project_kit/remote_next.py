@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 import dataclasses
 import subprocess
 from pathlib import Path
@@ -22,7 +24,7 @@ class RemoteNextResult:
 
 
 def _run_git(project_root: Path, argv: list[str]) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(
+    return run_with_tag_sync(
         argv,
         cwd=project_root,
         text=True,

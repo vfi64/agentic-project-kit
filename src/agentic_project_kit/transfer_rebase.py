@@ -1,8 +1,9 @@
 """Rebase orchestration and bounded conflict-observation handling."""
 from __future__ import annotations
 
+from agentic_project_kit.git_tag_sync import run_with_tag_sync
+
 import json
-import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -37,7 +38,7 @@ def rebase_on_upstream(*, upstream: str = "", expected_branch: str = "") -> dict
     blockers: list[str] = []
 
     def run_step(name: str, argv: list[str]) -> dict[str, Any]:
-        completed = subprocess.run(argv, text=True, capture_output=True)
+        completed = run_with_tag_sync(argv, text=True, capture_output=True)
         item = {
             "name": name,
             "argv": argv,
@@ -61,7 +62,7 @@ def rebase_on_upstream(*, upstream: str = "", expected_branch: str = "") -> dict
 
     if not blockers:
         fetch = run_step("fetch-origin", ["git", "fetch", "origin", current_branch])
-        if fetch["returncode"] != 0:
+        if fetch["returncode"] != 0 and "TAG_SYNC_BLOCKED" not in str(fetch["stderr"]) + str(fetch["stdout"]):
             fetch = run_step("fetch-origin-main", ["git", "fetch", "origin", "main"])
         if fetch["returncode"] != 0:
             blockers.append("fetch_failed")
