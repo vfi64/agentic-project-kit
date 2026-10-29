@@ -1,7 +1,5 @@
 """KIT-GF-090: real local origins; no network or maintainer checkout."""
 import subprocess
-from pathlib import Path
-import shutil
 from types import SimpleNamespace
 
 import pytest
@@ -100,27 +98,42 @@ def test_common_primitive_is_idempotent_and_does_not_force(tmp_path):
     assert git(clone, "show-ref", "--tags") == before
 
 
-def test_missing_closeout_tag_reports_blocker_then_sync_restores_verified(tmp_path, monkeypatch):
+@pytest.mark.parametrize("version", ["1.1.7", "9.9.9"])
+def test_missing_closeout_tag_reports_blocker_then_sync_restores_verified(tmp_path, monkeypatch, version):
     seed, clone = repositories(tmp_path)
-    root = Path(__file__).resolve().parents[1]
-    for relative in ("pyproject.toml", "src/agentic_project_kit/__init__.py", "README.md", "CHANGELOG.md",
-                     "CITATION.cff", "docs/STATUS.md", "docs/handoff/CURRENT_HANDOFF.md",
-                     "docs/releases/VERIFIED_RELEASES.md", "docs/reports/release/post-release-doi-closeout-1.1.7.json"):
+    doi = "10.5281/zenodo.22222222"
+    concept = "10.5281/zenodo.11111111"
+    status = (f"Current version: {version}\nCurrent verified release: {version}.\n"
+              f"Current release tag: v{version}.\nVerified Zenodo version DOI: `{doi}`.\n")
+    # The fixture owns all metadata: live checkout files may already prepare the next release.
+    files = {
+        "pyproject.toml": f'[project]\nname = "agentic-project-kit"\nversion = "{version}"\n',
+        "src/agentic_project_kit/__init__.py": f'__version__ = "{version}"\n',
+        "README.md": (f"Version `{version}` is the current release line.\n"
+                      f"Current verified release: `v{version}` with Zenodo version DOI `{doi}`.\n"),
+        "CHANGELOG.md": f"## v{version} - 2026-10-29\n\nDOI {doi}\n",
+        "CITATION.cff": f"version: {version}\ndoi: {concept}\n# Verified v{version} version DOI: {doi}\n",
+        "docs/STATUS.md": status,
+        "docs/handoff/CURRENT_HANDOFF.md": status,
+        "docs/releases/VERIFIED_RELEASES.md": f"# Verified releases\n\n## v{version}\n\nVersion DOI: {doi}\nConcept DOI: {concept}\n",
+        f"docs/reports/release/post-release-doi-closeout-{version}.json": "{}\n",
+    }
+    for relative, content in files.items():
         target = seed / relative
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(root / relative, target)
+        target.write_text(content, encoding="utf-8")
     git(seed, "add", ".")
     git(seed, "commit", "-m", "verified release files")
     git(seed, "push", "origin", "main")
     git(clone, "pull", "--ff-only", "origin", "main")
-    git(seed, "tag", "-a", "v1.1.7", "-m", "release")
-    git(seed, "push", "origin", "refs/tags/v1.1.7")
-    before = build_release_lifecycle_status(clone, version="1.1.7")
+    git(seed, "tag", "-a", f"v{version}", "-m", "release")
+    git(seed, "push", "origin", f"refs/tags/v{version}")
+    before = build_release_lifecycle_status(clone, version=version)
     assert "local_release_tag_missing" in before.blockers
     assert before.next_action == "agentic-kit transfer sync-main"
     monkeypatch.chdir(clone)
     assert actions.fetch_origin("main").returncode == 0
-    after = build_release_lifecycle_status(clone, version="1.1.7")
+    after = build_release_lifecycle_status(clone, version=version)
     assert after.current_state == "current_verified" and not after.blockers
 
 
