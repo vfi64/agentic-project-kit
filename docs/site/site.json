@@ -14790,9 +14790,8 @@
     },
     "release": {
       "date": "2026-10-29",
-      "entry_count": 3,
+      "entry_count": 2,
       "notes": [
-        "Zenodo DOI verification pending for v1.1.8.",
         "Fixed: Kit synchronization fetches release tags without overwriting local tags, and release-status reports a missing local release tag instead of falling back silently to prepared (KIT-GF-090).",
         "Preserve annotated local tags during atomic synchronization and diagnose divergent tag targets; regression tests cover conflicts, idempotency and current_verified recovery with local bare origins (KIT-GF-090)."
       ],
@@ -16028,7 +16027,7 @@
     "package_version": "1.1.8",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
-    "release_tag": "v1.1.7",
+    "release_tag": "v1.1.8",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "abe3d2533d28",
     "requires_python": ">=3.10",
@@ -16043,7 +16042,7 @@
       "orchestrator": 35,
       "primitive": 107
     },
-    "version_doi": "10.5281/zenodo.23698043"
+    "version_doi": "10.5281/zenodo.23771530"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -16063,13 +16062,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.7",
+    "current_release_tag": "v1.1.8",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.7",
+    "current_verified_release": "1.1.8",
     "current_version": "1.1.8",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23698043"
+    "version_doi": "10.5281/zenodo.23771530"
   },
   "task_projection": {
     "execution_authorized": false,

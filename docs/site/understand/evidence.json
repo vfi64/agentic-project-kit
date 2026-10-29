@@ -57,9 +57,8 @@
   },
   "release": {
     "date": "2026-10-29",
-    "entry_count": 3,
+    "entry_count": 2,
     "notes": [
-      "Zenodo DOI verification pending for v1.1.8.",
       "Fixed: Kit synchronization fetches release tags without overwriting local tags, and release-status reports a missing local release tag instead of falling back silently to prepared (KIT-GF-090).",
       "Preserve annotated local tags during atomic synchronization and diagnose divergent tag targets; regression tests cover conflicts, idempotency and current_verified recovery with local bare origins (KIT-GF-090)."
     ],

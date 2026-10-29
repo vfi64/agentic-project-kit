@@ -2,9 +2,12 @@
 
 ## v1.1.8 - 2026-10-29
 
-- Zenodo DOI verification pending for v1.1.8.
 - Fixed: Kit synchronization fetches release tags without overwriting local tags, and release-status reports a missing local release tag instead of falling back silently to prepared (KIT-GF-090).
 - Preserve annotated local tags during atomic synchronization and diagnose divergent tag targets; regression tests cover conflicts, idempotency and current_verified recovery with local bare origins (KIT-GF-090).
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.1.8 DOI `10.5281/zenodo.23771530`.
+
+Zenodo v1.1.8 DOI: 10.5281/zenodo.23771530
 
 ## v1.1.7 - 2026-10-27
 
