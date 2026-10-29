@@ -97,9 +97,10 @@ meta:
         scope: Owner accepted option A on 2026-10-26. Implement shared identity-bound selection and its website projection; no release or paid benchmark.
       - id: external-retest-machine-contracts
         status: blocked
-        scope: Main item remains active; c1 and c3 are done. Release 1.1.6 meets
-          the later-release dependency, but c2 still needs consumer/owner-remote
-          verification. Execution remains explicitly deferred.
+        scope: Main item remains active; c1 and c3 are done. Committed consumer
+          1.1.7 evidence already records all 48 local contracts PASS, with no missing
+          contracts. C2 still needs ledger entries for 087/088 and the four remaining
+          historical scenario retests; remote effects remain explicitly deferred.
       - id: kit-control-effectiveness-measurement
         step: gate-and-context-benchmark
         status: deferred
@@ -151,18 +152,28 @@ meta:
       boundary: Read-only continuation observation; this Kit slice changed no Cockpit file or runtime.
         The local adoption is now complete. Only the unreleased c1c contracts and owner-remote
         observations still require later consumer verification.
+    progress_update_20261029:
+      scope: Read-only reconciliation of committed consumer evidence; no new retest, adoption or remote mutation.
+      kit_release: 1.1.8 is fully closed out; the inspected consumer still uses 1.1.7.
+      consumer_snapshot: 420ab30db4fc8e21e44b22dcec7894273bf26857
+      evidence_path_in_consumer: docs/validation/evidence/kit-1.1.7-adoption.json
+      evidence_sha256: 76a12961da9ec5ae147c6559341814878672aa8d33124d384f48aee6a0fb4d52
+      recorded_counts: 'PASS 48; FAIL 0; NO_MACHINE_CONTRACT 0; NOT_RUN_LOCALLY 40; overall INCOMPLETE.'
+      ledger_boundary: 46 of those PASS families are present as VERIFIED_FIXED; 087/088 have PASS evidence but no consumer ledger entries. Do not assign their status from this planning update.
+      historical_16: Twelve are VERIFIED_FIXED; 003, 009, 012 and 018 remain FIXED without independent consumer verification.
+      publication_record: 081/082 are recorded as FIXED in 1.1.5, not VERIFIED_FIXED.
+      observation_boundary: Pinned committed evidence, not a fresh test or a current remote-state claim. Historical progress updates above retain their original dates and scope.
     remaining_priorities:
     - Follow owner_order above.
     - Reverify Comm-SCI Cycle 008 target state before continuing Brownfield; Cycle 007 with
       44 seams is the last committed completed-cycle baseline, not a current remote claim.
     - Keep B2 blocked until explicit Brownfield completion acceptance; keep B3 Stage 1 report-only
       and Stage 2 maintainer-gated.
-    - 'GF current progress: the development catalog completes KIT-GF-070 local contracts after
-      1.1.5 (44 local PASS, no missing contract); publication and consumer verification remain
-      separate. Cockpit PR376/377 resynced the ledger with 1.1.5. The remaining c2 verification
-      is deferred, not done, while owner_order prioritizes command/website planning. Release
-      1.1.6 now meets the release prerequisite; owner-remote retests still require decisions; never infer
-      VERIFIED_FIXED from a Kit closure.'
+    - 'GF current progress: consumer 1.1.7 evidence already records 48 local PASS with no missing
+      contracts. Do not repeat these solely because older planning stopped at 1.1.5/1.1.6.
+      C2 remains incomplete: reconcile missing 087/088 ledger entries and separately scope
+      003/009/012/018 scenario retests. Owner-remote observations remain deferred; never infer
+      VERIFIED_FIXED from a Kit closure or classify 40 NOT_RUN_LOCALLY as successful.'
     - Clear or explicitly defer lifecycle backlog and review remaining governance registrations
       before strict lifecycle adoption.
     - Reconcile partial implementations before starting registry, retention, onboarding or GUI
@@ -4919,7 +4930,9 @@ plans:
     status: done
     progress: c1a and c1b shipped in 1.1.5; c1c completes the remaining six contracts in a development
       wheel. Installed-wheel all-family run has 44 PASS, 0 FAIL, 0 NO_MACHINE_CONTRACT and
-      40 NOT_RUN_LOCALLY; overall INCOMPLETE (rc 3). The contracts subsequently shipped in 1.1.6; consumer verification remains deferred.
+      40 NOT_RUN_LOCALLY; overall INCOMPLETE (rc 3). The contracts subsequently shipped in 1.1.6.
+      Later committed consumer 1.1.7 evidence records 48 local PASS, no FAIL and no missing
+      contracts; that local verification is already performed, while non-local scenarios remain open.
     evidence:
     - docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
     acceptance:
@@ -4932,12 +4945,25 @@ plans:
       only then.'
   - id: c2-external-ledger-resync
     status: blocked
-    progress: The released-1.1.5 adoption and ledger resync already landed in Cockpit PR376 and
-      refresh PR377. Committed evidence records 38 PASS, no FAIL, six missing contracts and
-      40 non-local families; GF-081/082 are FIXED in 1.1.5, not VERIFIED_FIXED.
-    blocker: The six contracts shipped in 1.1.6; consumer adoption and retest remain required.
-      Owner-remote families need their own authorized observations. Do not relabel unrun cases VERIFIED_FIXED.
-    external_evidence: vfi64/agp-cockpit docs/validation/evidence/kit-1.1.5-adoption.json
+    progress: The historical 1.1.5 resync recorded 38 PASS and six missing contracts.
+      Committed consumer 1.1.7 evidence now records 48 PASS, no FAIL, no missing contracts and
+      40 NOT_RUN_LOCALLY (overall INCOMPLETE). Of the original 16 OPEN families, 12 are now
+      VERIFIED_FIXED; 003, 009, 012 and 018 remain FIXED. All 46 PASS families present in the
+      consumer ledger are VERIFIED_FIXED; 087/088 have PASS evidence but no ledger entries.
+      GF-081/082 are recorded as FIXED in 1.1.5, not VERIFIED_FIXED.
+    blocker: The local adoption/retest prerequisite is already met by committed 1.1.7 evidence.
+      Remaining work is the 087/088 ledger reconciliation and four historical scenario retests,
+      not a blanket rerun of local contracts. Remote/mutating scenarios require separately
+      scoped owner authorization; no unrun case may be relabeled VERIFIED_FIXED.
+    external_evidence: Consumer-owned docs/validation/evidence/kit-1.1.7-adoption.json at snapshot 420ab30db4fc8e21e44b22dcec7894273bf26857; SHA256 recorded in progress_update_20261029.
+    remaining_work:
+    - Reconcile consumer ledger entries for 087/088 against the already committed PASS evidence; preserve consumer-owned adjudication.
+    - '003: exercise the declared external handoff reader and missing-predecessor scenarios in a disposable initialized workspace.'
+    - '009/012: authorize a specific hosted external branch, changed path and CI-backed commit/PR/merge/handoff sequence before execution.'
+    - '018: authorize the named already-merged branch cleanup and verify the requested local/remote refs are absent.'
+    - '081: observe only a real owner-decided release abandonment; never stop a release just to test it.'
+    - '082: inspect DOWNLOAD events on the next authorized kit-update plan; successful downloads alone do not prove transient-error retry behavior.'
+    - A consumer update to 1.1.8 is separate from the already completed 1.1.7 local evidence and is not performed by this planning slice.
     acceptance:
     - The Cockpit retests the 16 OPEN-against-Kit-closure families with the released contracts and
       records VERIFIED_FIXED only from committed evidence; families that still fail are reported as
