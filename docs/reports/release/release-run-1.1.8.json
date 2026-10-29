@@ -1,0 +1,163 @@
+{
+  "approvals": [
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner in this Codex chat on 2026-10-29: Dann mache das Release 1.1.8 vollständig ohne weitere Nachfragen. Includes publication, DOI closeout and evidence archive.",
+      "result_status": "AUTHORIZED",
+      "signature": "6fe80da749ee5223a928abac",
+      "step_id": "B4",
+      "tag": "v1.1.8",
+      "target_commit": "6638a8f0395fc4ff6e0110d7b773eaf5d4850091",
+      "version": "1.1.8"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner in this Codex chat on 2026-10-29: Dann mache das Release 1.1.8 vollständig ohne weitere Nachfragen. Includes publication, DOI closeout and evidence archive.",
+      "result_status": "AUTHORIZED",
+      "signature": "1672ce60f2e418d847281b37",
+      "step_id": "C2",
+      "tag": "v1.1.8",
+      "target_commit": "e2bf45d992fb44cb17b0a1ff06b43bd8fc9a1849",
+      "version": "1.1.8"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner in this Codex chat on 2026-10-29: Dann mache das Release 1.1.8 vollständig ohne weitere Nachfragen. Includes publication, DOI closeout and evidence archive.",
+      "result_status": "AUTHORIZED",
+      "signature": "0d696d4e9560a08b45054687",
+      "step_id": "C3",
+      "tag": "v1.1.8",
+      "target_commit": "e2bf45d992fb44cb17b0a1ff06b43bd8fc9a1849",
+      "version": "1.1.8"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "Owner in this Codex chat on 2026-10-29: Dann mache das Release 1.1.8 vollständig ohne weitere Nachfragen. Includes publication, DOI closeout and evidence archive.",
+      "result_status": "AUTHORIZED",
+      "signature": "e45ff639ac64891a7a6ee60b",
+      "step_id": "D4",
+      "tag": "v1.1.8",
+      "target_commit": "e2bf45d992fb44cb17b0a1ff06b43bd8fc9a1849",
+      "version": "1.1.8"
+    }
+  ],
+  "archive_boundary": "Snapshot of completed release steps; archive merge is verified from Git/PR evidence.",
+  "artifact_type": "evidence",
+  "finished_steps": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+  ],
+  "kind": "release_run_evidence",
+  "package_index_dispatch": {
+    "dispatched": true,
+    "head_sha": "e2bf45d992fb44cb17b0a1ff06b43bd8fc9a1849",
+    "run_id": "40915016578"
+  },
+  "package_index_workflow": {
+    "file": "release.yml",
+    "publish_target_pypi": true
+  },
+  "publication_policy": "github+pypi+zenodo",
+  "publication_target": "e2bf45d992fb44cb17b0a1ff06b43bd8fc9a1849",
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "status": "active",
+  "steps": {
+    "A1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D5": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    }
+  },
+  "tag": "v1.1.8",
+  "version": "1.1.8"
+}
