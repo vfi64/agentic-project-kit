@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `fa6ffa432c2a8f0dac4dfd2cca902c7e8e559dfa` (`fa6ffa43`), after `Isolate release tag regression fixtures from checkout metadata (#2676)`.
-Last substantive work state is `fa6ffa432c2a8f0dac4dfd2cca902c7e8e559dfa` (`fa6ffa43`), after `Isolate release tag regression fixtures from checkout metadata (#2676)`.
+Current verified main/admin HEAD is `cd51c780f8da9e8ef9b9b285c1199fea12214e20` (`cd51c780`), after `Release 1.1.8 (#2678)`.
+Last substantive work state is `cd51c780f8da9e8ef9b9b285c1199fea12214e20` (`cd51c780`), after `Release 1.1.8 (#2678)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
