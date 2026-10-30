@@ -9,6 +9,7 @@ from agentic_project_kit.cli_commands.transfer_shared import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import *
 from agentic_project_kit.cli_commands.transfer_context_helpers import _known_volatile_transfer_paths
 from agentic_project_kit.cli_commands.transfer_pr_merge_flow import _resolve_expected_head_sha_alias
+from agentic_project_kit.closeout_receipt import valid_completion_receipt
 from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.repo_identity import bind_github_cli_env_for_origin
 from agentic_project_kit.transfer_pr_branch_state import detect_branch_no_content_diff
@@ -541,10 +542,9 @@ def pr_create_complete_command(
             return False
         if not isinstance(payload, dict):
             return False
-        return (
-            payload.get("result_status") == "PASS"
-            and payload.get("post_merge_complete_followup_required") is True
-            and "created, completed, and verified" in str(payload.get("next_action", ""))
+        return valid_completion_receipt(
+            payload, Path("."), after_pr=pr_number, main_branch=base,
+            source_head=expected_head_sha,
         )
 
     def pr_is_merged_for_outer_followup() -> bool:
@@ -800,8 +800,8 @@ def pr_create_complete_command(
     final_signal = "d" if result_status == "PASS" else "f"
     if result_status == "PASS" and inner_post_merge_followup_verified:
         next_action = (
-            "PR create-complete lifecycle is complete; inner pr-complete already "
-            "created, completed, and verified the administrative handoff refresh."
+            "PR create-complete lifecycle is complete; state-bound inner "
+            "post-merge completion evidence verified."
         )
     elif result_status == "PASS" and outer_followup_false_red_cleared:
         next_action = (
@@ -829,6 +829,8 @@ def pr_create_complete_command(
         "expected_head_sha": expected_head_sha,
         "pr_number": pr_number,
         "post_merge_complete_verified_by_inner_pr_complete": inner_post_merge_followup_verified,
+        "completion_receipt": (json.loads(complete_result.stdout).get("completion_receipt")
+                               if result_status == "PASS" and inner_post_merge_followup_verified else None),
         "outer_followup_false_red_cleared": outer_followup_false_red_cleared,
         "blockers": blockers,
         "steps": steps,

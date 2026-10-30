@@ -4432,7 +4432,7 @@ def test_admin_refresh_pr_command_signature_stays_canonical():
     assert "--body" not in source
 
 
-def test_pr_create_complete_skips_outer_followup_when_inner_pr_complete_verified_admin_refresh():
+def test_pr_create_complete_skips_outer_followup_only_with_state_bound_receipt():
     """Outer pr-create-complete must not turn red after inner auto admin refresh succeeded."""
     import inspect
 
@@ -4441,8 +4441,11 @@ def test_pr_create_complete_skips_outer_followup_when_inner_pr_complete_verified
     source = inspect.getsource(transfer_cli.pr_create_complete_command)
 
     assert "post_merge_complete_verified_by_inner_pr_complete" in source
-    assert "post_merge_complete_followup_required" in source
-    assert "created, completed, and verified" in source
+    assert "valid_completion_receipt(" in source
+    assert "source_head=expected_head_sha" in source
+    assert "completion_receipt" in source
+    assert "post_merge_complete_followup_required" not in source
+    assert "created, completed, and verified" not in source
     assert "and not inner_post_merge_followup_verified" in source
     assert "post-pr-sync-main-after-complete" in source
 

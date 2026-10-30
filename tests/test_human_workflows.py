@@ -1254,3 +1254,36 @@ def test_release_prepare_stops_before_release_prep_when_notes_block(monkeypatch,
     assert result.exit_code == 2, result.output
     assert not any(call[:2] == ["./.venv/bin/agentic-kit", "release-prep"] for call in calls)
     assert not (tmp_path / "docs" / "reports" / "release" / "release-prepare-1.2.3.json").exists()
+
+
+@pytest.mark.parametrize("reuse", [True, False])
+def test_work_finish_reuses_only_valid_current_receipt(monkeypatch, reuse):
+    calls = []
+    child = {"result_status": "PASS", "pr_number": 2317,
+             "post_merge_complete_verified_by_inner_pr_complete": True,
+             "completion_receipt": {"kind": "closeout_completion_receipt"}}
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create-complete"]:
+            return _completed(command, stdout=json.dumps(child))
+        if command[:3] == ["git", "status", "--short"]:
+            return _completed(command, stdout="")
+        return _completed(command)
+    observed = []
+    def validate(payload, root, **kwargs):
+        observed.append(kwargs)
+        return reuse
+    monkeypatch.setattr(human_workflows.subprocess, "run", fake_run)
+    monkeypatch.setattr(human_workflows, "valid_completion_receipt", validate)
+    result = CliRunner().invoke(app, ["work", "finish", "--branch", "codex/demo",
+        "--title", "Demo", "--message", "Demo", "--path", "src/demo.py", "--execute", "--json"])
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert observed[0]["after_pr"] == 2317
+    assert "source_head" in observed[0]
+    assert payload["completion_receipt_reused"] is reuse
+    names = [step["name"] for step in payload["steps"]]
+    assert ("sync-main" in names) is (not reuse)
+    assert ("post-merge-check" in names) is (not reuse)
+    assert names.count("repo-status") == (1 if reuse else 2)

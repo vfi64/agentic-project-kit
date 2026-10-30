@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import pytest
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -552,3 +553,29 @@ def test_write_post_merge_complete_report_embeds_llm_execution_context(tmp_path)
 
     assert report["llm_execution_context"]["kind"] == "llm_execution_context"
     assert report["llm_execution_context"]["command_reference"]["must_not_reconstruct_commands_from_memory"] is True
+
+
+@pytest.mark.parametrize("carrier_status,cleanup_ok", [("PASS", True), ("BLOCKED", True), ("PASS", False)])
+def test_receipt_issued_only_after_successful_refresh_and_cleanup(tmp_path, monkeypatch, carrier_status, cleanup_ok):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(command_module, "inspect_local_state", lambda *_args, **_kwargs: LocalState(True, (), (), ()))
+    monkeypatch.setattr(command_module, "post_merge_complete", lambda *_args, **_kwargs: FakePostMergeCompleteResult())
+    monkeypatch.setattr(command_module, "refresh_llm_context_carriers", lambda *args, **kwargs: {"result_status": carrier_status})
+    events = []
+    def cleanup(root):
+        events.append("cleanup")
+        return {"ok": True if len(events) == 1 else cleanup_ok, "after": {"clean": True}}
+    def issue(root, **kwargs):
+        events.append("receipt")
+        assert kwargs == {"after_pr": 1090, "main_branch": "main", "lifecycle_state": "COMPLETE"}
+        return {"kind": "closeout_completion_receipt"}
+    monkeypatch.setattr(command_module, "restore_known_volatile_for_post_merge", cleanup)
+    monkeypatch.setattr(command_module, "make_completion_receipt", issue)
+    result = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1090", "--json"])
+    payload = json.loads(result.stdout)
+    eligible = carrier_status == "PASS" and cleanup_ok
+    assert (payload["completion_receipt"] is not None) is eligible
+    assert ("receipt" in events) is eligible
+    if eligible:
+        assert events[-2:] == ["cleanup", "receipt"]
+    assert result.exit_code == (0 if cleanup_ok else 2)

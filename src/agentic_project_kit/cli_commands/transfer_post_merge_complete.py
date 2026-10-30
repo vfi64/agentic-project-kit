@@ -13,6 +13,7 @@ from agentic_project_kit.cli_commands.transfer_context_helpers import (
     _known_volatile_transfer_paths,
     _restore_known_volatile_paths,
 )
+from agentic_project_kit.closeout_receipt import make_completion_receipt
 from agentic_project_kit.transfer_post_merge_lifecycle import post_merge_complete
 from agentic_project_kit.llm_context_carriers import refresh_llm_context_carriers
 from agentic_project_kit.llm_execution_context import build_llm_execution_context
@@ -498,6 +499,15 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
 
         if json_output:
             payload = result.as_json_data()
+            payload["completion_receipt"] = (
+                make_completion_receipt(
+                    Path("."), after_pr=after_pr, main_branch=main_branch,
+                    lifecycle_state=result.lifecycle_state,
+                )
+                if result.result_status == "PASS" and result.returncode == 0
+                and final_cleanup_ok and llm_context_carriers_refresh.get("result_status") == "PASS"
+                else None
+            )
             payload["transfer_report"] = local_report
             payload["published_transfer_report"] = published_report
             payload["llm_context_carriers_refresh"] = llm_context_carriers_refresh

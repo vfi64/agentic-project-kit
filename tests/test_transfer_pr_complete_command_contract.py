@@ -144,6 +144,7 @@ def test_transfer_pr_complete_orchestrates_wait_merge_sync_ack_and_post_merge(mo
         "--ci-poll-seconds",
 
         "10",
+        "--json",
 
     ]
 
@@ -1001,3 +1002,93 @@ def test_gf050a_pr_complete_forwards_ci_budget_to_post_merge_complete_source():
     assert "str(timeout_seconds)" in block
     assert '"--ci-poll-seconds"' in block
     assert "str(poll_seconds)" in block
+
+
+@pytest.mark.parametrize("reuse", [True, False])
+def test_normal_closeout_reuses_structured_receipt(monkeypatch, reuse) -> None:
+    calls: list[list[str]] = []
+    monkeypatch.setattr(transfer_pr_create_flow, "valid_completion_receipt", lambda *args, **kwargs: reuse, raising=False)
+
+    def fake_run(argv, *args, **kwargs):
+        command = list(argv)
+        calls.append(command)
+        if command == ["git", "branch", "--show-current"]:
+            return subprocess.CompletedProcess(command, 0, "feature/demo\n", "")
+        if command == ["git", "rev-parse", "HEAD"]:
+            return subprocess.CompletedProcess(command, 0, "0123456789abcdef0123456789abcdef01234567\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-create"]:
+            return subprocess.CompletedProcess(
+                command,
+                0,
+                '{"stdout":"https://github.com/vfi64/agentic-project-kit/pull/789\\n"}\n',
+                "",
+            )
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"]:
+            return subprocess.CompletedProcess(command, 0, json.dumps({"result_status": "PASS", "expected_head_sha": "0123456789abcdef0123456789abcdef01234567", "post_merge_complete_followup_required": False, "completion_receipt": {"kind": "closeout_completion_receipt"}, "next_action": "arbitrary prose"}), "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "sync-main"]:
+            return subprocess.CompletedProcess(command, 0, "synced\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-check"]:
+            return subprocess.CompletedProcess(command, 0, "checked\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "repo-status"]:
+            return subprocess.CompletedProcess(command, 0, "clean\n", "")
+        if command[:3] == ["./.venv/bin/agentic-kit", "transfer", "restore-known-volatile"]:
+            return subprocess.CompletedProcess(command, 0, '{"result_status":"PASS"}\n', "")
+        return subprocess.CompletedProcess(command, 99, "", f"unexpected command: {command}\n")
+
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_transfer_capability",
+        lambda capability, **kwargs: None,
+    )
+    monkeypatch.setattr(
+        "agentic_project_kit.cli_commands.transfer._require_current_communication_context_or_exit",
+        lambda **kwargs: None,
+    )
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "transfer",
+            "pr-create-complete",
+            "--title",
+            "Demo",
+            "--body",
+            "Body",
+            "--base",
+            "main",
+            "--head",
+            "current",
+            "--merge-method",
+            "squash",
+            "--post-merge-complete",
+            "--skip-llm-context-gate",
+        ],
+    )
+
+    assert result.exit_code == 0
+    assert "789" in result.stdout
+    assert any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "pr-complete"] for call in calls)
+    assert not any(call[:3] == ["./.venv/bin/agentic-kit", "transfer", "post-merge-complete"] for call in calls)
+    assert any(call[:3] == [TEST_AGENTIC_KIT, "transfer", "sync-main"] for call in calls) is (not reuse)
+    assert any(call[:3] == [TEST_AGENTIC_KIT, "transfer", "post-merge-check"] for call in calls) is (not reuse)
+    assert any(call[:3] == [TEST_AGENTIC_KIT, "transfer", "repo-status"] for call in calls) is (not reuse)
+
+
+@pytest.mark.parametrize("reuse", [True, False])
+def test_pr_complete_requests_json_and_forwards_only_valid_receipt(monkeypatch, reuse):
+    calls = []
+    receipt = {"kind": "closeout_completion_receipt"}
+    def fake_run(argv, *args, **kwargs):
+        calls.append(list(argv))
+        output = json.dumps({"result_status": "PASS", "completion_receipt": receipt})
+        return subprocess.CompletedProcess(argv, 0, output, "")
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    monkeypatch.setattr(transfer_pr_merge_flow, "valid_completion_receipt", lambda *args, **kwargs: reuse)
+    result = CliRunner().invoke(app, ["transfer", "pr-complete", "123",
+        "--expected-head-sha", "a" * 40, "--skip-llm-context-gate", "--json"])
+    assert result.exit_code == 0, result.output
+    payload = json.loads(result.stdout)
+    assert payload["completion_receipt"] == (receipt if reuse else None)
+    assert payload["expected_head_sha"] == "a" * 40
+    child = next(call for call in calls if call[:3] == [TEST_AGENTIC_KIT, "transfer", "post-merge-complete"])
+    assert "--json" in child

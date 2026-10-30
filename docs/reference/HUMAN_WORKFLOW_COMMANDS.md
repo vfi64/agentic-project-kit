@@ -1,5 +1,25 @@
 # Human Workflow Meta Commands
 
+## Reusing completed PR closeout evidence
+
+The JSON result of `transfer post-merge-complete` can include an additive
+`completion_receipt` after successful terminal validation, context-carrier refresh
+and cleanup. `transfer pr-complete`, `transfer pr-create-complete` and `work finish`
+forward it only after validating the current repository, PR and main branch.
+The receipt binds HEAD, upstream, observed origin main, workspace settings and
+handoff evidence hashes. The outer wrappers then omit their duplicate final
+sync/check/status triplets; their initial checks remain. Human-readable
+`next_action` wording and recovery flags are not completion evidence.
+
+Missing, malformed, unavailable or changed evidence uses the existing full-check
+path. Remote observation is read-only and bounded; an unavailable remote declines
+reuse. The receipt is an in-process-chain optimization, not a signature, approval
+or persistent state. It does not authorize a merge, bypass CI, remove the separate
+administrative refresh PR or alter release gates. JSON outputs remain compatible:
+`completion_receipt` is null when unavailable; `work finish` additionally reports
+`completion_receipt_reused`. Revalidation has a cost, so omitted calls alone do not
+prove an end-to-end speedup.
+
 ## Release tags during synchronization
 
 Origin fetch/pull paths synchronize tags through a shared, atomic, non-forcing
