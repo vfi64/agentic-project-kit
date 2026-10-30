@@ -1177,7 +1177,7 @@ Expected result fields: `{"blocker_count": 0, "status": "PASS"}`.
 
 ## KIT-GF-070
 
-Kit state: CLOSED; fixed_in: not established.
+Kit state: CLOSED; fixed_in: 1.1.6.
 Evidence: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
 
 Execution class: local (effects: none); machine contract: A local contract runs to PASS; a mixed local/remote selection stays INCOMPLETE and a malformed selection blocks. The missing-contract countercheck uses a synthetic catalog in the unit suite, so no deliberately unproved local family remains in the shipped catalog.
@@ -1469,7 +1469,7 @@ Expected result fields: `{"assertions": ["High CI pin blocks before any entrypoi
 
 ## KIT-GF-087
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.7.
 Evidence: docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md
 
 Execution class: local (effects: none); machine contract: Partial generated project recovery is planned, signed, valid and idempotent without touching project documents.
@@ -1486,7 +1486,7 @@ Expected result fields: `{"assertions": ["AWAITING_APPROVAL then PASS; rule sour
 
 ## KIT-GF-088
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.7.
 Evidence: docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md
 
 Execution class: local (effects: none); machine contract: Work-check refuses partial bootstrap before Kit-internal tests and passes the generic external gate family after signed completion.
@@ -1503,7 +1503,7 @@ Expected result fields: `{"assertions": ["partial work-check BLOCKED, recovery P
 
 ## KIT-GF-089
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.7.
 Evidence: docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md
 
 Execution class: local (effects: none); machine contract: The owned-runtime retest fixture keeps the invoking environment's dependencies when the Kit is installed as a wheel beside them.
@@ -1520,7 +1520,7 @@ Expected result fields: `{"assertions": ["nested greenfield retest KIT-GF-021 PA
 
 ## KIT-GF-090
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.8.
 Evidence: docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md
 
 Execution class: local (effects: fetch, none); machine contract: Local bare-origin tag recovery and external doctor; publication disabled. Full Kit-checkout lifecycle replay is separately evidenced.
@@ -1535,6 +1535,24 @@ agentic-kit doctor
 Expected: Synchronization restores missing tags without overwriting existing tags; conflicts block with both targets. The independent Kit-checkout replay verifies release-status current_verified and doctor.
 
 Expected result fields: `{"assertions": ["release tag restored", "external doctor passes"]}`.
+
+## KIT-GF-091
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md
+
+Execution class: local (effects: none); machine contract: Real installed release-prep plans and assigns CLOSED/unreleased, exports through the signed route and is idempotent in an isolated Kit-layout fixture.
+
+Preconditions: Disposable Kit-layout fixture; publication disabled; run with the installed candidate wheel.
+
+```text
+agentic-kit release-prep --version 9.9.9 --dry-run --json
+agentic-kit greenfield export --root . --json
+```
+
+Expected: Dry-run names KIT-GF-091 without writing; preparation assigns its version and exports; repeated preparation is unchanged.
+
+Expected result fields: `{"assertions": ["greenfield_release.finding_ids contains KIT-GF-091 before assignment and is empty after assignment; export changed_paths is empty."]}`.
 
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 

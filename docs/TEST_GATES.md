@@ -1,5 +1,15 @@
 # Test Gates
 
+### Release finding version assignment
+
+`tests/test_release_greenfield_stamp.py` covers KIT-GF-091: CLOSED/unreleased
+assignment, OPEN and historical-version preservation, read-only planning,
+canonical export, idempotency, and empty/missing fixed_in refusal before any
+release metadata write. B4 signatures bind finding IDs and the exact catalog.
+The installed-wheel machine contract uses an isolated synthetic Kit-layout
+fixture; it runs real release-prep and greenfield export without publication.
+Existing release-content and Changelog hygiene tests remain mandatory.
+
 ### Release tag synchronization
 
 `tests/test_git_tag_sync.py` uses local bare origins to verify non-forcing atomic

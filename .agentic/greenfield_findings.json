@@ -2136,8 +2136,8 @@
     {
       "id": "KIT-GF-087",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
-      "prs": [],
+      "fixed_in": "1.1.7",
+      "prs": [2652],
       "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
@@ -2163,8 +2163,8 @@
     {
       "id": "KIT-GF-088",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
-      "prs": [],
+      "fixed_in": "1.1.7",
+      "prs": [2652],
       "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
@@ -4891,11 +4891,11 @@
         "verification": "PARTIAL: the runner, the execution classes and eight machine contracts exist; the remaining local retests still need contracts.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "",
+      "fixed_in": "1.1.6",
       "id": "KIT-GF-070",
       "kit_state": "CLOSED",
-      "pr_reference_note": "C1 implementation complete in this development slice; fixed_in stays empty until an owner-approved release carries it. Consumer VERIFIED_FIXED remains independent.",
-      "prs": [],
+      "pr_reference_note": "C1c machine contracts shipped in 1.1.6 (PR #2607); see the KIT-GF-091 historical release reconciliation. Consumer VERIFIED_FIXED remains independent.",
+      "prs": [2607],
       "report": "docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md"
     },
     {
@@ -6047,8 +6047,8 @@
     {
       "id": "KIT-GF-089",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
-      "prs": [],
+      "fixed_in": "1.1.7",
+      "prs": [2658],
       "report": "docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
@@ -6227,8 +6227,8 @@
     {
       "id": "KIT-GF-090",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
-      "prs": [],
+      "fixed_in": "1.1.8",
+      "prs": [2673],
       "report": "docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
@@ -6324,6 +6324,184 @@
           ]
         },
         "verification": "release-status declares network_read, so local-runner authority remains unchanged. Direct lifecycle tests and independent checkout replay cover current_verified. Consumer VERIFIED_FIXED requires a consumer retest."
+      }
+    },
+    {
+      "id": "KIT-GF-091",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Disposable Kit-layout fixture; publication disabled; run with the installed candidate wheel."
+        ],
+        "commands": [
+          "agentic-kit release-prep --version 9.9.9 --dry-run --json",
+          "agentic-kit greenfield export --root . --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "Dry-run names KIT-GF-091 without writing; preparation assigns its version and exports; repeated preparation is unchanged."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "greenfield_release.finding_ids contains KIT-GF-091 before assignment and is empty after assignment; export changed_paths is empty."
+          ]
+        },
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "Real installed release-prep plans and assigns CLOSED/unreleased, exports through the signed route and is idempotent in an isolated Kit-layout fixture.",
+          "steps": [
+            {
+              "write": {
+                "path": "pyproject.toml",
+                "text": "[project]\nname = \"agentic-project-kit\"\nversion = \"0.1.0\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": "src/agentic_project_kit/__init__.py",
+                "text": "__version__ = \"0.1.0\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": "README.md",
+                "text": "# Release fixture\nCurrent version: 0.1.0\n"
+              }
+            },
+            {
+              "write": {
+                "path": "CITATION.cff",
+                "text": "version: 0.1.0\ndate-released: \"2026-01-01\"\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/STATUS.md",
+                "text": "Current version: 0.1.0\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/handoff/CURRENT_HANDOFF.md",
+                "text": "Current version: 0.1.0\n"
+              }
+            },
+            {
+              "write": {
+                "path": "CHANGELOG.md",
+                "text": "## Unreleased\n\n- Fixed: Assign closed finding versions during guarded release preparation without publication while preserving independent consumer verification (KIT-GF-091).\n\n## v0.1.0 - 2026-01-01\n\n- Added: Initial fixture.\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md",
+                "text": "Fixture release assignment evidence.\n"
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/greenfield_findings.json",
+                "text": "{\"schema_version\":1,\"findings\":[{\"id\":\"KIT-GF-001\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-002\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-003\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-004\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-005\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-006\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-007\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-008\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-009\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-010\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-011\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-012\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-013\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-014\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-015\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-016\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-017\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-018\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-021\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-022\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-023\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-024\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-025\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-026\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-027\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-028\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-029\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-030\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-031\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-032\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-033\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-034\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-035\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-036\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-037\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-038\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-039\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-040\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-041\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-042\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-043\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-044\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-045\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-046\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-047\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-048\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-049\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-050\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-051\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-052\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-053\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-054\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-055\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-056\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-057\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-058\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-059\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-060\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-061\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-062\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-063\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-064\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-065\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-066\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-067\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-068\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-069\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-070\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-071\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-072\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-073\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-074\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-075\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-076\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-077\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-RULE-REGISTRY-BOOTSTRAP\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-091\",\"kit_state\":\"CLOSED\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}}]}\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "9.9.9",
+                "--date",
+                "2026-10-30",
+                "--summary-line",
+                "Fixed: Assign closed finding versions during guarded release preparation without publication while preserving independent consumer verification (KIT-GF-091).",
+                "--dry-run",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true,
+                  "greenfield_release.finding_ids": [
+                    "KIT-GF-091"
+                  ]
+                }
+              }
+            },
+            {
+              "assert": {
+                "absent": [
+                  "docs/reports/greenfield/external-findings-status.json"
+                ]
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "9.9.9",
+                "--date",
+                "2026-10-30",
+                "--summary-line",
+                "Fixed: Assign closed finding versions during guarded release preparation without publication while preserving independent consumer verification (KIT-GF-091).",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true,
+                  "greenfield_release.finding_ids": [
+                    "KIT-GF-091"
+                  ]
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "greenfield",
+                "export",
+                "--root",
+                ".",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "changed_paths": []
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "release-prep",
+                "--version",
+                "9.9.9",
+                "--date",
+                "2026-10-30",
+                "--summary-line",
+                "Fixed: Assign closed finding versions during guarded release preparation without publication while preserving independent consumer verification (KIT-GF-091).",
+                "--dry-run",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "ok": true,
+                  "greenfield_release.finding_ids": [],
+                  "changed_paths": []
+                }
+              }
+            }
+          ]
+        },
+        "verification": "Synthetic local metadata preparation only. No release publication and no consumer VERIFIED_FIXED claim. B4 signature coverage is independently tested."
       }
     }
   ],
