@@ -59,8 +59,8 @@ def status(
 
 @kit_app.command("update")
 def update(
-    version: str = typer.Option(
-        "", "--version", help="Exact stable PEP 440 Kit version, including post-releases."
+    version: str | None = typer.Option(
+        None, "--version", help="Exact released Kit version (X.Y.Z or X.Y.Z.postN)."
     ),
     latest: bool = typer.Option(False, "--latest", help="Resolve the latest stable release at the configured index and plan its exact version."),
     root: Path = typer.Option(Path("."), "--root", help="External workspace on a work branch."),
@@ -74,7 +74,7 @@ def update(
 ) -> None:
     """Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace."""
     try:
-        if bool(version) == latest:
+        if (version is not None) == latest:
             raise typer.BadParameter("Choose exactly one of --latest or --version.")
         if latest:
             from agentic_project_kit.kit_update_latest import run_latest_update

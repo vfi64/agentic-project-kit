@@ -5013,8 +5013,8 @@
       "lifecycle_rank": null,
       "params": [
         {
-          "default": "",
-          "help": "Exact stable PEP 440 Kit version, including post-releases.",
+          "default": null,
+          "help": "Exact released Kit version (X.Y.Z or X.Y.Z.postN).",
           "name": "version",
           "opts": [
             "--version"

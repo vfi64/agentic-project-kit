@@ -189,8 +189,9 @@ def test_latest_option_is_available(root, monkeypatch):
     assert result.exit_code == 0 and json.loads(result.stdout)["already_current"]
 
 
-@pytest.mark.parametrize("flags", [["--latest", "--version", "1.1.8"], []])
-def test_exactly_one_version_selector(flags):
+@pytest.mark.parametrize("flags", [["--latest", "--version", "1.1.8"], ["--latest", "--version", ""], []])
+def test_exactly_one_version_selector(flags, monkeypatch):
+    monkeypatch.setattr(latest, "run_latest_update", lambda *a, **k: {"result_status": "PASS", "next_action": "none"})
     result = CliRunner().invoke(app, ["kit", "update", *flags, "--json"])
     assert result.exit_code == 2 and "Choose exactly one" in result.output
 

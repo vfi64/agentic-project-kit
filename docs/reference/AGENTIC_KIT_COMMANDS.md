@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 416ca32a9c74
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 52fa7baf8daf
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1735,7 +1735,7 @@ Plan a released Kit update; signed execution installs locally, updates CI pins a
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
-| `version` | `TyperOption` | --version | `False` | `` | Exact stable PEP 440 Kit version, including post-releases. |
+| `version` | `TyperOption` | --version | `False` |  | Exact released Kit version (X.Y.Z or X.Y.Z.postN). |
 | `latest` | `TyperOption` | --latest | `False` | `False` | Resolve the latest stable release at the configured index and plan its exact version. |
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | External workspace on a work branch. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Execute the exactly signed update plan. |

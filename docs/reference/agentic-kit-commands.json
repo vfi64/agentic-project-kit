@@ -8158,8 +8158,8 @@
       "name": "update",
       "params": [
         {
-          "default": "",
-          "help": "Exact stable PEP 440 Kit version, including post-releases.",
+          "default": null,
+          "help": "Exact released Kit version (X.Y.Z or X.Y.Z.postN).",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
@@ -20786,7 +20786,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "416ca32a9c74",
+    "manifest_sha": "52fa7baf8daf",
     "schema_version": 2
   },
   "schema_version": 3,
