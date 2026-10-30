@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Reuse state-bound successful PR closeout evidence across nested wrappers; retain full checks whenever repository, remote or handoff evidence changes.
+
 - Fixed: Assign released versions to closed findings during release preparation, include finding IDs in guarded B4 approval, and block missing version evidence before metadata writes (KIT-GF-091).
 
 ## v1.1.8 - 2026-10-29

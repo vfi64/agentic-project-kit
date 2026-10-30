@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from agentic_project_kit.closeout_receipt import valid_completion_receipt
+
 from pathlib import Path
 # ruff: noqa: F403,F405
 
@@ -394,12 +396,14 @@ def pr_complete_command(
                 str(timeout_seconds),
                 "--ci-poll-seconds",
                 str(poll_seconds),
+                "--json",
             ],
         ),
     ]
 
     failed_step = None
     pending_refresh_pr = None
+    completion_receipt = None
     for name, argv in step_plan:
         if name == "pr-wait-ci":
             update_parent_live_status("waiting_ci", step=name)
@@ -413,6 +417,10 @@ def pr_complete_command(
                 post_payload = json.loads(str(steps[-1].get("stdout") or "{}"))
             except json.JSONDecodeError:
                 post_payload = {}
+            if step_returncode == 0 and valid_completion_receipt(
+                post_payload, Path("."), after_pr=pr_number, main_branch=main_branch,
+            ):
+                completion_receipt = post_payload["completion_receipt"]
             if isinstance(post_payload, dict) and post_payload.get("result_status") == "PENDING":
                 pending_refresh_pr = post_payload.get("refresh_pr")
                 break
@@ -474,6 +482,7 @@ def pr_complete_command(
         "result_status": result_status,
         "final_signal": final_signal,
         "failed_step": failed_step,
+        "completion_receipt": completion_receipt if result_status == "PASS" else None,
         "post_merge_complete_requested": post_merge_complete,
         "post_merge_complete_followup_required": post_merge_complete_followup_required,
         "remote_settle_recovery_required": remote_settle_recovery_required,

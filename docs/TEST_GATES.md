@@ -1,5 +1,19 @@
 # Test Gates
 
+### State-bound closeout completion evidence
+
+`tests/test_closeout_receipt.py` uses local bare origins to verify unchanged-state
+reuse and refusal after local, upstream, remote, branch, operation or ignored
+handoff-evidence drift. Missing/malformed/failed evidence and unavailable remote
+reads decline reuse. `tests/test_transfer_pr_complete_command_contract.py` covers
+the normal successful child contract independently of prose and recovery flags;
+`tests/test_transfer_post_merge_complete_command.py` checks producer eligibility.
+`tests/test_human_workflows.py` checks both reuse and the original fallback.
+The new core is isolated in `closeout_receipt.py`. The existing large workflow
+adapters retain orchestration only; extracting their entire state machines would
+exceed this slice. That monolith risk remains; a later safe extraction can move
+step orchestration behind its existing CLI boundary and contract tests.
+
 ### Release finding version assignment
 
 `tests/test_release_greenfield_stamp.py` covers KIT-GF-091: CLOSED/unreleased

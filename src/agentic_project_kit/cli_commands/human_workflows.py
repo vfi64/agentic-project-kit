@@ -11,6 +11,7 @@ import subprocess
 
 import typer
 
+from agentic_project_kit.closeout_receipt import valid_completion_receipt
 from agentic_project_kit.cli_executable import default_agentic_kit, default_python
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
@@ -711,6 +712,7 @@ def work_finish_command(
     selected_paths = _paths_with_pending_communication_refresh(paths or [])
     pr_number: int | None = None
     expected_head_sha = ""
+    completion_receipt = None
     steps: list[dict[str, object]] = [
         _run_step("repo-status", _agentic("transfer", "repo-status")),
         _run_step("protected-diff-plan", _agentic("transfer", "protected-diff-plan", "--label", branch.replace("/", "-"))),
@@ -791,6 +793,14 @@ def work_finish_command(
                 )
                 steps.append(_validate_pr_create_complete_result(lifecycle_step))
                 if all(step["ok"] for step in steps):
+                    child = json.loads(str(lifecycle_step.get("stdout") or "{}"))
+                    pr_number = child.get("pr_number")
+                    if valid_completion_receipt(
+                        child, Path("."), after_pr=pr_number, main_branch="main",
+                        source_head=expected_head_sha,
+                    ):
+                        completion_receipt = child["completion_receipt"]
+                if all(step["ok"] for step in steps) and completion_receipt is None:
                     steps.extend(
                         [
                             _run_step("sync-main", _agentic("transfer", "sync-main")),
@@ -873,6 +883,8 @@ def work_finish_command(
             "pr_body": pr_body,
             "release_note_category": release_note_category,
             "completion_mode": completion_mode,
+            "completion_receipt": completion_receipt,
+            "completion_receipt_reused": completion_receipt is not None,
             "merge": merge,
             "pr_number": pr_number,
             "expected_head_sha": expected_head_sha,

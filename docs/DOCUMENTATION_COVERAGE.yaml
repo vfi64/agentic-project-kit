@@ -3,6 +3,20 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: state-bound-closeout-receipt
+  description: Completed closeout evidence may suppress duplicate outer checks only while its bound state still matches.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - completion_receipt
+    - completion_receipt_reused
+    - observed origin main
+    - full-check
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_closeout_receipt.py
+    - tests/test_human_workflows.py
+    - tests/test_transfer_post_merge_complete_command.py
 - id: release-finding-version-assignment
   description: Release preparation assigns closed unreleased findings under explicit B4 approval.
   documents:
