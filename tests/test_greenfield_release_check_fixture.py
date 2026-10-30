@@ -24,7 +24,7 @@ def test_only_loopback_fixture_can_classify_optional_network_reads_as_local():
         ]
 
 
-@pytest.mark.parametrize("change", ["index", "interpreter", "execute", "root", "route"])
+@pytest.mark.parametrize("change", ["index", "interpreter", "execute", "root", "offline_root", "route"])
 def test_loopback_fixture_refuses_changed_bindings_or_effectful_commands(tmp_path, change):
     config = {"kit": {"interpreter": "owned-python", "index_url": "http://127.0.0.1:1234/simple"}}
     path = tmp_path / ".agentic/config.yaml"
@@ -38,6 +38,8 @@ def test_loopback_fixture_refuses_changed_bindings_or_effectful_commands(tmp_pat
         argv.append("--execute")
     if change == "root":
         argv += ["--root", "/another"]
+    if change == "offline_root":
+        argv = ["agentic-kit", "kit", "status", "--root", "/another", "--json"]
     if change == "route":
         argv = ["agentic-kit", "release-publish"]
     path.write_text(yaml.safe_dump(config))

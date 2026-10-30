@@ -96,6 +96,9 @@ def guard_index(root: Path, python: str, url: str, argv: list[str]):
         raise ValueError("local_release_index_binding_changed")
     if tuple(argv[:3]) not in {("agentic-kit", "kit", "status"), ("agentic-kit", "kit", "update")}:
         raise ValueError("local_release_index_route_refused")
+    allowed = {"--json", "--check-release"} if argv[2] == "status" else {"--json", "--latest"}
+    if not set(argv[3:]) <= allowed:
+        raise ValueError("local_release_index_arguments_refused")
     entry = {"path": argv[1:3], "remote_effects": ["network_read"]}
     if release_effects(argv, entry, FIXTURE) != ["none"]:
         raise ValueError("local_release_index_effect_refused")
