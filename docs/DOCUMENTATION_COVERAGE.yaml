@@ -3,6 +3,20 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: release-finding-version-assignment
+  description: Release preparation assigns closed unreleased findings under explicit B4 approval.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - KIT-GF-091
+    - greenfield_release
+    - fixed_in
+    - BLOCKS
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_release_greenfield_stamp.py
+    - B4
+    - installed-wheel
 - id: release-tag-synchronization
   description: Synchronization preserves existing local tags and diagnoses missing closeout tags.
   documents:

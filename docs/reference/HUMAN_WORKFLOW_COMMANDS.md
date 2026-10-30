@@ -253,6 +253,16 @@ generated release-notes lines; it reaches the release-prep dry-run of the scan
 
 Generate release-notes summary evidence and run release-prep. It is dry-run by default.
 
+KIT-GF-091: in the Kit development checkout, preparation assigns the target
+version only to CLOSED findings with `fixed_in: unreleased`. The
+`greenfield_release` result lists the IDs and source digest; write mode refreshes
+the status projections through the signed `greenfield export` route. B4 signs
+the prepared target-version IDs and exact catalog digest with the release
+metadata change. A CLOSED entry with empty or missing `fixed_in` BLOCKS before
+metadata writes: establish its historical release from evidence first. OPEN
+entries and established versions are preserved; repeated preparation changes
+nothing. External consumer workspaces and VERIFIED_FIXED are unaffected.
+
 KIT-GF-086: `kit-ci-pin-guard` is the first step, in dry-run and write modes.
 It compares the installed Kit numerically with every stable exact CI pin in
 `.github/workflows/` and `.agentic/ci/`. An older runtime blocks with

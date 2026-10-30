@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Assign released versions to closed findings during release preparation, include finding IDs in guarded B4 approval, and block missing version evidence before metadata writes (KIT-GF-091).
+
 ## v1.1.8 - 2026-10-29
 
 - Fixed: Kit synchronization fetches release tags without overwriting local tags, and release-status reports a missing local release tag instead of falling back silently to prepared (KIT-GF-090).

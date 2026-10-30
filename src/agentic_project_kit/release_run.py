@@ -365,6 +365,11 @@ class ReleaseRun:
                 "paths": list(self.state.get("b_paths") or []),
                 "target_commit": target_commit,
             }
+            from agentic_project_kit.release_greenfield_stamp import gate_findings
+
+            finding_gate = gate_findings(self.root, self.version)
+            if finding_gate:
+                gate["greenfield_release"] = finding_gate
             gate.update(resume_plan(self))   # KIT-GF-080: the release's own open release PR
             return gate
         if gate_id == "C2":

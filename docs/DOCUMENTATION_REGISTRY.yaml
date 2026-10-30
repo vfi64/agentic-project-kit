@@ -1889,3 +1889,9 @@ documents:
   - path: docs/reports/release/release-run-1.1.8.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: KIT-GF-091 release finding version assignment and historical reconciliation
+      evidence.

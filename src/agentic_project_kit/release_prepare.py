@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import json
 from pathlib import Path
@@ -29,6 +29,7 @@ class ReleasePrepareResult:
     date: str
     changed_paths: list[str]
     dry_run: bool
+    greenfield_release: dict = field(default_factory=dict)
 
     @property
     def ok(self) -> bool:
@@ -41,6 +42,7 @@ class ReleasePrepareResult:
             "date": self.date,
             "changed_paths": self.changed_paths,
             "dry_run": self.dry_run,
+            "greenfield_release": self.greenfield_release,
         }
 
 
@@ -370,6 +372,11 @@ def prepare_release_state(
             root, version=version, date=date, summary_lines=normalized_summary_lines, dry_run=dry_run
         )
 
+    from agentic_project_kit.release_greenfield_stamp import plan_stamp, apply_stamp
+    from agentic_project_kit.greenfield_status import CATALOG, EXPORT, PACKAGED, RETEST_REPORT
+
+    finding_plan = plan_stamp(root, version)
+
     projected_changelog = _update_changelog(
         _read(root / "CHANGELOG.md"),
         version,
@@ -424,7 +431,13 @@ def prepare_release_state(
             continue
         _write_if_changed(path, text, dry_run=dry_run, changed=changed, root=root)
 
-    return ReleasePrepareResult(version=version, date=date, changed_paths=sorted(changed), dry_run=dry_run)
+    if finding_plan.get("finding_ids"):
+        changed.extend(
+            [str(p) for p in (CATALOG, EXPORT, PACKAGED, RETEST_REPORT)]
+            if dry_run else apply_stamp(root, finding_plan)
+        )
+    return ReleasePrepareResult(version=version, date=date, changed_paths=sorted(changed),
+                                dry_run=dry_run, greenfield_release=finding_plan)
 
 
 # --- KIT-GF-032 slice B: external workspaces -------------------------------------------------
