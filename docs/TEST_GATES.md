@@ -1,5 +1,17 @@
 # Test Gates
 
+### Optional Kit release discovery
+
+`tests/test_kit_release_check.py` covers offline compatibility, all four release
+states, Simple JSON/HTML, post-release selection, pre/dev/yanked exclusion,
+configured index isolation, editable metadata, malformed responses and deadline.
+`tests/test_kit_update.py` requires identical latest/exact signatures and executes
+the exact suggested command after another release appears. CI pin regressions
+cover post-release comparison and subsequent updates. GF-092 uses the
+external_release_check loopback fixture; changed bindings and effectful routes
+are refused. Run its machine contract from a noneditable installed wheel; a
+checkout-only run does not replace installed-wheel evidence.
+
 ### State-bound closeout completion evidence
 
 `tests/test_closeout_receipt.py` uses local bare origins to verify unchanged-state

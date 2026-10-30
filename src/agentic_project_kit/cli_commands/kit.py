@@ -25,6 +25,8 @@ def _emit(payload: dict, json_output: bool) -> None:
             typer.echo("CHANGED_PATHS=" + ", ".join(payload["changed_paths"]))
         if payload.get("blocker"):
             typer.echo("BLOCKER=" + payload["blocker"])
+        if payload.get("release_check"):
+            typer.echo("RELEASE_CHECK=" + json.dumps(payload["release_check"], ensure_ascii=False))
         typer.echo("NEXT_ACTION=" + payload["next_action"])
     if payload["result_status"] == "BLOCKED":
         raise typer.Exit(2)
@@ -41,11 +43,15 @@ def _error(exc: Exception) -> dict:
 @kit_app.command("status")
 def status(
     root: Path = typer.Option(Path("."), "--root", help="Workspace root."),
+    check_release: bool = typer.Option(False, "--check-release", help="Read the configured index for a newer stable release; bounded to 10 seconds."),
     json_output: bool = typer.Option(False, "--json", help="Emit one JSON document."),
 ) -> None:
     """Verify the workspace-owned Kit interpreter and installation without global PATH guesses."""
     try:
         payload = installation_status(root.resolve())
+        if check_release:
+            from agentic_project_kit.kit_release_check import check_release as release_check
+            payload["release_check"] = release_check(root.resolve())
     except (OSError, RuntimeError, ValueError) as exc:
         payload = _error(exc)
     _emit(payload, json_output)
@@ -54,8 +60,9 @@ def status(
 @kit_app.command("update")
 def update(
     version: str = typer.Option(
-        ..., "--version", help="Exact released stable Kit version (X.Y.Z)."
+        "", "--version", help="Exact stable PEP 440 Kit version, including post-releases."
     ),
+    latest: bool = typer.Option(False, "--latest", help="Resolve the latest stable release at the configured index and plan its exact version."),
     root: Path = typer.Option(Path("."), "--root", help="External workspace on a work branch."),
     execute: bool = typer.Option(
         False, "--execute", help="Execute the exactly signed update plan."
@@ -67,9 +74,15 @@ def update(
 ) -> None:
     """Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace."""
     try:
-        payload = run_kit_update(
-            root, version, execute=execute, expected_signature=expected_signature
-        )
+        if bool(version) == latest:
+            raise typer.BadParameter("Choose exactly one of --latest or --version.")
+        if latest:
+            from agentic_project_kit.kit_update_latest import run_latest_update
+            payload = run_latest_update(root, execute=execute, expected_signature=expected_signature)
+        else:
+            payload = run_kit_update(
+                root, version, execute=execute, expected_signature=expected_signature
+            )
     except (OSError, RuntimeError, ValueError) as exc:
         payload = _error(exc)
     _emit(payload, json_output)

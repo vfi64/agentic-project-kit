@@ -19,6 +19,7 @@ The runner never reads or writes the consumer workspace; Git runs with an isolat
 
 from __future__ import annotations
 
+from contextlib import ExitStack
 import json
 import os
 import re
@@ -30,10 +31,12 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
+from agentic_project_kit.greenfield_retest_release_check import release_effects
+
 EXECUTION_CLASSES = ("local", "owner_remote", "kit_release")
 LOCAL_EFFECTS = frozenset({"none", "fetch", "push"})
 MANIFEST_FIXTURES = frozenset({
-    "external_manifest", "external_owned_runtime", "external_owned_interpreter", "external_release",
+    "external_manifest", "external_owned_runtime", "external_owned_interpreter", "external_release", "external_release_check",
 })
 OWNED_FIXTURES = MANIFEST_FIXTURES - {"external_manifest"}
 FIXTURES = ("git_repository", *sorted(MANIFEST_FIXTURES))
@@ -96,7 +99,7 @@ def check_route(command: str | list[str], routes=None) -> dict[str, Any]:
 def execution_class(retest: dict[str, Any], routes=None) -> tuple[str, list[str]]:
     effects: set[str] = set()
     for command in retest["commands"]:
-        effects.update(check_route(command, routes).get("remote_effects") or ["none"])
+        effects.update(release_effects(command, check_route(command, routes), (retest.get("machine") or {}).get("fixture")))
     if retest["workspace_kind"] == "kit_release":
         return "kit_release", sorted(effects)
     return ("local" if effects <= LOCAL_EFFECTS else "owner_remote"), sorted(effects)
@@ -155,7 +158,7 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None) -> No
                     "--all" in argv or finding_id in argv
                 ):
                     raise ValueError(f"{finding_id}: a contract may not retest itself or all findings")
-                if set(entry.get("remote_effects") or ["none"]) - LOCAL_EFFECTS:
+                if set(release_effects(argv, entry, machine["fixture"])) - LOCAL_EFFECTS:
                     raise ValueError(f"{finding_id}: a step needs a remote service: {' '.join(argv)}")
                 ran_retest_route |= any(
                     check_route(c, routes)["path"] == entry["path"] for c in retest["commands"]
@@ -290,7 +293,7 @@ def _check(expect: dict[str, Any], completed: subprocess.CompletedProcess) -> li
     return failures
 
 
-def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[Path, dict[str, str], list[str]]:
+def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=None) -> tuple[Path, dict[str, str], list[str]]:
     root = base / "workspace"
     root.mkdir()
     from agentic_project_kit import __version__
@@ -332,6 +335,11 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[
             variables["kit_python"] = str(python)
         except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
             return root, variables, [f"owned runtime fixture failed: {exc}"]
+    if machine["fixture"] == "external_release_check":
+        from agentic_project_kit.greenfield_retest_release_check import fake_index
+        if stack is None:
+            return root, variables, ["local index lifecycle unavailable"]
+        variables["release_index_url"] = stack.enter_context(fake_index(root, variables["kit_python"]))
     if machine["fixture"] == "external_release":
         from agentic_project_kit.greenfield_retest_release import prepare_release_fixture
 
@@ -342,10 +350,10 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str]) -> tuple[
 
 
 def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
-    with tempfile.TemporaryDirectory(prefix="agentic-kit-retest-") as directory:
+    with tempfile.TemporaryDirectory(prefix="agentic-kit-retest-") as directory, ExitStack() as stack:
         base = Path(directory).resolve()
         env = _environment(base)
-        root, variables, failures = _fixture(machine, base, env)
+        root, variables, failures = _fixture(machine, base, env, stack)
         steps: list[dict[str, Any]] = []
         if failures:
             return {"result": "FAIL", "failures": failures, "steps": steps}
@@ -355,6 +363,12 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
             failed: list[str] = []
             if "run" in step:
                 record["argv"] = raw["run"]
+                if machine["fixture"] == "external_release_check":
+                    from agentic_project_kit.greenfield_retest_release_check import guard_index
+                    try:
+                        guard_index(root, variables["kit_python"], variables["release_index_url"], step["run"])
+                    except (ValueError, OSError) as exc:
+                        return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
                 completed = _run(step["run"], root, env)
                 record["returncode"] = completed.returncode
                 failed = _check(step.get("expect", {}), completed)

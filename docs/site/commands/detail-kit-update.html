@@ -17,7 +17,7 @@
       <header>
         <p class="eyebrow">Current source-tree command contract</p>
         <h1>agentic-kit kit update</h1><p class="lede">Plan a released Kit update; signed execution installs locally, updates CI pins and checks the workspace.</p>
-        <p>Package version 1.1.8 · Manifest <code>abe3d2533d28</code>.</p>
+        <p>Package version 1.1.8 · Manifest <code>416ca32a9c74</code>.</p>
         <p>These options describe this source tree. Check your installed Kit's help;
           a previously published wheel may expose a different interface.</p>
       </header>
@@ -27,7 +27,7 @@
           consent or execute a command. Inspect the actual plan and existing gates.</p>
       </section>
       <section aria-labelledby="conditions"><h2 id="conditions">When this route applies</h2><article class="panel"><h3>Update kit</h3><p>Phase: planning. Required state: branch role = &quot;work&quot;, workspace mode = &quot;managed&quot;, worktree clean = true.</p><p>Required task inputs: version: stable_version.</p><p>Planning can download wheels and write temporary reports; signature-gated install remains separate.</p></article></section>
-      <section aria-labelledby="options"><h2 id="options">Options and arguments</h2><dl class="parameters"><div class="parameter"><dt><code>--version</code></dt><dd>Exact released stable Kit version (X.Y.Z).<br>Required: true · Default: <code>None</code></dd></div><div class="parameter"><dt><code>--root</code></dt><dd>External workspace on a work branch.<br>Required: false · Default: <code>PosixPath(&#x27;.&#x27;)</code></dd></div><div class="parameter"><dt><code>--execute</code></dt><dd>Execute the exactly signed update plan.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--expected-signature</code></dt><dd>Approval signature from the current dry run.<br>Required: false · Default: <code></code></dd></div><div class="parameter"><dt><code>--json</code></dt><dd>Emit one JSON document.<br>Required: false · Default: <code>False</code></dd></div></dl></section>
+      <section aria-labelledby="options"><h2 id="options">Options and arguments</h2><dl class="parameters"><div class="parameter"><dt><code>--version</code></dt><dd>Exact stable PEP 440 Kit version, including post-releases.<br>Required: false · Default: <code></code></dd></div><div class="parameter"><dt><code>--latest</code></dt><dd>Resolve the latest stable release at the configured index and plan its exact version.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--root</code></dt><dd>External workspace on a work branch.<br>Required: false · Default: <code>PosixPath(&#x27;.&#x27;)</code></dd></div><div class="parameter"><dt><code>--execute</code></dt><dd>Execute the exactly signed update plan.<br>Required: false · Default: <code>False</code></dd></div><div class="parameter"><dt><code>--expected-signature</code></dt><dd>Approval signature from the current dry run.<br>Required: false · Default: <code></code></dd></div><div class="parameter"><dt><code>--json</code></dt><dd>Emit one JSON document.<br>Required: false · Default: <code>False</code></dd></div></dl></section>
       <section aria-labelledby="example"><h2 id="example">Inspect local help</h2>
         <pre><code>agentic-kit kit update --help</code></pre>
         <p>This help example is tested in a local fixture. It does not run the workflow.

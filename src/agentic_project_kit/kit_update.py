@@ -12,6 +12,7 @@ import shlex
 import uuid
 
 import yaml
+from packaging.version import Version, InvalidVersion
 
 from agentic_project_kit.kit_installation import discover_kit_installation
 from agentic_project_kit.kit_update_artifacts import PreparedTarget, prepare_target, sha256_file
@@ -107,8 +108,12 @@ class UpdatePlan:
 def build_update_plan(
     root: Path, version: str, run, *, prepare=prepare_target, discover=discover_kit_installation
 ) -> UpdatePlan:
-    if not re.fullmatch(r"(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)", version):
-        raise UpdateBlocked("stable_exact_version_required")
+    try:
+        target_version = Version(version)
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.post[0-9]+)?", version) or target_version.is_prerelease or str(target_version) != version:
+            raise InvalidVersion(version)
+    except InvalidVersion as exc:
+        raise UpdateBlocked("stable_exact_version_required") from exc
     allowed = {
         "docs/reference/agentic-kit-commands.json",
         "docs/reference/AGENTIC_KIT_COMMANDS.md",
@@ -129,9 +134,11 @@ def build_update_plan(
     identity = _identity(run)
     installation = _installation(root, ws.kit.interpreter, discover)
     current = installation["version"]
-    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", current):
-        raise UpdateBlocked("unsupported_installed_version")
-    if tuple(map(int, version.split("."))) < tuple(map(int, current.split("."))):
+    try:
+        current_version = Version(current)
+    except InvalidVersion as exc:
+        raise UpdateBlocked("unsupported_installed_version") from exc
+    if target_version < current_version:
         raise UpdateBlocked("kit_downgrade_refused")
     python = installation["candidate"]["python"]
     # Validate provenance/ambiguity before network resolution or installing even

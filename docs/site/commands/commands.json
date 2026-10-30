@@ -4983,6 +4983,15 @@
         },
         {
           "default": false,
+          "help": "Read the configured index for a newer stable release; bounded to 10 seconds.",
+          "name": "check_release",
+          "opts": [
+            "--check-release"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
           "help": "Emit one JSON document.",
           "name": "json_output",
           "opts": [
@@ -5004,13 +5013,22 @@
       "lifecycle_rank": null,
       "params": [
         {
-          "default": null,
-          "help": "Exact released stable Kit version (X.Y.Z).",
+          "default": "",
+          "help": "Exact stable PEP 440 Kit version, including post-releases.",
           "name": "version",
           "opts": [
             "--version"
           ],
-          "required": true
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Resolve the latest stable release at the configured index and plan its exact version.",
+          "name": "latest",
+          "opts": [
+            "--latest"
+          ],
+          "required": false
         },
         {
           "default": "PosixPath('.')",

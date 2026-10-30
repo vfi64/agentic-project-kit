@@ -3,14 +3,15 @@ from __future__ import annotations
 
 from pathlib import Path
 import re
+from packaging.version import Version
 
 from agentic_project_kit.kit_ci_pin_patterns import EXACT_KIT_PIN
 
 
-def _numeric_version(version: str) -> tuple[int, ...]:
-    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version):
+def _numeric_version(version: str) -> Version:
+    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.post[0-9]+)?", version):
         raise ValueError("stable X.Y.Z version required")
-    return tuple(int(part) for part in version.split("."))
+    return Version(version)
 
 
 def _read_pins(root: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:

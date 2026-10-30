@@ -693,3 +693,35 @@ def test_gf086_preview_target_runtime_and_execute_pins_before_sync(workspace):
     assert result['result_status'] == 'PASS', result
     assert observations[0] == 'target_preview_without_execute'
     assert observations[-1] == 'execute_after_install_and_pins'
+
+
+def test_latest_and_exact_signatures_match_and_suggested_exact_execution_survives_new_release(workspace, monkeypatch):
+    import shlex
+    from agentic_project_kit import kit_update_latest as latest
+    from agentic_project_kit.cli_commands import kit as cli
+
+    monkeypatch.setattr(latest, "release_installation", lambda root: {"installed": "1.0.18", "installation_kind": "wheel"})
+    release = {"result": "UPDATE_AVAILABLE", "latest_release": "1.0.19"}
+    dependencies = dict(run=workspace.run, discover=workspace.discover, prepare=workspace.prepare)
+    planned = latest.run_latest_update(workspace.root, check=lambda *a, **k: release, **dependencies)
+    exact = workspace.update()
+    assert planned["resolved_version"] == "1.0.19"
+    assert planned["approval_signature"] == exact["approval_signature"]
+    release["latest_release"] = "1.0.20"
+    def execute(root, version, **kwargs):
+        assert version == "1.0.19"
+        return run_kit_update(root, version, **kwargs, **dependencies)
+    monkeypatch.setattr(cli, "run_kit_update", execute)
+    result = CliRunner().invoke(app, shlex.split(planned["next_action"])[1:])
+    assert result.exit_code == 0, result.output
+    assert json.loads(result.stdout)["installed_version"] == "1.0.19"
+
+
+def test_post_release_can_be_planned_and_its_pin_can_be_updated_again(workspace):
+    result = run_kit_update(workspace.root, "1.0.19.post1", run=workspace.run,
+        discover=workspace.discover, prepare=lambda tmp, python, index_url, version, run: workspace.prepare(tmp, python, index_url, "1.0.19", run))
+    assert result["result_status"] == "AWAITING_APPROVAL"
+    source = SOURCE.replace(b"1.0.18", b"1.0.19.post1")
+    desired = plan_ci_pins(source, MANAGED_CI_HEADER.encode() + b"\n" + source, "1.0.20")
+    assert b"1.0.20" in desired[CI_TEMPLATE_PATH]
+    assert b"post1" not in desired[CI_TEMPLATE_PATH]

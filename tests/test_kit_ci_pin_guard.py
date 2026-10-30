@@ -99,3 +99,10 @@ def test_kit_repository_without_exact_ci_pins_passes():
 def test_invalid_installed_version_blocks_when_pinned(tmp_path):
     pin(tmp_path, '1.1.5')
     assert check_kit_ci_pin(tmp_path, 'unknown')['reasons'] == ['installed_kit_version_invalid']
+
+
+def test_post_release_pin_is_compared_without_crashing_or_authorizing_downgrade(tmp_path):
+    pin(tmp_path, "1.1.8.post1")
+    assert check_kit_ci_pin(tmp_path, "1.1.8")["result_status"] == "BLOCKED"
+    assert check_kit_ci_pin(tmp_path, "1.1.8.post1")["result_status"] == "PASS"
+    assert check_kit_ci_pin(tmp_path, "1.1.9")["result_status"] == "PASS"

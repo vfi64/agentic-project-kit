@@ -1554,6 +1554,24 @@ Expected: Dry-run names KIT-GF-091 without writing; preparation assigns its vers
 
 Expected result fields: `{"assertions": ["greenfield_release.finding_ids contains KIT-GF-091 before assignment and is empty after assignment; export changed_paths is empty."]}`.
 
+## KIT-GF-092
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md
+
+Execution class: local (effects: none); machine contract: Local Simple-index release observation and branch-free no-op planning from an installed owned runtime; no remote service or installation.
+
+Preconditions: Disposable owned runtime and local fake Simple index; run from an installed wheel.
+
+```text
+agentic-kit kit status --check-release --json
+agentic-kit kit update --latest --json
+```
+
+Expected: Stable post-releases included; pre/dev/yanked excluded; offline status preserved; no-op on main; unknown blocks planning.
+
+Expected result fields: `{"assertions": ["release_check result is explicit; latest never installs or guesses a target."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Added: Optional single-index stable Kit release discovery and latest-version update planning with unchanged offline status, stable post-release support and exact signed execution (KIT-GF-092).
+
 - Fixed: Reuse state-bound successful PR closeout evidence across nested wrappers; retain full checks whenever repository, remote or handoff evidence changes.
 
 - Fixed: Assign released versions to closed findings during release preparation, include finding IDs in guarded B4 approval, and block missing version evidence before metadata writes (KIT-GF-091).
