@@ -39,9 +39,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2686-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/c2-status-priorities`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -271,15 +271,6 @@ Wenn der Bootstrap grün ist:
         "docs/planning/PROJECT_DIRECTION.yaml",
         "docs/DOCUMENTATION_REGISTRY.yaml"
       ],
-      "id": "website-evidence-and-command-navigation",
-      "status": "active",
-      "summary": "Improve the public website with gated quickstart, evidence and governed command navigation"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
       "id": "independent-held-out-gate-validation",
       "status": "planned",
       "summary": "Test known Kit gate claims against independently developed held-out faults"
@@ -466,15 +457,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2686-handoff-refresh",
+    "branch": "codex/c2-status-priorities",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b351ea163361a4532a09fb3e698b99ba747ae41a",
-    "head_matches_origin_main": true,
-    "head_short": "b351ea16",
+    "head": "807c38f6efa404165dd9ca675d63a3953ae42dd1",
+    "head_matches_origin_main": false,
+    "head_short": "807c38f6",
     "local_path": "cd /path/to/",
-    "origin_main": "b351ea163361a4532a09fb3e698b99ba747ae41a",
-    "origin_main_short": "b351ea16",
-    "worktree_clean": false
+    "origin_main": "83823ff1b66fe658b4d4108319edcec3e7afd6cd",
+    "origin_main_short": "83823ff1",
+    "worktree_clean": true
   }
 }
 ```

@@ -136,15 +136,6 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
-        "id": "website-evidence-and-command-navigation",
-        "status": "active",
-        "summary": "Improve the public website with gated quickstart, evidence and governed command navigation"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
         "id": "independent-held-out-gate-validation",
         "status": "planned",
         "summary": "Test known Kit gate claims against independently developed held-out faults"
@@ -332,14 +323,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2686-handoff-refresh",
+      "branch": "codex/c2-status-priorities",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "b351ea163361a4532a09fb3e698b99ba747ae41a",
-      "head_matches_origin_main": true,
+      "head": "807c38f6efa404165dd9ca675d63a3953ae42dd1",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "b351ea163361a4532a09fb3e698b99ba747ae41a",
-      "worktree_clean": false
+      "origin_main": "83823ff1b66fe658b4d4108319edcec3e7afd6cd",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -519,14 +510,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2686-handoff-refresh",
+    "branch": "codex/c2-status-priorities",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b351ea163361a4532a09fb3e698b99ba747ae41a",
-    "head_matches_origin_main": true,
+    "head": "807c38f6efa404165dd9ca675d63a3953ae42dd1",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "b351ea163361a4532a09fb3e698b99ba747ae41a",
-    "worktree_clean": false
+    "origin_main": "83823ff1b66fe658b4d4108319edcec3e7afd6cd",
+    "worktree_clean": true
   },
   "rules": [
     {
