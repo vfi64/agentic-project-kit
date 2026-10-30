@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b351ea163361a4532a09fb3e698b99ba747ae41a
-  short: b351ea16
-  subject: Stamp closed finding versions during release preparation (KIT-GF-091) (#2686)
+  full: 854a5c2c6db7998a616b0503bda9b422653dfaa2
+  short: 854a5c2c
+  subject: Reconcile C2 ledger status and prioritize administrative overhead reduction (#2688)
 last_substantive_work_state:
-  full: b351ea163361a4532a09fb3e698b99ba747ae41a
-  short: b351ea16
-  subject: Stamp closed finding versions during release preparation (KIT-GF-091) (#2686)
+  full: 854a5c2c6db7998a616b0503bda9b422653dfaa2
+  short: 854a5c2c
+  subject: Reconcile C2 ledger status and prioritize administrative overhead reduction (#2688)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
