@@ -46,7 +46,7 @@ meta:
       completion file. Historical specifications and bounded evidence remain linked references;
       Git preserves earlier states.
     owner_order:
-      decided: '2026-10-21'
+      decided: '2026-10-30'
       rule: Work in this order; a later item starts only after the earlier one is done or the owner
         reorders it. Security-relevant authority findings still come first (kit-control-effectiveness-measurement
         ordering_rule).
@@ -96,11 +96,37 @@ meta:
         status: done
         scope: Owner accepted option A on 2026-10-26. Implement shared identity-bound selection and its website projection; no release or paid benchmark.
       - id: external-retest-machine-contracts
-        status: blocked
-        scope: Main item remains active; c1 and c3 are done. Committed consumer
-          1.1.7 evidence already records all 48 local contracts PASS, with no missing
-          contracts. C2 still needs ledger entries for 087/088 and the four remaining
-          historical scenario retests; remote effects remain explicitly deferred.
+        step: c2-ledger-status-reconciliation
+        status: done
+        scope: Bounded read-only reconciliation is complete. The committed consumer
+          1.1.8 ledger already verifies 087/088. The parent and c2 remain open for
+          historical scenarios; those separately gated scenarios do not block the
+          owner-approved administrative-effort follow-up proposals below.
+      - id: decomplexification-audit-roadmap
+        step: transfer-lifecycle-consolidation
+        status: planned
+        scope: First measure current repeated closeout checks, render passes and
+          administrative handoff work using the existing invocation ledger. Propose
+          a bounded reduction aligned with next-turn-workflow-kernel; an additional
+          facade alone is not evidence of less work. Preserve deterministic gates.
+      - id: mechanize-doc-registry-scope-reconcile
+        status: planned
+        scope: Complete residual registry, scope and coverage consistency around
+          the existing command; do not rebuild delivered reconciliation routes.
+      - id: context-budgeted-handoff-projections
+        status: planned
+        scope: Complete Greenfield/Brownfield profiles and bounded deterministic
+          validation of existing packets. Paid benchmark repetitions remain deferred;
+          smaller context alone does not prove sufficient context.
+      - id: lifecycle-backlog-clearance
+        status: planned
+        scope: Resolve or explicitly defer remaining lifecycle findings and planning
+          residuals with planning-ideas-residual-cleanup. Keep completed work central
+          and distinguish maintained obligations from unfinished implementation.
+      - id: reports-retention-policy
+        status: planned
+        scope: Review the delivered retention implementation against exemptions
+          and protected-diff requirements before adding any cleanup mechanism.
       - id: kit-control-effectiveness-measurement
         step: gate-and-context-benchmark
         status: deferred
@@ -114,6 +140,31 @@ meta:
           to start K0, website implementation, a release or owner-remote retests.
         status_semantics: Queue status and an item's lifecycle status are distinct;
           explicit deferral does not close an active item or satisfy blocked acceptance.
+      reordered_20261030:
+        basis: Owner approved C2/status reconciliation followed by the ordered
+          administrative-effort reductions above, prioritizing determinism.
+        gates_preserved: true
+        implementation_authorized_by_queue: false
+        authorization_boundary: Priorities select bounded proposals, not execution
+          authority. Existing dependencies, security-first ordering, maintainer
+          decisions, explicit budgets and release/publication permissions remain.
+        residual_c2_boundary: Ledger reconciliation is complete; the four historical
+          scenario retests and owner-remote observations remain separately gated.
+    progress_update_20261030:
+      scope: Read-only consumer reconciliation and Kit planning/status update;
+        no consumer edits, repeat retests, release or publication.
+      consumer_result: Committed Kit 1.1.8 adoption records PASS 49, FAIL 0,
+        NO_MACHINE_CONTRACT 0 and NOT_RUN_LOCALLY 40; overall INCOMPLETE.
+      ledger_result: 087/088 are already VERIFIED_FIXED; exact snapshot, evidence
+        path and digest are recorded once in c2-external-ledger-resync.ledger_reconciliation.
+      c2_boundary: 003, 009, 012 and 018 remain FIXED without the outstanding
+        independent scenarios; 081/082 retain their separate observation requirements.
+      website_result: W0-W4 and D1 are done; close the completed website umbrella
+        without reimplementing its steps or implying independent agent-context acceptance.
+      gf091_implementation_pr: 2686
+      gf091_publication_status: unreleased
+      gf091_evidence: docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md
+      release_authorized: false
     progress_update_20261026:
       release: Kit 1.1.6 is published and fully closed out; no new release is authorized by this slice.
       release_evidence: docs/reports/release/release-run-1.1.6.json
@@ -169,11 +220,11 @@ meta:
       44 seams is the last committed completed-cycle baseline, not a current remote claim.
     - Keep B2 blocked until explicit Brownfield completion acceptance; keep B3 Stage 1 report-only
       and Stage 2 maintainer-gated.
-    - 'GF current progress: consumer 1.1.7 evidence already records 48 local PASS with no missing
-      contracts. Do not repeat these solely because older planning stopped at 1.1.5/1.1.6.
-      C2 remains incomplete: reconcile missing 087/088 ledger entries and separately scope
-      003/009/012/018 scenario retests. Owner-remote observations remain deferred; never infer
-      VERIFIED_FIXED from a Kit closure or classify 40 NOT_RUN_LOCALLY as successful.'
+    - 'GF current progress: committed consumer 1.1.8 evidence records 49 local PASS and
+      already verifies ledger entries 087/088. Do not repeat completed local contracts.
+      C2 remains incomplete: separately scope 003/009/012/018 scenario retests and preserve
+      owner-remote observation boundaries. Never infer VERIFIED_FIXED from a Kit closure
+      or classify 40 NOT_RUN_LOCALLY as successful.'
     - Clear or explicitly defer lifecycle backlog and review remaining governance registrations
       before strict lifecycle adoption.
     - Reconcile partial implementations before starting registry, retention, onboarding or GUI
@@ -2089,9 +2140,9 @@ plans:
     tracks are split into separately reviewable slices.
   - Audit classifications remain an orthogonal planning dimension to manifest
     surface; they must not become a second public command taxonomy.
-  - The first implementation slice should prefer the DPA stable API facade unless
-    newer evidence shows transfer-lifecycle consolidation is no longer competing
-    with active next-turn workflow work.
+  - The owner-approved 2026-10-30 follow-up prioritizes bounded transfer-lifecycle
+    overhead measurement and reduction aligned with next-turn-workflow-kernel.
+    DPA facade work remains a later candidate; no competing workflow authority is added.
   steps:
   - id: k0-command-composition-reaudit
     status: done
@@ -2181,10 +2232,12 @@ plans:
       note: Manifest surface remains the authoritative usage/presentation layer;
         audit categories describe decomplexification role and lifecycle risk.
     first_implementation_recommendation:
-      target: dpa-stable-api
-      rationale: DPA has a smaller public command cluster, no identified active
-        competing Direction item, and mostly HISTORICAL/MIGRATION public names;
-        transfer has higher payoff but overlaps next-turn-workflow-kernel.
+      target: transfer-lifecycle-consolidation
+      rationale: Owner prioritized administrative-effort reduction on 2026-10-30.
+        Start with a current bounded cost baseline using existing evidence, then
+        propose a minimal deterministic reduction aligned with next-turn-workflow-kernel.
+        The earlier DPA-first recommendation favored a smaller isolated command cluster;
+        it is superseded as execution priority, not discarded as a later candidate.
     coordination_constraints:
     - pre-gui-hardening-plan remains a dependency because GUI and website projections
       consume command-manifest surface.
@@ -2493,7 +2546,10 @@ plans:
   - docs/reports/COMMAND_USAGE_AUDIT_20261015.md
   - docs/reports/self-hosting/DRIFT_QUALITY_AUDIT_20261015.md
 - id: website-evidence-and-command-navigation
-  status: active
+  status: done
+  completion_scope: All recorded W0-W4 and D1 steps are complete. The umbrella
+    status is reconciled on 2026-10-30; no new website implementation is implied.
+    Agent-context effectiveness remains in its independent open/deferred items.
   title: Improve the public website with gated quickstart, evidence and governed command navigation
   decision_status: accepted_by_owner
   integrated_at: '2026-10-17'
@@ -4945,25 +5001,34 @@ plans:
       only then.'
   - id: c2-external-ledger-resync
     status: blocked
-    progress: The historical 1.1.5 resync recorded 38 PASS and six missing contracts.
-      Committed consumer 1.1.7 evidence now records 48 PASS, no FAIL, no missing contracts and
-      40 NOT_RUN_LOCALLY (overall INCOMPLETE). Of the original 16 OPEN families, 12 are now
-      VERIFIED_FIXED; 003, 009, 012 and 018 remain FIXED. All 46 PASS families present in the
-      consumer ledger are VERIFIED_FIXED; 087/088 have PASS evidence but no ledger entries.
-      GF-081/082 are recorded as FIXED in 1.1.5, not VERIFIED_FIXED.
-    blocker: The local adoption/retest prerequisite is already met by committed 1.1.7 evidence.
-      Remaining work is the 087/088 ledger reconciliation and four historical scenario retests,
-      not a blanket rerun of local contracts. Remote/mutating scenarios require separately
-      scoped owner authorization; no unrun case may be relabeled VERIFIED_FIXED.
-    external_evidence: Consumer-owned docs/validation/evidence/kit-1.1.7-adoption.json at snapshot 420ab30db4fc8e21e44b22dcec7894273bf26857; SHA256 recorded in progress_update_20261029.
+    progress: The historical 1.1.5 and 1.1.7 counts remain in their dated snapshots.
+      Current committed consumer 1.1.8 evidence records 49 PASS, no FAIL, no missing
+      contracts and 40 NOT_RUN_LOCALLY (overall INCOMPLETE). The ledger already
+      verifies 087/088. Of the original 16 OPEN families, 003, 009, 012 and 018
+      remain FIXED. GF-081/082 remain FIXED in 1.1.5, not VERIFIED_FIXED.
+    blocker: Remaining work is the four historical scenario retests and separately
+      authorized owner-remote observations, not ledger creation for 087/088 or a
+      blanket rerun of local contracts. No unrun case may become VERIFIED_FIXED.
+    ledger_reconciliation:
+      status: done
+      observed_at: '2026-10-30'
+      consumer_snapshot: 37d539ded098f091339d6b82d7e41c6e129dacb7
+      ledger_blob_sha: d44b3b384633586210add18e8429fc398d6b9d07
+      evidence_path_in_consumer: docs/validation/evidence/kit-1.1.8-adoption.json
+      evidence_sha256: c52675701a0df01498210c253274b1e70b570d31da4967e661169088e5020b93
+      verified_families:
+      - KIT-GF-087
+      - KIT-GF-088
+      authority: Consumer-owned committed ledger and installed-wheel PASS evidence;
+        this Kit slice only reads existing evidence and assigns no external status.
     remaining_work:
-    - Reconcile consumer ledger entries for 087/088 against the already committed PASS evidence; preserve consumer-owned adjudication.
     - '003: exercise the declared external handoff reader and missing-predecessor scenarios in a disposable initialized workspace.'
     - '009/012: authorize a specific hosted external branch, changed path and CI-backed commit/PR/merge/handoff sequence before execution.'
     - '018: authorize the named already-merged branch cleanup and verify the requested local/remote refs are absent.'
     - '081: observe only a real owner-decided release abandonment; never stop a release just to test it.'
     - '082: inspect DOWNLOAD events on the next authorized kit-update plan; successful downloads alone do not prove transient-error retry behavior.'
-    - A consumer update to 1.1.8 is separate from the already completed 1.1.7 local evidence and is not performed by this planning slice.
+    - Preserve the already committed consumer 1.1.8 adoption and 087/088 verification;
+      no new adoption or repeated all-family retest is required by this reconciliation.
     acceptance:
     - The Cockpit retests the 16 OPEN-against-Kit-closure families with the released contracts and
       records VERIFIED_FIXED only from committed evidence; families that still fail are reported as
