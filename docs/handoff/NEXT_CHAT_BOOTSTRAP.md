@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `b351ea163361a4532a09fb3e698b99ba747ae41a` (`b351ea16`)
-- Handoff freshness marker: `b351ea16`
-- Branch at generation: `docs/post-pr2686-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `807c38f6efa404165dd9ca675d63a3953ae42dd1` (`807c38f6`)
+- Handoff freshness marker: `807c38f6`
+- Branch at generation: `codex/c2-status-priorities`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -84,7 +84,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `decomplexification-audit-roadmap` (active): Reduce command-surface complexity through compatibility-preserving facades
 - `context-budgeted-handoff-projections` (planned): Reduce agent token consumption through deterministic context projections
 - `kit-control-effectiveness-measurement` (planned): Measure the effectiveness and cost of the Kit's own control mechanisms
-- `website-evidence-and-command-navigation` (active): Improve the public website with gated quickstart, evidence and governed command navigation
 - `independent-held-out-gate-validation` (planned): Test known Kit gate claims against independently developed held-out faults
 - `optional-structural-evidence-provider-evaluation` (planned): Evaluate optional structural evidence providers for impact-aware context
 - `next-turn-workflow-kernel` (active): Move recurring next-step execution from chat discipline into a deterministic local workflow kernel
