@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-10-30T18:04:26.584827+00:00",
+  "generated_at_utc": "2026-10-30T18:09:20.206466+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -59,9 +59,9 @@
   "repo": {
     "branch": "feat/kit-gf-092-release-check",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "340881837471d7bf63c843d0b06275bfb749b85c",
+    "head": "eab4b115d41693c169e46ef7189490747b8a6acd",
     "head_matches_origin_main": false,
-    "head_short": "34088183",
+    "head_short": "eab4b115",
     "local_path": "cd /path/to/",
     "origin_main": "62ea664c3121a4e4c26dec3685cde90313add416",
     "origin_main_short": "62ea664c",

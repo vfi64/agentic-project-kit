@@ -459,9 +459,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "feat/kit-gf-092-release-check",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "340881837471d7bf63c843d0b06275bfb749b85c",
+    "head": "eab4b115d41693c169e46ef7189490747b8a6acd",
     "head_matches_origin_main": false,
-    "head_short": "34088183",
+    "head_short": "eab4b115",
     "local_path": "cd /path/to/",
     "origin_main": "62ea664c3121a4e4c26dec3685cde90313add416",
     "origin_main_short": "62ea664c",
@@ -490,7 +490,7 @@ Wenn der Bootstrap grün ist:
 3. Danach die nächste aktive Aufgabe aus `docs/planning/PROJECT_DIRECTION.yaml` oder dem externen Workspace-State bearbeiten.
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 416ca32a9c74). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 416ca32a9c74. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 52fa7baf8daf). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 52fa7baf8daf. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -500,5 +500,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: c6eb64554131fd2f636f956038264e8453039a252945bfa4a032d93b3b913a02
-- docs/reference/agentic-kit-commands.json: 2204392adf4654e18b7bdfa8b2282a113a2d7114f319f40264ce17854f2fbae5
+- docs/reference/AGENTIC_KIT_COMMANDS.md: 04a3817a6d6acdeaa3ed89389c5a72bed6f515098923f508fd34db044235c1e5
+- docs/reference/agentic-kit-commands.json: 4ae65d7169ea678c889e2cd9debd75b0bce2773878968545ae8793ee83418bcd
