@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `854a5c2c6db7998a616b0503bda9b422653dfaa2` (`854a5c2c`), after `Reconcile C2 ledger status and prioritize administrative overhead reduction (#2688)`.
-Last substantive work state is `854a5c2c6db7998a616b0503bda9b422653dfaa2` (`854a5c2c`), after `Reconcile C2 ledger status and prioritize administrative overhead reduction (#2688)`.
+Current verified main/admin HEAD is `5e1f5ccc8d3c74d25eb5cc12179985b0287e7815` (`5e1f5ccc`), after `Reuse state-bound completion evidence across PR closeout wrappers (#2690)`.
+Last substantive work state is `5e1f5ccc8d3c74d25eb5cc12179985b0287e7815` (`5e1f5ccc`), after `Reuse state-bound completion evidence across PR closeout wrappers (#2690)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

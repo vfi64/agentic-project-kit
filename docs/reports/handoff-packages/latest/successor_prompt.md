@@ -39,9 +39,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `codex/closeout-completion-receipt`
-- head_matches_origin_main: `False`
-- worktree_clean: `True`
+- branch: `docs/post-pr2690-handoff-refresh`
+- head_matches_origin_main: `True`
+- worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -457,15 +457,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "codex/closeout-completion-receipt",
+    "branch": "docs/post-pr2690-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "f0bb7734976d7cb47e88420a6a9e0d581512e3bb",
-    "head_matches_origin_main": false,
-    "head_short": "f0bb7734",
+    "head": "5e1f5ccc8d3c74d25eb5cc12179985b0287e7815",
+    "head_matches_origin_main": true,
+    "head_short": "5e1f5ccc",
     "local_path": "cd /path/to/",
-    "origin_main": "94af156e9c9d5dd5e2f0cb8b20675c663aecfde5",
-    "origin_main_short": "94af156e",
-    "worktree_clean": true
+    "origin_main": "5e1f5ccc8d3c74d25eb5cc12179985b0287e7815",
+    "origin_main_short": "5e1f5ccc",
+    "worktree_clean": false
   }
 }
 ```
