@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 15b1bc4e86f6e718d2562505e386e2d7ea6053620172cb93ed7f12ae15b0fd0c
 - docs/reference/agentic-kit-commands.json: 3383329cf21f71f199ad2a6fbe0d8870e15f76a31fd6f2583bfe774a2a47a66d
-## Operational documentation refresh state after PR #2688
+## Operational documentation refresh state after PR #2690
 
-Current administrative handoff refresh state is `854a5c2c` (`Reconcile C2 ledger status and prioritize administrative overhead reduction (#2688)`). Continue next only after this post-PR2688 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `5e1f5ccc` (`Reuse state-bound completion evidence across PR closeout wrappers (#2690)`). Continue next only after this post-PR2690 refresh is committed and merged; the next substantive slice must be created from fresh main.
