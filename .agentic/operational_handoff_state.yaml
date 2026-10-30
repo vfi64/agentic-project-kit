@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 351498868b39023b08669cb4b1ef0cfc9501a6cc
-  short: 35149886
-  subject: Reconcile consumer retest planning with committed evidence (#2684)
+  full: b351ea163361a4532a09fb3e698b99ba747ae41a
+  short: b351ea16
+  subject: Stamp closed finding versions during release preparation (KIT-GF-091) (#2686)
 last_substantive_work_state:
-  full: 351498868b39023b08669cb4b1ef0cfc9501a6cc
-  short: 35149886
-  subject: Reconcile consumer retest planning with committed evidence (#2684)
+  full: b351ea163361a4532a09fb3e698b99ba747ae41a
+  short: b351ea16
+  subject: Stamp closed finding versions during release preparation (KIT-GF-091) (#2686)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

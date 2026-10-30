@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `351498868b39023b08669cb4b1ef0cfc9501a6cc` (`35149886`), after `Reconcile consumer retest planning with committed evidence (#2684)`.
-Last substantive work state is `351498868b39023b08669cb4b1ef0cfc9501a6cc` (`35149886`), after `Reconcile consumer retest planning with committed evidence (#2684)`.
+Current verified main/admin HEAD is `b351ea163361a4532a09fb3e698b99ba747ae41a` (`b351ea16`), after `Stamp closed finding versions during release preparation (KIT-GF-091) (#2686)`.
+Last substantive work state is `b351ea163361a4532a09fb3e698b99ba747ae41a` (`b351ea16`), after `Stamp closed finding versions during release preparation (KIT-GF-091) (#2686)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
