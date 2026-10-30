@@ -64,5 +64,21 @@ the combined 38 cases passed. They cover dry-run, CLOSED versus OPEN assignment,
 preservation of existing versions, canonical exports, idempotency, empty/missing
 version refusal before writes and ID/catalog binding in the B4 signature.
 
-Full-suite, wheel and final gate evidence is recorded at slice closeout. No
-release, tag or package publication is authorized or performed by this slice.
+Final local validation (2026-10-30):
+
+- Full suite: `./.venv/bin/python -m pytest -q -n 4 --dist worksteal`:
+  4331 passed. The full suite includes the release-content checkout audits and
+  the Changelog hygiene tests; no audit or category rule was weakened.
+- Ruff, check, check-docs, doctor and canonical site build: exit 0. Doctor retains
+  76 report-only lifecycle findings; these are not findings closure.
+- Fresh virtual environment, non-editable `pip install .`, invoked outside the
+  source checkout: KIT-GF-091 PASS 1, FAIL 0. The imported Kit is under the fresh
+  environment's site-packages. The candidate retains development metadata 1.1.8;
+  this is not a new published build.
+- Historical PRs are included in their assigned tags and absent from the
+  immediately preceding release tags. No external ledger was changed.
+
+The metadata fixture proves local planning, assignment, export and idempotency;
+the independent B4 unit test proves signature binding. No live release-run or
+publication acceptance is claimed. No release, tag or package publication was
+performed by this slice.
