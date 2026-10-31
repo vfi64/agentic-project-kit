@@ -1538,7 +1538,7 @@ Expected result fields: `{"assertions": ["release tag restored", "external docto
 
 ## KIT-GF-091
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.9.
 Evidence: docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md
 
 Execution class: local (effects: none); machine contract: Real installed release-prep plans and assigns CLOSED/unreleased, exports through the signed route and is idempotent in an isolated Kit-layout fixture.
@@ -1556,7 +1556,7 @@ Expected result fields: `{"assertions": ["greenfield_release.finding_ids contain
 
 ## KIT-GF-092
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.9.
 Evidence: docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md
 
 Execution class: local (effects: none); machine contract: Local Simple-index release observation and branch-free no-op planning from an installed owned runtime; no remote service or installation.
