@@ -1918,3 +1918,6 @@ documents:
     owner: maintainers
     status: active
     summary: KIT-GF-093 installed-wheel machine result with normalized execution origin.
+  - path: docs/reports/release/release-run-1.1.10.json
+    class: evidence/log
+    owner: maintainers
