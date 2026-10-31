@@ -37,6 +37,7 @@ EXECUTION_CLASSES = ("local", "owner_remote", "kit_release")
 LOCAL_EFFECTS = frozenset({"none", "fetch", "push"})
 MANIFEST_FIXTURES = frozenset({
     "external_manifest", "external_owned_runtime", "external_owned_interpreter", "external_release", "external_release_check",
+    "external_release_check_stale_editable",
 })
 OWNED_FIXTURES = MANIFEST_FIXTURES - {"external_manifest"}
 FIXTURES = ("git_repository", *sorted(MANIFEST_FIXTURES))
@@ -335,11 +336,13 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
             variables["kit_python"] = str(python)
         except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
             return root, variables, [f"owned runtime fixture failed: {exc}"]
-    if machine["fixture"] == "external_release_check":
-        from agentic_project_kit.greenfield_retest_release_check import fake_index
+    if machine["fixture"] in {"external_release_check", "external_release_check_stale_editable"}:
+        from agentic_project_kit.greenfield_retest_release_check import STALE_EDITABLE_FIXTURE, fake_index
         if stack is None:
             return root, variables, ["local index lifecycle unavailable"]
-        variables["release_index_url"] = stack.enter_context(fake_index(root, variables["kit_python"]))
+        variables["release_index_url"] = stack.enter_context(
+            fake_index(root, variables["kit_python"], stale_editable=machine["fixture"] == STALE_EDITABLE_FIXTURE)
+        )
     if machine["fixture"] == "external_release":
         from agentic_project_kit.greenfield_retest_release import prepare_release_fixture
 
@@ -363,7 +366,7 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
             failed: list[str] = []
             if "run" in step:
                 record["argv"] = raw["run"]
-                if machine["fixture"] == "external_release_check":
+                if machine["fixture"] in {"external_release_check", "external_release_check_stale_editable"}:
                     from agentic_project_kit.greenfield_retest_release_check import guard_index
                     try:
                         guard_index(root, variables["kit_python"], variables["release_index_url"], step["run"])

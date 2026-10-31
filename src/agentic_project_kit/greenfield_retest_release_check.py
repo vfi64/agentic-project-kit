@@ -11,6 +11,11 @@ import threading
 import yaml
 
 FIXTURE = "external_release_check"
+# KIT-GF-093: the same loopback index with an editable owned runtime whose distribution
+# metadata names an older version than the package that runs (a checkout after a pull).
+STALE_EDITABLE_FIXTURE = "external_release_check_stale_editable"
+STALE_METADATA_VERSION = "0.0.1"
+FIXTURES = frozenset({FIXTURE, STALE_EDITABLE_FIXTURE})
 
 
 def release_effects(command, entry, fixture=None):
@@ -18,7 +23,7 @@ def release_effects(command, entry, fixture=None):
     path = tuple(entry["path"])
     if path == ("kit", "status") and "--check-release" not in argv:
         return ["none"]
-    if fixture == FIXTURE and path in {("kit", "status"), ("kit", "update")}:
+    if fixture in FIXTURES and path in {("kit", "status"), ("kit", "update")}:
         rest = argv[3:]
         # No execute, exact install, alternate root, or other effectful options.
         allowed = {"--json", "--check-release"} if path[1] == "status" else {"--json", "--latest"}
@@ -28,7 +33,7 @@ def release_effects(command, entry, fixture=None):
 
 
 @contextmanager
-def fake_index(root: Path, python: str):
+def fake_index(root: Path, python: str, *, stale_editable: bool = False):
     # The fixture owns a noneditable package copy. Source-driven test harnesses
     # may have copied an editable origin marker into that copy's metadata;
     # normalize only this disposable runtime, never the invoking installation.
@@ -45,8 +50,24 @@ def fake_index(root: Path, python: str):
                     "p=pathlib.Path(d._path)/'direct_url.json'",
                     "assert p.resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())",
                     "p.write_text('"
-                    + '{"url":"file:///synthetic-owned-runtime","dir_info":{"editable":false}}'
-                    + "')",
+                    + '{"url":"file:///synthetic-owned-runtime","dir_info":{"editable":'
+                    + ("true" if stale_editable else "false")
+                    + "}}')",
+                    *(
+                        [
+                            "q=pathlib.Path(d._path)/'METADATA'",
+                            "assert q.resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())",
+                            "t=q.read_text()",
+                            "q.write_text(t.replace('Version: '+d.version, 'Version: "
+                            + STALE_METADATA_VERSION
+                            + "', 1))",
+                            # the index offers the version that runs, as a checkout after a pull
+                            "import agentic_project_kit as k",
+                            "print(k.__version__)",
+                        ]
+                        if stale_editable
+                        else []
+                    ),
                 ]
             ),
         ],
@@ -55,7 +76,7 @@ def fake_index(root: Path, python: str):
         text=True,
         timeout=10,
     )
-    version = observed.stdout.strip()
+    version = observed.stdout.strip().splitlines()[-1]
     data_path = root / "release-index.json"
     data_path.write_text(
         json.dumps({"files": [{"filename": f"agentic_project_kit-{version}-py3-none-any.whl"}]})

@@ -1,0 +1,55 @@
+{
+  "authority": "Kit retest of the installed Kit; VERIFIED_FIXED belongs to the consuming workspace",
+  "catalog_sha256": "87b5735d02c4f6a676b7bfd43e3bf99ae2c921eda4948fa2e53251ae24d1634d",
+  "counts": {
+    "FAIL": 0,
+    "NOT_RUN_LOCALLY": 0,
+    "NO_MACHINE_CONTRACT": 0,
+    "PASS": 1
+  },
+  "executed_from": "site-packages/agentic_project_kit",
+  "kind": "external_findings_retest",
+  "kit_version": "1.1.9",
+  "result_status": "PASS",
+  "results": [
+    {
+      "covers": "Editable owned runtime after a pull: metadata 0.0.1, running package the installed Kit version; the release check uses the running version and keeps the metadata as a note; latest planning stays a checkout hint.",
+      "execution_class": "local",
+      "failures": [],
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-093",
+      "kit_state": "CLOSED",
+      "remote_effects": [
+        "none"
+      ],
+      "result": "PASS",
+      "steps": [
+        {
+          "argv": [
+            "agentic-kit",
+            "kit",
+            "status",
+            "--check-release",
+            "--json"
+          ],
+          "failures": [],
+          "index": 0,
+          "returncode": 0
+        },
+        {
+          "argv": [
+            "agentic-kit",
+            "kit",
+            "update",
+            "--latest",
+            "--json"
+          ],
+          "failures": [],
+          "index": 1,
+          "returncode": 0
+        }
+      ]
+    }
+  ],
+  "schema_version": 1
+}

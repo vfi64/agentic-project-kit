@@ -6877,6 +6877,74 @@
         },
         "verification": "Local machine contract only; independent consumer verification remains separate."
       }
+    },
+    {
+      "id": "KIT-GF-093",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Disposable editable owned runtime whose distribution metadata names an older version than its running package; local fake Simple index; run from an installed wheel."
+        ],
+        "commands": [
+          "agentic-kit kit status --check-release --json",
+          "agentic-kit kit update --latest --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "An editable install is judged by its running package version; the stale metadata version is reported beside it and no update is claimed."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "release_check.installed equals the running Kit version, release_check.metadata_version names the stale metadata, release_check.result is CURRENT; kit update --latest gives the checkout hint without a plan."
+          ]
+        },
+        "machine": {
+          "fixture": "external_release_check_stale_editable",
+          "covers": "Editable owned runtime after a pull: metadata 0.0.1, running package the installed Kit version; the release check uses the running version and keeps the metadata as a note; latest planning stays a checkout hint.",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--check-release",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "release_check.result": "CURRENT",
+                  "release_check.installation_kind": "editable",
+                  "release_check.installed": "{kit_version}",
+                  "release_check.metadata_version": "0.0.1"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "kit",
+                "update",
+                "--latest",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "checkout_required": true
+                }
+              }
+            }
+          ]
+        },
+        "verification": "Local machine contract only; independent consumer verification remains separate."
+      }
     }
   ],
   "kind": "external_findings_catalog",

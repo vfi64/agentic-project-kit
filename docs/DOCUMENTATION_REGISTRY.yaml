@@ -1908,3 +1908,13 @@ documents:
   - path: docs/reports/release/release-run-1.1.9.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: KIT-GF-093 editable release check uses the running package version evidence.
+  - path: docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: KIT-GF-093 installed-wheel machine result with normalized execution origin.
