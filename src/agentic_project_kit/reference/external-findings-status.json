@@ -7234,7 +7234,7 @@
         "verification": "Local machine contract only; independent consumer verification remains separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.10",
       "id": "KIT-GF-093",
       "kit_state": "CLOSED",
       "prs": [],
@@ -7380,5 +7380,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 52,
   "schema_version": 1,
-  "source_sha256": "87b5735d02c4f6a676b7bfd43e3bf99ae2c921eda4948fa2e53251ae24d1634d"
+  "source_sha256": "0a99e42c0680a167694b8822a2d3bc8bd4b6538f7858f1aa459a3d8ee8a6dc27"
 }

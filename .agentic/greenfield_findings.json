@@ -6881,7 +6881,7 @@
     {
       "id": "KIT-GF-093",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.10",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md",
       "external_retest": {

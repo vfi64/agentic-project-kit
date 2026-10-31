@@ -58,7 +58,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.1.9",
+            "detail": "project.version=1.1.10",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -262,12 +262,14 @@
         "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
       },
       {
-        "blockers": [],
+        "blockers": [
+          "PyPI publication workflow evidence for this version is unverified."
+        ],
         "evidence": [
           {
-            "detail": "The PyPI publication workflow for version 1.1.9 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+            "detail": "PyPI publication workflow evidence for this version is unverified.",
             "evidence_type": "release-pypi-workflow",
-            "status": "verified"
+            "status": "unverified"
           }
         ],
         "id": "current-release-pypi-workflow",
@@ -275,7 +277,7 @@
         "required": false,
         "scope": "historical-observation",
         "scope_note": "C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.",
-        "status": "verified",
+        "status": "unverified",
         "text": "The PyPI publication workflow for the current package version completed successfully in its release run (C3)."
       }
     ],
@@ -289,8 +291,8 @@
     "status": "PASS",
     "status_counts": {
       "planned": 0,
-      "unverified": 0,
-      "verified": 15
+      "unverified": 1,
+      "verified": 14
     }
   },
   "command_catalog": {
@@ -4913,7 +4915,7 @@
             "required": false
           },
           {
-            "default": "1.1.9",
+            "default": "1.1.10",
             "help": "",
             "name": "version",
             "opts": [
@@ -6821,7 +6823,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.1.9",
+            "default": "1.1.10",
             "help": "",
             "name": "version",
             "opts": [
@@ -7832,7 +7834,7 @@
             "required": false
           },
           {
-            "default": "1.1.9",
+            "default": "1.1.10",
             "help": "",
             "name": "version",
             "opts": [
@@ -14758,7 +14760,7 @@
     ],
     "execution_authorized": false,
     "kind": "command_detail_projection",
-    "manifest_sha": "357a6861eea4",
+    "manifest_sha": "c75ff9f747e1",
     "schema_version": 1
   },
   "explanation_projection": {
@@ -14820,15 +14822,14 @@
     },
     "release": {
       "date": "2026-10-31",
-      "entry_count": 3,
+      "entry_count": 2,
       "notes": [
-        "Added: Optional single-index stable Kit release discovery and latest-version update planning with unchanged offline status, stable post-release support and exact signed execution (KIT-GF-092).",
-        "Fixed: Reuse state-bound successful PR closeout evidence across nested wrappers; retain full checks whenever repository, remote or handoff evidence changes.",
-        "Fixed: Assign released versions to closed findings during release preparation, include finding IDs in guarded B4 approval, and block missing version evidence before metadata writes (KIT-GF-091)."
+        "Zenodo DOI verification pending for v1.1.10.",
+        "Fixed: Repaired the release check of an editable installation: it reads the running package version instead of the stale distribution metadata of its last editable install and reports differing metadata as metadata_version. The check stays read-only and bounded; an unimportable package is UNKNOWN without a guessed version. A regression machine contract with an editable fixture covers it (KIT-GF-093)."
       ],
       "source": "CHANGELOG.md",
       "status": "recorded",
-      "version": "1.1.9"
+      "version": "1.1.10"
     },
     "safety_evidence": {
       "baseline": {
@@ -15961,7 +15962,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "147b837beb19a82c9a4cadaf1c9f2afc8202b39ad2da61d0ef63a13aaccd5065",
-        "docs/reference/agentic-kit-commands.json": "538111e363d56c7e1738e1bbe3848dd53f2519a421a65f6d32b8761ddaf5260b",
+        "docs/reference/agentic-kit-commands.json": "aa52355e172993426f74c11f580dd6f0044899997a8f116436554f149fe87515",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -15997,7 +15998,7 @@
       "version": "0.2.0"
     },
     "kind": "bounded_history_projection",
-    "manifest_sha": "357a6861eea4",
+    "manifest_sha": "c75ff9f747e1",
     "overhead": {
       "admin_refresh_prs": 83,
       "evidence_class": "historical classification",
@@ -16053,14 +16054,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "357a6861eea4",
+    "manifest_sha": "c75ff9f747e1",
     "package_name": "agentic-project-kit",
-    "package_version": "1.1.9",
+    "package_version": "1.1.10",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.9",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "357a6861eea4",
+    "reproduced_manifest_sha": "c75ff9f747e1",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
@@ -16096,7 +16097,7 @@
     "current_release_tag": "v1.1.9",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.1.9",
-    "current_version": "1.1.9",
+    "current_version": "1.1.10",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.23840219"
@@ -16127,7 +16128,7 @@
       ],
       "worktree_clean": "boolean"
     },
-    "manifest_sha": "357a6861eea4",
+    "manifest_sha": "c75ff9f747e1",
     "routes": [
       {
         "command": "agentic-kit check",
