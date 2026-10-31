@@ -1572,6 +1572,24 @@ Expected: Stable post-releases included; pre/dev/yanked excluded; offline status
 
 Expected result fields: `{"assertions": ["release_check result is explicit; latest never installs or guesses a target."]}`.
 
+## KIT-GF-093
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md
+
+Execution class: local (effects: none); machine contract: Editable owned runtime after a pull: metadata 0.0.1, running package the installed Kit version; the release check uses the running version and keeps the metadata as a note; latest planning stays a checkout hint.
+
+Preconditions: Disposable editable owned runtime whose distribution metadata names an older version than its running package; local fake Simple index; run from an installed wheel.
+
+```text
+agentic-kit kit status --check-release --json
+agentic-kit kit update --latest --json
+```
+
+Expected: An editable install is judged by its running package version; the stale metadata version is reported beside it and no update is claimed.
+
+Expected result fields: `{"assertions": ["release_check.installed equals the running Kit version, release_check.metadata_version names the stale metadata, release_check.result is CURRENT; kit update --latest gives the checkout hint without a plan."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

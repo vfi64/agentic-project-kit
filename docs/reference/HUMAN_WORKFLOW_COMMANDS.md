@@ -147,6 +147,14 @@ next_safe_action. Planning an actual upgrade still requires the existing work
 branch, provenance, artifact and signature checks. Exact managed pins support
 X.Y.Z and X.Y.Z.postN; other existing exact-pin restrictions remain intact.
 
+For an editable installation (KIT-GF-093) installed is the running package's
+`__version__`, read in the owned interpreter; an editable checkout keeps the
+distribution metadata of its last `pip install -e` after every pull. When that
+metadata differs, release_check adds metadata_version beside installed. An
+editable package that cannot be imported gives UNKNOWN with reason
+running_version_unavailable; the metadata version is never used as a fallback.
+Wheel installations are unchanged.
+
 Start a normal Kit work branch before adoption. A Kit runtime containing this
 route can update an older workspace-owned runtime:
 

@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 91,
+    "CLOSED": 92,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 51,
+    "local": 52,
     "owner_remote": 33
   },
   "findings": [
@@ -7170,6 +7170,78 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit kit status --check-release --json",
+          "agentic-kit kit update --latest --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "An editable install is judged by its running package version; the stale metadata version is reported beside it and no update is claimed."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "release_check.installed equals the running Kit version, release_check.metadata_version names the stale metadata, release_check.result is CURRENT; kit update --latest gives the checkout hint without a plan."
+          ]
+        },
+        "machine": {
+          "covers": "Editable owned runtime after a pull: metadata 0.0.1, running package the installed Kit version; the release check uses the running version and keeps the metadata as a note; latest planning stays a checkout hint.",
+          "fixture": "external_release_check_stale_editable",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "release_check.installation_kind": "editable",
+                  "release_check.installed": "{kit_version}",
+                  "release_check.metadata_version": "0.0.1",
+                  "release_check.result": "CURRENT",
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--check-release",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "checkout_required": true,
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "update",
+                "--latest",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable editable owned runtime whose distribution metadata names an older version than its running package; local fake Simple index; run from an installed wheel."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Local machine contract only; independent consumer verification remains separate.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-093",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -7306,7 +7378,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 51,
+  "machine_contracts": 52,
   "schema_version": 1,
-  "source_sha256": "6aa7c3a3312ece7b6a97d522c7bf4a403f59cbeef26af7c6f8252217835120b1"
+  "source_sha256": "87b5735d02c4f6a676b7bfd43e3bf99ae2c921eda4948fa2e53251ae24d1634d"
 }

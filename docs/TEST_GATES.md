@@ -12,6 +12,18 @@ external_release_check loopback fixture; changed bindings and effectful routes
 are refused. Run its machine contract from a noneditable installed wheel; a
 checkout-only run does not replace installed-wheel evidence.
 
+### Editable release check uses the running version
+
+`tests/test_kit_release_check.py` runs the real installation probe against
+synthetic distributions on PYTHONPATH: an editable install with older metadata
+reports its running version and metadata_version (CURRENT, no false update), newer
+metadata gives no false AHEAD, a wheel keeps its previous output and an
+unimportable editable package is UNKNOWN with running_version_unavailable without
+an index read. GF-093 uses the external_release_check_stale_editable fixture: the
+GF-092 loopback index with an editable owned runtime whose METADATA names 0.0.1
+while its package runs the installed Kit version. Run the machine contract from a
+noneditable installed wheel as for GF-092.
+
 ### State-bound closeout completion evidence
 
 `tests/test_closeout_receipt.py` uses local bare origins to verify unchanged-state

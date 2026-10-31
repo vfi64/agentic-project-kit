@@ -22,10 +22,24 @@ from agentic_project_kit.workspace import load_workspace
 RELEASE_TIMEOUT_SECONDS = 10
 MAX_INDEX_BYTES = 2 * 1024 * 1024
 PROJECT = "agentic-project-kit"
+# KIT-GF-093: an editable install keeps the distribution metadata of its last
+# `pip install -e` while the checkout's code runs. The installed version of an
+# editable install is therefore the running package's __version__; the metadata
+# version is only reported beside it. A failed import never falls back to it.
 _METADATA = """import importlib.metadata as m, json
 d=m.distribution("agentic-project-kit")
 u=json.loads(d.read_text("direct_url.json") or "{}")
-print(json.dumps({"installed":d.version,"installation_kind":"editable" if u.get("dir_info",{}).get("editable") is True else "wheel"}))"""
+editable=u.get("dir_info",{}).get("editable") is True
+out={"installed":d.version,"installation_kind":"editable" if editable else "wheel"}
+if editable:
+    out["metadata_version"]=d.version
+    try:
+        import agentic_project_kit as k
+        out["installed"]=str(getattr(k,"__version__","") or "")
+    except Exception as exc:
+        out["installed"]=""
+        out["running_error"]=type(exc).__name__
+print(json.dumps(out))"""
 
 
 def release_installation(root: Path) -> dict:
@@ -55,11 +69,18 @@ def release_installation(root: Path) -> dict:
             if result.returncode:
                 continue
             data = json.loads(result.stdout)
-            Version(data["installed"])
             if data["installation_kind"] not in {"wheel", "editable"}:
                 continue
             if resolution.status != "FOUND" and data["installation_kind"] != "editable":
                 continue
+            if data["installation_kind"] == "editable" and not data.get("installed"):
+                return {
+                    "installed": None,
+                    "installation_kind": "editable",
+                    "metadata_version": data.get("metadata_version"),
+                    "reason": "running_version_unavailable",
+                }
+            Version(data["installed"])
             return data
         except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):
             continue
@@ -170,6 +191,8 @@ def check_release(root: Path, *, installation: dict | None = None, fetch=None) -
         "installation_kind": metadata.get("installation_kind"),
         "result": "UNKNOWN",
     }
+    if metadata.get("metadata_version") and metadata.get("metadata_version") != metadata.get("installed"):
+        result["metadata_version"] = metadata["metadata_version"]
     if not metadata.get("installed"):
         return {**result, "reason": metadata.get("reason", "installation_metadata_unavailable")}
     try:

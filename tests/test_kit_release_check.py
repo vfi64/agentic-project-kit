@@ -357,3 +357,83 @@ def test_noneditable_package_outside_owned_environment_is_not_release_authority(
         ),
     )
     assert release.release_installation(root)["installed"] is None
+
+
+def _fake_distribution(tmp_path, *, metadata, running, editable=True):
+    """A synthetic agentic-project-kit distribution on sys.path whose metadata and package disagree."""
+    site = tmp_path / "site"
+    package = site / "agentic_project_kit"
+    package.mkdir(parents=True)
+    (package / "__init__.py").write_text(f'__version__ = "{running}"\n' if running else "raise ImportError('broken')\n")
+    info = site / f"agentic_project_kit-{metadata}.dist-info"
+    info.mkdir()
+    (info / "METADATA").write_text(f"Metadata-Version: 2.1\nName: agentic-project-kit\nVersion: {metadata}\n")
+    (info / "direct_url.json").write_text(
+        json.dumps({"url": "file:///checkout", "dir_info": {"editable": editable}})
+    )
+    return site
+
+
+def _probe(site):
+    import os
+    import sys
+
+    env = dict(os.environ, PYTHONPATH=str(site))
+    done = subprocess.run(
+        [sys.executable, "-c", release._METADATA], capture_output=True, text=True, env=env, timeout=30
+    )
+    assert done.returncode == 0, done.stderr
+    return json.loads(done.stdout)
+
+
+def test_editable_install_reports_the_running_package_not_stale_metadata(tmp_path):
+    """KIT-GF-093: a checkout after a pull runs 1.1.9 while its metadata still says 1.1.4."""
+    data = _probe(_fake_distribution(tmp_path, metadata="1.1.4", running="1.1.9"))
+    assert data == {"installed": "1.1.9", "installation_kind": "editable", "metadata_version": "1.1.4"}
+
+
+def test_editable_install_with_newer_metadata_is_not_reported_ahead(tmp_path, root):
+    data = _probe(_fake_distribution(tmp_path, metadata="9.0.0", running="1.1.8"))
+    result = release.check_release(root, installation=data, fetch=lambda url: index(("1.1.8", False)))
+    assert result["result"] == "CURRENT" and result["installed"] == "1.1.8"
+    assert result["metadata_version"] == "9.0.0"
+
+
+def test_stale_editable_metadata_no_longer_reports_an_update(tmp_path, root):
+    data = _probe(_fake_distribution(tmp_path, metadata="1.1.4", running="1.1.9"))
+    result = release.check_release(root, installation=data, fetch=lambda url: index(("1.1.9", False)))
+    assert result["result"] == "CURRENT" and result["installed"] == "1.1.9"
+    assert result["metadata_version"] == "1.1.4"
+
+
+def test_wheel_install_keeps_the_metadata_version(tmp_path, root):
+    data = _probe(_fake_distribution(tmp_path, metadata="1.1.8", running="1.1.8", editable=False))
+    assert data == {"installed": "1.1.8", "installation_kind": "wheel"}
+    result = release.check_release(root, installation=data, fetch=lambda url: index(("1.1.8", False)))
+    assert result["result"] == "CURRENT" and "metadata_version" not in result
+
+
+def test_unimportable_editable_package_is_unknown_never_the_metadata(tmp_path, root, monkeypatch):
+    from types import SimpleNamespace
+
+    data = _probe(_fake_distribution(tmp_path, metadata="1.1.4", running=""))
+    assert data["installed"] == "" and data["running_error"] == "ImportError"
+    python = root / ".venv/bin/python"
+    python.parent.mkdir(parents=True)
+    python.touch()
+    monkeypatch.setattr(
+        release,
+        "discover_kit_installation",
+        lambda *a, **k: SimpleNamespace(
+            status="FOUND", installation=SimpleNamespace(candidate=SimpleNamespace(python=python))
+        ),
+    )
+    monkeypatch.setattr(
+        release.subprocess,
+        "run",
+        lambda argv, **kw: subprocess.CompletedProcess(argv, 0, json.dumps(data), ""),
+    )
+    metadata = release.release_installation(root)
+    assert metadata["installed"] is None and metadata["reason"] == "running_version_unavailable"
+    result = release.check_release(root, installation=metadata, fetch=lambda url: pytest.fail("no index read"))
+    assert result["result"] == "UNKNOWN" and result["reason"] == "running_version_unavailable"

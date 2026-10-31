@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: The release check judges an editable installation by its running package version instead of the distribution metadata of its last editable install, reports differing metadata as metadata_version and is UNKNOWN when the running version cannot be read (KIT-GF-093).
+
 ## v1.1.9 - 2026-10-31
 
 - Added: Optional single-index stable Kit release discovery and latest-version update planning with unchanged offline status, stable post-release support and exact signed execution (KIT-GF-092).
