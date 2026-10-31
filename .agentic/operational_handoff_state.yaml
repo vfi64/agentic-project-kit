@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: c567c0648865ae6c537f9d8fd4a7c4620ad5a0a4
-  short: c567c064
-  subject: Archive release 1.1.9 evidence (#2698)
+  full: 859f933d03c6e9d2960da53c3e6cdcd25b84e7cf
+  short: 859f933d
+  subject: Judge an editable install by its running Kit version in the release check (KIT-GF-093) (#2700)
 last_substantive_work_state:
-  full: c567c0648865ae6c537f9d8fd4a7c4620ad5a0a4
-  short: c567c064
-  subject: Archive release 1.1.9 evidence (#2698)
+  full: 859f933d03c6e9d2960da53c3e6cdcd25b84e7cf
+  short: 859f933d
+  subject: Judge an editable install by its running Kit version in the release check (KIT-GF-093) (#2700)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
