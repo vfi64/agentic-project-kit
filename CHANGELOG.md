@@ -2,8 +2,11 @@
 
 ## v1.1.10 - 2026-10-31
 
-- Zenodo DOI verification pending for v1.1.10.
 - Fixed: Repaired the release check of an editable installation: it reads the running package version instead of the stale distribution metadata of its last editable install and reports differing metadata as metadata_version. The check stays read-only and bounded; an unimportable package is UNKNOWN without a guessed version. A regression machine contract with an editable fixture covers it (KIT-GF-093).
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.1.10 DOI `10.5281/zenodo.23844213`.
+
+Zenodo v1.1.10 DOI: 10.5281/zenodo.23844213
 
 ## v1.1.9 - 2026-10-31
 
