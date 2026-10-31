@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 04a3817a6d6acdeaa3ed89389c5a72bed6f515098923f508fd34db044235c1e5
 - docs/reference/agentic-kit-commands.json: 4ae65d7169ea678c889e2cd9debd75b0bce2773878968545ae8793ee83418bcd
-## Operational documentation refresh state after PR #2690
+## Operational documentation refresh state after PR #2692
 
-Current administrative handoff refresh state is `5e1f5ccc` (`Reuse state-bound completion evidence across PR closeout wrappers (#2690)`). Continue next only after this post-PR2690 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `5f4fc6f0` (`Add stable Kit release discovery and signed latest planning (KIT-GF-092) (#2692)`). Continue next only after this post-PR2692 refresh is committed and merged; the next substantive slice must be created from fresh main.

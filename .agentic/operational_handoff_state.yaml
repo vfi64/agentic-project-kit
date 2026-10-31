@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 5e1f5ccc8d3c74d25eb5cc12179985b0287e7815
-  short: 5e1f5ccc
-  subject: Reuse state-bound completion evidence across PR closeout wrappers (#2690)
+  full: 5f4fc6f0a0c700642e75258c04f72a43ce9464c6
+  short: 5f4fc6f0
+  subject: Add stable Kit release discovery and signed latest planning (KIT-GF-092) (#2692)
 last_substantive_work_state:
-  full: 5e1f5ccc8d3c74d25eb5cc12179985b0287e7815
-  short: 5e1f5ccc
-  subject: Reuse state-bound completion evidence across PR closeout wrappers (#2690)
+  full: 5f4fc6f0a0c700642e75258c04f72a43ce9464c6
+  short: 5f4fc6f0
+  subject: Add stable Kit release discovery and signed latest planning (KIT-GF-092) (#2692)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
