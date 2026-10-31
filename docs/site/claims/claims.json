@@ -261,14 +261,12 @@
       "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
     },
     {
-      "blockers": [
-        "PyPI publication workflow evidence for this version is unverified."
-      ],
+      "blockers": [],
       "evidence": [
         {
-          "detail": "PyPI publication workflow evidence for this version is unverified.",
+          "detail": "The PyPI publication workflow for version 1.1.10 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
           "evidence_type": "release-pypi-workflow",
-          "status": "unverified"
+          "status": "verified"
         }
       ],
       "id": "current-release-pypi-workflow",
@@ -276,7 +274,7 @@
       "required": false,
       "scope": "historical-observation",
       "scope_note": "C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.",
-      "status": "unverified",
+      "status": "verified",
       "text": "The PyPI publication workflow for the current package version completed successfully in its release run (C3)."
     }
   ],
@@ -290,7 +288,7 @@
   "status": "PASS",
   "status_counts": {
     "planned": 0,
-    "unverified": 1,
-    "verified": 14
+    "unverified": 0,
+    "verified": 15
   }
 }
