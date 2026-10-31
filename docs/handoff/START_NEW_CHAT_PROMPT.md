@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 5f99e4aa38d76357911f819fb50183b0409f8decef6abda4e45139c5af9fb974
 - docs/reference/agentic-kit-commands.json: 538111e363d56c7e1738e1bbe3848dd53f2519a421a65f6d32b8761ddaf5260b
-## Operational documentation refresh state after PR #2698
+## Operational documentation refresh state after PR #2700
 
-Current administrative handoff refresh state is `c567c064` (`Archive release 1.1.9 evidence (#2698)`). Continue next only after this post-PR2698 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `859f933d` (`Judge an editable install by its running Kit version in the release check (KIT-GF-093) (#2700)`). Continue next only after this post-PR2700 refresh is committed and merged; the next substantive slice must be created from fresh main.
