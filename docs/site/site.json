@@ -14822,9 +14822,8 @@
     },
     "release": {
       "date": "2026-10-31",
-      "entry_count": 2,
+      "entry_count": 1,
       "notes": [
-        "Zenodo DOI verification pending for v1.1.10.",
         "Fixed: Repaired the release check of an editable installation: it reads the running package version instead of the stale distribution metadata of its last editable install and reports differing metadata as metadata_version. The check stays read-only and bounded; an unimportable package is UNKNOWN without a guessed version. A regression machine contract with an editable fixture covers it (KIT-GF-093)."
       ],
       "source": "CHANGELOG.md",
@@ -16059,7 +16058,7 @@
     "package_version": "1.1.10",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
-    "release_tag": "v1.1.9",
+    "release_tag": "v1.1.10",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "c75ff9f747e1",
     "requires_python": ">=3.10",
@@ -16074,7 +16073,7 @@
       "orchestrator": 35,
       "primitive": 107
     },
-    "version_doi": "10.5281/zenodo.23840219"
+    "version_doi": "10.5281/zenodo.23844213"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -16094,13 +16093,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.9",
+    "current_release_tag": "v1.1.10",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.9",
+    "current_verified_release": "1.1.10",
     "current_version": "1.1.10",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23840219"
+    "version_doi": "10.5281/zenodo.23844213"
   },
   "task_projection": {
     "execution_authorized": false,
