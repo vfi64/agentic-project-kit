@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 859f933d03c6e9d2960da53c3e6cdcd25b84e7cf
-  short: 859f933d
-  subject: Judge an editable install by its running Kit version in the release check (KIT-GF-093) (#2700)
+  full: 8f5bdc76a5cd0488581da09eac6e878f3a6a380b
+  short: 8f5bdc76
+  subject: Name the substance of the KIT-GF-093 changelog entry for the release-quality gate (#2702)
 last_substantive_work_state:
-  full: 859f933d03c6e9d2960da53c3e6cdcd25b84e7cf
-  short: 859f933d
-  subject: Judge an editable install by its running Kit version in the release check (KIT-GF-093) (#2700)
+  full: 8f5bdc76a5cd0488581da09eac6e878f3a6a380b
+  short: 8f5bdc76
+  subject: Name the substance of the KIT-GF-093 changelog entry for the release-quality gate (#2702)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
