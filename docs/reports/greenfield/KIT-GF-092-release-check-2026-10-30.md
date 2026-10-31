@@ -58,15 +58,55 @@ is read or changed, and this evidence does not claim consumer VERIFIED_FIXED.
 ## Verification
 
 The existing 95 update/installation tests passed before changes. Focused tests
-cover JSON/HTML, index failure, response limits/deadline, editable metadata,
+cover JSON/HTML, index failure, deadline, editable metadata,
 offline compatibility, CURRENT/UPDATE_AVAILABLE/AHEAD, post/pre/dev/yanked policy,
 selector exclusion and guarded exact execution. The signature regression compares
 latest and exact plans and executes the proposed exact command after a newer
 candidate appears. Installed-wheel machine evidence and final gates are recorded
-in the slice PR. No release publication is part of this finding.
+below and in the companion JSON result. No release publication is part of this finding.
 
 Review-only modularization exception: existing updater and retest orchestration
 remain large; new policy is delegated to focused modules. Extracting their full
 state machines would exceed this slice. A later safe step is an independently
 tested orchestration extraction behind the current CLI contracts. Existing typed
 plans and retest steps suffice; another DCO layer would duplicate them.
+
+## Final candidate results
+
+- Full unchanged suite, run serially: 4410 passed, 560 warnings.
+- Ruff, project check, check-docs, doctor and protected-diff-plan: PASS.
+  Doctor retains 76 pre-existing report-only lifecycle findings.
+- Fresh noneditable branch installation: version 1.1.8, packaging
+  26.3; GF-092 installed-wheel retest: PASS, one executed
+  contract, zero failed or unexecuted contracts.
+- Code/test candidate commit: `144dfbd19c6982519f3555ebb9ae5740ee16d95e`.
+  Source tree: `03d9f11bb905d5ca7e8f2350bc0080682b1e49cd`; test tree: `c37af602ac6af1448f8da571db6d8fe0ae0177a1`.
+- Command manifest SHA: `52fa7baf8daf`.
+- Machine-readable wheel result:
+  [GF-092 result](KIT-GF-092-release-check-2026-10-30.json), SHA-256 `041c5ed613951e02d99e025c45a13434e09c8094a0982f47cc778557339ac706`.
+  Its execution-origin path omits the private host prefix; all contract step
+  outcomes and the catalog binding are preserved.
+- A parallel macOS run was interrupted after a process-start hang. Native
+  inspection located its child in close-open-file-descriptors before exec,
+  with a Tcl/Tk notifier active. It is not reported as PASS; the complete serial
+  run above is the local full-suite evidence. No assertions or gates were skipped.
+
+## Reproduction and artifact completeness
+
+Implementation, tests, catalog source, machine fixture, generated reference and
+catalog projections, documentation and bounded final outcomes are repository
+artifacts. No checked-in file depends on a temporary helper or virtualenv.
+The machine contract is preserved in `.agentic/greenfield_findings.json` and
+exported with the installed Kit; it creates its own disposable loopback index.
+
+Recreate the wheel evidence by making a fresh virtualenv, installing this checkout
+noneditably with pip, and invoking its installed `agentic-kit greenfield retest
+--id KIT-GF-092 --json`. Check distribution metadata for editable=false first.
+Run the full suite with `python -m pytest -q --durations=10`, then `ruff check .`,
+`agentic-kit check --json`, `agentic-kit check-docs --json` and `agentic-kit doctor`.
+Dependency requirements are declared in pyproject.toml; the saved test virtualenv
+and orchestration helpers are disposable and are not required for reproduction.
+
+Temporary raw logs and process samples are diagnostics, not unique required
+inputs or the only final verification record. This evidence does not claim a
+real consumer update, cross-platform certification or release publication.
