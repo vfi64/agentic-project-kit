@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8f5bdc76a5cd0488581da09eac6e878f3a6a380b` (`8f5bdc76`), after `Name the substance of the KIT-GF-093 changelog entry for the release-quality gate (#2702)`.
-Last substantive work state is `8f5bdc76a5cd0488581da09eac6e878f3a6a380b` (`8f5bdc76`), after `Name the substance of the KIT-GF-093 changelog entry for the release-quality gate (#2702)`.
+Current verified main/admin HEAD is `bdea133cddcbb45c212dc495a22f35d07ace8566` (`bdea133c`), after `Release 1.1.10 (#2704)`.
+Last substantive work state is `bdea133cddcbb45c212dc495a22f35d07ace8566` (`bdea133c`), after `Release 1.1.10 (#2704)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
