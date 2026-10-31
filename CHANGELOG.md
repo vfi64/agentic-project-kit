@@ -1,6 +1,6 @@
 ## Unreleased
 
-- Fixed: The release check judges an editable installation by its running package version instead of the distribution metadata of its last editable install, reports differing metadata as metadata_version and is UNKNOWN when the running version cannot be read (KIT-GF-093).
+- Fixed: Repaired the release check of an editable installation: it reads the running package version instead of the stale distribution metadata of its last editable install and reports differing metadata as metadata_version. The check stays read-only and bounded; an unimportable package is UNKNOWN without a guessed version. A regression machine contract with an editable fixture covers it (KIT-GF-093).
 
 ## v1.1.9 - 2026-10-31
 
