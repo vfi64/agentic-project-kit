@@ -71,7 +71,7 @@ state machines would exceed this slice. A later safe step is an independently
 tested orchestration extraction behind the current CLI contracts. Existing typed
 plans and retest steps suffice; another DCO layer would duplicate them.
 
-## Final candidate results
+## Completed local baseline before compatibility correction
 
 - Full unchanged suite, run serially: 4410 passed, 560 warnings.
 - Ruff, project check, check-docs, doctor and protected-diff-plan: PASS.
@@ -110,3 +110,21 @@ and orchestration helpers are disposable and are not required for reproduction.
 Temporary raw logs and process samples are diagnostics, not unique required
 inputs or the only final verification record. This evidence does not claim a
 real consumer update, cross-platform certification or release publication.
+
+## Compatibility correction before merge
+
+The final contract review found that the exact updater's new PEP 440 comparison
+had broadened the accepted installed-version domain beyond the previous stable
+X.Y.Z contract. Two regressions first demonstrated AWAITING_APPROVAL for installed
+pre/dev versions where unsupported_installed_version was required. The narrow
+installed-version preflight now preserves the old refusal and additionally
+accepts the explicitly approved stable post-release form. A positive regression
+protects installed post-release support. All 113 targeted tests passed after the
+correction; no assertion was weakened. The automatic closeout was stopped before
+merge. The complete baseline above is not presented as a full-suite run of this
+subsequent correction; final full-suite and wheel evidence must be refreshed
+before completion.
+
+Correction input `src/agentic_project_kit/kit_update.py` SHA-256: `be320fe9b184bc4050147fbe4a44b3553fe7979c6befcf829b4fe7ffd0c8b325`.
+
+Correction input `tests/test_kit_update.py` SHA-256: `d294e3d54566016d3af0e1d2baf2d151b2fd0fd235e7114e0c9598fb9fbffcaf`.

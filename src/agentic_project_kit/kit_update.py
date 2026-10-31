@@ -135,6 +135,8 @@ def build_update_plan(
     installation = _installation(root, ws.kit.interpreter, discover)
     current = installation["version"]
     try:
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.post[0-9]+)?", current):
+            raise InvalidVersion(current)
         current_version = Version(current)
     except InvalidVersion as exc:
         raise UpdateBlocked("unsupported_installed_version") from exc

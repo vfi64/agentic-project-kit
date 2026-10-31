@@ -725,3 +725,17 @@ def test_post_release_can_be_planned_and_its_pin_can_be_updated_again(workspace)
     desired = plan_ci_pins(source, MANAGED_CI_HEADER.encode() + b"\n" + source, "1.0.20")
     assert b"1.0.20" in desired[CI_TEMPLATE_PATH]
     assert b"post1" not in desired[CI_TEMPLATE_PATH]
+
+
+@pytest.mark.parametrize("installed", ["1.0.18rc1", "1.0.18.dev1"])
+def test_exact_update_preserves_unstable_installed_version_refusal(workspace, installed):
+    workspace.version = installed
+    result = workspace.update()
+    assert result["result_status"] == "BLOCKED"
+    assert result["blocker"] == "unsupported_installed_version"
+    assert workspace.installs == []
+
+
+def test_exact_update_accepts_an_installed_stable_post_release(workspace):
+    workspace.version = "1.0.18.post1"
+    assert workspace.update()["result_status"] == "AWAITING_APPROVAL"
