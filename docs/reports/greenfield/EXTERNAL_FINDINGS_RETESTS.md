@@ -1574,7 +1574,7 @@ Expected result fields: `{"assertions": ["release_check result is explicit; late
 
 ## KIT-GF-093
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.10.
 Evidence: docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md
 
 Execution class: local (effects: none); machine contract: Editable owned runtime after a pull: metadata 0.0.1, running package the installed Kit version; the release check uses the running version and keeps the metadata as a note; latest planning stays a checkout hint.
