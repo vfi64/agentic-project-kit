@@ -7018,7 +7018,7 @@
         "verification": "Synthetic local metadata preparation only. No release publication and no consumer VERIFIED_FIXED claim. B4 signature coverage is independently tested.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.9",
       "id": "KIT-GF-091",
       "kit_state": "CLOSED",
       "prs": [],
@@ -7162,7 +7162,7 @@
         "verification": "Local machine contract only; independent consumer verification remains separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.9",
       "id": "KIT-GF-092",
       "kit_state": "CLOSED",
       "prs": [],
@@ -7308,5 +7308,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 51,
   "schema_version": 1,
-  "source_sha256": "3e755b761bc4766551a6e9a58f5f81a94922940c6ef264ba86532d334d51d919"
+  "source_sha256": "6aa7c3a3312ece7b6a97d522c7bf4a403f59cbeef26af7c6f8252217835120b1"
 }

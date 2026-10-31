@@ -2137,25 +2137,122 @@
       "id": "KIT-GF-087",
       "kit_state": "CLOSED",
       "fixed_in": "1.1.7",
-      "prs": [2652],
+      "prs": [
+        2652
+      ],
       "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
-        "preconditions": ["Disposable generic Git repository; explicit fixture-only recovery consent."],
-        "commands": ["agentic-kit workspace init --recover-partial --json"],
+        "preconditions": [
+          "Disposable generic Git repository; explicit fixture-only recovery consent."
+        ],
+        "commands": [
+          "agentic-kit workspace init --recover-partial --json"
+        ],
         "bindings": {},
-        "expected": ["Signed additive recovery reaches valid external rule sources; repeated initialization writes nothing."],
-        "expected_result_fields": {"assertions": ["AWAITING_APPROVAL then PASS; rule sources valid; repeated recovery written false"]},
+        "expected": [
+          "Signed additive recovery reaches valid external rule sources; repeated initialization writes nothing."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "AWAITING_APPROVAL then PASS; rule sources valid; repeated recovery written false"
+          ]
+        },
         "machine": {
           "fixture": "git_repository",
           "covers": "Partial generated project recovery is planned, signed, valid and idempotent without touching project documents.",
           "steps": [
-            {"run": ["git", "commit", "--allow-empty", "-m", "Fixture HEAD"], "expect": {"returncode": 0}},
-            {"write": {"path": ".agentic/project.yaml", "text": "version: 1\nproject: {name: external, description: fixture, type: generic}\nprofiles: [generic-git-repo]\npolicy_packs: [solo-maintainer]\ngovernance: {}\n"}},
-            {"run": ["agentic-kit", "workspace", "init", "--recover-partial", "--json"], "expect": {"returncode": 0, "json": {"result_status": "AWAITING_APPROVAL", "written": false}}, "capture": {"signature": "approval_signature"}},
-            {"run": ["agentic-kit", "workspace", "init", "--recover-partial", "--execute", "--expected-signature", "{signature}", "--approved-by", "fixture-owner", "--consent-source", "machine fixture consent", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PASS", "written": true}}},
-            {"run": ["agentic-kit", "rules", "validate-sources", "--json"], "expect": {"returncode": 0, "json": {"is_valid": true, "fail_closed": false}}},
-            {"run": ["agentic-kit", "workspace", "init", "--recover-partial", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PASS", "written": false}}}
+            {
+              "run": [
+                "git",
+                "commit",
+                "--allow-empty",
+                "-m",
+                "Fixture HEAD"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/project.yaml",
+                "text": "version: 1\nproject: {name: external, description: fixture, type: generic}\nprofiles: [generic-git-repo]\npolicy_packs: [solo-maintainer]\ngovernance: {}\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--recover-partial",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "AWAITING_APPROVAL",
+                  "written": false
+                }
+              },
+              "capture": {
+                "signature": "approval_signature"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--recover-partial",
+                "--execute",
+                "--expected-signature",
+                "{signature}",
+                "--approved-by",
+                "fixture-owner",
+                "--consent-source",
+                "machine fixture consent",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "written": true
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rules",
+                "validate-sources",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "is_valid": true,
+                  "fail_closed": false
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--recover-partial",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "written": false
+                }
+              }
+            }
           ]
         }
       }
@@ -2164,31 +2261,162 @@
       "id": "KIT-GF-088",
       "kit_state": "CLOSED",
       "fixed_in": "1.1.7",
-      "prs": [2652],
+      "prs": [
+        2652
+      ],
       "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
-        "preconditions": ["Disposable generic Git repository with no Python test suite."],
-        "commands": ["agentic-kit work check --profile minimal --json"],
+        "preconditions": [
+          "Disposable generic Git repository with no Python test suite."
+        ],
+        "commands": [
+          "agentic-kit work check --profile minimal --json"
+        ],
         "bindings": {},
-        "expected": ["Partial bootstrap blocks explicitly; initialized generic workspace passes external gates without Kit tests."],
-        "expected_result_fields": {"assertions": ["partial work-check BLOCKED, recovery PASS, external work-check PASS"]},
+        "expected": [
+          "Partial bootstrap blocks explicitly; initialized generic workspace passes external gates without Kit tests."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "partial work-check BLOCKED, recovery PASS, external work-check PASS"
+          ]
+        },
         "machine": {
           "fixture": "git_repository",
           "covers": "Work-check refuses partial bootstrap before Kit-internal tests and passes the generic external gate family after signed completion.",
           "steps": [
-            {"run": ["git", "commit", "--allow-empty", "-m", "Fixture HEAD"], "expect": {"returncode": 0}},
-            {"write": {"path": ".agentic/todo.yaml", "text": "items: []\n"}},
-            {"write": {"path": "docs/STATUS.md", "text": "# Project Status\n\n## Current Goal\nVerify external bootstrap.\n\n## Next Safe Step\nReview fixture evidence.\n"}},
-            {"write": {"path": "docs/handoff/CURRENT_HANDOFF.md", "text": "# Current Handoff\n\n## Current\nExternal bootstrap fixture.\n\n## Next\nReview verified local checks.\n"}},
-            {"write": {"path": "sentinel.yaml", "text": "documents:\n  - path: docs/STATUS.md\n    required_sections: ['## Current Goal', '## Next Safe Step']\n  - path: docs/handoff/CURRENT_HANDOFF.md\n    required_sections: ['## Current', '## Next']\n"}},
-            {"write": {"path": ".agentic/project.yaml", "text": "version: 1\nproject: {name: external, description: fixture, type: generic}\nprofiles: []\npolicy_packs: [solo-maintainer]\ngovernance: {}\n"}},
-            {"run": ["agentic-kit", "work", "check", "--profile", "minimal", "--json"], "expect": {"returncode": 2, "json": {"result_status": "BLOCKED"}, "stdout_contains": "workspace-bootstrap-required"}},
-            {"run": ["agentic-kit", "workspace", "init", "--recover-partial", "--json"], "expect": {"returncode": 0}, "capture": {"signature": "approval_signature"}},
-            {"run": ["agentic-kit", "workspace", "init", "--recover-partial", "--execute", "--expected-signature", "{signature}", "--approved-by", "fixture-owner", "--consent-source", "machine fixture consent", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PASS"}}},
-            {"run": ["agentic-kit", "rules", "acknowledge", "--json"], "expect": {"returncode": 0}},
-            {"run": ["agentic-kit", "work", "check", "--profile", "minimal", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PASS", "workspace_mode": "external_manifest_workspace"}}},
-            {"assert": {"absent": ["tests"]}}
+            {
+              "run": [
+                "git",
+                "commit",
+                "--allow-empty",
+                "-m",
+                "Fixture HEAD"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/todo.yaml",
+                "text": "items: []\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/STATUS.md",
+                "text": "# Project Status\n\n## Current Goal\nVerify external bootstrap.\n\n## Next Safe Step\nReview fixture evidence.\n"
+              }
+            },
+            {
+              "write": {
+                "path": "docs/handoff/CURRENT_HANDOFF.md",
+                "text": "# Current Handoff\n\n## Current\nExternal bootstrap fixture.\n\n## Next\nReview verified local checks.\n"
+              }
+            },
+            {
+              "write": {
+                "path": "sentinel.yaml",
+                "text": "documents:\n  - path: docs/STATUS.md\n    required_sections: ['## Current Goal', '## Next Safe Step']\n  - path: docs/handoff/CURRENT_HANDOFF.md\n    required_sections: ['## Current', '## Next']\n"
+              }
+            },
+            {
+              "write": {
+                "path": ".agentic/project.yaml",
+                "text": "version: 1\nproject: {name: external, description: fixture, type: generic}\nprofiles: []\npolicy_packs: [solo-maintainer]\ngovernance: {}\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "check",
+                "--profile",
+                "minimal",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "stdout_contains": "workspace-bootstrap-required"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--recover-partial",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              },
+              "capture": {
+                "signature": "approval_signature"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--recover-partial",
+                "--execute",
+                "--expected-signature",
+                "{signature}",
+                "--approved-by",
+                "fixture-owner",
+                "--consent-source",
+                "machine fixture consent",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "rules",
+                "acknowledge",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "check",
+                "--profile",
+                "minimal",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "workspace_mode": "external_manifest_workspace"
+                }
+              }
+            },
+            {
+              "assert": {
+                "absent": [
+                  "tests"
+                ]
+              }
+            }
           ]
         }
       }
@@ -4895,7 +5123,9 @@
       "id": "KIT-GF-070",
       "kit_state": "CLOSED",
       "pr_reference_note": "C1c machine contracts shipped in 1.1.6 (PR #2607); see the KIT-GF-091 historical release reconciliation. Consumer VERIFIED_FIXED remains independent.",
-      "prs": [2607],
+      "prs": [
+        2607
+      ],
       "report": "docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md"
     },
     {
@@ -6048,7 +6278,9 @@
       "id": "KIT-GF-089",
       "kit_state": "CLOSED",
       "fixed_in": "1.1.7",
-      "prs": [2658],
+      "prs": [
+        2658
+      ],
       "report": "docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
@@ -6228,7 +6460,9 @@
       "id": "KIT-GF-090",
       "kit_state": "CLOSED",
       "fixed_in": "1.1.8",
-      "prs": [2673],
+      "prs": [
+        2673
+      ],
       "report": "docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
@@ -6329,7 +6563,7 @@
     {
       "id": "KIT-GF-091",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.9",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md",
       "external_retest": {
@@ -6507,7 +6741,7 @@
     {
       "id": "KIT-GF-092",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.9",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md",
       "external_retest": {

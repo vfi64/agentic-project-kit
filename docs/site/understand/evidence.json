@@ -56,15 +56,17 @@
     "status": "planned"
   },
   "release": {
-    "date": "2026-10-29",
-    "entry_count": 2,
+    "date": "2026-10-31",
+    "entry_count": 4,
     "notes": [
-      "Fixed: Kit synchronization fetches release tags without overwriting local tags, and release-status reports a missing local release tag instead of falling back silently to prepared (KIT-GF-090).",
-      "Preserve annotated local tags during atomic synchronization and diagnose divergent tag targets; regression tests cover conflicts, idempotency and current_verified recovery with local bare origins (KIT-GF-090)."
+      "Zenodo DOI verification pending for v1.1.9.",
+      "Added: Optional single-index stable Kit release discovery and latest-version update planning with unchanged offline status, stable post-release support and exact signed execution (KIT-GF-092).",
+      "Fixed: Reuse state-bound successful PR closeout evidence across nested wrappers; retain full checks whenever repository, remote or handoff evidence changes.",
+      "Fixed: Assign released versions to closed findings during release preparation, include finding IDs in guarded B4 approval, and block missing version evidence before metadata writes (KIT-GF-091)."
     ],
     "source": "CHANGELOG.md",
     "status": "recorded",
-    "version": "1.1.8"
+    "version": "1.1.9"
   },
   "safety_evidence": {
     "baseline": {
@@ -1197,7 +1199,7 @@
     "schema_version": 1,
     "sources": {
       "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "27e7efe2b0e73561d2e5782b1e6a92a66b96475678dbba7227738749d05b68a3",
-      "docs/reference/agentic-kit-commands.json": "4ae65d7169ea678c889e2cd9debd75b0bce2773878968545ae8793ee83418bcd",
+      "docs/reference/agentic-kit-commands.json": "538111e363d56c7e1738e1bbe3848dd53f2519a421a65f6d32b8761ddaf5260b",
       "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
       "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
       "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",

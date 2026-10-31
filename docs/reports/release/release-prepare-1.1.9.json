@@ -1,0 +1,250 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    ".agentic/greenfield_findings.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+    "docs/reports/greenfield/external-findings-status.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/reports/task_selection_design_20261026/README.md",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/detail-check.html",
+    "docs/site/commands/detail-doctor.html",
+    "docs/site/commands/detail-init.html",
+    "docs/site/commands/detail-kit-update.html",
+    "docs/site/commands/detail-release-run.html",
+    "docs/site/commands/detail-transfer-chat-switch-complete.html",
+    "docs/site/commands/detail-transfer-pr-closeout-complete.html",
+    "docs/site/commands/detail-transfer-pr-complete.html",
+    "docs/site/commands/detail-work-finish.html",
+    "docs/site/commands/detail-work-start.html",
+    "docs/site/commands/detail-workspace-adopt.html",
+    "docs/site/commands/detail-workspace-init.html",
+    "docs/site/commands/details.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/commands/tasks.json",
+    "docs/site/history/history.json",
+    "docs/site/history/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/understand/workflow-figures.json",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json",
+    "src/agentic_project_kit/reference/external-findings-status.json"
+  ],
+  "date": "2026-10-31",
+  "explicit_summary_lines": [],
+  "from_tag": "v1.1.8",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": null,
+      "argv": [
+        "kit-ci-pin-guard"
+      ],
+      "name": "kit-ci-pin-guard",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "{\"next_action\": null, \"reasons\": [], \"result_status\": \"PASS\", \"unreadable_files\": [], \"versions\": {\"highest_pin\": null, \"installed\": \"1.1.8\", \"pins\": []}}",
+      "stdout_length": 154,
+      "stdout_sha256": "869d8470b8b3f63c84714e35e0186a2e8fcf505833522933a60ae7cddf1dd51b"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.1.9",
+        "--from-tag",
+        "v1.1.8",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-119-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 29143,
+      "stdout_sha256": "69098ed7b3f2c4787b197221677bb8a86ee8ef313be05c7cc509881619f75572"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.1.9",
+        "--date",
+        "2026-10-31",
+        "--summary-lines-from",
+        "tmp/release-119-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 829,
+      "stdout_sha256": "47ab3329d0d55eca28e2b971ca10468f99313861a6d9dbe6a05275fabef40043"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 507,
+      "stdout_sha256": "ab681c700f4aace9e6d9d52780b8ca0663161507ceef15a1cec9e1c70c534e2e"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "scripts/task_selection_design_check.py",
+        "--out",
+        "docs/reports/task_selection_design_20261026/README.md"
+      ],
+      "name": "task-selection-review-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "{\"result_status\": \"PASS\", \"scope\": \"proposal structure only\", \"routes\": 11, \"runtime_enabled\": false}",
+      "stdout_length": 102,
+      "stdout_sha256": "53416fd4e80adf3a813ac4b576c481977745c461080b56f20947a8efb172c713"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 260,
+      "stdout_sha256": "3287f407da0daf5cf747699dd63f34a7132b58db768b605a871a924ca3fcb6c2"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10313,
+      "stdout_sha256": "0c23006e3fd0f8bf3b4045b9bdf9d58fa09e82e660caf2764e8b336be7329b7c"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 6438,
+      "stdout_sha256": "6954091806eacf2cd2a3d43ce6a6fa810bd7302b3e0e241a43fefd4bbf253e0c"
+    }
+  ],
+  "summary_lines_path": "tmp/release-119-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.1.9"
+}
