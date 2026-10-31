@@ -5278,6 +5278,15 @@
           },
           {
             "default": false,
+            "help": "Read the configured index for a newer stable release; bounded to 10 seconds.",
+            "name": "check_release",
+            "opts": [
+              "--check-release"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
             "help": "Emit one JSON document.",
             "name": "json_output",
             "opts": [
@@ -5300,12 +5309,21 @@
         "params": [
           {
             "default": null,
-            "help": "Exact released stable Kit version (X.Y.Z).",
+            "help": "Exact released Kit version (X.Y.Z or X.Y.Z.postN).",
             "name": "version",
             "opts": [
               "--version"
             ],
-            "required": true
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Resolve the latest stable release at the configured index and plan its exact version.",
+            "name": "latest",
+            "opts": [
+              "--latest"
+            ],
+            "required": false
           },
           {
             "default": "PosixPath('.')",
@@ -13384,7 +13402,7 @@
         "params": [
           {
             "default": null,
-            "help": "Exact released stable Kit version (X.Y.Z).",
+            "help": "Exact released Kit version (X.Y.Z or X.Y.Z.postN).",
             "is_flag": false,
             "metavar": null,
             "multiple": false,
@@ -13393,7 +13411,21 @@
               "--version"
             ],
             "param_type": "TyperOption",
-            "required": true,
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Resolve the latest stable release at the configured index and plan its exact version.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "latest",
+            "opts": [
+              "--latest"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
             "secondary_opts": []
           },
           {
@@ -14726,7 +14758,7 @@
     ],
     "execution_authorized": false,
     "kind": "command_detail_projection",
-    "manifest_sha": "abe3d2533d28",
+    "manifest_sha": "52fa7baf8daf",
     "schema_version": 1
   },
   "explanation_projection": {
@@ -15927,8 +15959,8 @@
       },
       "schema_version": 1,
       "sources": {
-        "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "79ab40582ae02695fedb3e845e9ccc240917f05b0d29687970f0186f0eb4d893",
-        "docs/reference/agentic-kit-commands.json": "3383329cf21f71f199ad2a6fbe0d8870e15f76a31fd6f2583bfe774a2a47a66d",
+        "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "27e7efe2b0e73561d2e5782b1e6a92a66b96475678dbba7227738749d05b68a3",
+        "docs/reference/agentic-kit-commands.json": "4ae65d7169ea678c889e2cd9debd75b0bce2773878968545ae8793ee83418bcd",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -15964,7 +15996,7 @@
       "version": "0.2.0"
     },
     "kind": "bounded_history_projection",
-    "manifest_sha": "abe3d2533d28",
+    "manifest_sha": "52fa7baf8daf",
     "overhead": {
       "admin_refresh_prs": 83,
       "evidence_class": "historical classification",
@@ -16020,14 +16052,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "abe3d2533d28",
+    "manifest_sha": "52fa7baf8daf",
     "package_name": "agentic-project-kit",
     "package_version": "1.1.8",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.8",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "abe3d2533d28",
+    "reproduced_manifest_sha": "52fa7baf8daf",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 176,
@@ -16094,7 +16126,7 @@
       ],
       "worktree_clean": "boolean"
     },
-    "manifest_sha": "abe3d2533d28",
+    "manifest_sha": "52fa7baf8daf",
     "routes": [
       {
         "command": "agentic-kit check",

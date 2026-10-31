@@ -399,7 +399,7 @@
       "params": [
         {
           "default": null,
-          "help": "Exact released stable Kit version (X.Y.Z).",
+          "help": "Exact released Kit version (X.Y.Z or X.Y.Z.postN).",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
@@ -408,7 +408,21 @@
             "--version"
           ],
           "param_type": "TyperOption",
-          "required": true,
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Resolve the latest stable release at the configured index and plan its exact version.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "latest",
+          "opts": [
+            "--latest"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
           "secondary_opts": []
         },
         {
@@ -1741,6 +1755,6 @@
   ],
   "execution_authorized": false,
   "kind": "command_detail_projection",
-  "manifest_sha": "abe3d2533d28",
+  "manifest_sha": "52fa7baf8daf",
   "schema_version": 1
 }

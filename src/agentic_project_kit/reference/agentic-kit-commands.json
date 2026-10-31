@@ -8107,6 +8107,20 @@
         },
         {
           "default": false,
+          "help": "Read the configured index for a newer stable release; bounded to 10 seconds.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "check_release",
+          "opts": [
+            "--check-release"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Emit one JSON document.",
           "is_flag": true,
           "metavar": null,
@@ -8126,7 +8140,7 @@
       ],
       "qualified_name": "agentic-kit kit status",
       "remote_effects": [
-        "none"
+        "network_read"
       ],
       "replaces_raw": [],
       "safety": "READ_ONLY",
@@ -8145,7 +8159,7 @@
       "params": [
         {
           "default": null,
-          "help": "Exact released stable Kit version (X.Y.Z).",
+          "help": "Exact released Kit version (X.Y.Z or X.Y.Z.postN).",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
@@ -8154,7 +8168,21 @@
             "--version"
           ],
           "param_type": "TyperOption",
-          "required": true,
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Resolve the latest stable release at the configured index and plan its exact version.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "latest",
+          "opts": [
+            "--latest"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
           "secondary_opts": []
         },
         {
@@ -20758,7 +20786,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "abe3d2533d28",
+    "manifest_sha": "52fa7baf8daf",
     "schema_version": 2
   },
   "schema_version": 3,

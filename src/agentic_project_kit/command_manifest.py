@@ -432,6 +432,7 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit transfer remote-next": ["fetch", "push"],
         "agentic-kit transfer remote-work-start": ["fetch", "push"],
         "agentic-kit rule-registry bootstrap": ["none"],
+        "agentic-kit kit status": ["network_read"],
         "agentic-kit kit update": ["network_read"],
         "agentic-kit pr merge-if-green": ["delete_remote", "merge", "network_read"],
         "agentic-kit remote-branch-hygiene-apply": ["delete_remote", "network_read", "push"],

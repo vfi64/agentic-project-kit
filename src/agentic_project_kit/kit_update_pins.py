@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 import shlex
+from packaging.version import Version, InvalidVersion
 
 from agentic_project_kit.workspace_init import MANAGED_CI_HEADER
 from agentic_project_kit.kit_ci_pin_patterns import EXACT_KIT_PIN_BYTES as _EXACT_PIN
@@ -16,8 +17,12 @@ def plan_ci_pins(
 ) -> dict[str, bytes]:
     from agentic_project_kit.workspace_init import CI_TEMPLATE_PATH, CI_INJECTION_TARGET
 
-    if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", version):
-        raise ValueError("stable_version_required")
+    try:
+        parsed = Version(version)
+        if not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.post[0-9]+)?", version) or parsed.is_prerelease or str(parsed) != version:
+            raise InvalidVersion(version)
+    except InvalidVersion as exc:
+        raise ValueError("stable_version_required") from exc
     headers = [MANAGED_CI_HEADER.encode() + ending for ending in (b"\n", b"\r\n")]
     header = next((header for header in headers if workflow == header + source), None)
     if header is None:

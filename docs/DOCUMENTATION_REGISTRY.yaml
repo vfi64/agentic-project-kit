@@ -1895,3 +1895,13 @@ documents:
     status: active
     summary: KIT-GF-091 release finding version assignment and historical reconciliation
       evidence.
+  - path: docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: KIT-GF-092 optional release discovery and exact signed latest planning evidence.
+  - path: docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: KIT-GF-092 installed-wheel machine result with normalized execution origin.

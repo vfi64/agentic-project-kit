@@ -119,6 +119,34 @@ a missing console script does not hide an intact installation. Doctor uses this
 same discovery model. Missing and unverified installations have distinct
 diagnostics. Global and editable packages outside the environment are refused.
 
+### Optional stable release discovery (KIT-GF-092)
+
+`agentic-kit kit status --check-release --root PATH --json` adds release_check:
+installed, latest_release, index_url, checked_at (UTC), installation_kind
+(wheel/editable) and result CURRENT, UPDATE_AVAILABLE, AHEAD or UNKNOWN. UNKNOWN
+includes reason. Missing installation metadata is null, never guessed.
+The original offline status and its exit code remain unchanged, including when
+the optional index read fails. The query uses only kit.index_url, accepts Simple
+JSON/HTML, excludes yanked files and pre/dev versions and includes post-releases.
+The complete index observation has a 10-second deadline and 2 MiB response limit;
+there are no retries, writes, extra indexes or implicit update actions.
+
+`agentic-kit kit update --latest --root PATH --json` resolves the latest stable
+release and delegates to the exact updater. --latest and --version are mutually
+exclusive. resolved_version is additive output, outside the signed plan; latest
+and exact-version plans have identical approval_signature for identical inputs.
+Execute the returned --version command and signature. A subsequently published
+release does not change that target; --latest --execute is refused rather than
+silently re-resolving an authorized target.
+
+Already current returns PASS with already_current: true, no plan, no writes and
+no branch requirement. Editable returns PASS/checkout_required and a governed
+checkout synchronization hint without a release-installation plan or index read.
+AHEAD blocks an implicit downgrade. UNKNOWN blocks planning with reason and
+next_safe_action. Planning an actual upgrade still requires the existing work
+branch, provenance, artifact and signature checks. Exact managed pins support
+X.Y.Z and X.Y.Z.postN; other existing exact-pin restrictions remain intact.
+
 Start a normal Kit work branch before adoption. A Kit runtime containing this
 route can update an older workspace-owned runtime:
 
@@ -150,7 +178,7 @@ Optional `.agentic/config.yaml` configuration:
       index_url: https://pypi.org/simple
 
 The local `.venv` takes precedence over the declared interpreter. The default
-index is PyPI; no fallback index or implicit latest version is used. Index URLs
+index is PyPI; no fallback index or implicit latest version is used without --latest. Index URLs
 must be HTTPS without credentials or query parameters; HTTP loopback is allowed
 for isolated fixtures. Dry runs download verified binary wheels and create a
 temporary preview environment under the workspace tmp directory. They leave

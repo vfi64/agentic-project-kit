@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 90,
+    "CLOSED": 91,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 50,
+    "local": 51,
     "owner_remote": 33
   },
   "findings": [
@@ -7026,6 +7026,150 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit kit status --check-release --json",
+          "agentic-kit kit update --latest --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Stable post-releases included; pre/dev/yanked excluded; offline status preserved; no-op on main; unknown blocks planning."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "release_check result is explicit; latest never installs or guesses a target."
+          ]
+        },
+        "machine": {
+          "covers": "Local Simple-index release observation and branch-free no-op planning from an installed owned runtime; no remote service or installation.",
+          "fixture": "external_release_check",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "release_check.installation_kind": "wheel",
+                  "release_check.result": "CURRENT"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--check-release",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "already_current": true,
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "update",
+                "--latest",
+                "--json"
+              ]
+            },
+            {
+              "write": {
+                "path": "release-index.json",
+                "text": "{\"files\": [{\"filename\": \"agentic_project_kit-{kit_version}.post1-py3-none-any.whl\"}, {\"filename\": \"agentic_project_kit-9999.0.0rc1-py3-none-any.whl\"}, {\"filename\": \"agentic_project_kit-9999.0.0.dev1-py3-none-any.whl\"}, {\"filename\": \"agentic_project_kit-9999.0.0-py3-none-any.whl\", \"yanked\": true}]}"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "release_check.latest_release": "{kit_version}.post1",
+                  "release_check.result": "UPDATE_AVAILABLE"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--check-release",
+                "--json"
+              ]
+            },
+            {
+              "write": {
+                "path": "release-index.json",
+                "text": "{\"files\":[]}"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "release_check.reason": "no_stable_release_found",
+                  "release_check.result": "UNKNOWN",
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "status",
+                "--check-release",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "reason": "no_stable_release_found",
+                  "result_status": "BLOCKED"
+                },
+                "returncode": 2
+              },
+              "run": [
+                "agentic-kit",
+                "kit",
+                "update",
+                "--latest",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable owned runtime and local fake Simple index; run from an installed wheel."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Local machine contract only; independent consumer verification remains separate.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-092",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -7162,7 +7306,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 50,
+  "machine_contracts": 51,
   "schema_version": 1,
-  "source_sha256": "47314f5727d497f58ccd1e929825c5b0f10b40febbf33d2bbe5656ac041863b1"
+  "source_sha256": "3e755b761bc4766551a6e9a58f5f81a94922940c6ef264ba86532d334d51d919"
 }
