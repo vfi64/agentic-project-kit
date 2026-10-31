@@ -15,7 +15,7 @@ from urllib.request import Request, build_opener
 from packaging.utils import canonicalize_name, parse_sdist_filename, parse_wheel_filename
 from packaging.version import Version
 
-from agentic_project_kit.kit_installation import installation_candidates
+from agentic_project_kit.kit_installation import discover_kit_installation
 from agentic_project_kit.kit_update_artifacts import _ValidatedRedirect
 from agentic_project_kit.workspace import load_workspace
 
@@ -30,7 +30,19 @@ print(json.dumps({"installed":d.version,"installation_kind":"editable" if u.get(
 
 def release_installation(root: Path) -> dict:
     ws = load_workspace(root, suppress_legacy_profile_warning=True)
-    for candidate in installation_candidates(root, declared_interpreter=ws.kit.interpreter or None):
+    resolution = discover_kit_installation(root, declared_interpreter=ws.kit.interpreter or None)
+    if resolution.status == "FOUND":
+        candidates = [resolution.installation.candidate]
+    else:
+        # The existing probe has already checked interpreter/venv identity in
+        # this one error state. Only an observed editable install may relax the
+        # package-origin check for an informational checkout hint, never a plan.
+        candidates = [
+            item.candidate
+            for item in resolution.observations
+            if item.reason == "package_outside_environment"
+        ]
+    for candidate in candidates:
         if not candidate.python.is_file():
             continue
         try:
@@ -45,6 +57,8 @@ def release_installation(root: Path) -> dict:
             data = json.loads(result.stdout)
             Version(data["installed"])
             if data["installation_kind"] not in {"wheel", "editable"}:
+                continue
+            if resolution.status != "FOUND" and data["installation_kind"] != "editable":
                 continue
             return data
         except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError):

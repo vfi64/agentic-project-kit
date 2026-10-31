@@ -189,14 +189,36 @@ def test_latest_option_is_available(root, monkeypatch):
     assert result.exit_code == 0 and json.loads(result.stdout)["already_current"]
 
 
-@pytest.mark.parametrize("flags", [["--latest", "--version", "1.1.8"], ["--latest", "--version", ""], []])
+@pytest.mark.parametrize(
+    "flags", [["--latest", "--version", "1.1.8"], ["--latest", "--version", ""], []]
+)
 def test_exactly_one_version_selector(flags, monkeypatch):
-    monkeypatch.setattr(latest, "run_latest_update", lambda *a, **k: {"result_status": "PASS", "next_action": "none"})
+    monkeypatch.setattr(
+        latest,
+        "run_latest_update",
+        lambda *a, **k: {"result_status": "PASS", "next_action": "none"},
+    )
     result = CliRunner().invoke(app, ["kit", "update", *flags, "--json"])
     assert result.exit_code == 2 and "Choose exactly one" in result.output
 
 
 def test_metadata_probe_uses_owned_interpreter_and_editable_metadata(root, monkeypatch):
+    from types import SimpleNamespace
+
+    monkeypatch.setattr(
+        release,
+        "discover_kit_installation",
+        lambda *a, **k: SimpleNamespace(
+            status="BLOCKED",
+            installation=None,
+            observations=[
+                SimpleNamespace(
+                    reason="package_outside_environment",
+                    candidate=SimpleNamespace(python=root / ".venv/bin/python"),
+                )
+            ],
+        ),
+    )
     python = root / ".venv/bin/python"
     python.parent.mkdir(parents=True)
     python.touch()
@@ -254,3 +276,84 @@ def test_total_deadline_bounds_a_stalled_reader(monkeypatch):
             release.fetch_index("https://example.invalid/simple/agentic-project-kit/")
     finally:
         done.set()
+
+
+def test_release_metadata_uses_the_existing_owned_interpreter_selection(root, monkeypatch):
+    from types import SimpleNamespace
+
+    local = root / ".venv/bin/python"
+    declared = root / "owned/bin/python"
+    for path in [local, declared]:
+        path.parent.mkdir(parents=True)
+        path.touch()
+    with (root / ".agentic/config.yaml").open("a") as stream:
+        stream.write(f"kit: {{interpreter: '{declared}'}}\n")
+    authoritative = SimpleNamespace(
+        status="FOUND",
+        installation=SimpleNamespace(candidate=SimpleNamespace(python=declared)),
+        observations=[],
+    )
+    monkeypatch.setattr(
+        release, "discover_kit_installation", lambda *a, **k: authoritative, raising=False
+    )
+
+    def metadata(argv, **kwargs):
+        version = "9.0.0" if argv[0] == str(local) else "1.1.8"
+        return subprocess.CompletedProcess(
+            argv, 0, json.dumps({"installed": version, "installation_kind": "wheel"}), ""
+        )
+
+    monkeypatch.setattr(release.subprocess, "run", metadata)
+    assert release.release_installation(root)["installed"] == "1.1.8"
+
+
+def test_release_metadata_never_trusts_an_interpreter_rejected_by_the_existing_probe(
+    root, monkeypatch
+):
+    from types import SimpleNamespace
+
+    python = root / ".venv/bin/python"
+    python.parent.mkdir(parents=True)
+    python.touch()
+    resolution = SimpleNamespace(
+        status="BLOCKED",
+        installation=None,
+        observations=[
+            SimpleNamespace(reason="interpreter_mismatch", candidate=SimpleNamespace(python=python))
+        ],
+    )
+    monkeypatch.setattr(
+        release, "discover_kit_installation", lambda *a, **k: resolution, raising=False
+    )
+    monkeypatch.setattr(
+        release.subprocess,
+        "run",
+        lambda *a, **k: pytest.fail("rejected interpreter must not be trusted"),
+    )
+    assert release.release_installation(root)["installed"] is None
+
+
+def test_noneditable_package_outside_owned_environment_is_not_release_authority(root, monkeypatch):
+    from types import SimpleNamespace
+
+    python = root / ".venv/bin/python"
+    python.parent.mkdir(parents=True)
+    python.touch()
+    resolution = SimpleNamespace(
+        status="BLOCKED",
+        installation=None,
+        observations=[
+            SimpleNamespace(
+                reason="package_outside_environment", candidate=SimpleNamespace(python=python)
+            )
+        ],
+    )
+    monkeypatch.setattr(release, "discover_kit_installation", lambda *a, **k: resolution)
+    monkeypatch.setattr(
+        release.subprocess,
+        "run",
+        lambda argv, **k: subprocess.CompletedProcess(
+            argv, 0, '{"installed":"9.0.0","installation_kind":"wheel"}', ""
+        ),
+    )
+    assert release.release_installation(root)["installed"] is None

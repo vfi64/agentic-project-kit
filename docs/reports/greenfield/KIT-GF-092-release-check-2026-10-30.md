@@ -128,3 +128,21 @@ before completion.
 Correction input `src/agentic_project_kit/kit_update.py` SHA-256: `be320fe9b184bc4050147fbe4a44b3553fe7979c6befcf829b4fe7ffd0c8b325`.
 
 Correction input `tests/test_kit_update.py` SHA-256: `d294e3d54566016d3af0e1d2baf2d151b2fd0fd235e7114e0c9598fb9fbffcaf`.
+
+## Interpreter authority compatibility
+
+Release metadata now uses the existing discover_kit_installation selection,
+including its interpreter and virtualenv identity checks. It cannot treat an
+unusable local environment as CURRENT while the existing status route selects
+the declared owned interpreter. Only the existing package_outside_environment
+diagnostic permits an additional metadata read, and only an observed editable
+installation can then produce an informational checkout hint. A noneditable
+package outside the owned environment and other rejected interpreters are not
+release authorities. Two regressions first reproduced the independent-selection
+error; all 150 targeted installation, update, release and fixture tests passed
+after using the central selector. The existing editable-information exception
+remains covered. Final complete-candidate verification follows this correction.
+
+Authority input `src/agentic_project_kit/kit_release_check.py` SHA-256: `4caf4bcf1360fa6e05a34abb42939ca1f2aabe7e368a3d063f13a996939ac05e`.
+
+Authority input `tests/test_kit_release_check.py` SHA-256: `2bfa99bf98151b5e210ea1001464c694bd54a7e8221b85c4135dbe66e20d2529`.
