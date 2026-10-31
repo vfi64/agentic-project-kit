@@ -122,8 +122,8 @@ accepts the explicitly approved stable post-release form. A positive regression
 protects installed post-release support. All 113 targeted tests passed after the
 correction; no assertion was weakened. The automatic closeout was stopped before
 merge. The complete baseline above is not presented as a full-suite run of this
-subsequent correction; final full-suite and wheel evidence must be refreshed
-before completion.
+subsequent correction; final full-suite and wheel evidence is refreshed in the final current-candidate
+section below.
 
 Correction input `src/agentic_project_kit/kit_update.py` SHA-256: `be320fe9b184bc4050147fbe4a44b3553fe7979c6befcf829b4fe7ffd0c8b325`.
 
@@ -141,8 +141,28 @@ package outside the owned environment and other rejected interpreters are not
 release authorities. Two regressions first reproduced the independent-selection
 error; all 150 targeted installation, update, release and fixture tests passed
 after using the central selector. The existing editable-information exception
-remains covered. Final complete-candidate verification follows this correction.
+remains covered. Final complete-candidate verification below includes this correction.
 
 Authority input `src/agentic_project_kit/kit_release_check.py` SHA-256: `4caf4bcf1360fa6e05a34abb42939ca1f2aabe7e368a3d063f13a996939ac05e`.
 
 Authority input `tests/test_kit_release_check.py` SHA-256: `2bfa99bf98151b5e210ea1001464c694bd54a7e8221b85c4135dbe66e20d2529`.
+
+## Final current candidate verification
+
+- Final code and tests at `ed91e11320fdd6c27ca4075dc74717b4f17884ea`: 4416 full-suite tests passed,
+  560 warnings; no test was disabled or assertion weakened.
+- Local command: `python -m pytest -q -n 4 --dist loadfile --durations=10`.
+  File grouping reduces cross-file GUI/process interleaving; CI configuration
+  and its existing work-stealing strategy are unchanged.
+- Source tree: `82405d4f4f3d6132cca8d383eb849d4c0307296f`; test tree: `58d4ded415fbb5d531453b8eb512024b3e0a66cb`.
+- Ruff, check, check-docs and doctor: PASS. The earlier complete serial baseline
+  remains historical evidence; the final full run includes all compatibility
+  and interpreter-authority regressions.
+- A separate fresh noneditable installation of this corrected branch passed
+  GF-092's installed-wheel contract: one PASS, zero failed/unexecuted contracts,
+  package 1.1.8, packaging 26.3.
+- The normalized machine result is stored alongside this report, SHA-256
+  `041c5ed613951e02d99e025c45a13434e09c8094a0982f47cc778557339ac706`. Command manifest SHA remains `52fa7baf8daf`.
+- All implementation, tests, fixture definitions and necessary bounded outcomes
+  are repository artifacts. Temporary wrappers, virtualenvs and raw diagnostics
+  are disposable. No real consumer update or release publication was performed.
