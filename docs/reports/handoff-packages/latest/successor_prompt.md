@@ -459,9 +459,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "feat/kit-gf-092-release-check",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "b7f40c79b8bee9125a0850b1d8b8cec3629344eb",
+    "head": "9f331b7e20a55311107c9cbb74ae685effc65740",
     "head_matches_origin_main": false,
-    "head_short": "b7f40c79",
+    "head_short": "9f331b7e",
     "local_path": "cd /path/to/",
     "origin_main": "62ea664c3121a4e4c26dec3685cde90313add416",
     "origin_main_short": "62ea664c",
