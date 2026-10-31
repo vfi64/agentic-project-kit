@@ -2,10 +2,13 @@
 
 ## v1.1.9 - 2026-10-31
 
-- Zenodo DOI verification pending for v1.1.9.
 - Added: Optional single-index stable Kit release discovery and latest-version update planning with unchanged offline status, stable post-release support and exact signed execution (KIT-GF-092).
 - Fixed: Reuse state-bound successful PR closeout evidence across nested wrappers; retain full checks whenever repository, remote or handoff evidence changes.
 - Fixed: Assign released versions to closed findings during release preparation, include finding IDs in guarded B4 approval, and block missing version evidence before metadata writes (KIT-GF-091).
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.1.9 DOI `10.5281/zenodo.23840219`.
+
+Zenodo v1.1.9 DOI: 10.5281/zenodo.23840219
 
 ## v1.1.8 - 2026-10-29
 
