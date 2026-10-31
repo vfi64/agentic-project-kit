@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 8f5bdc76a5cd0488581da09eac6e878f3a6a380b
-  short: 8f5bdc76
-  subject: Name the substance of the KIT-GF-093 changelog entry for the release-quality gate (#2702)
+  full: bdea133cddcbb45c212dc495a22f35d07ace8566
+  short: bdea133c
+  subject: Release 1.1.10 (#2704)
 last_substantive_work_state:
-  full: 8f5bdc76a5cd0488581da09eac6e878f3a6a380b
-  short: 8f5bdc76
-  subject: Name the substance of the KIT-GF-093 changelog entry for the release-quality gate (#2702)
+  full: bdea133cddcbb45c212dc495a22f35d07ace8566
+  short: bdea133c
+  subject: Release 1.1.10 (#2704)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
