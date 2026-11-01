@@ -49,6 +49,14 @@ is a more precise advisory for installed versions below 1.1.11. Tests preserve
 the independent A path and B default. Existing typed results and evidence are
 sufficient; an additional DCO cell layer would add complexity here.
 
+The existing retest adapter also needs two bounded fixture corrections under
+the B default: skip an empty migration commit when init already produced the
+same v2 bytes, and remove the caller's PYTHONPATH before checking the owned
+returned A-prime runtime. Existing 084/094 and 097/098 contracts reproduced the
+failures. Their expectations and the real wheel-transition code remain unchanged.
+The adapter's existing mixed fixture-dispatch responsibilities remain; no new
+framework or broader runner extraction is introduced in this activation slice.
+
 For external workspaces, an unchanged captured-input set after a content merge
 no longer needs a refresh-only PR. Chat switches leave the versioned handoff
 files byte-identical: changing HEAD, branch, time and run identity belongs to

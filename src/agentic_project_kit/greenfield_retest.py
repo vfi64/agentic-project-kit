@@ -368,7 +368,15 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
         result = _run(["agentic-kit", "transfer", "prepare-successor-handoff", "--json"], root, env)
         if result.returncode:
             return root, variables, ["active v2 fixture generation failed: " + result.stderr[-400:]]
-        steps = [["git", "add", "."], ["git", "commit", "-m", "Active B fixture"]]
+        result = _run(["git", "add", "."], root, env)
+        if result.returncode:
+            return root, variables, ["active v2 fixture staging failed: " + result.stderr[-400:]]
+        staged = _run(["git", "diff", "--cached", "--quiet"], root, env)
+        if staged.returncode not in {0, 1}:
+            return root, variables, ["active v2 fixture diff failed: " + staged.stderr[-400:]]
+        # B init already renders v2. Preparing identical inputs is a no-op,
+        # whereas an A-created fixture still needs its actual migration commit.
+        steps = [["git", "commit", "-m", "Active B fixture"]] if staged.returncode else []
         if machine.get("origin"):
             # Match the existing release fixture: construct only the confined
             # disposable bare origin, without a protected-branch push.
@@ -389,6 +397,9 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
             root = base / "transition/consumer"
             (root / ".agentic/tmp/transition-proof.json").write_text(json.dumps(proof, sort_keys=True))
             env["AGENTIC_KIT_RETEST_PYTHON"] = str(root / ".venv/bin/python")
+            # As for other owned runtimes, never let the extracted caller's
+            # PYTHONPATH override the wheel installed in the fixture runtime.
+            env.pop("PYTHONPATH", None)
         except (OSError, ValueError, RuntimeError, subprocess.SubprocessError, AssertionError) as exc:
             return root, variables, [f"real wheel transition failed: {exc}"]
     return root, variables, []
