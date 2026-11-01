@@ -1976,3 +1976,6 @@ documents:
     owner: maintainers
     status: active
     summary: Real A-B-A return verification with explicit consumer acceptance limits.
+  - path: docs/reports/release/release-run-1.1.11.json
+    class: evidence/log
+    owner: maintainers
