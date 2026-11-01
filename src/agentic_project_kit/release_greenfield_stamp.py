@@ -15,6 +15,28 @@ from agentic_project_kit.greenfield_status import (
 from agentic_project_kit.release_version_sources import is_kit_self_hosting
 
 
+def _external_projection_release_prerequisites(root: Path, data: dict, selected: list[str]) -> dict:
+    if "KIT-GF-094" not in selected:
+        return {}
+    finding = next(item for item in data["findings"] if item["id"] == "KIT-GF-094")
+    path = root / Path(finding["report"]).with_suffix(".json")
+    if path.is_symlink() or not path.resolve().is_relative_to(root.resolve()):
+        raise ValueError("KIT-GF-094 release prerequisites path unsafe")
+    try:
+        raw = path.read_bytes()
+        report = json.loads(raw)
+        states = report["release_prerequisites"]
+        missing = [key for key in ("local_return", "consumer_rehearsal", "owner_acceptance")
+                   if states.get(key) != "PASS"]
+    except (OSError, ValueError, KeyError, TypeError, AttributeError) as exc:
+        raise ValueError("KIT-GF-094 release prerequisites missing or invalid") from exc
+    if missing:
+        raise ValueError("KIT-GF-094 release BLOCKED: " + ", ".join(missing))
+    # Existing signed release approval binds the reviewed evidence bytes as
+    # well as the catalog. A changed acceptance report invalidates the plan.
+    return {"release_prerequisites_sha256": hashlib.sha256(raw).hexdigest()}
+
+
 def plan_stamp(root: Path, version: str) -> dict:
     """Validate before any release write and bind the proposed IDs to source bytes."""
     if not is_kit_self_hosting(root) or not (root / CATALOG).exists():
@@ -33,7 +55,8 @@ def plan_stamp(root: Path, version: str) -> dict:
     ids = sorted(f["id"] for f in data["findings"]
                  if f["kit_state"] == "CLOSED" and f["fixed_in"] == "unreleased")
     plan = {"version": version, "finding_ids": ids,
-            "catalog_sha256": hashlib.sha256(raw).hexdigest()}
+            "catalog_sha256": hashlib.sha256(raw).hexdigest(),
+            **_external_projection_release_prerequisites(root, data, ids)}
     plan["approval_signature"] = hashlib.sha256(encoded({"root": str(root.resolve()), **plan})).hexdigest()
     return plan
 
@@ -64,6 +87,7 @@ def gate_findings(root: Path, version: str) -> dict:
         return {}
     raw = (root / CATALOG).read_bytes()
     data = json.loads(raw)
+    ids = sorted(f["id"] for f in data["findings"]
+                 if f["kit_state"] == "CLOSED" and f.get("fixed_in") == version)
     return {"version": version, "catalog_sha256": hashlib.sha256(raw).hexdigest(),
-            "finding_ids": sorted(f["id"] for f in data["findings"]
-                                  if f["kit_state"] == "CLOSED" and f.get("fixed_in") == version)}
+            "finding_ids": ids, **_external_projection_release_prerequisites(root, data, ids)}

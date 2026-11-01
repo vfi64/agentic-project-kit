@@ -90,3 +90,29 @@ def test_b4_signature_binds_release_finding_ids_and_catalog(tmp_path):
     second = run_release(options, runner=FakeRunner())
     assert second["gate"]["approval_signature"] != first["gate"]["approval_signature"]
     assert second["gate"]["greenfield_release"]["finding_ids"] == ["KIT-GF-092"]
+
+
+def test_external_v2_release_requires_return_rehearsal_and_owner_acceptance(tmp_path):
+    from agentic_project_kit.release_greenfield_stamp import plan_stamp
+
+    root = _copy_release_state_files(tmp_path)
+    data = catalog_fixture(root)
+    finding = next(item for item in data["findings"] if item["id"] == "KIT-GF-094")
+    finding["fixed_in"] = "unreleased"
+    (root / CATALOG).write_bytes(encoded(data))
+    report = root / finding["report"]
+    report = report.with_suffix(".json")
+    states = {"local_return": "PASS", "consumer_rehearsal": "NOT_RUN", "owner_acceptance": "PENDING"}
+    report.write_bytes(encoded({"release_prerequisites": states}))
+    before = (root / CATALOG).read_bytes()
+    with pytest.raises(ValueError, match="KIT-GF-094.*consumer_rehearsal.*owner_acceptance"):
+        plan_stamp(root, TARGET_VERSION)
+    assert (root / CATALOG).read_bytes() == before
+    states.update(consumer_rehearsal="PASS", owner_acceptance="PASS")
+    report.write_bytes(encoded({"release_prerequisites": states}))
+    plan = plan_stamp(root, TARGET_VERSION)
+    assert plan["release_prerequisites_sha256"]
+    states["local_return"] = "FAIL"
+    report.write_bytes(encoded({"release_prerequisites": states}))
+    with pytest.raises(ValueError, match="local_return"):
+        plan_stamp(root, TARGET_VERSION)

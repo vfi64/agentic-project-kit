@@ -157,7 +157,8 @@ def test_check_docs_json_reports_manifest_workspace_gate_semantics(tmp_path: Pat
 
 
 def test_check_context_option_reports_manifest_workspace_gate_semantics(tmp_path: Path):
-    _write_manifest_workspace(tmp_path)
+    from agentic_project_kit.workspace_init import build_workspace_init_plan, execute_workspace_init
+    execute_workspace_init(build_workspace_init_plan(tmp_path, execute=True))
 
     result = CliRunner().invoke(app, ["check", "--root", str(tmp_path), "--context"])
 
@@ -187,7 +188,8 @@ def test_check_docs_keeps_selfhosting_gate_when_manifest_is_present(tmp_path: Pa
 
 
 def test_check_all_accepts_manifest_workspace_without_sentinel_todo(tmp_path: Path):
-    _write_manifest_workspace(tmp_path)
+    from agentic_project_kit.workspace_init import build_workspace_init_plan, execute_workspace_init
+    execute_workspace_init(build_workspace_init_plan(tmp_path, execute=True))
     (tmp_path / "README.md").write_text("# Demo\nrequired-term\n", encoding="utf-8")
 
     assert check_all(tmp_path) == []

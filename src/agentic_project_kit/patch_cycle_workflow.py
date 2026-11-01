@@ -60,9 +60,10 @@ class PatchCycleStatus:
     disabled_actions: tuple[dict[str, object], ...]
     traffic_lights: dict[str, str]
     blockers: tuple[str, ...]
+    handoff_projection: dict[str, object] | None = None
 
     def as_dict(self) -> dict[str, object]:
-        return {
+        result = {
             "schema_version": self.schema_version,
             "kind": self.kind,
             "current_stage": self.current_stage,
@@ -84,6 +85,10 @@ class PatchCycleStatus:
             "traffic_lights": self.traffic_lights,
             "blockers": list(self.blockers),
         }
+        if self.handoff_projection is not None:
+            result.pop("handoff_generated_head")
+            result["handoff_projection"] = self.handoff_projection
+        return result
 
 
 def build_patch_cycle_status(
@@ -104,6 +109,14 @@ def build_patch_cycle_status(
     handoff_generated_head = str(handoff_validation.get("generated_head") or "")
     handoff_validation_status = str(handoff_validation.get("status") or "MISSING")
     handoff_fresh_for_head = bool(head_sha and handoff_generated_head == head_sha)
+    handoff_projection = None
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(project_root):
+        from agentic_project_kit.external_handoff_projection import check_projection
+        handoff_projection = check_projection(project_root)
+        handoff_generated_head = ""
+        handoff_validation_status = str(handoff_projection["status"])
+        handoff_fresh_for_head = handoff_validation_status == "PASS"
     pr = _read_pr(project_root, pr_number, include_ci, runner) if pr_number is not None else None
     current_stage = _current_stage(
         branch=branch,
@@ -153,6 +166,7 @@ def build_patch_cycle_status(
         disabled_actions=disabled_actions,
         traffic_lights=traffic_lights,
         blockers=blockers,
+        handoff_projection=handoff_projection,
     )
 
 

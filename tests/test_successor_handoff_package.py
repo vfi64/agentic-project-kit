@@ -332,12 +332,14 @@ def test_external_workspace_successor_handoff_package_uses_operating_layer_paths
     assert "agentic-kit transfer chat-switch-complete --render-prompt" in result.closeout_prompt
     assert "./.venv/bin/agentic-kit" not in result.closeout_prompt
     assert "docs/reference/agentic-kit-commands.json" not in successor_prompt
+    assert "@kit/agentic-kit-commands.json" in successor_prompt
     assert "agentic-kit check --root ." in successor_prompt
     assert "agentic-kit doctor --root ." in successor_prompt
     assert "agentic-kit transfer repo-status" in successor_prompt
-    assert "agentic-kit rules acknowledge" not in successor_prompt
-    assert "agentic-kit transfer post-merge-check" not in successor_prompt
-    assert "main == origin/main" not in successor_prompt
+    assert "projection_contract_version" in successor_prompt
+    assert "runtime_identity.json" in successor_prompt
+    bootstrap_rule = next(rule for rule in contract["rules"] if rule["rule_id"] == "bootstrap_acceptance_gate")
+    assert "main == origin/main while continuing a feature branch" in bootstrap_rule["not_required_for_external_workspace"]
     assert "PR #1304" not in successor_prompt
     assert "agentic-kit check --root ." in next_bootstrap
     assert "agentic-kit doctor --root ." in start_prompt
@@ -356,9 +358,9 @@ def test_external_workspace_chat_switch_cli_defaults_to_workspace_package_path(t
 
     def fake_run_git(_root, args):
         if args == ["rev-parse", "HEAD"]:
-            return "external123456"
+            return "a" * 40
         if args == ["rev-parse", "origin/main"]:
-            return "external123456"
+            return "a" * 40
         if args == ["status", "--short"]:
             return ""
         if args == ["branch", "--show-current"]:
@@ -371,12 +373,14 @@ def test_external_workspace_chat_switch_cli_defaults_to_workspace_package_path(t
 
     result = CliRunner().invoke(
         app,
-        ["transfer", "chat-switch-complete", "--json", "--no-update-canonical-prompts"],
+        ["transfer", "chat-switch-complete", "--json"],
     )
 
     assert result.exit_code == 0, result.output
     payload = json.loads(result.output)
     assert payload["result_status"] == "PASS"
+    assert payload["runtime_identity"]["validator_status"] == "PASS"
+    assert payload["runtime_identity"]["generated_head"] == "a" * 40
     assert payload["context_path"] == ".agentic/state/handoff/packages/latest/successor_context.yaml"
     assert (tmp_path / payload["context_path"]).exists()
 

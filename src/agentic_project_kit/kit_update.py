@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import json
 from pathlib import Path
@@ -34,8 +34,9 @@ from agentic_project_kit.workspace_ci_update import is_kit_written_ci_template, 
 print(json.dumps({"kit_written": is_kit_written_ci_template(json.loads(sys.argv[1])), "template": managed_ci_template_text()}))"""
 
 
-_INVENTORY = """import importlib.metadata as m, json, sys
-print(json.dumps({"python": sys.version, "packages": sorted((d.metadata["Name"], d.version) for d in m.distributions())}))"""
+_INVENTORY = """import importlib.metadata as m, importlib.util, json, sys
+contract = 2 if importlib.util.find_spec('agentic_project_kit.external_handoff_projection') else 1
+print(json.dumps({"python": sys.version, "projection_contract_version": contract, "packages": sorted((d.metadata["Name"], d.version) for d in m.distributions())}))"""
 
 
 def signature(plan: dict) -> str:
@@ -57,9 +58,9 @@ def _file_state(root: Path, relative: str) -> str | None:
     return sha256_file(path) if path.exists() else None
 
 
-def _identity(run) -> dict:
+def _identity(run, *, allow_main: bool = False) -> dict:
     branch = checked(run, ["git", "symbolic-ref", "--short", "HEAD"]).strip()
-    if branch in {"main", "master"}:
+    if branch in {"main", "master"} and not allow_main:
         raise UpdateBlocked("work_branch_required: start a Kit work branch before updating")
     return {"branch": branch, "head": checked(run, ["git", "rev-parse", "HEAD"]).strip()}
 
@@ -103,10 +104,12 @@ class UpdatePlan:
     target: PreparedTarget
     desired_pins: dict[str, bytes]
     before: dict[str, str | None]
+    desired_projection: dict[str, bytes] = field(default_factory=dict)
 
 
 def build_update_plan(
-    root: Path, version: str, run, *, prepare=prepare_target, discover=discover_kit_installation
+    root: Path, version: str, run, *, prepare=prepare_target, discover=discover_kit_installation,
+    return_adoption: str = "", observe_pr=None,
 ) -> UpdatePlan:
     try:
         target_version = Version(version)
@@ -120,10 +123,11 @@ def build_update_plan(
         "AGENTS.md",
         "docs/handoff/START_NEW_CHAT_PROMPT.md",
     }
+    from agentic_project_kit.kit_update_projection import projection_update_paths
     paths = sorted(
         {CI_TEMPLATE_PATH, CI_INJECTION_TARGET, ".agentic/config.yaml", ".venv/pyvenv.cfg",
          INVENTORY.as_posix()}
-        | allowed
+        | allowed | set(projection_update_paths(root))
     )
     before = {path: _file_state(root, path) for path in paths}
     ws = load_workspace(root, suppress_legacy_profile_warning=True)
@@ -131,7 +135,14 @@ def build_update_plan(
         raise UpdateBlocked("external_manifest_workspace_required")
     if Path(checked(run, ["git", "rev-parse", "--show-toplevel"]).strip()).resolve() != root:
         raise UpdateBlocked("workspace_root_must_be_git_root")
-    identity = _identity(run)
+    return_proof = None
+    if return_adoption:
+        from agentic_project_kit.kit_return import verify_install_return, observe_return_pr
+        return_proof = verify_install_return(
+            root, return_adoption, version, run=run,
+            observe_pr=observe_pr or (lambda number: observe_return_pr(root, run, number)),
+        )
+    identity = _identity(run, allow_main=return_proof is not None)
     installation = _installation(root, ws.kit.interpreter, discover)
     current = installation["version"]
     try:
@@ -140,7 +151,9 @@ def build_update_plan(
         current_version = Version(current)
     except InvalidVersion as exc:
         raise UpdateBlocked("unsupported_installed_version") from exc
-    if target_version < current_version:
+    if return_proof and current not in {return_proof["installed_version_before"], version}:
+        raise UpdateBlocked("return_installed_version_mismatch")
+    if target_version < current_version and return_proof is None:
         raise UpdateBlocked("kit_downgrade_refused")
     python = installation["candidate"]["python"]
     # Validate provenance/ambiguity before network resolution or installing even
@@ -180,12 +193,23 @@ def build_update_plan(
     # The released CLI may only project these known operating-layer surfaces.
     if set(entry_paths) - allowed:
         raise UpdateBlocked("unexpected_target_entrypoint_path")
+    desired_projection = {}
+    from agentic_project_kit import __version__
+    if return_proof is None and target_version >= Version(__version__):
+        from agentic_project_kit.kit_update_projection import preview_target_projection
+        desired_projection = preview_target_projection(root, target.python, desired, run)
+    if return_proof is None and inventory.get("projection_contract_version", 1) >= 2 and not desired_projection:
+        raise UpdateBlocked("projection_contract_downgrade_refused: use the evidence-bound return route")
     if any(_file_state(root, path) != digest for path, digest in before.items()):
         raise UpdateBlocked("workspace_changed_during_plan")
     changed = sorted(
         {path for path, content in desired.items() if (root / path).read_bytes() != content}
         | set(entry_paths)
+        | {path for path, content in desired_projection.items()
+           if not (root / path).exists() or (root / path).read_bytes() != content}
     )
+    if return_proof is not None and changed:
+        raise UpdateBlocked("return_requires_unchanged_workspace_plan")
     artifacts = [
         {key: value for key, value in artifact.items() if key != "url"}
         for artifact in target.artifacts
@@ -211,7 +235,7 @@ def build_update_plan(
     # KIT-GF-072: a Kit-derived rule-mechanism inventory records the installed Kit version and
     # source hashes, so it is re-derived by the updated Kit after the signed update. Its content
     # is derived from the verified release; a hand-reviewed inventory is never touched.
-    refresh_inventory = _kit_derived_inventory(root)
+    refresh_inventory = return_proof is None and _kit_derived_inventory(root)
     payload = {
         "schema_version": 1,
         "root": str(root),
@@ -227,6 +251,9 @@ def build_update_plan(
         "pin_hashes_after": {
             path: hashlib.sha256(content).hexdigest() for path, content in desired.items()
         },
+        "projection_hashes_after": {
+            path: hashlib.sha256(content).hexdigest() for path, content in desired_projection.items()
+        },
         "manifest_ack_after": ack,
         "actions": [
             "install_released_wheels" if install_required else "verify_installed_version",
@@ -238,7 +265,9 @@ def build_update_plan(
         ],
         "derived_paths": [INVENTORY.as_posix()] if refresh_inventory else [],
     }
-    return UpdatePlan(payload, target, desired, before)
+    if return_proof is not None:
+        payload["return_evidence"] = return_proof
+    return UpdatePlan(payload, target, desired, before, desired_projection)
 
 
 def _kit_derived_inventory(root: Path) -> bool:
@@ -297,6 +326,8 @@ def run_kit_update(
     run=None,
     prepare=None,
     discover=None,
+    return_adoption: str = "",
+    observe_pr=None,
 ) -> dict:
     root = root.resolve()
     result = {
@@ -319,9 +350,8 @@ def run_kit_update(
         )
         run = run or UpdateRunner(root, Path(result["log_path"]))
         discover = discover or discover_kit_installation
-        plan = build_update_plan(
-            root, version, run, prepare=prepare or prepare_target, discover=discover
-        )
+        plan = build_update_plan(root, version, run, prepare=prepare or prepare_target, discover=discover,
+                                 **({"return_adoption": return_adoption, "observe_pr": observe_pr} if return_adoption else {}))
         sig = signature(plan.payload)
         result.update(
             plan=plan.payload,
@@ -332,6 +362,11 @@ def run_kit_update(
         result["next_action"] = (
             f"agentic-kit kit update --root {shlex.quote(str(root))} --version {version} --execute --expected-signature {sig} --json"
         )
+        if return_adoption:
+            result["next_action"] = (
+                f"agentic-kit kit return-install --root {shlex.quote(str(root))} --adoption {return_adoption} "
+                f"--execute --expected-signature {sig} --json"
+            )
         if not execute:
             result["result_status"] = "AWAITING_APPROVAL"
             _write(Path(result["state_path"]), result)
@@ -341,7 +376,15 @@ def run_kit_update(
         with acquire_workspace_lock(root, "kit_update"):
             # Repeat observable preconditions after preparation and immediately
             # before mutation; stages/receipts do not participate in the signature.
-            if _identity(run) != {key: plan.payload[key] for key in ("branch", "head")}:
+            if return_adoption:
+                from agentic_project_kit.kit_return import verify_install_return, observe_return_pr
+                current_proof = verify_install_return(
+                    root, return_adoption, version, run=run,
+                    observe_pr=observe_pr or (lambda number: observe_return_pr(root, run, number)),
+                )
+                if current_proof != plan.payload["return_evidence"]:
+                    raise UpdateBlocked("return_evidence_changed")
+            if _identity(run, allow_main=bool(return_adoption)) != {key: plan.payload[key] for key in ("branch", "head")}:
                 raise UpdateBlocked("workspace_branch_or_head_changed")
             if any(_file_state(root, path) != digest for path, digest in plan.before.items()):
                 raise UpdateBlocked("workspace_files_changed")
@@ -380,6 +423,7 @@ def run_kit_update(
                         "--no-index",
                         "--no-deps",
                         "--upgrade",
+                        *(["--force-reinstall"] if plan.payload["installation"]["version"] == version else []),
                         *map(str, plan.target.wheels),
                     ],
                     timeout=180,
@@ -387,13 +431,18 @@ def run_kit_update(
             installed = _installation(root, ws.kit.interpreter, discover)
             if installed["version"] != version:
                 raise UpdateBlocked("installed_version_mismatch")
+            expected_kit = next(item for item in plan.payload["artifacts"] if re.sub(r"[-_.]+", "-", item["name"].lower()) == "agentic-project-kit")
+            if installed.get("wheel_sha256") != expected_kit["sha256"]:
+                raise UpdateBlocked("installed_wheel_identity_mismatch")
             record("install")
-            if _identity(run) != {key: plan.payload[key] for key in ("branch", "head")}:
+            if _identity(run, allow_main=bool(return_adoption)) != {key: plan.payload[key] for key in ("branch", "head")}:
                 raise UpdateBlocked("workspace_branch_or_head_changed_after_install")
             if any(_file_state(root, path) != digest for path, digest in plan.before.items()):
                 raise UpdateBlocked("workspace_files_changed_after_install")
             for path, content in plan.desired_pins.items():
                 target_path = root / path
+                if target_path.read_bytes() == content:
+                    continue
                 temp = target_path.with_suffix(".kit-update-writing")
                 temp.write_bytes(content)
                 temp.replace(target_path)
@@ -420,6 +469,14 @@ def run_kit_update(
             ):
                 raise UpdateBlocked("target_entrypoint_projection_changed")
             record("entrypoints")
+            if plan.desired_projection:
+                for path, content in plan.desired_projection.items():
+                    target_path = root / path
+                    target_path.parent.mkdir(parents=True, exist_ok=True)
+                    temp = target_path.with_suffix(".kit-update-writing")
+                    temp.write_bytes(content)
+                    temp.replace(target_path)
+                record("projection")
             # check emits a structured status; doctor has a text-only contract.
             check = json_command(run, [*argv, "check", "--root", str(root), "--json"])
             if check.get("status") != "PASS":
@@ -436,12 +493,19 @@ def run_kit_update(
         # Outside the update lock: bootstrap takes the workspace lock itself and re-verifies its
         # own evidence before writing.
         next_action = "Finish changed files through the normal Kit work lifecycle."
-        if "refresh_rule_inventory" in plan.payload["actions"]:
+        if return_adoption:
+            from agentic_project_kit.kit_return import record_install_return
+            record_install_return(root, plan.payload["return_evidence"], installed_version=version, completed_steps=result["completed_steps"])
+        elif "refresh_rule_inventory" in plan.payload["actions"]:
             refreshed = _refresh_rule_inventory(run, argv, root)
             result["changed_paths"] = sorted({*result["changed_paths"], *refreshed})
             record("rule_inventory")
         elif not (root / INVENTORY).exists():
             next_action = f"Optionally run {bootstrap_route(root)}; then finish changed files through the normal Kit work lifecycle."
+        if plan.desired_projection and not return_adoption:
+            from agentic_project_kit.kit_return import record_adoption
+            adoption = record_adoption(root, adoption_id=run_id, plan={**plan.payload, "changed_paths": result["changed_paths"]}, approval_signature=sig)
+            result["adoption_id"] = adoption["adoption_id"]
         result.update(result_status="PASS", installed_version=version, next_action=next_action)
     except (UpdateBlocked, OSError, ValueError, RuntimeError) as exc:
         result.update(

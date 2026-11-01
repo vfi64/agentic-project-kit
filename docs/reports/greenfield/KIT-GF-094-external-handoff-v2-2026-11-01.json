@@ -1,0 +1,284 @@
+{
+  "consumer": "an external desktop controller",
+  "finding": "KIT-GF-094",
+  "fixed_in": "unreleased",
+  "full_suite": "PENDING",
+  "implementation_status": "VALIDATING",
+  "machine": {
+    "failures": [],
+    "result": "PASS",
+    "steps": [
+      {
+        "argv": [
+          "git",
+          "switch",
+          "-c",
+          "product"
+        ],
+        "failures": [],
+        "index": 0,
+        "returncode": 0
+      },
+      {
+        "failures": [],
+        "index": 1,
+        "write": "product.txt"
+      },
+      {
+        "argv": [
+          "git",
+          "add",
+          "product.txt"
+        ],
+        "failures": [],
+        "index": 2,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "commit",
+          "-m",
+          "Product work without handoff inputs"
+        ],
+        "failures": [],
+        "index": 3,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "switch",
+          "main"
+        ],
+        "failures": [],
+        "index": 4,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "merge",
+          "--squash",
+          "product"
+        ],
+        "failures": [],
+        "index": 5,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "commit",
+          "-m",
+          "Squash product"
+        ],
+        "failures": [],
+        "index": 6,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "push",
+          "origin",
+          "main"
+        ],
+        "failures": [],
+        "index": 7,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "agentic-kit",
+          "transfer",
+          "post-merge-check"
+        ],
+        "failures": [],
+        "index": 8,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "switch",
+          "-c",
+          "authority"
+        ],
+        "failures": [],
+        "index": 9,
+        "returncode": 0
+      },
+      {
+        "failures": [],
+        "index": 10,
+        "write": ".agentic/state/status.md"
+      },
+      {
+        "argv": [
+          "agentic-kit",
+          "check"
+        ],
+        "failures": [],
+        "index": 11,
+        "returncode": 1
+      },
+      {
+        "argv": [
+          "agentic-kit",
+          "transfer",
+          "chat-switch-complete",
+          "--json"
+        ],
+        "failures": [],
+        "index": 12,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "add",
+          "-A"
+        ],
+        "failures": [],
+        "index": 13,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "commit",
+          "-m",
+          "Update authority with deterministic projection"
+        ],
+        "failures": [],
+        "index": 14,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "switch",
+          "main"
+        ],
+        "failures": [],
+        "index": 15,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "merge",
+          "--squash",
+          "authority"
+        ],
+        "failures": [],
+        "index": 16,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "commit",
+          "-m",
+          "Squash authority"
+        ],
+        "failures": [],
+        "index": 17,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "push",
+          "origin",
+          "main"
+        ],
+        "failures": [],
+        "index": 18,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "agentic-kit",
+          "transfer",
+          "post-merge-check"
+        ],
+        "failures": [],
+        "index": 19,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "agentic-kit",
+          "transfer",
+          "chat-switch-complete",
+          "--json"
+        ],
+        "failures": [],
+        "index": 20,
+        "returncode": 0
+      },
+      {
+        "argv": [
+          "git",
+          "rev-parse",
+          "HEAD"
+        ],
+        "failures": [],
+        "index": 21,
+        "returncode": 0
+      },
+      {
+        "failures": [],
+        "index": 22,
+        "write": ".agentic/tmp/first-run"
+      },
+      {
+        "argv": [
+          "agentic-kit",
+          "transfer",
+          "chat-switch-complete",
+          "--json"
+        ],
+        "failures": [],
+        "index": 23,
+        "returncode": 0
+      },
+      {
+        "failures": [],
+        "index": 24,
+        "write": ".agentic/tmp/second-run"
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--no-index",
+          ".agentic/tmp/first-run",
+          ".agentic/tmp/second-run"
+        ],
+        "failures": [],
+        "index": 25,
+        "returncode": 1
+      },
+      {
+        "argv": [
+          "git",
+          "diff",
+          "--exit-code"
+        ],
+        "failures": [],
+        "index": 26,
+        "returncode": 0
+      }
+    ]
+  },
+  "noneditable_wheel": "PENDING",
+  "release_prerequisites": {
+    "consumer_rehearsal": "NOT_RUN",
+    "local_return": "PASS",
+    "owner_acceptance": "PENDING"
+  },
+  "schema_version": 1
+}

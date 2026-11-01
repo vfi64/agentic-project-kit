@@ -325,6 +325,7 @@ class SuccessorPackageResult:
     start_new_chat_prompt: str
     closeout_prompt: str
     output_dir: Path
+    runtime_identity: dict[str, Any] | None = None
 
 
 def _run_git(root: Path, args: list[str]) -> str:
@@ -1012,7 +1013,7 @@ def _source_manifest_validation_findings(
     return findings
 
 
-def build_execution_contract(context: dict[str, Any], ws: Workspace | None = None) -> dict[str, object]:
+def build_execution_contract(context: dict[str, Any], ws: Workspace | None = None, *, reference_contract: dict[str, Any] | None = None) -> dict[str, object]:
     """Build the machine-readable execution contract for successor chats."""
 
     ws = ws or _LEGACY_WORKSPACE
@@ -1052,8 +1053,8 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
     current_state_contract = {
         "scope": "current-continuation-state",
         "repo": {
-            "full_name": repo.get("full_name", detect_repo_full_name(ws.root)),
-            "local_path": repo.get("local_path", default_local_path_hint(ws.root)),
+            "full_name": repo["full_name"] if "full_name" in repo else detect_repo_full_name(ws.root),
+            "local_path": repo["local_path"] if "local_path" in repo else default_local_path_hint(ws.root),
             "branch": branch,
             "head": head,
             "origin_main": origin_main,
@@ -1114,8 +1115,8 @@ def build_execution_contract(context: dict[str, Any], ws: Workspace | None = Non
         "current_state_contract": current_state_contract,
         "handoff_projection_contract": handoff_projection_contract,
         "repo": current_state_contract["repo"],
-        "command_reference": command_reference_contract(ws.root),
-        "source_hashes": command_reference_contract(ws.root)["source_hashes"],
+        "command_reference": reference_contract if reference_contract is not None else command_reference_contract(ws.root),
+        "source_hashes": (reference_contract if reference_contract is not None else command_reference_contract(ws.root))["source_hashes"],
         "validation": {
             "status": validation_report.get("status"),
             "path": validation_report.get("path", ".agentic/successor_handoff_package/validation_report.json"),
@@ -1797,6 +1798,14 @@ def _next_markdown_section_index(text: str, start: int) -> int:
 
 
 def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> SuccessorPackageResult:
+    if _is_external_workspace(ws):
+        from agentic_project_kit.external_handoff_projection import build_external_package
+        return build_external_package(root_path)[0]
+    return _build_legacy_successor_handoff_package(root_path, ws)
+
+
+def _build_legacy_successor_handoff_package(root_path: Path, ws: Workspace) -> SuccessorPackageResult:
+    """Retained v1 renderer; external production dispatch never selects it."""
     context = _build_context(root_path, ws)
     source_manifest = _source_manifest(root_path, ws)
     successor_prompt = render_successor_prompt(context, ws)
@@ -1846,6 +1855,9 @@ def write_successor_handoff_package(
 ) -> SuccessorPackageResult:
     root_path = Path(root)
     ws = load_workspace(root_path)
+    if _is_external_workspace(ws):
+        from agentic_project_kit.external_handoff_projection import write_external_package
+        return write_external_package(root_path, output_dir, update_canonical_prompts=update_canonical_prompts)
     resolved_output_dir = Path(output_dir) if output_dir is not None else ws.handoff_packages_latest()
     relative_output_dir = Path(_workspace_path_text(ws, resolved_output_dir))
     result = _build_successor_handoff_package(root_path, ws)

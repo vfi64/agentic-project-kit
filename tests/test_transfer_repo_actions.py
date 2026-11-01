@@ -3843,7 +3843,7 @@ def test_successor_package_freshness_detects_missing_execution_contract(tmp_path
     assert any("missing docs/reports/handoff-packages/latest/execution_contract.json" in item for item in findings)
 
 
-def test_successor_package_freshness_accepts_external_bootstrap_contract(tmp_path, monkeypatch) -> None:
+def test_successor_package_freshness_requires_external_v1_migration(tmp_path, monkeypatch) -> None:
     import json
     import subprocess
 
@@ -3900,7 +3900,7 @@ def test_successor_package_freshness_accepts_external_bootstrap_contract(tmp_pat
         lambda command: subprocess.CompletedProcess(command, 0, head + "\n", ""),
     )
 
-    assert actions._successor_package_freshness_findings(tmp_path) == []
+    assert any("NEEDS_PROJECTION_MIGRATION" in finding for finding in actions._successor_package_freshness_findings(tmp_path))
 
 
 def test_successor_package_freshness_detects_stale_generated_head(tmp_path, monkeypatch) -> None:

@@ -86,3 +86,29 @@ def update(
     except (OSError, RuntimeError, ValueError) as exc:
         payload = _error(exc)
     _emit(payload, json_output)
+
+
+@kit_app.command("return-revert")
+def return_revert(
+    adoption: str = typer.Option(..., "--adoption", help="Immutable v2 adoption evidence ID."),
+    root: Path = typer.Option(Path("."), "--root", help="External workspace on its return work branch."),
+    execute: bool = typer.Option(False, "--execute", help="Prepare the exactly signed revert; normal work closeout follows."),
+    expected_signature: str = typer.Option("", "--expected-signature", help="Approval signature from the fresh return plan."),
+    json_output: bool = typer.Option(False, "--json"),
+) -> None:
+    """Preflight the recorded adoption's squash revert and stage its verified prior Kit through the existing updater."""
+    from agentic_project_kit.kit_return import run_return_revert
+    _emit(run_return_revert(root, adoption, execute=execute, expected_signature=expected_signature), json_output)
+
+
+@kit_app.command("return-install")
+def return_install(
+    adoption: str = typer.Option(..., "--adoption", help="Evidence ID whose verified revert PR is already merged."),
+    root: Path = typer.Option(Path("."), "--root", help="Already reverted external workspace."),
+    execute: bool = typer.Option(False, "--execute", help="Owner decision: execute the exactly signed installation return."),
+    expected_signature: str = typer.Option("", "--expected-signature", help="Approval signature from the fresh installation plan."),
+    json_output: bool = typer.Option(False, "--json"),
+) -> None:
+    """Return only to the prior pinned 1.1.10 through the existing two-phase updater; no general downgrade."""
+    from agentic_project_kit.kit_return import run_install_return
+    _emit(run_install_return(root, adoption, execute=execute, expected_signature=expected_signature), json_output)

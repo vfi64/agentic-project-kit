@@ -439,6 +439,18 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             help="Print JSON instead of text.",
         ),
     ) -> None:
+        from agentic_project_kit.kit_return import prepare_pending_return_closeout
+        try:
+            pending_return = prepare_pending_return_closeout(Path.cwd(), after_pr)
+        except (OSError, ValueError, RuntimeError) as exc:
+            payload = {"result_status": "BLOCKED", "returncode": 2, "after_pr": after_pr, "blocker": str(exc)}
+            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+            raise typer.Exit(2) from exc
+        if pending_return is not None:
+            payload = {"result_status": "PENDING", "returncode": 2, "after_pr": after_pr,
+                       "lifecycle_state": "NEEDS_PROJECTION_MIGRATION", "completion_receipt": None, **pending_return}
+            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+            raise typer.Exit(2)
         preflight_cleanup = restore_known_volatile_for_post_merge(Path("."))
         local_state = _cleanup_state_from_payload(preflight_cleanup)
         if bool(preflight_cleanup.get("ok")) and local_state.clean:

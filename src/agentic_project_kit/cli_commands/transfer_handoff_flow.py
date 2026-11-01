@@ -222,6 +222,8 @@ def _emit_successor_package(
         update_canonical_prompts=update_canonical_prompts,
     )
     package_dir = result.output_dir
+    runtime = result.runtime_identity
+    repo_identity = runtime if runtime is not None else result.context["repo"]
     payload = {
         "schema_version": 1,
         "kind": "transfer_chat_switch_complete_result",
@@ -231,16 +233,30 @@ def _emit_successor_package(
         "validation_report_path": str(package_dir / "validation_report.json"),
         "successor_prompt_path": str(package_dir / "successor_prompt.md"),
         "updated_canonical_prompts": update_canonical_prompts,
-        "generated_head": result.context["repo"]["head"],
-        "generated_head_short": result.context["repo"]["head_short"],
+        "generated_head": repo_identity["head"],
+        "generated_head_short": str(repo_identity["head"])[:8] if runtime is not None else repo_identity["head_short"],
         "open_tasks": result.context["short_term_memory"]["open_tasks"],
         "findings": result.validation_report["findings"],
     }
+    if runtime is not None:
+        from agentic_project_kit.external_handoff_projection import RUNTIME_PATH, validate_runtime_identity
+        payload.update(
+            runtime_identity=runtime, runtime_identity_path=RUNTIME_PATH,
+            projection_contract_version=runtime["projection_contract_version"],
+            input_digest=runtime["input_digest"], run_id=runtime["run_id"],
+            result_status=validate_runtime_identity(runtime, expected_head=runtime["head"]),
+        )
     if json_output:
         typer.echo(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
+        if payload["result_status"] != "PASS":
+            raise typer.Exit(code=1)
         return
     if render_prompt:
         typer.echo(result.successor_prompt)
+        if runtime is not None:
+            typer.echo("\n## Runtime identity for this handoff\n```json\n" + json.dumps(runtime, indent=2, sort_keys=True) + "\n```")
+            if payload["result_status"] != "PASS":
+                raise typer.Exit(code=1)
         return
     typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
     typer.echo(f"FINAL_SIGNAL={'d' if result.validation_report['status'] == 'PASS' else 'f'}")
@@ -298,10 +314,11 @@ def prepare_successor_handoff(
     _ = (repair_known_volatile, write_outbox)
 
     emit_successor_package = _public_transfer_attr("_emit_successor_package", _emit_successor_package)
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
     emit_successor_package(
         json_output=json_output,
         render_prompt=render_prompt,
-        output_dir="docs/reports/handoff-packages/latest",
+        output_dir=None if is_external_manifest_workspace(Path(".")) else "docs/reports/handoff-packages/latest",
         update_canonical_prompts=True,
     )
 

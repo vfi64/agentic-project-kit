@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -19,12 +20,13 @@ class UpdateRunner:
     root: Path
     log_path: Path
 
-    def __call__(self, argv: list[str], *, timeout: int = 120) -> subprocess.CompletedProcess[str]:
+    def __call__(self, argv: list[str], *, timeout: int = 120, binary: bool = False) -> subprocess.CompletedProcess:
         self.log_path.parent.mkdir(parents=True, exist_ok=True)
         start = time.monotonic()
         self._append({"event": "START", "argv": argv})
         try:
             environment = os.environ.copy()
+            environment["GIT_OPTIONAL_LOCKS"] = "0"
             if "-m" in argv and argv[argv.index("-m") + 1] == "pip":
                 # --isolated alone still loads system and venv pip.conf. Those
                 # files could add an unsigned extra index or installation scope.
@@ -34,7 +36,7 @@ class UpdateRunner:
                 cwd=self.root,
                 env=environment,
                 capture_output=True,
-                text=True,
+                text=not binary,
                 timeout=timeout,
             )
         except (OSError, subprocess.TimeoutExpired) as exc:
@@ -53,8 +55,8 @@ class UpdateRunner:
                 "argv": argv,
                 "rc": result.returncode,
                 "duration": time.monotonic() - start,
-                "stdout": result.stdout,
-                "stderr": result.stderr,
+                "stdout": result.stdout if not binary else {"sha256": hashlib.sha256(result.stdout).hexdigest(), "bytes": len(result.stdout)},
+                "stderr": result.stderr if not binary else result.stderr.decode("utf-8", errors="replace"),
             }
         )
         return result

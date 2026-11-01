@@ -444,9 +444,15 @@ def _render_markdown(data: dict[str, Any], section: str) -> str:
     lines: list[str] = [
         "# Project Direction",
         "",
-        f"- Status: `{meta.get('status')}`",
+        f"Status: {meta.get('status')}",
+        f"Decision status: {meta.get('decision_status', 'review')}",
+        f"Review policy: {meta.get('review_policy', 'required')}",
+        "",
         f"- {_updated_after_pr_render_label(meta)}: `{meta.get('updated_after_pr')}`",
         f"- Authority: `{meta.get('authority')}`",
+        "",
+        f"`{meta.get('authority')}` is the canonical machine-readable source. "
+        "This generated view is not independent planning authority.",
         "",
     ]
     if section in {"all", "strategy"}:

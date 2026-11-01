@@ -2,6 +2,7 @@ from __future__ import annotations
 
 RULE_ACK_DIRECTORY_PATH = ".agentic/rule_ack"
 RULE_ACK_CURRENT_PATH = f"{RULE_ACK_DIRECTORY_PATH}/current.json"
+SUCCESSOR_RUNTIME_IDENTITY_PATH = ".agentic/tmp/handoff/runtime_identity.json"
 
 TRANSFER_INBOX_NEXT_COMMAND_PATH = ".agentic/transfer/inbox/next_command.py.txt"
 TRANSFER_OUTBOX_DIRECTORY_PATH = ".agentic/transfer/outbox"
@@ -69,6 +70,7 @@ KNOWN_SUCCESSOR_HANDOFF_PROJECTION_PATHS = (
 )
 
 KNOWN_RUNTIME_STATUS_PATHS = (
+    SUCCESSOR_RUNTIME_IDENTITY_PATH,
     LEGACY_LOCAL_GC_REPORT_PATH,
     LEGACY_LOCAL_GC_RUN_MARKER_PATH,
     LEGACY_LOCAL_COMMAND_STACK_STATE_PATH,

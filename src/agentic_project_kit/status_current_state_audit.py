@@ -51,6 +51,7 @@ class StatusCurrentStateAuditResult:
     findings: tuple[StatusCurrentStateFinding, ...]
     blockers: tuple[StatusCurrentStateFinding, ...]
     warnings: tuple[StatusCurrentStateFinding, ...] = ()
+    projection: dict[str, Any] | None = None
 
     @property
     def ok(self) -> bool:
@@ -65,7 +66,7 @@ class StatusCurrentStateAuditResult:
         return 0 if self.ok else 2
 
     def as_dict(self) -> dict[str, object]:
-        return {
+        result = {
             "schema_version": 1,
             "kind": "status_current_state_audit",
             "root": self.root,
@@ -85,6 +86,10 @@ class StatusCurrentStateAuditResult:
             "blockers": [finding.as_dict() for finding in self.blockers],
             "warnings": [finding.as_dict() for finding in self.warnings],
         }
+        if self.projection is not None:
+            result.pop("validation_generated_head")
+            result.update(self.projection)
+        return result
 
 
 def audit_status_current_state(
@@ -94,6 +99,22 @@ def audit_status_current_state(
     release_status_builder: ReleaseStatusBuilder | None = None,
     max_origin_lag: int = 3,
 ) -> StatusCurrentStateAuditResult:
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(root):
+        from agentic_project_kit.external_handoff_projection import check_projection
+        projection = check_projection(root)
+        finding = StatusCurrentStateFinding(
+            path=".agentic/state/handoff/packages/latest/validation_report.json",
+            check=projection["code"], status=projection["status"],
+            detail=json.dumps(projection, sort_keys=True),
+        )
+        return StatusCurrentStateAuditResult(
+            root=str(root), package_version=None, status_version=None,
+            status_current_verified_release=None, status_current_verified_main=None,
+            validation_status=projection["status"], validation_generated_head=None,
+            origin_main=None, release_current_state=None, findings=(finding,),
+            blockers=() if projection["status"] == "PASS" else (finding,), projection=projection,
+        )
     root = root.resolve()
     findings: list[StatusCurrentStateFinding] = []
     blockers: list[StatusCurrentStateFinding] = []
@@ -231,6 +252,8 @@ def audit_status_current_state(
 
 
 def render_status_current_state_audit(result: StatusCurrentStateAuditResult) -> str:
+    if result.projection is not None:
+        return "STATUS_CURRENT_STATE_AUDIT\n" + json.dumps(result.as_dict(), indent=2, sort_keys=True) + "\n"
     lines = [
         "STATUS_CURRENT_STATE_AUDIT",
         f"STATUS={result.status}",

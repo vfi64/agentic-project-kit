@@ -225,7 +225,7 @@
       "blockers": [],
       "evidence": [
         {
-          "detail": "commands=273",
+          "detail": "commands=275",
           "evidence_type": "generated-artifact",
           "status": "verified"
         }

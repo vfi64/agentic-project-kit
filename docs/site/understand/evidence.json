@@ -1196,7 +1196,7 @@
     "schema_version": 1,
     "sources": {
       "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "147b837beb19a82c9a4cadaf1c9f2afc8202b39ad2da61d0ef63a13aaccd5065",
-      "docs/reference/agentic-kit-commands.json": "aa52355e172993426f74c11f580dd6f0044899997a8f116436554f149fe87515",
+      "docs/reference/agentic-kit-commands.json": "fb70bee006ceb4cb24bdb2e6ab484d3aab5f5fbc71d635ccafe5849fb340ae2e",
       "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
       "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
       "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -1206,8 +1206,8 @@
       "site/templates/figures/G2.svg": "8765be0ba0e6d94c6c9448905e816211583ff3fdb1fb457fbde766c3dba1ec60",
       "site/templates/figures/G3-mobile.svg": "6d9cccea1ddf7b43fb34bec25c215175c40becb2497b9cd71ebc9de8293a5e72",
       "site/templates/figures/G3.svg": "52ba78e99e8496b7c3de1ccb04889f860afdcea8566c448a40d5a555b8c82152",
-      "src/agentic_project_kit/cli_commands/human_workflows.py": "c8b1a63d3c810be3a73b5b6a77cec6c2414a21f9211b8d553c0257d2e2ab6057",
-      "src/agentic_project_kit/successor_handoff_package.py": "053a96a55182ff05d3e801c56dfc74535a4205de67ecd4db1ba837c2494f81f2"
+      "src/agentic_project_kit/cli_commands/human_workflows.py": "26af380197b49f68dca955773104ec682d22731d0402f840b21d6c9de938f395",
+      "src/agentic_project_kit/successor_handoff_package.py": "9be8dee7b4b5f107e15ea8ae783d47b63d90555146127becd7c9f211059dbfa8"
     }
   }
 }

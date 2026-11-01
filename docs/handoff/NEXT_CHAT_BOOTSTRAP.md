@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `dea389a638c039f7d712e7daed3a6706d4fefa13` (`dea389a6`)
-- Handoff freshness marker: `dea389a6`
-- Branch at generation: `docs/post-pr2708-handoff-refresh`
+- HEAD: `fd29840904e6e676212c15d50d0eddc0c40ad46c` (`fd298409`)
+- Handoff freshness marker: `fd298409`
+- Branch at generation: `codex/external-handoff-v2`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -108,7 +108,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: c75ff9f747e1). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK c75ff9f747e1. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: c37a88a94d05). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK c37a88a94d05. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -118,5 +118,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: b1b3be74e754a9fd9517738a9c6ffd8ba642128575b3b4142b0f4b19fc22ff79
-- docs/reference/agentic-kit-commands.json: aa52355e172993426f74c11f580dd6f0044899997a8f116436554f149fe87515
+- docs/reference/AGENTIC_KIT_COMMANDS.md: c2be2dcef51ac1313609ac1023649f3ca6fb9d8a3d9f49c51519686e9c0fc25e
+- docs/reference/agentic-kit-commands.json: fb70bee006ceb4cb24bdb2e6ab484d3aab5f5fbc71d635ccafe5849fb340ae2e

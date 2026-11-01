@@ -8,6 +8,8 @@ meta:
     maintainer-gated.
   owner: maintainers
   status: active
+  decision_status: accepted
+  review_policy: required
   updated_after_pr: 2591
   updated_after_pr_semantics: strategic_direction_refresh
   updated_after_pr_current_main_claimed: false
@@ -104,7 +106,20 @@ meta:
           owner-approved administrative-effort follow-up proposals below.
       - id: decomplexification-audit-roadmap
         step: transfer-lifecycle-consolidation
-        status: planned
+        status: active
+        measurement_evidence:
+        - docs/reports/COMMAND_USAGE_AUDIT_20261015.md#F3
+        - kit-control-effectiveness-measurement rationale
+        - docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+        first_reduction_slice:
+          finding: KIT-GF-094
+          stage: 1
+          owner_approved: '2026-11-01'
+          scope: External workspace deterministic content projection and ignored runtime identity only.
+          supersedes_for_external_mode:
+            source: docs/reports/POST_0_5_0_C4_REFRESH_CHAIN_DECISION_20260813.md
+            decision: F1
+            reason: Versioned v2 contains no post-merge facts; exact Git identity is runtime-only. Self-hosting C4 remains unchanged.
         scope: First measure current repeated closeout checks, render passes and
           administrative handoff work using the existing invocation ledger. Propose
           a bounded reduction aligned with next-turn-workflow-kernel; an additional
@@ -2301,6 +2316,8 @@ plans:
   acceptance:
   - Establish a measured baseline for successor prompts, handoff packages, status
     pointers, evidence references, and common Greenfield/Brownfield bootstrap context.
+  - For external workspaces, post-merge freshness is deterministic content freshness
+    under projection v2; exact head references belong to ignored runtime identity.
   - Define task-scoped context profiles for release, bugfix, planning, Greenfield,
     Brownfield, and handoff-only work.
   - Keep long evidence, full reports, and source documents in the repository; compact
@@ -3476,9 +3493,11 @@ plans:
       - POST_MERGE_CHECK_FAILED
       - POST_MERGE_COMPLETE
       - HANDOFF_REFRESH_REQUIRED
+      - NEEDS_PROJECTION_MIGRATION
       - RELEASE_CLOSEOUT_REQUIRED
       - BLOCKED
       invariants:
+      - NEEDS_PROJECTION_MIGRATION is external-only and has one transition through the governed v1-to-v2 migration route
       - feature-branch gates and main/post-merge gates are distinct
       - post-merge-check is a main/post-merge lifecycle check, not a feature-branch
         pre-PR gate
@@ -3810,6 +3829,7 @@ plans:
       evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     - id: B1-KIT-008
       status: released_package_retest_pass
+      adoption_sequence: The B1 Brownfield workspace adopts a Kit containing KIT-GF-094 only after cycle 008 is completed and recorded (owner decision F2, 2026-11-01).
       goal: Make post-merge-settle return cleanly after generated admin refresh
         PRs have reached a terminal PASS/NOOP state, with bounded progress or
         timeout evidence for long waits.

@@ -561,4 +561,15 @@ def check_all(project_root: Path) -> list[str]:
     errors: list[str] = []
     errors.extend(check_docs(project_root))
     errors.extend(check_todo(project_root))
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(project_root):
+        from agentic_project_kit.external_handoff_projection import check_projection
+        projection = check_projection(project_root)
+        if projection["status"] != "PASS":
+            errors.append(
+                f"{projection['code']}: {projection.get('message', 'External handoff projection is not current')}; "
+                f"changed_inputs={projection.get('changed_inputs', [])}; "
+                f"differing_paths={projection.get('differing_paths', [])}; "
+                f"regenerate with {projection['migration_route']}"
+            )
     return errors

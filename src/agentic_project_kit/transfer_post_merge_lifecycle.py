@@ -8,6 +8,7 @@ from agentic_project_kit.composed_wrapper_invariants import assert_no_failed_req
 from agentic_project_kit.transfer_post_merge_state import (
     NEEDS_HANDOFF_REFRESH_STATE,
     NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE,
+    NEEDS_PROJECTION_MIGRATION_STATE,
     READY_STATE,
     REFRESHABLE_POST_MERGE_STATES,
     post_merge_state as classify_post_merge_state,
@@ -75,7 +76,7 @@ def _refresh_plan_for_state(state: str, *, main_branch: str) -> RefreshPlan | No
             blocked_state_prefix="ADMIN_REFRESH",
             create=lambda after_pr: admin_refresh_pr(after_pr, main_branch=main_branch),
         )
-    if state == NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE:
+    if state in {NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE, NEEDS_PROJECTION_MIGRATION_STATE}:
         return RefreshPlan(
             step_prefix="successor-package-refresh-pr",
             display_name="successor package refresh",
@@ -218,6 +219,11 @@ def _run_final_check(
         else "final-post-merge-check"
     )
     steps.append(PostMergeLifecycleStep(step_name, final_check))
+    from agentic_project_kit.kit_return import installation_return_is_pending
+    if installation_return_is_pending(final_check):
+        return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
+                       lifecycle_state=NEEDS_PROJECTION_MIGRATION_STATE, next_action=final_check.next_action,
+                       steps=steps, refresh_pr=refresh_pr)
     final_state = _post_merge_state(final_check)
     return _finish_after_final_check(
         after_pr=after_pr,
@@ -249,9 +255,24 @@ def post_merge_complete(
 
     steps: list[PostMergeLifecycleStep] = []
 
+    from pathlib import Path
+    from agentic_project_kit.kit_return import prepare_pending_return_closeout, installation_return_is_pending
+    try:
+        pending = prepare_pending_return_closeout(Path.cwd(), after_pr)
+    except (OSError, ValueError, RuntimeError) as exc:
+        return _finish(after_pr=after_pr, result_status="BLOCKED", returncode=2,
+                       lifecycle_state="RETURN_EVIDENCE_BLOCKED", next_action=str(exc), steps=steps)
+    if pending is not None:
+        return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
+                       lifecycle_state=NEEDS_PROJECTION_MIGRATION_STATE,
+                       next_action="RETURN_INSTALLATION_APPROVAL_REQUIRED=True; " + pending["next_action"], steps=steps)
+
     initial_check = post_merge_check(main_branch=main_branch)
     steps.append(PostMergeLifecycleStep("initial-post-merge-check", initial_check))
     initial_state = _post_merge_state(initial_check)
+    if installation_return_is_pending(initial_check):
+        return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
+                       lifecycle_state=initial_state, next_action=initial_check.next_action, steps=steps)
 
     refresh_plan = _refresh_plan_for_state(initial_state, main_branch=main_branch)
 

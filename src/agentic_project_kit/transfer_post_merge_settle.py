@@ -7,6 +7,7 @@ from typing import Callable
 from agentic_project_kit.transfer_post_merge_state import (
     NEEDS_HANDOFF_REFRESH_STATE,
     NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE,
+    NEEDS_PROJECTION_MIGRATION_STATE,
     READY_STATE,
     post_merge_state as classify_post_merge_state,
 )
@@ -54,6 +55,7 @@ RefreshFactory = Callable[[int], RepoActionResult]
 _REFRESHABLE_STATES = {
     NEEDS_HANDOFF_REFRESH_STATE: "handoff-refresh",
     NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE: "successor-package-refresh",
+    NEEDS_PROJECTION_MIGRATION_STATE: "projection-migration",
 }
 
 
@@ -150,7 +152,7 @@ def _refresh_factory(
     state: str,
     main_branch: str,
 ) -> RefreshFactory | None:
-    if state == NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE:
+    if state in {NEEDS_SUCCESSOR_PACKAGE_REFRESH_STATE, NEEDS_PROJECTION_MIGRATION_STATE}:
         return lambda after_pr: successor_package_refresh_pr(after_pr, main_branch=main_branch)
     if state == NEEDS_HANDOFF_REFRESH_STATE:
         return lambda after_pr: admin_refresh_pr(after_pr, main_branch=main_branch)
@@ -191,11 +193,28 @@ def post_merge_settle(
     refresh_kinds: list[str] = []
     current_after_pr = after_pr
 
+    from pathlib import Path
+    from agentic_project_kit.kit_return import prepare_pending_return_closeout, installation_return_is_pending
+    try:
+        pending = prepare_pending_return_closeout(Path.cwd(), after_pr)
+    except (OSError, ValueError, RuntimeError) as exc:
+        return _block(after_pr=after_pr, lifecycle_state="RETURN_EVIDENCE_BLOCKED", next_action=str(exc),
+                      refresh_limit=refresh_limit, refresh_prs=refresh_prs, refresh_kinds=refresh_kinds, steps=steps)
+    if pending is not None:
+        return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
+                       lifecycle_state=NEEDS_PROJECTION_MIGRATION_STATE,
+                       next_action="RETURN_INSTALLATION_APPROVAL_REQUIRED=True; " + pending["next_action"],
+                       refresh_limit=refresh_limit, refresh_prs=refresh_prs, refresh_kinds=refresh_kinds, steps=steps)
+
     while True:
         check_name = "initial-post-merge-check" if not steps else "next-post-merge-check"
         check = post_merge_check(main_branch=main_branch)
         steps.append(PostMergeSettleStep(check_name, check))
         state = _post_merge_state(check)
+        if installation_return_is_pending(check):
+            return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
+                           lifecycle_state=state, next_action=check.next_action,
+                           refresh_limit=refresh_limit, refresh_prs=refresh_prs, refresh_kinds=refresh_kinds, steps=steps)
 
         if state == READY_STATE:
             return _complete(
