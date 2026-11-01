@@ -1,11 +1,30 @@
 # KIT-GF-097: Installed predecessor plans the first active projection migration
 
-Consumer: an external desktop controller.
+Consumer: an external desktop controller. Status: implemented and locally verified; fixed_in remains unreleased.
 
-Release A retains v1 behind one package-owned False constant. A later owner-approved B activates v2. The prior target-preview-only test did not prove first adoption by the installed predecessor. This correction uses distinct source-built A/B/A-prime wheels and real installation through a loopback index. Only PR observation is a test double; the legacy unsupported-preview boundary is explicitly simulated.
+The first adoption was previously previewed by the new planner, so it did not prove that an installed predecessor could plan migration. Release A now ships dormant capabilities, and its installed planner signs the later B migration.
 
-Return is bound to the prior pinned version, original receipt, exact PR/squash, file hashes, staged package identity and artifact hashes. A missing original adoption receipt blocks governed return. Normal downgrade prohibition remains.
+Release A keeps `EXTERNAL_PROJECTION_V2_ACTIVE = False`: external generation/checks retain v1, init adds no minimum, and target probes do not confuse module presence with activation. A later separately approved B changes the single package constant to True. GF-094 remains PARTIAL in A; GF-096 expiry starts from B. Known external workspaces adopt A first; B1 additionally waits for recorded cycle 008. No environment/workspace switch was added.
 
-Validation: IN_PROGRESS; see the adjacent machine-readable report. Independent consumer rehearsal: NOT_RUN. Owner acceptance: PENDING. No release or merge performed.
+The real transition matrix uses distinct source-built test wheels A=1.1.11, B=1.1.12 and A-prime=1.1.11.post1, loopback resolution, actual pip installation, owned runtimes and real local bare-origin squashes. Only PR observation is a test double. A plans and executes B, writes migration and adoption evidence, and B passes fresh check/doctor and post-merge check after later product work without a refresh. B prepares the exact revert, the actual squash is verified, return installs A, original bytes match and unrelated product work survives. A generates v1 and A-to-A-prime performs no projection migration.
 
-Complexity balance: one central activation policy and focused disposable wheel/transition fixtures are added. Existing update, generation, return and governance routes are reused. No new CLI route, environment flag, workspace flag, dependency or general rollback framework. Self-hosting stage 2 and productive consumer migration remain outside scope.
+For the direct legacy-to-B case, only unsupported preview is simulated. Actual B installation first ends BLOCKED without an adoption receipt; B check identifies missing migration. Existing prepare-successor-handoff followed by the repeated B update yields empty changed_paths and check/doctor PASS. Missing original adoption evidence explicitly blocks installation return; it is never reconstructed or guessed.
+
+Return remains bound to exact PR/squash identity, original receipt, file hashes, the prior pin and signed staged artifact hashes. When the original installation recorded that pin's wheel hash, another wheel with the same version is rejected. Unknown original hashes are not claimed verified. Normal downgrade prohibition remains. Pending return does not bypass main-branch, upstream or clean-worktree guards and never auto-migrates restored v1.
+
+Validation at source revision `b266c2c87cd87973cac2797ae573a9e271f8b352`:
+
+| Check | Result |
+|---|---|
+| `python -m pytest -q -n 4` | 4504 passed; 332.58 s; 560 warnings |
+| `ruff check .` | PASS |
+| `agentic-kit check --json` | PASS |
+| `agentic-kit check-docs` | PASS |
+| `agentic-kit doctor` | PASS |
+| Fresh noneditable-wheel GF-094/095/097/098 contracts | Four PASS; historical v2 fixtures explicitly activate B |
+
+Regression tests first reproduced missing activation policy, wrong target probing, missing normal-update receipts, the fixed return version, absent original-artifact enforcement and pending-return branch bypass. Existing Safe-Push and remote-effect audits remain unchanged. Active fixture origins use the established confined local-fetch construction.
+
+Complexity balance: three focused modules provide the activation policy, disposable wheel construction and transition matrix. Existing update, generation, return and governance routes are reused; no new CLI route, dependency, environment flag, workspace flag or generic rollback framework. `greenfield_retest.py` retains its existing fixture-dispatch adapter; its mixed runner responsibilities remain a known monolith risk. A future approved slice can extract fixture dispatch without changing contracts. Existing typed plans, receipts and result JSON are sufficient; another DCO cell layer would add complexity here.
+
+Independent consumer rehearsal: NOT_RUN. Owner acceptance: PENDING. No release, merge, productive consumer migration or Self-hosting stage 2. No measured CI/runtime reduction is claimed. Historical approvals and evidence remain unchanged. Full machine fields and the local wheel hash are in the adjacent JSON report.
