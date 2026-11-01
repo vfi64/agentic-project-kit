@@ -15,10 +15,16 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_b_catalog_makes_gf094_eligible_only_for_future_release_stamping():
+    from packaging.version import Version
+    from agentic_project_kit import __version__
+
     data = json.loads((ROOT / CATALOG).read_bytes())
     findings = {f["id"]: f for f in data["findings"]}
     assert findings["KIT-GF-094"]["kit_state"] == "CLOSED"
-    assert findings["KIT-GF-094"]["fixed_in"] == "unreleased"
+    fixed = findings["KIT-GF-094"]["fixed_in"]
+    # Preparation is unreleased; the same regression must also allow the
+    # subsequent real B stamp, while permanently excluding released A.
+    assert fixed == "unreleased" or (fixed == __version__ and Version(fixed) > Version("1.1.11"))
     assert "release B" in " ".join(findings["KIT-GF-096"]["external_retest"]["preconditions"])
 
 
@@ -136,6 +142,7 @@ def test_external_v2_release_requires_return_rehearsal_and_owner_acceptance(tmp_
     report.write_bytes(encoded({"release_prerequisites": states}))
     plan = plan_stamp(root, TARGET_VERSION)
     assert plan["release_prerequisites_sha256"]
+    assert "KIT-GF-094" in plan["finding_ids"]
     states["local_return"] = "FAIL"
     report.write_bytes(encoded({"release_prerequisites": states}))
     with pytest.raises(ValueError, match="local_return"):

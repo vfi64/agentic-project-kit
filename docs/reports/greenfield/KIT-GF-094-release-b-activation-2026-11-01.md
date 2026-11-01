@@ -27,14 +27,25 @@ release after B, not after A.
 
 ## Verification
 
-Local verification is IN_PROGRESS; see the adjacent JSON report. The intended
-gates are the full suite, ruff, check, check-docs, doctor and machine contracts
-094, 095, 097 and 098 from a fresh noneditable wheel. The transition fixture
+Local verification at implementation revision `54c507457ef25318076b574dbe18fcc696c0c904`:
+
+| Check | Result |
+|---|---|
+| Full suite | 4513 passed, 560 warnings, 399.28 seconds |
+| ruff / check / check-docs / doctor | PASS |
+| Fresh noneditable wheel: 094 / 095 / 097 / 098 | Four PASS |
+| Final release-stamp regression module | 7 passed |
+
+The final stamp-test refinement allows a later genuine B version assignment
+while excluding 1.1.11, so the preparation test does not block the actual future
+release. It and the evidence report are checked separately after the full run;
+production code is unchanged. Machine details and the local wheel hash are in
+the adjacent JSON report. The transition fixture
 builds its own distinct A/B/A-prime wheels and uses real installation and Git;
 only PR observation and the explicitly simulated unsupported legacy preview
 boundary are doubles.
 
-After these gates pass, the independent consumer rehearsal must use published
+The independent consumer rehearsal must next use published
 PyPI 1.1.11 as its actual planner and a PR-built target wheel in a disposable
 copy: A-to-B, B chat switch, content merge and post-merge-check without refresh,
 B-to-A return, and direct 1.1.10-to-B completion. This rehearsal is NOT_RUN here;
@@ -65,3 +76,9 @@ runtime evidence is preserved, not deleted. Changed authority inputs still
 require governed regeneration. Self-hosting keeps its existing C4 lifecycle.
 Legacy v1 compatibility is retained until KIT-GF-096; it is not removed now.
 No measured CI/runtime saving or productive consumer verification is claimed.
+
+The repository version remains 1.1.11; no B release version is assigned. The
+existing test-wheel builder can give the PR target a distinct disposable test
+version. Its synthetic A wheel must not replace the published PyPI 1.1.11
+planner in the independent rehearsal. Main and all published artifacts remain
+unchanged; this activation stays on the unmerged PR branch.
