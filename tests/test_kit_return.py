@@ -283,3 +283,5 @@ def test_pending_installation_return_is_read_only_and_never_plans_migration(tmp_
 
     monkeypatch.setattr(lifecycle, "successor_package_refresh_pr", forbidden)
     assert lifecycle.post_merge_complete(102).result_status == "PENDING"
+    _git(tmp_path, "switch", "-c", "unexpected-post-merge-branch")
+    assert post_merge_check().result_status != "PENDING"

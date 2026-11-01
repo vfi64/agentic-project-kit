@@ -1850,9 +1850,17 @@ def _post_merge_state_lines(*, state: str, next_action: str) -> str:
 
 
 def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
-    from agentic_project_kit.kit_return import pending_install_return
+    if uses_external_projection_v2(Path.cwd()):
+        from agentic_project_kit.external_handoff_projection import external_post_merge_check
+        return external_post_merge_check(Path.cwd(), main_branch=main_branch)
+    from agentic_project_kit.kit_return import pending_install_return, verify_pending_return_location
+    def local_run(argv, **kwargs):
+        return _run(argv)
+
     try:
-        pending = pending_install_return(Path.cwd(), run=lambda argv, **kwargs: _run(argv))
+        pending = pending_install_return(Path.cwd(), run=local_run)
+        if pending is not None:
+            verify_pending_return_location(main_branch, run=local_run)
     except (OSError, ValueError, RuntimeError) as exc:
         return RepoActionResult(
             action="post-merge-check", result_status="BLOCKED", returncode=2,
@@ -1866,9 +1874,6 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
             stdout=json.dumps(pending, sort_keys=True), stderr="",
             next_action=f"STATE={pending['lifecycle_state']}\nNEXT={pending['next_action']}\n",
         )
-    if uses_external_projection_v2(Path.cwd()):
-        from agentic_project_kit.external_handoff_projection import external_post_merge_check
-        return external_post_merge_check(Path.cwd(), main_branch=main_branch)
     branch_command = ["git", "branch", "--show-current"]
     branch_completed = _run(branch_command)
     if branch_completed.returncode != 0:

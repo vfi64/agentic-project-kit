@@ -319,6 +319,17 @@ def pending_install_return(root: Path, *, run) -> dict | None:
             "next_action": f"agentic-kit kit return-install --adoption {proof['adoption_id']} --json"}
 
 
+def verify_pending_return_location(main_branch: str, *, run) -> None:
+    """Pending approval never bypasses the normal post-merge location guards."""
+    if checked(run, ["git", "branch", "--show-current"]).strip() != main_branch:
+        raise UpdateBlocked("return_post_merge_expected_main_branch")
+    head = checked(run, ["git", "rev-parse", "HEAD"]).strip()
+    if head != checked(run, ["git", "rev-parse", f"origin/{main_branch}"]).strip():
+        raise UpdateBlocked("return_post_merge_head_origin_mismatch")
+    if checked(run, ["git", "status", "--porcelain", "--untracked-files=all"]).strip():
+        raise UpdateBlocked("return_post_merge_requires_clean_worktree")
+
+
 def record_merged_return(root: Path, after_pr: int, *, run, observe_pr=None) -> dict | None:
     events = _events(root)
     installed = {item.get("adoption_id") for item in events if item.get("event") == "return_installed"}

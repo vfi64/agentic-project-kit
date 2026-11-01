@@ -16,7 +16,7 @@ observed PR number in `.agentic/kit-update`; never find the PR by commit subject
    byte while preserving later unrelated work. Use normal Kit work finish,
    commit, push and PR routes. Their PR observation binds the actual return PR.
    Merge remains owner-controlled. A verified return does not regenerate v2.
-3. After the return PR is merged, closeout remains PENDING. New Kit validation
+3. After the return PR is merged, closeout remains PENDING. Active B validation
    correctly reports `NEEDS_PROJECTION_MIGRATION`; it must not silently accept
    restored v1. Plan `agentic-kit kit return-install --adoption <receipt-id>
    --json`. This requires restored v1, no handoff minimum key, both pins exactly
@@ -36,7 +36,10 @@ The historical GF-095 machine test uses an installation test double with the
 v2 policy explicitly active. GF-097/GF-098 add real source-built A/B/A-prime
 wheels with actual installation, package identity and signed artifact hashes.
 The return version comes from the prior CI pin; installation identity before
-adoption is retained separately. A predecessor without adoption evidence cannot
+adoption is retained separately. When the original installed wheel hash is
+available for that pin, a different artifact of the same version is refused;
+otherwise the approved staged artifact hashes remain binding without a claim
+of original artifact equality. A predecessor without adoption evidence cannot
 use the return route. Before release, an
 external desktop controller must repeat the complete adoption, revert,
 installation return, `check`, `doctor`, `post-merge-check` and v1 chat switch in a

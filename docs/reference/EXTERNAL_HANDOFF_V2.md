@@ -39,7 +39,7 @@ is a test double. A direct jump simulates the unsupported preview boundary;
 installation and completion remain real. Independent consumer rehearsal and
 owner acceptance remain release gates; no release is authorized here.
 
-KIT-GF-094 replaces commit freshness with deterministic content freshness only
+When release B is active, KIT-GF-094 replaces commit freshness with deterministic content freshness only
 for external workspaces. Self-hosting retains its v1 contract, C4 administrative
 refresh boundary and WRT-CH-001 commit binding. Approvals, signed plans, CI and
 release gates remain bound to their exact commits.
@@ -105,5 +105,5 @@ No release or production migration is authorized by these documents.
 The follow-up finding must remove external v1 acceptance and refresh-only
 descendant logic once every known external workspace has recorded v2 adoption
 and the Kit fixtures use v2, no later than the second Kit release following the
-release containing KIT-GF-094. Only the v1-detected-to-migration entry remains.
-Returning to 1.1.10 uses that older Kit's own v1 logic.
+activation release B containing KIT-GF-094. Only the v1-detected-to-migration entry remains.
+Returning to the prior pinned A uses that older Kit's own v1 logic.
