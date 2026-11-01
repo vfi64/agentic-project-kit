@@ -21,7 +21,8 @@ def external_first_cycle_without_handoff(root: Path) -> bool:
     from agentic_project_kit.external_handoff_projection import RUNTIME_PATH, check_projection
     # Any runtime evidence (even invalid) prevents treating a lost state as a
     # pristine init. Partial/corrupt projections also remain HANDOFF_REQUIRED.
-    return not (root / RUNTIME_PATH).exists() and check_projection(root)["status"] == "PASS"
+    from agentic_project_kit.external_projection_policy import uses_external_projection_v2
+    return uses_external_projection_v2(root) and not (root / RUNTIME_PATH).exists() and check_projection(root)["status"] == "PASS"
 
 
 def handoff_applicability(root: Path, explicit_path: str = "") -> dict:

@@ -202,7 +202,7 @@ def post_merge_settle(
                       refresh_limit=refresh_limit, refresh_prs=refresh_prs, refresh_kinds=refresh_kinds, steps=steps)
     if pending is not None:
         return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
-                       lifecycle_state=NEEDS_PROJECTION_MIGRATION_STATE,
+                       lifecycle_state=pending["lifecycle_state"],
                        next_action="RETURN_INSTALLATION_APPROVAL_REQUIRED=True; " + pending["next_action"],
                        refresh_limit=refresh_limit, refresh_prs=refresh_prs, refresh_kinds=refresh_kinds, steps=steps)
 

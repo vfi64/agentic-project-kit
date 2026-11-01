@@ -6091,7 +6091,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest",
         "machine": {
-          "fixture": "external_manifest",
+          "fixture": "external_projection_v2",
           "covers": "docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.",
           "steps": [
             {
@@ -6975,7 +6975,7 @@
     },
     {
       "id": "KIT-GF-094",
-      "kit_state": "CLOSED",
+      "kit_state": "PARTIAL",
       "fixed_in": "unreleased",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md",
@@ -6999,7 +6999,7 @@
           ]
         },
         "machine": {
-          "fixture": "external_manifest",
+          "fixture": "external_projection_v2",
           "origin": true,
           "covers": "Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.",
           "steps": [
@@ -7296,7 +7296,7 @@
             }
           ]
         },
-        "verification": "Local machine contract only; consumer rehearsal and owner acceptance remain separate release gates."
+        "verification": "Implementation retained behind the package activation constant. Release A remains v1; GF-094 becomes effective only in separately approved release B. Consumer rehearsal and owner acceptance remain required."
       }
     },
     {
@@ -7364,7 +7364,7 @@
       "external_retest": {
         "workspace_kind": "external_manifest",
         "preconditions": [
-          "Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094."
+          "Every known external workspace first records release A adoption and then v2 adoption; all Kit Greenfield fixtures use v2; due no later than the second release after activation release B."
         ],
         "commands": [
           "agentic-kit check --json",
@@ -7382,6 +7382,112 @@
           ]
         },
         "verification": "Open expiry follow-up; not claimed fixed or externally verified."
+      }
+    },
+    {
+      "id": "KIT-GF-097",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Disposable owned runtimes and local loopback Simple index; no consumer installation or remote PR mutation."
+        ],
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "Installed A plans and executes B, writes migration and adoption evidence; B return restores A; A-to-A-prime stays v1; unsupported legacy preview completes through existing generation and repeat update."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."
+          ]
+        },
+        "machine": {
+          "fixture": "external_projection_transition",
+          "origin": false,
+          "covers": "Installed predecessor plans the first active projection migration using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.",
+          "steps": [
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/tmp/transition-proof.json"
+                ]
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json_contains": {
+                  "status": "PASS"
+                }
+              }
+            }
+          ]
+        },
+        "verification": "Local machine evidence is separate from independent consumer rehearsal and owner acceptance. No release or merge authority."
+      }
+    },
+    {
+      "id": "KIT-GF-098",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Disposable owned runtimes and local loopback Simple index; no consumer installation or remote PR mutation."
+        ],
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "Installed A plans and executes B, writes migration and adoption evidence; B return restores A; A-to-A-prime stays v1; unsupported legacy preview completes through existing generation and repeat update."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."
+          ]
+        },
+        "machine": {
+          "fixture": "external_projection_transition",
+          "origin": false,
+          "covers": "Return targets the exact previous pinned Kit version using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.",
+          "steps": [
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/tmp/transition-proof.json"
+                ]
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json_contains": {
+                  "status": "PASS"
+                }
+              }
+            }
+          ]
+        },
+        "verification": "Local machine evidence is separate from independent consumer rehearsal and owner acceptance. No release or merge authority."
       }
     }
   ],

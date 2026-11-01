@@ -56,6 +56,15 @@ def test_release_relation(root, installed, expected):
     assert urls == ["https://pypi.org/simple/agentic-project-kit/"]
 
 
+def test_legacy_update_notice_prefers_expand_release_before_v2(root):
+    result = release.check_release(
+        root, installation={"installed": "1.1.10", "installation_kind": "wheel"},
+        fetch=lambda url: index(("1.1.12", False)),
+    )
+    assert "release A" in result["transition_guidance"]
+    assert "adoption evidence" in result["transition_guidance"]
+
+
 def test_post_release_wins_over_final_but_not_prerelease_or_yanked():
     assert (
         release.newest_stable(

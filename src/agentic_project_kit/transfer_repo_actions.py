@@ -28,6 +28,7 @@ from agentic_project_kit.transfer_operation_monitor import read_git_state
 from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH, is_rule_ack_path, normalize_status_path
 from agentic_project_kit.workspace import KitConfig, Workspace, load_workspace
 from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+from agentic_project_kit.external_projection_policy import uses_external_projection_v2
 from agentic_project_kit.workspace_lock import acquire_workspace_lock, workspace_mutation_lock
 
 
@@ -96,7 +97,7 @@ def _admin_refresh_paths(ws: Workspace) -> tuple[str, ...]:
 
 def _successor_package_refresh_paths(ws: Workspace) -> tuple[str, ...]:
     return (
-        *((".agentic/config.yaml", ".gitignore") if is_external_manifest_workspace(ws.root) else ()),
+        *((".agentic/config.yaml", ".gitignore") if uses_external_projection_v2(ws.root) else ()),
         _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")),
         _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),
         _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")),
@@ -475,7 +476,7 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
 
     root = repo_root or Path.cwd()
     ws = load_workspace(root)
-    if is_external_manifest_workspace(root):
+    if uses_external_projection_v2(root):
         from agentic_project_kit.external_handoff_projection import check_projection
         projection = check_projection(root)
         if projection["status"] == "PASS":
@@ -1849,9 +1850,30 @@ def _post_merge_state_lines(*, state: str, next_action: str) -> str:
 
 
 def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
-    if is_external_manifest_workspace(Path.cwd()):
+    if uses_external_projection_v2(Path.cwd()):
         from agentic_project_kit.external_handoff_projection import external_post_merge_check
         return external_post_merge_check(Path.cwd(), main_branch=main_branch)
+    from agentic_project_kit.kit_return import pending_install_return, verify_pending_return_location
+    def local_run(argv, **kwargs):
+        return _run(argv)
+
+    try:
+        pending = pending_install_return(Path.cwd(), run=local_run)
+        if pending is not None:
+            verify_pending_return_location(main_branch, run=local_run)
+    except (OSError, ValueError, RuntimeError) as exc:
+        return RepoActionResult(
+            action="post-merge-check", result_status="BLOCKED", returncode=2,
+            command=["agentic-kit", "transfer", "post-merge-check"], stdout="", stderr=str(exc),
+            next_action="STATE=BLOCKED; NEXT=diagnose_return_evidence",
+        )
+    if pending is not None:
+        return RepoActionResult(
+            action="post-merge-check", result_status="PENDING", returncode=2,
+            command=["agentic-kit", "transfer", "post-merge-check"],
+            stdout=json.dumps(pending, sort_keys=True), stderr="",
+            next_action=f"STATE={pending['lifecycle_state']}\nNEXT={pending['next_action']}\n",
+        )
     branch_command = ["git", "branch", "--show-current"]
     branch_completed = _run(branch_command)
     if branch_completed.returncode != 0:

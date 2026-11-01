@@ -106,6 +106,8 @@ class Fixture:
             if self.on_preflight and self.identity_count == 2:
                 self.on_preflight()
             text = self.branch
+        elif argv == ["git", "rev-parse", "--git-path", "info/exclude"]:
+            text = str(self.root / ".git/info/exclude")
         elif argv[:3] == ["git", "rev-parse", "--show-toplevel"]:
             text = str(self.root)
         elif argv[:3] == ["git", "rev-parse", "HEAD"]:
@@ -642,7 +644,7 @@ def test_signed_update_refreshes_a_kit_derived_rule_inventory(workspace):
     calls = [argv for argv in workspace.calls if "rule-registry" in argv]
     assert [("--execute" in argv, argv[argv.index("rule-registry") + 1]) for argv in calls] == [
         (False, "bootstrap"), (True, "bootstrap"), (False, "check")]
-    assert all(argv[0] == workspace.calls[-1][0] for argv in calls)
+    assert all(argv[0] == str(workspace.root / ".venv/bin/python") for argv in calls)
 
 
 def test_hand_reviewed_or_absent_inventory_is_never_written_by_update(workspace):

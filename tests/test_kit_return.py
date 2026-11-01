@@ -9,11 +9,17 @@ import subprocess
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def active_projection_contract(monkeypatch):
+    from agentic_project_kit import external_projection_policy
+    monkeypatch.setattr(external_projection_policy, "EXTERNAL_PROJECTION_V2_ACTIVE", True)
+
+
 def _git(root, *args):
     return subprocess.check_output(["git", *args], cwd=root, text=True, stderr=subprocess.STDOUT).strip()
 
 
-def _fixture(root, *, crlf=False, bind_adoption=True):
+def _fixture(root, *, crlf=False, bind_adoption=True, previous="1.1.10", adopted="1.1.11", previous_sha=""):
     from agentic_project_kit.kit_return import record_adoption, bind_adoption_pr
     from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
     from agentic_project_kit.workspace_init import CI_TEMPLATE_PATH, CI_INJECTION_TARGET, MANAGED_CI_HEADER
@@ -22,6 +28,7 @@ def _fixture(root, *, crlf=False, bind_adoption=True):
     ws = seed(root)
     (root / ".gitignore").write_text("/.agentic/tmp/\n/.agentic/rule_ack/\n")
     pin = b'jobs:\n  gate:\n    steps:\n      - run: python -m pip install "agentic-project-kit==1.1.10"\n'
+    pin = pin.replace(b"==1.1.10", f"=={previous}".encode())
     if crlf:
         pin = pin.replace(b"\n", b"\r\n")
     for name, content in {CI_TEMPLATE_PATH: pin, CI_INJECTION_TARGET: MANAGED_CI_HEADER.encode() + b"\n" + pin}.items():
@@ -38,13 +45,13 @@ def _fixture(root, *, crlf=False, bind_adoption=True):
     write_successor_handoff_package(root)
     for name in (CI_TEMPLATE_PATH, CI_INJECTION_TARGET):
         path = root / name
-        path.write_bytes(path.read_bytes().replace(b"==1.1.10", b"==1.1.11"))
+        path.write_bytes(path.read_bytes().replace(f"=={previous}".encode(), f"=={adopted}".encode()))
     paths = sorted(set(_git(root, "ls-files").splitlines()) | {
         path.relative_to(root).as_posix() for path in ws.handoff_dir().rglob("*") if path.is_file()
     })
     before = {name: hashlib.sha256(baseline[name]).hexdigest() if name in baseline else None for name in paths}
     receipt = record_adoption(root, adoption_id="a" * 32, plan={
-        "installation": {"version": "1.1.10"}, "version": "1.1.11", "branch": "adoption",
+        "installation": {"version": previous, "wheel_sha256": previous_sha}, "version": adopted, "branch": "adoption",
         "head": base_head, "files_before": before, "changed_paths": paths, "artifacts": [],
     }, approval_signature="approved-fixture")
     _git(root, "add", ".")
@@ -85,6 +92,18 @@ def test_revert_plan_is_read_only_and_restores_exact_adoption_bytes(tmp_path):
         assert (tmp_path / name).read_bytes() == content, name
     assert (tmp_path / "product.txt").read_text() == "Later product work\n"
     assert check_projection(tmp_path)["code"] == "NEEDS_PROJECTION_MIGRATION"
+
+
+def test_return_target_is_the_receipted_previous_pin_not_a_fixed_release(tmp_path):
+    from agentic_project_kit.kit_return import plan_return_revert, execute_return_revert, return_closeout_context
+
+    receipt, baseline, observe, run, _ = _fixture(tmp_path, previous="1.1.11", adopted="1.1.12")
+    plan = plan_return_revert(tmp_path, receipt["adoption_id"], run=run, observe_pr=observe)
+    execute_return_revert(tmp_path, receipt["adoption_id"], expected_signature=plan["approval_signature"], run=run, observe_pr=observe)
+    context = return_closeout_context(tmp_path, run=run)
+    assert context["target_version"] == "1.1.11"
+    for name, content in baseline.items():
+        assert (tmp_path / name).read_bytes() == content
 
 
 def test_later_change_to_adoption_path_blocks_without_mutation(tmp_path):
@@ -180,6 +199,21 @@ def test_return_revert_signature_binds_staged_wheel_hash(tmp_path):
     assert _git(tmp_path, "rev-parse", "HEAD") == before
 
 
+def test_return_rejects_replaced_original_package_artifact(tmp_path):
+    from agentic_project_kit.kit_return import plan_return_revert
+    from agentic_project_kit.kit_update_artifacts import PreparedTarget
+    from agentic_project_kit.kit_update_runtime import UpdateBlocked
+
+    receipt, _, observe, run, _ = _fixture(tmp_path, previous_sha="1" * 64)
+    wheel = tmp_path / ".agentic/tmp/replaced.whl"
+    wheel.write_bytes(b"different artifact with the same version")
+    artifact = {"name": "agentic-project-kit", "version": "1.1.10", "filename": wheel.name,
+                "sha256": hashlib.sha256(wheel.read_bytes()).hexdigest()}
+    target = PreparedTarget(tmp_path / ".agentic/tmp/preview/bin/python", (wheel,), (artifact,))
+    with pytest.raises(UpdateBlocked, match="return_previous_artifact_identity_mismatch"):
+        plan_return_revert(tmp_path, receipt["adoption_id"], run=run, observe_pr=observe, target=target)
+
+
 def test_existing_pr_creation_records_adoption_number_without_extra_commit(tmp_path, monkeypatch):
     from types import SimpleNamespace
     from agentic_project_kit import transfer_repo_actions as actions
@@ -210,7 +244,8 @@ def test_existing_pr_creation_records_adoption_number_without_extra_commit(tmp_p
     assert plan_return_revert(tmp_path, receipt["adoption_id"], run=git_run, observe_pr=observe)["pr_number"] == 101
 
 
-def test_pending_installation_return_is_read_only_and_never_plans_migration(tmp_path, monkeypatch):
+@pytest.mark.parametrize("active", [False, True])
+def test_pending_installation_return_is_read_only_and_never_plans_migration(tmp_path, monkeypatch, active):
     from agentic_project_kit.kit_return import (
         plan_return_revert, execute_return_revert, bind_return_pr, record_merged_return,
     )
@@ -232,12 +267,15 @@ def test_pending_installation_return_is_read_only_and_never_plans_migration(tmp_
     def observed(number):
         return {"number": number, "state": "MERGED", "baseRefName": "main", "headRefOid": head, "mergeCommit": {"oid": merge}}
     record_merged_return(tmp_path, 102, run=run, observe_pr=observed)
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", active)
     monkeypatch.chdir(tmp_path)
     before = {p.relative_to(tmp_path).as_posix(): p.read_bytes() for p in tmp_path.rglob("*") if p.is_file()}
     result = post_merge_check()
     assert result.result_status == "PENDING", result
     assert "RETURN_INSTALLATION_APPROVAL_REQUIRED" in result.stdout
     assert "return-install" in result.next_action
+    if not active:
+        assert "NEEDS_PROJECTION_MIGRATION" not in result.stdout
     assert before == {p.relative_to(tmp_path).as_posix(): p.read_bytes() for p in tmp_path.rglob("*") if p.is_file()}
 
     def forbidden(*args, **kwargs):
@@ -245,3 +283,5 @@ def test_pending_installation_return_is_read_only_and_never_plans_migration(tmp_
 
     monkeypatch.setattr(lifecycle, "successor_package_refresh_pr", forbidden)
     assert lifecycle.post_merge_complete(102).result_status == "PENDING"
+    _git(tmp_path, "switch", "-c", "unexpected-post-merge-branch")
+    assert post_merge_check().result_status != "PENDING"

@@ -30,11 +30,20 @@ from agentic_project_kit.dpa_workspace_init_projection import (
     render_workspace_init_projection_manifest,
 )
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
+from agentic_project_kit.external_projection_policy import external_projection_contract_version
 
 
 GITIGNORE_TMP_LINE = ".agentic/tmp/"
 GITIGNORE_RULE_ACK_LINE = f"{RULE_ACK_DIRECTORY_PATH}/"
 GITIGNORE_VOLATILE_LINES = (GITIGNORE_TMP_LINE, GITIGNORE_RULE_ACK_LINE, f"/{SUCCESSOR_RUNTIME_IDENTITY_PATH}")
+
+
+def _v2_active() -> bool:
+    return external_projection_contract_version() == 2
+
+
+def _ignore_lines() -> tuple[str, ...]:
+    return GITIGNORE_VOLATILE_LINES if _v2_active() else GITIGNORE_VOLATILE_LINES[:2]
 CI_TEMPLATE_PATH = ".agentic/ci/agentic-gate.yaml"
 PRE_COMMIT_TEMPLATE_PATH = ".agentic/ci/pre-commit-snippet.yaml"
 CI_INJECTION_TARGET = ".github/workflows/agentic-gate.yaml"
@@ -334,7 +343,7 @@ def _manifest_for(project: ProjectSuggestion) -> dict[str, object]:
         },
         "publication": DEFAULT_PUBLICATION_POLICY,
         "hygiene": default_hygiene_manifest(),
-        "handoff": {"projection_contract_min": 2},
+        **({"handoff": {"projection_contract_min": 2}} if _v2_active() else {}),
         "paths": {
             "docs_root": "docs",
         },
@@ -367,8 +376,9 @@ def _planned_files(root: Path, project: ProjectSuggestion, manifest_yaml: str) -
         ".agentic/INITIAL_LLM_PROMPT.md": _initial_llm_prompt(project),
         ".agentic/transfer/inbox/.gitkeep": "# Transfer inbox carrier; executable orders are written here.\n",
     }
-    from agentic_project_kit.external_handoff_projection import preview_initial_projection
-    files.update(preview_initial_projection(root, files))
+    if _v2_active():
+        from agentic_project_kit.external_handoff_projection import preview_initial_projection
+        files.update(preview_initial_projection(root, files))
     files[DPA_WORKSPACE_INIT_MANIFEST_PATH] = render_workspace_init_projection_manifest(
         project_name=project.name,
         project_type=project.type,
@@ -459,16 +469,16 @@ lives under `.agentic/tmp/`; local rule acknowledgement state lives under
 def _gitignore_diff(root: Path) -> tuple[str, ...]:
     gitignore = root / ".gitignore"
     if not gitignore.exists():
-        return tuple(f"+ {line}" for line in GITIGNORE_VOLATILE_LINES)
+        return tuple(f"+ {line}" for line in _ignore_lines())
     lines = gitignore.read_text(encoding="utf-8").splitlines()
-    return tuple(f"+ {line}" for line in GITIGNORE_VOLATILE_LINES if line not in lines)
+    return tuple(f"+ {line}" for line in _ignore_lines() if line not in lines)
 
 
 def _append_gitignore_volatile(root: Path) -> None:
     gitignore = root / ".gitignore"
     existing = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
     lines = existing.splitlines()
-    missing = [line for line in GITIGNORE_VOLATILE_LINES if line not in lines]
+    missing = [line for line in _ignore_lines() if line not in lines]
     if not missing:
         return
     prefix = existing

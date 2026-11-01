@@ -1798,7 +1798,8 @@ def _next_markdown_section_index(text: str, start: int) -> int:
 
 
 def _build_successor_handoff_package(root_path: Path, ws: Workspace) -> SuccessorPackageResult:
-    if _is_external_workspace(ws):
+    from agentic_project_kit.external_projection_policy import uses_external_projection_v2
+    if uses_external_projection_v2(root_path):
         from agentic_project_kit.external_handoff_projection import build_external_package
         return build_external_package(root_path)[0]
     return _build_legacy_successor_handoff_package(root_path, ws)
@@ -1855,7 +1856,8 @@ def write_successor_handoff_package(
 ) -> SuccessorPackageResult:
     root_path = Path(root)
     ws = load_workspace(root_path)
-    if _is_external_workspace(ws):
+    from agentic_project_kit.external_projection_policy import uses_external_projection_v2
+    if uses_external_projection_v2(root_path):
         from agentic_project_kit.external_handoff_projection import write_external_package
         return write_external_package(root_path, output_dir, update_canonical_prompts=update_canonical_prompts)
     resolved_output_dir = Path(output_dir) if output_dir is not None else ws.handoff_packages_latest()

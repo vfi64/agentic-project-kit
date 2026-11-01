@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 94,
+    "CLOSED": 95,
     "NOT_APPLICABLE": 0,
     "OPEN": 1,
-    "PARTIAL": 0
+    "PARTIAL": 1
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 54,
+    "local": 56,
     "owner_remote": 34
   },
   "findings": [
@@ -6184,7 +6184,7 @@
         },
         "machine": {
           "covers": "docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.",
-          "fixture": "external_manifest",
+          "fixture": "external_projection_v2",
           "steps": [
             {
               "expect": {
@@ -7286,7 +7286,7 @@
         },
         "machine": {
           "covers": "Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.",
-          "fixture": "external_manifest",
+          "fixture": "external_projection_v2",
           "origin": true,
           "steps": [
             {
@@ -7588,12 +7588,12 @@
         "remote_effects": [
           "none"
         ],
-        "verification": "Local machine contract only; consumer rehearsal and owner acceptance remain separate release gates.",
+        "verification": "Implementation retained behind the package activation constant. Release A remains v1; GF-094 becomes effective only in separately approved release B. Consumer rehearsal and owner acceptance remain required.",
         "workspace_kind": "external_manifest"
       },
       "fixed_in": "unreleased",
       "id": "KIT-GF-094",
-      "kit_state": "CLOSED",
+      "kit_state": "PARTIAL",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md"
     },
@@ -7676,7 +7676,7 @@
           ]
         },
         "preconditions": [
-          "Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094."
+          "Every known external workspace first records release A adoption and then v2 adoption; all Kit Greenfield fixtures use v2; due no later than the second release after activation release B."
         ],
         "remote_effects": [
           "network_read",
@@ -7690,6 +7690,120 @@
       "kit_state": "OPEN",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Installed A plans and executes B, writes migration and adoption evidence; B return restores A; A-to-A-prime stays v1; unsupported legacy preview completes through existing generation and repeat update."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."
+          ]
+        },
+        "machine": {
+          "covers": "Installed predecessor plans the first active projection migration using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.",
+          "fixture": "external_projection_transition",
+          "origin": false,
+          "steps": [
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/tmp/transition-proof.json"
+                ]
+              }
+            },
+            {
+              "expect": {
+                "json_contains": {
+                  "status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable owned runtimes and local loopback Simple index; no consumer installation or remote PR mutation."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Local machine evidence is separate from independent consumer rehearsal and owner acceptance. No release or merge authority.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-097",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Installed A plans and executes B, writes migration and adoption evidence; B return restores A; A-to-A-prime stays v1; unsupported legacy preview completes through existing generation and repeat update."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."
+          ]
+        },
+        "machine": {
+          "covers": "Return targets the exact previous pinned Kit version using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.",
+          "fixture": "external_projection_transition",
+          "origin": false,
+          "steps": [
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/tmp/transition-proof.json"
+                ]
+              }
+            },
+            {
+              "expect": {
+                "json_contains": {
+                  "status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable owned runtimes and local loopback Simple index; no consumer installation or remote PR mutation."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Local machine evidence is separate from independent consumer rehearsal and owner acceptance. No release or merge authority.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-098",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md"
     },
     {
       "external_retest": {
@@ -7829,7 +7943,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 54,
+  "machine_contracts": 56,
   "schema_version": 1,
-  "source_sha256": "677d35a8c9eb343486610007ab1bcb087f80b5e2e35cf6625d3106e1c83878f2"
+  "source_sha256": "6f10314bfdf281aef550ee36387a5c4518197c0aa9af01e39381a23bfd8dde99"
 }

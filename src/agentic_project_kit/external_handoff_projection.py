@@ -375,7 +375,7 @@ def external_post_merge_check(root, *, main_branch="main"):
             return RepoActionResult(
                 action="post-merge-check", result_status="PENDING", returncode=2,
                 command=["agentic-kit", "transfer", "post-merge-check"], stdout=json.dumps(pending, sort_keys=True), stderr="",
-                next_action=f"STATE=NEEDS_PROJECTION_MIGRATION\nNEXT={pending['next_action']}\n",
+                next_action=f"STATE={pending['lifecycle_state']}\nNEXT={pending['next_action']}\n",
             )
         projection = check_projection(root)
         detail = json.dumps(projection, sort_keys=True)

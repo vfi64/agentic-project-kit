@@ -561,8 +561,8 @@ def check_all(project_root: Path) -> list[str]:
     errors: list[str] = []
     errors.extend(check_docs(project_root))
     errors.extend(check_todo(project_root))
-    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
-    if is_external_manifest_workspace(project_root):
+    from agentic_project_kit.external_projection_policy import uses_external_projection_v2
+    if uses_external_projection_v2(project_root):
         from agentic_project_kit.external_handoff_projection import check_projection
         projection = check_projection(project_root)
         if projection["status"] != "PASS":

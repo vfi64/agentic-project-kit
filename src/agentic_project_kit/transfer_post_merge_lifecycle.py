@@ -222,7 +222,7 @@ def _run_final_check(
     from agentic_project_kit.kit_return import installation_return_is_pending
     if installation_return_is_pending(final_check):
         return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
-                       lifecycle_state=NEEDS_PROJECTION_MIGRATION_STATE, next_action=final_check.next_action,
+                       lifecycle_state=_post_merge_state(final_check), next_action=final_check.next_action,
                        steps=steps, refresh_pr=refresh_pr)
     final_state = _post_merge_state(final_check)
     return _finish_after_final_check(
@@ -264,7 +264,7 @@ def post_merge_complete(
                        lifecycle_state="RETURN_EVIDENCE_BLOCKED", next_action=str(exc), steps=steps)
     if pending is not None:
         return _finish(after_pr=after_pr, result_status="PENDING", returncode=2,
-                       lifecycle_state=NEEDS_PROJECTION_MIGRATION_STATE,
+                       lifecycle_state=pending["lifecycle_state"],
                        next_action="RETURN_INSTALLATION_APPROVAL_REQUIRED=True; " + pending["next_action"], steps=steps)
 
     initial_check = post_merge_check(main_branch=main_branch)

@@ -5,6 +5,7 @@ from __future__ import annotations
 import base64
 import json
 from pathlib import Path
+import tempfile
 
 from agentic_project_kit.kit_update_runtime import UpdateBlocked, json_command
 from agentic_project_kit.workspace import load_workspace
@@ -17,11 +18,15 @@ from agentic_project_kit.volatile_paths import (
 # installation. Older target wheels explicitly report lack of v2 support.
 TARGET_PROJECTION_PREVIEW = r'''
 import base64, importlib.util, json, pathlib, subprocess, sys, tempfile
-if importlib.util.find_spec("agentic_project_kit.external_handoff_projection") is None:
+contract = 1
+if importlib.util.find_spec("agentic_project_kit.external_projection_policy") is not None:
+    from agentic_project_kit.external_projection_policy import external_projection_contract_version
+    contract = external_projection_contract_version()
+if contract != 2:
     print(json.dumps({"supported": False, "files": {}}))
 else:
     from agentic_project_kit.external_handoff_projection import write_external_package
-    payload = json.loads(sys.argv[1])
+    payload = json.loads(pathlib.Path(sys.argv[1]).read_bytes())
     with tempfile.TemporaryDirectory(prefix="kit-update-projection-") as directory:
         root = pathlib.Path(directory)
         for name, encoded in payload["files"].items():
@@ -77,9 +82,15 @@ def preview_target_projection(root: Path, python: Path, desired_pins: dict[str, 
         # newlines here. This string is data for a temporary config, not a shell.
         git_config = '[remote "origin"]\n\turl = ' + json.dumps(origin) + "\n"
     allowed = projection_update_paths(root)
-    preview = json_command(run, [str(python), "-I", "-c", TARGET_PROJECTION_PREVIEW, json.dumps({
-        "files": files, "git_config": git_config, "output_paths": allowed,
-    })])
+    # The packaged command reference alone exceeds Linux's per-argument exec
+    # limit. Keep the captured bytes outside argv and outside the workspace;
+    # the target reads them synchronously before the private directory closes.
+    with tempfile.TemporaryDirectory(prefix="kit-update-preview-input-") as directory:
+        payload_path = Path(directory) / "inputs.json"
+        payload_path.write_text(json.dumps({
+            "files": files, "git_config": git_config, "output_paths": allowed,
+        }), encoding="utf-8")
+        preview = json_command(run, [str(python), "-I", "-c", TARGET_PROJECTION_PREVIEW, str(payload_path)])
     if preview.get("supported") is False and preview.get("files") == {}:
         return {}
     if preview.get("supported") is not True or not isinstance(preview.get("files"), dict):

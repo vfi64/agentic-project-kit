@@ -13,6 +13,10 @@ rules:
     - NEEDS_PROJECTION_MIGRATION
     - runtime_identity.json
     - projection_integrity_mismatch
+    - KIT-GF-097
+    - EXTERNAL_PROJECTION_V2_ACTIVE
+    - release A
+    - release B
   - path: docs/KIT_UPDATE_RETURN.md
     terms:
     - KIT-GF-095
@@ -20,12 +24,15 @@ rules:
     - return-install
     - changed_paths
     - owner acceptance
+    - KIT-GF-098
+    - prior pinned
   - path: docs/TEST_GATES.md
     terms:
     - tests/test_external_handoff_projection.py
     - tests/test_kit_return.py
     - tests/test_kit_return_install.py
     - tests/test_kit_update_projection.py
+    - tests/test_projection_release_transition.py
 - id: editable-release-check-running-version
   description: The release check judges an editable installation by its running package version, never by stale metadata.
   documents:

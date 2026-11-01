@@ -1592,7 +1592,7 @@ Expected result fields: `{"assertions": ["release_check.installed equals the run
 
 ## KIT-GF-094
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: PARTIAL; fixed_in: unreleased.
 Evidence: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
 
 Execution class: local (effects: none); machine contract: Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.
@@ -1633,7 +1633,7 @@ Evidence: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
 
 Execution class: owner_remote (effects: network_read, none); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
-Preconditions: Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094.
+Preconditions: Every known external workspace first records release A adoption and then v2 adoption; all Kit Greenfield fixtures use v2; due no later than the second release after activation release B.
 
 ```text
 agentic-kit check --json
@@ -1643,6 +1643,40 @@ agentic-kit transfer pr-status {pr} --json
 Expected: Remove external v1 acceptance and refresh-only descendant logic; retain only v1 detection to governed migration. Return uses old Kit own v1 support.
 
 Expected result fields: `{"assertions": ["Migration evidence complete for all known external workspaces; no external v1 acceptance or refresh remains."]}`.
+
+## KIT-GF-097
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md
+
+Execution class: local (effects: none); machine contract: Installed predecessor plans the first active projection migration using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.
+
+Preconditions: Disposable owned runtimes and local loopback Simple index; no consumer installation or remote PR mutation.
+
+```text
+agentic-kit check --json
+```
+
+Expected: Installed A plans and executes B, writes migration and adoption evidence; B return restores A; A-to-A-prime stays v1; unsupported legacy preview completes through existing generation and repeat update.
+
+Expected result fields: `{"assertions": ["Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."]}`.
+
+## KIT-GF-098
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md
+
+Execution class: local (effects: none); machine contract: Return targets the exact previous pinned Kit version using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.
+
+Preconditions: Disposable owned runtimes and local loopback Simple index; no consumer installation or remote PR mutation.
+
+```text
+agentic-kit check --json
+```
+
+Expected: Installed A plans and executes B, writes migration and adoption evidence; B return restores A; A-to-A-prime stays v1; unsupported legacy preview completes through existing generation and repeat update.
+
+Expected result fields: `{"assertions": ["Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."]}`.
 
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 

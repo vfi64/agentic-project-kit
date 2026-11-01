@@ -1935,7 +1935,7 @@ documents:
     class: governance/system
     owner: maintainers
     status: active
-    summary: KIT-GF-095 bounded evidence-bound return to the pre-adoption Kit 1.1.10.
+    summary: KIT-GF-095 and KIT-GF-098 evidence-bound return to the exact pre-adoption Kit pin.
   - path: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
     class: evidence/log
     owner: maintainers
@@ -1956,3 +1956,23 @@ documents:
     owner: maintainers
     status: active
     summary: Separate KIT-GF-095 local machine evidence with installation test-double boundary.
+  - path: docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Two-release activation boundary and installed-predecessor real-wheel evidence.
+  - path: docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Separate machine validation and independent release acceptance boundaries.
+  - path: docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Exact previous pin and original artifact identity in governed return.
+  - path: docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Real A-B-A return verification with explicit consumer acceptance limits.
