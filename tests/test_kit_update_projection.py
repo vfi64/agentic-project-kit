@@ -8,6 +8,31 @@ import runpy
 import pytest
 
 
+def test_target_preview_transfers_large_inputs_without_large_process_arguments(tmp_path):
+    import base64
+    import json
+    import subprocess
+    from agentic_project_kit.kit_update_projection import preview_target_projection
+
+    fixture_type = runpy.run_path(str(Path(__file__).with_name("test_kit_update.py")))["Fixture"]
+    fixture_type(tmp_path)
+    reference = tmp_path / "docs/reference/agentic-kit-commands.json"
+    reference.parent.mkdir(parents=True, exist_ok=True)
+    reference.write_bytes(b"x" * 180_000)
+    paths = []
+
+    def run(argv, **kwargs):
+        assert max(map(len, argv)) < 128 * 1024, "Linux rejects oversized individual exec arguments"
+        path = Path(argv[-1])
+        paths.append(path)
+        payload = json.loads(path.read_bytes())
+        assert base64.b64decode(payload["files"]["docs/reference/agentic-kit-commands.json"]) == reference.read_bytes()
+        return subprocess.CompletedProcess(argv, 0, json.dumps({"supported": False, "files": {}}), "")
+
+    assert preview_target_projection(tmp_path.resolve(), Path("/fixture/python"), {}, run) == {}
+    assert paths and not paths[0].exists()
+
+
 def test_same_version_update_cannot_silently_remove_projection_contract(tmp_path, monkeypatch):
     import json
     import subprocess

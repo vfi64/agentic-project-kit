@@ -11,6 +11,8 @@ return restores A, A-to-A-prime stays v1, and a legacy unsupported-preview attem
 completes through existing routes. Only PR observation is doubled. Fresh
 noneditable-wheel retests are required for KIT-GF-097 and KIT-GF-098. Release A
 does not stamp PARTIAL KIT-GF-094 as fixed.
+The target-preview regression also transfers inputs larger than Linux's
+individual argument limit through a temporary input file and checks its cleanup.
 
 `tests/test_external_handoff_projection.py` covers pure frozen-input rendering,
 versioned golden output, complete digest inputs, byte integrity, migration,
