@@ -14938,9 +14938,8 @@
     },
     "release": {
       "date": "2026-11-01",
-      "entry_count": 4,
+      "entry_count": 3,
       "notes": [
-        "Zenodo DOI verification pending for v1.1.11.",
         "Fixed: Stage external projection v2 across two releases: A retains v1 behavior while shipping the future migration planner; only a separately approved B activates the package-owned switch (KIT-GF-097).",
         "Fixed: Record normal update adoption evidence and return to the exact prior pinned version instead of hard-coded 1.1.10; preserve signed package identity, artifact hashes, exact file restoration and fresh-process checks (KIT-GF-098, KIT-GF-095).",
         "Fixed: Verify first adoption with the installed predecessor and real A/B/A-prime wheels; document direct legacy-to-B completion through existing routes and the missing-evidence return boundary. GF-094 remains PARTIAL until B; GF-096 expires from B. External deterministic content freshness remains inactive in A."
@@ -16177,7 +16176,7 @@
     "package_version": "1.1.11",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
-    "release_tag": "v1.1.10",
+    "release_tag": "v1.1.11",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "f770b8310c36",
     "requires_python": ">=3.10",
@@ -16192,7 +16191,7 @@
       "orchestrator": 37,
       "primitive": 107
     },
-    "version_doi": "10.5281/zenodo.23844213"
+    "version_doi": "10.5281/zenodo.23864349"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -16212,13 +16211,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.10",
+    "current_release_tag": "v1.1.11",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.10",
+    "current_verified_release": "1.1.11",
     "current_version": "1.1.11",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23844213"
+    "version_doi": "10.5281/zenodo.23864349"
   },
   "task_projection": {
     "execution_authorized": false,

@@ -2,10 +2,13 @@
 
 ## v1.1.11 - 2026-11-01
 
-- Zenodo DOI verification pending for v1.1.11.
 - Fixed: Stage external projection v2 across two releases: A retains v1 behavior while shipping the future migration planner; only a separately approved B activates the package-owned switch (KIT-GF-097).
 - Fixed: Record normal update adoption evidence and return to the exact prior pinned version instead of hard-coded 1.1.10; preserve signed package identity, artifact hashes, exact file restoration and fresh-process checks (KIT-GF-098, KIT-GF-095).
 - Fixed: Verify first adoption with the installed predecessor and real A/B/A-prime wheels; document direct legacy-to-B completion through existing routes and the missing-evidence return boundary. GF-094 remains PARTIAL until B; GF-096 expires from B. External deterministic content freshness remains inactive in A.
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.1.11 DOI `10.5281/zenodo.23864349`.
+
+Zenodo v1.1.11 DOI: 10.5281/zenodo.23864349
 
 ## v1.1.10 - 2026-10-31
 
