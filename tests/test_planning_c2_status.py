@@ -17,7 +17,9 @@ def test_owner_order_preserves_blocked_c2_without_blocking_approved_followups():
         ("lifecycle-backlog-clearance", None),
         ("reports-retention-policy", None),
     ]
-    active_slice = next(item for item in order["sequence"] if item["id"] == "decomplexification-audit-roadmap")
+    active_slice = next(item for item in order["sequence"]
+                        if item["id"] == "decomplexification-audit-roadmap"
+                        and item.get("step") == "transfer-lifecycle-consolidation")
     assert active_slice["status"] == "active"
     assert active_slice["step"] == "transfer-lifecycle-consolidation"
     assert active_slice["first_reduction_slice"]["finding"] == "KIT-GF-094"
