@@ -106,6 +106,14 @@ def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> N
     }
     assert expected_dirs == actual_dirs
     expected_files = {
+        ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+        ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+        ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+        ".agentic/state/handoff/packages/latest/execution_contract.json",
+        ".agentic/state/handoff/packages/latest/source_manifest.json",
+        ".agentic/state/handoff/packages/latest/successor_context.yaml",
+        ".agentic/state/handoff/packages/latest/successor_prompt.md",
+        ".agentic/state/handoff/packages/latest/validation_report.json",
         ".agentic/config.yaml",
         ".agentic/DOC_LIFECYCLE.md",
         ".agentic/registries/documentation.yaml",
@@ -280,7 +288,8 @@ def test_init_gitignore_append_is_idempotent(tmp_path: Path) -> None:
 
     assert first.exit_code == 0, first.output
     assert second.exit_code != 0
-    assert (tmp_path / ".gitignore").read_text(encoding="utf-8").count(".agentic/tmp/") == 1
+    assert (tmp_path / ".gitignore").read_text(encoding="utf-8").splitlines().count(".agentic/tmp/") == 1
+    assert (tmp_path / ".gitignore").read_text(encoding="utf-8").splitlines().count("/.agentic/tmp/handoff/runtime_identity.json") == 1
     assert (tmp_path / ".gitignore").read_text(encoding="utf-8").count(".agentic/rule_ack/") == 1
 
 
@@ -626,4 +635,4 @@ def test_init_json_shape(tmp_path: Path) -> None:
     assert payload["mode"] == "dry-run"
     assert payload["written"] is False
     assert payload["injection_targets"] == [".github/workflows/agentic-gate.yaml"]
-    assert payload["gitignore_diff"] == ["+ .agentic/tmp/", "+ .agentic/rule_ack/"]
+    assert payload["gitignore_diff"] == ["+ .agentic/tmp/", "+ .agentic/rule_ack/", "+ /.agentic/tmp/handoff/runtime_identity.json"]

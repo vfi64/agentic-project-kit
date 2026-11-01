@@ -72,6 +72,22 @@ def _release_successor_handoff_refresh_step() -> dict[str, object]:
     )
 
 
+def _return_closeout_preflight(root: Path) -> dict | None:
+    if not is_external_manifest_workspace(root):
+        return None
+    import os
+    from agentic_project_kit.kit_return import return_closeout_context, return_target_checks
+
+    def run(argv, **kwargs):
+        return subprocess.run(argv, cwd=root, capture_output=True, text=not kwargs.get("binary", False),
+                              env={**os.environ, "GIT_OPTIONAL_LOCKS": "0"})
+
+    context = return_closeout_context(root.resolve(), run=run)
+    if context is not None:
+        context["target_checks"] = return_target_checks(root.resolve(), context, run=run)
+    return context
+
+
 DOCS_PAGES_BUILD_SCRIPT = "site/scripts/build.py"
 
 
@@ -327,20 +343,11 @@ def _is_main_start_ref(ref: str) -> bool:
 
 
 def _external_first_cycle_without_successor_package(root: Path = Path(".")) -> bool:
-    if not is_external_manifest_workspace(root):
-        return False
+    from agentic_project_kit.handoff_applicability import external_first_cycle_without_handoff
     try:
-        workspace = load_workspace(root, suppress_legacy_profile_warning=True)
+        return external_first_cycle_without_handoff(root)
     except RuntimeError:
         return False
-    package_root = workspace.handoff_packages_latest()
-    package_files = (
-        package_root / "execution_contract.json",
-        package_root / "successor_context.yaml",
-        package_root / "validation_report.json",
-        package_root / "source_manifest.json",
-    )
-    return not any(path.exists() for path in package_files)
 
 
 def _open_pr_closeout_body(title: str) -> str:
@@ -577,7 +584,7 @@ def work_start_command(
                 steps.append(
                     _noop_step(
                         "post-merge-check",
-                        "External first-cycle workspace has no successor package yet; post-merge check is not applicable.\n",
+                        "External first-cycle workspace has no runtime handoff yet; post-merge check is not applicable.\n",
                     )
                 )
             else:
@@ -710,6 +717,21 @@ def work_finish_command(
         _exit_if_blocked(payload)
         return
     selected_paths = _paths_with_pending_communication_refresh(paths or [])
+    return_context = None
+    try:
+        return_context = _return_closeout_preflight(Path("."))
+        if return_context is not None:
+            if return_context.get("branch", branch) != branch:
+                raise ValueError("return_closeout_branch_mismatch")
+            expected_paths = set(return_context["paths"])
+            if selected_paths and set(map(str, selected_paths)) != expected_paths:
+                raise ValueError("return_closeout_requires_exact_revert_paths")
+            selected_paths = [Path(name) for name in sorted(expected_paths)]
+    except (OSError, ValueError, RuntimeError) as exc:
+        payload = _payload("work-finish", [_failed_local_step("return-preflight", str(exc))])
+        _emit(payload, json_output=json_output)
+        _exit_if_blocked(payload)
+        return
     pr_number: int | None = None
     expected_head_sha = ""
     completion_receipt = None
@@ -730,7 +752,10 @@ def work_finish_command(
         if all(step["ok"] for step in steps):
             steps.append(_run_step("rules-acknowledge-post-work-commit", _agentic("rules", "acknowledge")))
         if all(step["ok"] for step in steps):
-            steps.append(_run_step("handoff-refresh", _agentic("transfer", "chat-switch-complete", "--render-prompt")))
+            if return_context is None:
+                steps.append(_run_step("handoff-refresh", _agentic("transfer", "chat-switch-complete", "--render-prompt")))
+            else:
+                steps.append(_noop_step("handoff-refresh", "GF095: preserve the verified v1 revert; staged target check/doctor passed. The current Kit still reports NEEDS_PROJECTION_MIGRATION.\n"))
         if all(step["ok"] for step in steps):
             handoff_status = _handoff_projection_status_step()
             steps.append(handoff_status)
@@ -893,6 +918,14 @@ def work_finish_command(
     )
     if next_action and payload["result_status"] == "PASS":
         payload["next_action"] = next_action
+    if return_context is not None:
+        payload["post_merge_handoff"] = "pending_installation_return"
+        payload["return_adoption_id"] = return_context["adoption_id"]
+        payload["projection_status"] = "NEEDS_PROJECTION_MIGRATION"
+        pending_marker = any("RETURN_INSTALLATION_APPROVAL_REQUIRED" in str(step.get("stdout", "")) for step in steps)
+        if not dry_run and merge and (payload["result_status"] == "PASS" or pending_marker):
+            payload.update(result_status="PENDING", returncode=2,
+                           next_action=f"Owner decision required after the revert merge: agentic-kit kit return-install --adoption {return_context['adoption_id']} --json")
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
 

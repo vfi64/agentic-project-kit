@@ -316,6 +316,8 @@ def infer_surface(command: dict[str, Any]) -> str:
 
     orchestrator_commands = {
         "agentic-kit kit update",
+        "agentic-kit kit return-revert",
+        "agentic-kit kit return-install",
         "agentic-kit artifact-gc",
         "agentic-kit chat session-start",
         "agentic-kit docs lifecycle sweep",
@@ -434,6 +436,8 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit rule-registry bootstrap": ["none"],
         "agentic-kit kit status": ["network_read"],
         "agentic-kit kit update": ["network_read"],
+        "agentic-kit kit return-revert": ["network_read"],
+        "agentic-kit kit return-install": ["network_read"],
         "agentic-kit pr merge-if-green": ["delete_remote", "merge", "network_read"],
         "agentic-kit remote-branch-hygiene-apply": ["delete_remote", "network_read", "push"],
         "agentic-kit transfer pull-current": ["fetch"],

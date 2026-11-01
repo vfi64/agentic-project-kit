@@ -1,15 +1,15 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 92,
+    "CLOSED": 94,
     "NOT_APPLICABLE": 0,
-    "OPEN": 0,
+    "OPEN": 1,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 52,
-    "owner_remote": 33
+    "local": 54,
+    "owner_remote": 34
   },
   "findings": [
     {
@@ -1165,6 +1165,20 @@
                 "path": "review.md",
                 "text": "Project-owned prose\n"
               }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "prepare-successor-handoff",
+                "--json"
+              ]
             },
             {
               "expect": {
@@ -6169,7 +6183,7 @@
           "stdout": "Incomplete successor package for a partial package"
         },
         "machine": {
-          "covers": "docs-audit passes in a freshly initialized external workspace whose successor package directory is still empty; a package with only some of its files still fails as incomplete",
+          "covers": "docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.",
           "fixture": "external_manifest",
           "steps": [
             {
@@ -6191,6 +6205,19 @@
                 "path": ".agentic/state/handoff/packages/latest/successor_prompt.md",
                 "text": "# partial\n"
               }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "rm",
+                ".agentic/state/handoff/packages/latest/execution_contract.json",
+                ".agentic/state/handoff/packages/latest/source_manifest.json",
+                ".agentic/state/handoff/packages/latest/successor_context.yaml",
+                ".agentic/state/handoff/packages/latest/validation_report.json"
+              ]
             },
             {
               "expect": {
@@ -7242,6 +7269,430 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer post-merge-check",
+          "agentic-kit transfer chat-switch-complete --json",
+          "agentic-kit check"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Real squash merges require no refresh when captured inputs match; changed authority without regeneration fails; runtime identity names exact HEAD and distinct runs."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "READY with refresh_required=False; projection_inputs_changed; runtime_identity.validator_status=PASS; exact generated_head; unique run_id."
+          ]
+        },
+        "machine": {
+          "covers": "Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.",
+          "fixture": "external_manifest",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "product"
+              ]
+            },
+            {
+              "write": {
+                "path": "product.txt",
+                "text": "Preserved product work\n"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                "product.txt"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "Product work without handoff inputs"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "merge",
+                "--squash",
+                "product"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "Squash product"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "push",
+                "origin",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "refresh_required=False"
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "post-merge-check"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "authority"
+              ]
+            },
+            {
+              "write": {
+                "path": ".agentic/state/status.md",
+                "text": "# Updated workspace authority\n"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 1,
+                "stdout_contains": "projection_inputs_changed"
+              },
+              "run": [
+                "agentic-kit",
+                "check"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "projection_contract_version": 2,
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "chat-switch-complete",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "Update authority with deterministic projection"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "switch",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "merge",
+                "--squash",
+                "authority"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "Squash authority"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "push",
+                "origin",
+                "main"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_contains": "refresh_required=False"
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "post-merge-check"
+              ]
+            },
+            {
+              "capture": {
+                "current_head": "generated_head",
+                "first_run": "run_id"
+              },
+              "expect": {
+                "json": {
+                  "result_status": "PASS",
+                  "runtime_identity.validator_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "chat-switch-complete",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "{current_head}"
+              },
+              "run": [
+                "git",
+                "rev-parse",
+                "HEAD"
+              ]
+            },
+            {
+              "write": {
+                "path": ".agentic/tmp/first-run",
+                "text": "{first_run}"
+              }
+            },
+            {
+              "capture": {
+                "second_run": "run_id"
+              },
+              "expect": {
+                "json": {
+                  "generated_head": "{current_head}",
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "chat-switch-complete",
+                "--json"
+              ]
+            },
+            {
+              "write": {
+                "path": ".agentic/tmp/second-run",
+                "text": "{second_run}"
+              }
+            },
+            {
+              "expect": {
+                "returncode": 1
+              },
+              "run": [
+                "git",
+                "diff",
+                "--no-index",
+                ".agentic/tmp/first-run",
+                ".agentic/tmp/second-run"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "diff",
+                "--exit-code"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable external workspace with local bare origin; installed noneditable Kit wheel."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Local machine contract only; consumer rehearsal and owner acceptance remain separate release gates.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-094",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Verified v1 backup, v2 migration, unrelated product commit, exact observed squash revert, later-touch rejection and existing signed installer including install/check/doctor failures."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "The fixture compares all return assertions to true; current Kit still reports NEEDS_PROJECTION_MIGRATION after restoring v1."
+          ]
+        },
+        "machine": {
+          "covers": "Real local Git adoption and return squashes, byte-exact v1 restoration including ignored runtime backup, later-touch no-mutation, wrong state/version rejection; existing update executor with installation double and real fresh-process snapshot checks.",
+          "fixture": "external_kit_return",
+          "origin": true,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 1,
+                "stdout_contains": "NEEDS_PROJECTION_MIGRATION"
+              },
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "diff",
+                "--no-index",
+                ".agentic/tmp/return-contract/expected.json",
+                ".agentic/tmp/return-contract/actual.json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable bare-origin fixture; explicit installation and PR-observation test doubles; released-wheel rehearsal remains separate."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Installation is a test double, not real 1.1.10 compatibility evidence. Consumer rehearsal and owner acceptance are required before release.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-095",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "pr": "Exact observed v2 adoption PR from each known workspace receipt"
+        },
+        "commands": [
+          "agentic-kit check --json",
+          "agentic-kit transfer pr-status {pr} --json"
+        ],
+        "execution_class": "owner_remote",
+        "expected": [
+          "Remove external v1 acceptance and refresh-only descendant logic; retain only v1 detection to governed migration. Return uses old Kit own v1 support."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Migration evidence complete for all known external workspaces; no external v1 acceptance or refresh remains."
+          ]
+        },
+        "preconditions": [
+          "Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094."
+        ],
+        "remote_effects": [
+          "network_read",
+          "none"
+        ],
+        "verification": "Open expiry follow-up; not claimed fixed or externally verified.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "",
+      "id": "KIT-GF-096",
+      "kit_state": "OPEN",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -7378,7 +7829,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 52,
+  "machine_contracts": 54,
   "schema_version": 1,
-  "source_sha256": "0a99e42c0680a167694b8822a2d3bc8bd4b6538f7858f1aa459a3d8ee8a6dc27"
+  "source_sha256": "677d35a8c9eb343486610007ab1bcb087f80b5e2e35cf6625d3106e1c83878f2"
 }

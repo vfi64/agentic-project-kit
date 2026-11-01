@@ -60,9 +60,10 @@ class PatchCycleStatus:
     disabled_actions: tuple[dict[str, object], ...]
     traffic_lights: dict[str, str]
     blockers: tuple[str, ...]
+    handoff_projection: dict[str, object] | None = None
 
     def as_dict(self) -> dict[str, object]:
-        return {
+        result = {
             "schema_version": self.schema_version,
             "kind": self.kind,
             "current_stage": self.current_stage,
@@ -84,6 +85,10 @@ class PatchCycleStatus:
             "traffic_lights": self.traffic_lights,
             "blockers": list(self.blockers),
         }
+        if self.handoff_projection is not None:
+            result.pop("handoff_generated_head")
+            result["handoff_projection"] = self.handoff_projection
+        return result
 
 
 def build_patch_cycle_status(
@@ -94,16 +99,26 @@ def build_patch_cycle_status(
     command_runner: PatchCycleRunner | None = None,
 ) -> PatchCycleStatus:
     runner = command_runner or run_command
-    branch = _stdout(runner(project_root, ["git", "branch", "--show-current"]))
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    external = is_external_manifest_workspace(project_root)
+    branch_command = ["git", "rev-parse", "--abbrev-ref", "HEAD"] if external else ["git", "branch", "--show-current"]
+    branch = _stdout(runner(project_root, branch_command))
     head_sha = _stdout(runner(project_root, ["git", "rev-parse", "HEAD"]))
     origin_main_sha = _stdout(runner(project_root, ["git", "rev-parse", "origin/main"]))
     status_result = runner(project_root, ["git", "status", "--short", "--untracked-files=all"])
     dirty_paths = tuple(line.strip() for line in status_result.stdout.splitlines() if line.strip())
     worktree_clean = status_result.returncode == 0 and not dirty_paths
-    handoff_validation = _read_handoff_validation(project_root)
+    handoff_validation = {} if external else _read_handoff_validation(project_root)
     handoff_generated_head = str(handoff_validation.get("generated_head") or "")
     handoff_validation_status = str(handoff_validation.get("status") or "MISSING")
     handoff_fresh_for_head = bool(head_sha and handoff_generated_head == head_sha)
+    handoff_projection = None
+    if external:
+        from agentic_project_kit.external_handoff_projection import check_projection
+        handoff_projection = check_projection(project_root)
+        handoff_generated_head = ""
+        handoff_validation_status = str(handoff_projection["status"])
+        handoff_fresh_for_head = handoff_validation_status == "PASS"
     pr = _read_pr(project_root, pr_number, include_ci, runner) if pr_number is not None else None
     current_stage = _current_stage(
         branch=branch,
@@ -127,8 +142,11 @@ def build_patch_cycle_status(
         handoff_fresh_for_head=handoff_fresh_for_head,
         head_sha=head_sha,
         origin_main_sha=origin_main_sha,
+        handoff_blocker=handoff_projection["code"] if handoff_projection is not None else "handoff_generated_head_mismatch",
     )
     next_action = _next_action(current_stage, blockers, steps)
+    if handoff_projection is not None and not handoff_fresh_for_head:
+        next_action = str(handoff_projection["migration_route"])
     disabled_actions = _disabled_actions(steps, blockers)
     traffic_lights = _traffic_lights(steps, blockers)
     result_status = "BLOCKED" if blockers else ("PASS" if current_stage == "POST_MERGE_CLEAN_STATE" else "READY")
@@ -153,6 +171,7 @@ def build_patch_cycle_status(
         disabled_actions=disabled_actions,
         traffic_lights=traffic_lights,
         blockers=blockers,
+        handoff_projection=handoff_projection,
     )
 
 
@@ -310,6 +329,7 @@ def _steps_for(
     handoff_fresh_for_head: bool,
     head_sha: str,
     origin_main_sha: str,
+    handoff_blocker: str = "handoff_generated_head_mismatch",
 ) -> tuple[PatchCycleStep, ...]:
     patch_pr_state = _pr_state(pr)
     return (
@@ -331,7 +351,7 @@ def _steps_for(
             "HANDOFF_REFRESH_SLICE",
             "ACTIVE" if current_stage == "HANDOFF_REFRESH_SLICE" else ("DONE" if current_stage in {"HANDOFF_REFRESH_PR", "POST_MERGE_CLEAN_STATE"} and handoff_fresh_for_head else "PENDING"),
             _actions("admin_refresh_pr", "prepare_successor_handoff", "publish_last_report") if current_stage == "HANDOFF_REFRESH_SLICE" else (),
-            () if branch != "main" or not worktree_clean or handoff_fresh_for_head else ("handoff_generated_head_mismatch",),
+            () if branch != "main" or not worktree_clean or handoff_fresh_for_head else (handoff_blocker,),
             (f"handoff_fresh_for_head={handoff_fresh_for_head}",),
         ),
         PatchCycleStep(

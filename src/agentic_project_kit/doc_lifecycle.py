@@ -1154,6 +1154,12 @@ def _load_handoff_context(project_root: Path) -> dict[str, Any]:
     This is advisory evidence only. It does not decide repository state and it
     does not replace post-merge-check.
     """
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(project_root):
+        from agentic_project_kit.external_handoff_projection import check_projection
+        projection = check_projection(project_root)
+        return {"available": True, "severity": "advisory", "safe_to_continue": projection["status"] == "PASS",
+                "projection_contract_version": 2, **projection}
     validation_path = (
         project_root
         / "docs"

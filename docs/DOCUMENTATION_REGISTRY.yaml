@@ -1921,3 +1921,38 @@ documents:
   - path: docs/reports/release/release-run-1.1.10.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reference/EXTERNAL_HANDOFF_V2.md
+    class: governance/system
+    owner: maintainers
+    status: active
+    summary: KIT-GF-094 external content projection, runtime consumer contract and migration boundary.
+  - path: docs/reference/fixtures/external-handoff-runtime-v2.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Synthetic published runtime identity for consumer contract tests.
+  - path: docs/KIT_UPDATE_RETURN.md
+    class: governance/system
+    owner: maintainers
+    status: active
+    summary: KIT-GF-095 bounded evidence-bound return to the pre-adoption Kit 1.1.10.
+  - path: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: External v2 projection, historical baseline, complexity balance and expiry follow-up.
+  - path: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Separate KIT-GF-094 machine evidence and fail-closed release prerequisites.
+  - path: docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Bound workspace revert and installation return evidence limits.
+  - path: docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Separate KIT-GF-095 local machine evidence with installation test-double boundary.

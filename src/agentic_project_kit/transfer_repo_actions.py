@@ -96,6 +96,7 @@ def _admin_refresh_paths(ws: Workspace) -> tuple[str, ...]:
 
 def _successor_package_refresh_paths(ws: Workspace) -> tuple[str, ...]:
     return (
+        *((".agentic/config.yaml", ".gitignore") if is_external_manifest_workspace(ws.root) else ()),
         _workspace_path_text(ws, ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md")),
         _workspace_path_text(ws, ws.handoff_file("START_NEW_CHAT_PROMPT.md")),
         _workspace_path_text(ws, ws.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md")),
@@ -474,6 +475,21 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
 
     root = repo_root or Path.cwd()
     ws = load_workspace(root)
+    if is_external_manifest_workspace(root):
+        from agentic_project_kit.external_handoff_projection import check_projection
+        projection = check_projection(root)
+        if projection["status"] == "PASS":
+            return SuccessorPackageFreshnessCheck(findings=(), notes=(
+                "successor_package_identity_model=content_projection_v2",
+                f"successor_package_input_digest={projection['input_digest']}",
+                "successor_package_freshness=PASS", "successor_package_integrity=PASS",
+            ))
+        return SuccessorPackageFreshnessCheck(findings=(
+            f"{projection['code']}: {projection.get('message', '')}; "
+            f"changed_inputs={projection.get('changed_inputs', [])}; "
+            f"differing_paths={projection.get('differing_paths', [])}; "
+            f"route={projection['migration_route']}",
+        ), notes=())
     findings: list[str] = []
     notes: list[str] = []
 
@@ -1462,6 +1478,17 @@ def pr_create(*, base: str, head: str, title: str, body: str) -> RepoActionResul
         return _pr_create_unlocked(base=base, head=head, title=title, body=body)
 
 
+def _record_kit_return_pr(branch: str, completed, *, number=None) -> RepoActionResult | None:
+    from agentic_project_kit.kit_return import record_pr_evidence
+    try:
+        record_pr_evidence(Path.cwd(), branch=branch, output=completed.stdout, number=number,
+                           run=lambda argv, **kwargs: _run(argv))
+    except (OSError, ValueError, RuntimeError) as exc:
+        return RepoActionResult("pr-create", "BLOCKED", 2, list(completed.args), completed.stdout,
+                                str(exc), "PR exists; diagnose its Kit update/return evidence binding before continuing.")
+    return None
+
+
 def _pr_create_unlocked(*, base: str, head: str, title: str, body: str) -> RepoActionResult:
     if head == "current":
         branch_result = _run(["git", "branch", "--show-current"])
@@ -1513,6 +1540,9 @@ def _pr_create_unlocked(*, base: str, head: str, title: str, body: str) -> RepoA
     ]
     completed = _run(command)
     if completed.returncode == 0:
+        evidence_failure = _record_kit_return_pr(head, completed)
+        if evidence_failure is not None:
+            return evidence_failure
         return _result("pr-create", command, completed, "Run agentic-kit transfer pr-status on the created PR.")
 
     combined = f"{completed.stdout}\n{completed.stderr}".lower()
@@ -1557,6 +1587,9 @@ def _pr_create_unlocked(*, base: str, head: str, title: str, body: str) -> RepoA
                 "RESULT=PASS\n"
             )
             recovered = subprocess.CompletedProcess(command, 0, out, "")
+            evidence_failure = _record_kit_return_pr(head, recovered, number=pr.get("number"))
+            if evidence_failure is not None:
+                return evidence_failure
             return _result("pr-create", command, recovered, "STATE=PR_EXISTS; NEXT=run_pr_status_or_pr_complete")
         bad = subprocess.CompletedProcess(
             lookup_command,
@@ -1816,6 +1849,9 @@ def _post_merge_state_lines(*, state: str, next_action: str) -> str:
 
 
 def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
+    if is_external_manifest_workspace(Path.cwd()):
+        from agentic_project_kit.external_handoff_projection import external_post_merge_check
+        return external_post_merge_check(Path.cwd(), main_branch=main_branch)
     branch_command = ["git", "branch", "--show-current"]
     branch_completed = _run(branch_command)
     if branch_completed.returncode != 0:

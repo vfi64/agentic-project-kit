@@ -6,6 +6,7 @@ optional transfer state. Invalid declarations remain blockers in warn mode.
 """
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -153,28 +154,17 @@ def _handoff(ws: Workspace) -> tuple[list[str], list[str]]:
     package = ws.handoff_packages_latest()
     required = ("successor_context.yaml", "source_manifest.json", "execution_contract.json",
                 "successor_prompt.md", "validation_report.json")
-    # KIT-GF-084: workspace init creates the package directory empty; only a package that holds at
-    # least one of its files is a package (and then it must be complete).
+    # An absent historical package is not a partial package. New init includes
+    # a complete v2 projection, validated by the shared content checker below.
     package_present = package.is_dir() and any((package / name).exists() for name in required)
     if package_present:
-        from agentic_project_kit.successor_handoff_package import validate_successor_outputs
-
         missing = [name for name in required if not (package / name).is_file()]
         if missing:
             return [*errors, f"Incomplete successor package: missing {', '.join(missing)}"], []
-        context = _mapping(package / "successor_context.yaml")
-        repo = context.get("repo")
-        if not isinstance(repo, dict) or any(not isinstance(repo.get(k), str) or not repo[k]
-                                             for k in ("head", "head_short")):
-            return ["successor_context.yaml: missing repo.head or repo.head_short"], []
-        outputs = {p.name: p.read_text(encoding="utf-8") for p in package.iterdir()
-                   if p.is_file() and p.name != "validation_report.json"}
-        for name in ("NEXT_CHAT_BOOTSTRAP.md", "START_NEW_CHAT_PROMPT.md", "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"):
-            path = ws.handoff_file(name)
-            if path.exists():
-                outputs[ws.path_text(path)] = path.read_text(encoding="utf-8")
-        result = validate_successor_outputs(outputs, context, ws)
-        errors.extend(f"handoff:{f['code']}: {f['message']}" for f in result["findings"])
+        from agentic_project_kit.external_handoff_projection import check_projection
+        result = check_projection(ws.root)
+        if result["status"] != "PASS":
+            errors.append(f"handoff:{result['code']}: {json.dumps(result, sort_keys=True)}")
     return errors, [] if state.exists() or package_present else ["No previous handoff; fresh workspace."]
 
 

@@ -303,6 +303,14 @@ def _safe_finish(invocation: _Invocation | None, returncode: int) -> None:
 
 def run_cli(call: Any, app: Any, argv: list[str]) -> Any:
     """Run the CLI ``call`` and record it; the ledger never alters the outcome."""
+    pure = False
+    try:
+        pure = _external_pure_check(command_path(app, argv), argv)
+    except Exception:
+        # Preserve the existing best-effort telemetry failure boundary below.
+        pure = False
+    if pure:
+        return call()
     invocation = _safe_begin(lambda: command_path(app, argv), "cli")
     returncode = 0
     try:
@@ -318,6 +326,26 @@ def run_cli(call: Any, app: Any, argv: list[str]) -> Any:
         raise
     finally:
         _safe_finish(invocation, returncode)
+
+
+def _external_pure_check(command: str, argv: list[str]) -> bool:
+    # External projection validators promise no ledger writes, even when the
+    # optional invocation telemetry is enabled. Self-hosting remains unchanged.
+    if command not in {
+        "agentic-kit check", "agentic-kit check-docs", "agentic-kit check-todo",
+        "agentic-kit transfer post-merge-check", "agentic-kit audit-status-current-state",
+        "agentic-kit doc-lifecycle-audit",
+        "agentic-kit docs-audit",
+    }:
+        return False
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    root = Path.cwd()
+    for index, arg in enumerate(argv):
+        if arg == "--root" and index + 1 < len(argv):
+            root = Path(argv[index + 1])
+        elif arg.startswith("--root="):
+            root = Path(arg.split("=", 1)[1])
+    return is_external_manifest_workspace(root)
 
 
 @contextmanager

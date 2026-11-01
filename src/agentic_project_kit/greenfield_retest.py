@@ -40,7 +40,7 @@ MANIFEST_FIXTURES = frozenset({
     "external_release_check_stale_editable",
 })
 OWNED_FIXTURES = MANIFEST_FIXTURES - {"external_manifest"}
-FIXTURES = ("git_repository", *sorted(MANIFEST_FIXTURES))
+FIXTURES = ("git_repository", "external_kit_return", *sorted(MANIFEST_FIXTURES))
 STEP_KINDS = ("run", "write", "append", "replace", "assert")
 EXPECT_KEYS = frozenset(
     {"returncode", "returncode_nonzero", "json", "json_contains", "stdout_contains", "stdout_equals"}
@@ -349,6 +349,12 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
         failures = prepare_release_fixture(root, variables, env, _run)
         if failures:
             return root, variables, failures
+    if machine["fixture"] == "external_kit_return":
+        from agentic_project_kit.greenfield_retest_return import prepare_return_fixture
+        try:
+            prepare_return_fixture(root, variables, env)
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
+            return root, variables, [f"return fixture failed: {exc}"]
     return root, variables, []
 
 

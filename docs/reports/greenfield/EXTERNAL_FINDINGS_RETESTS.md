@@ -1421,7 +1421,7 @@ Expected result fields: `{"result.stale_files": "names the stale reference file"
 Kit state: CLOSED; fixed_in: 1.1.5.
 Evidence: docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md
 
-Execution class: local (effects: none); machine contract: docs-audit passes in a freshly initialized external workspace whose successor package directory is still empty; a package with only some of its files still fails as incomplete
+Execution class: local (effects: none); machine contract: docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.
 
 Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 
@@ -1589,6 +1589,60 @@ agentic-kit kit update --latest --json
 Expected: An editable install is judged by its running package version; the stale metadata version is reported beside it and no update is claimed.
 
 Expected result fields: `{"assertions": ["release_check.installed equals the running Kit version, release_check.metadata_version names the stale metadata, release_check.result is CURRENT; kit update --latest gives the checkout hint without a plan."]}`.
+
+## KIT-GF-094
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+
+Execution class: local (effects: none); machine contract: Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.
+
+Preconditions: Disposable external workspace with local bare origin; installed noneditable Kit wheel.
+
+```text
+agentic-kit transfer post-merge-check
+agentic-kit transfer chat-switch-complete --json
+agentic-kit check
+```
+
+Expected: Real squash merges require no refresh when captured inputs match; changed authority without regeneration fails; runtime identity names exact HEAD and distinct runs.
+
+Expected result fields: `{"assertions": ["READY with refresh_required=False; projection_inputs_changed; runtime_identity.validator_status=PASS; exact generated_head; unique run_id."]}`.
+
+## KIT-GF-095
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md
+
+Execution class: local (effects: none); machine contract: Real local Git adoption and return squashes, byte-exact v1 restoration including ignored runtime backup, later-touch no-mutation, wrong state/version rejection; existing update executor with installation double and real fresh-process snapshot checks.
+
+Preconditions: Disposable bare-origin fixture; explicit installation and PR-observation test doubles; released-wheel rehearsal remains separate.
+
+```text
+agentic-kit check --json
+```
+
+Expected: Verified v1 backup, v2 migration, unrelated product commit, exact observed squash revert, later-touch rejection and existing signed installer including install/check/doctor failures.
+
+Expected result fields: `{"assertions": ["The fixture compares all return assertions to true; current Kit still reports NEEDS_PROJECTION_MIGRATION after restoring v1."]}`.
+
+## KIT-GF-096
+
+Kit state: OPEN; fixed_in: not established.
+Evidence: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+
+Execution class: owner_remote (effects: network_read, none); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094.
+
+```text
+agentic-kit check --json
+agentic-kit transfer pr-status {pr} --json
+```
+
+Expected: Remove external v1 acceptance and refresh-only descendant logic; retain only v1 detection to governed migration. Return uses old Kit own v1 support.
+
+Expected result fields: `{"assertions": ["Migration evidence complete for all known external workspaces; no external v1 acceptance or refresh remains."]}`.
 
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 

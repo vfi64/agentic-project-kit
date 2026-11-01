@@ -3,6 +3,29 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: external-handoff-v2-and-bound-return
+  description: External deterministic projections and evidence-bound installation returns remain visible and independently verified.
+  documents:
+  - path: docs/reference/EXTERNAL_HANDOFF_V2.md
+    terms:
+    - KIT-GF-094
+    - projection_contract_min
+    - NEEDS_PROJECTION_MIGRATION
+    - runtime_identity.json
+    - projection_integrity_mismatch
+  - path: docs/KIT_UPDATE_RETURN.md
+    terms:
+    - KIT-GF-095
+    - return-revert
+    - return-install
+    - changed_paths
+    - owner acceptance
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_external_handoff_projection.py
+    - tests/test_kit_return.py
+    - tests/test_kit_return_install.py
+    - tests/test_kit_update_projection.py
 - id: editable-release-check-running-version
   description: The release check judges an editable installation by its running package version, never by stale metadata.
   documents:

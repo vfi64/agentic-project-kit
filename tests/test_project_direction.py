@@ -53,6 +53,9 @@ def test_project_direction_cli_markdown() -> None:
     assert "# Project Direction" in result.output
     assert "## Strategy" in result.output
     assert "Governed operating model" in result.output
+    assert "canonical machine-readable source" in result.output
+    assert "\nStatus: active\n" in result.output
+    assert "\nDecision status: accepted\n" in result.output
 
 
 def test_project_direction_cli_json() -> None:

@@ -7,7 +7,7 @@ import yaml
 from agentic_project_kit.external_rule_registry import bootstrap_route
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
-from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH
+from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH, SUCCESSOR_RUNTIME_IDENTITY_PATH
 from agentic_project_kit.workspace import (
     ALLOWED_PROFILES,
     DEFAULT_PUBLICATION_POLICY,
@@ -34,7 +34,7 @@ from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 GITIGNORE_TMP_LINE = ".agentic/tmp/"
 GITIGNORE_RULE_ACK_LINE = f"{RULE_ACK_DIRECTORY_PATH}/"
-GITIGNORE_VOLATILE_LINES = (GITIGNORE_TMP_LINE, GITIGNORE_RULE_ACK_LINE)
+GITIGNORE_VOLATILE_LINES = (GITIGNORE_TMP_LINE, GITIGNORE_RULE_ACK_LINE, f"/{SUCCESSOR_RUNTIME_IDENTITY_PATH}")
 CI_TEMPLATE_PATH = ".agentic/ci/agentic-gate.yaml"
 PRE_COMMIT_TEMPLATE_PATH = ".agentic/ci/pre-commit-snippet.yaml"
 CI_INJECTION_TARGET = ".github/workflows/agentic-gate.yaml"
@@ -334,6 +334,7 @@ def _manifest_for(project: ProjectSuggestion) -> dict[str, object]:
         },
         "publication": DEFAULT_PUBLICATION_POLICY,
         "hygiene": default_hygiene_manifest(),
+        "handoff": {"projection_contract_min": 2},
         "paths": {
             "docs_root": "docs",
         },
@@ -366,6 +367,8 @@ def _planned_files(root: Path, project: ProjectSuggestion, manifest_yaml: str) -
         ".agentic/INITIAL_LLM_PROMPT.md": _initial_llm_prompt(project),
         ".agentic/transfer/inbox/.gitkeep": "# Transfer inbox carrier; executable orders are written here.\n",
     }
+    from agentic_project_kit.external_handoff_projection import preview_initial_projection
+    files.update(preview_initial_projection(root, files))
     files[DPA_WORKSPACE_INIT_MANIFEST_PATH] = render_workspace_init_projection_manifest(
         project_name=project.name,
         project_type=project.type,

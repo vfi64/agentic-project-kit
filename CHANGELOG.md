@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: External successor handoffs use bounded deterministic content projection and read-only byte validation instead of commit freshness, preventing redundant refresh PRs after squash merges with unchanged inputs. Ignored same-run runtime identity preserves exact HEAD validation; signed update migration and the evidence-bound return to 1.1.10 retain approval, artifact-hash and fresh-process check/doctor gates. Regression tests cover integrity failures, migration, real local squash merges and incomplete installation returns (KIT-GF-094, KIT-GF-095).
+
 ## v1.1.10 - 2026-10-31
 
 - Fixed: Repaired the release check of an editable installation: it reads the running package version instead of the stale distribution metadata of its last editable install and reports differing metadata as metadata_version. The check stays read-only and bounded; an unimportable package is UNKNOWN without a guessed version. A regression machine contract with an editable fixture covers it (KIT-GF-093).

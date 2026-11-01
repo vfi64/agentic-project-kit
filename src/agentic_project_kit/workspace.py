@@ -53,6 +53,7 @@ ALLOWED_TOP_LEVEL_KEYS = frozenset(
         "gates",
         "kit",
         "audit",
+        "handoff",
     }
 )
 
@@ -194,6 +195,7 @@ class Workspace:
     manifest_schema_version: int = 0
     kit: KitUpdateConfig = field(default_factory=KitUpdateConfig)
     ns_legacy_evidence_paths: tuple[str, ...] = ()
+    handoff_projection_contract_min: int | None = None
 
     def _path(self, relative: str | Path) -> Path:
         return self.root / Path(relative)
@@ -479,7 +481,21 @@ def _load_manifest_workspace(root: Path, manifest_path: Path, config: KitConfig)
         manifest_schema_version=schema_version,
         kit=kit,
         ns_legacy_evidence_paths=evidence_paths,
+        handoff_projection_contract_min=_parse_handoff_projection_minimum(manifest.get("handoff"), location),
     )
+
+
+def _parse_handoff_projection_minimum(value: object, location: str) -> int | None:
+    if value is None:
+        return None
+    if not isinstance(value, dict):
+        raise RuntimeError(_manifest_error(f"{location}:handoff", "expected mapping"))
+    if set(value) - {"projection_contract_min"}:
+        raise RuntimeError(_manifest_error(f"{location}:handoff", "unknown handoff key"))
+    minimum = value.get("projection_contract_min")
+    if type(minimum) is not int or minimum < 1:
+        raise RuntimeError(_manifest_error(f"{location}:handoff.projection_contract_min", "expected positive integer"))
+    return minimum
 
 
 def _read_manifest(manifest_path: Path, location: str) -> dict[str, Any]:

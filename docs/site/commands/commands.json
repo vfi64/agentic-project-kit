@@ -1,5 +1,5 @@
 {
-  "command_count": 273,
+  "command_count": 275,
   "diagnostic_count": 131,
   "entries": [
     {
@@ -4964,6 +4964,122 @@
       "safety": "READ_ONLY",
       "surface": "diagnostic",
       "when_to_use": "Lint instruction text against the current command manifest."
+    },
+    {
+      "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "kit",
+      "help": "Return only to the prior pinned 1.1.10 through the existing two-phase updater; no general downgrade.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": null,
+          "help": "Evidence ID whose verified revert PR is already merged.",
+          "name": "adoption",
+          "opts": [
+            "--adoption"
+          ],
+          "required": true
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Already reverted external workspace.",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Owner decision: execute the exactly signed installation return.",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Approval signature from the fresh installation plan.",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit kit return-install",
+      "safety": "BOUNDED",
+      "surface": "orchestrator",
+      "when_to_use": "Return only to the prior pinned 1.1.10 through the existing two-phase updater; no general downgrade."
+    },
+    {
+      "diagnostic_priority": "not_diagnostic",
+      "dry_run_available": true,
+      "group": "kit",
+      "help": "Preflight the recorded adoption's squash revert and stage its verified prior Kit through the existing updater.",
+      "lifecycle_rank": null,
+      "params": [
+        {
+          "default": null,
+          "help": "Immutable v2 adoption evidence ID.",
+          "name": "adoption",
+          "opts": [
+            "--adoption"
+          ],
+          "required": true
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "External workspace on its return work branch.",
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Prepare the exactly signed revert; normal work closeout follows.",
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "required": false
+        },
+        {
+          "default": "",
+          "help": "Approval signature from the fresh return plan.",
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        }
+      ],
+      "qualified_name": "agentic-kit kit return-revert",
+      "safety": "BOUNDED",
+      "surface": "orchestrator",
+      "when_to_use": "Preflight the recorded adoption's squash revert and stage its verified prior Kit through the existing updater."
     },
     {
       "diagnostic_priority": "advanced_diagnostic",
@@ -12671,7 +12787,7 @@
     "gui": 1,
     "handoff": 5,
     "instruction": 1,
-    "kit": 2,
+    "kit": 4,
     "ledger": 1,
     "onboarding": 1,
     "pass-already-done": 2,
@@ -12692,17 +12808,17 @@
     "workflow-guard": 2,
     "workspace": 6
   },
-  "guided_count": 35,
+  "guided_count": 37,
   "kind": "site_command_catalog",
   "safety_counts": {
-    "BOUNDED": 176,
+    "BOUNDED": 178,
     "DESTRUCTIVE": 11,
     "READ_ONLY": 86
   },
   "schema_version": 1,
   "surface_counts": {
     "diagnostic": 131,
-    "orchestrator": 35,
+    "orchestrator": 37,
     "primitive": 107
   }
 }

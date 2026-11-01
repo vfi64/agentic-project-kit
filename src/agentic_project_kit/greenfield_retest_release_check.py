@@ -21,6 +21,11 @@ FIXTURES = frozenset({FIXTURE, STALE_EDITABLE_FIXTURE})
 def release_effects(command, entry, fixture=None):
     argv = shlex.split(command) if isinstance(command, str) else command
     path = tuple(entry["path"])
+    # This fixture always contains an external manifest. Its v2 post-merge
+    # adapter reads only local Git/content; self-hosting retains network reads.
+    if fixture == "external_manifest" and path == ("transfer", "post-merge-check"):
+        if set(argv[3:]) <= {"--json"}:
+            return ["none"]
     if path == ("kit", "status") and "--check-release" not in argv:
         return ["none"]
     if fixture in FIXTURES and path in {("kit", "status"), ("kit", "update")}:

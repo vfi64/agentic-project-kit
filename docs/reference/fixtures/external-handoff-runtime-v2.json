@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "projection_contract_version": 2,
+  "head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "generated_head": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "origin_main": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "branch": "main",
+  "worktree_clean": true,
+  "generated_at_utc": "2026-11-01T00:00:00+00:00",
+  "run_id": "11111111111111111111111111111111",
+  "input_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "freshness": "PASS",
+  "integrity": "PASS",
+  "validator_status": "PASS"
+}

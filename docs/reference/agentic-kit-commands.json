@@ -8086,6 +8086,194 @@
       "when_to_use": "Lint instruction text against the current command manifest."
     },
     {
+      "dry_run_available": true,
+      "group": "kit",
+      "help": "Return only to the prior pinned 1.1.10 through the existing two-phase updater; no general downgrade.",
+      "name": "return-install",
+      "params": [
+        {
+          "default": null,
+          "help": "Evidence ID whose verified revert PR is already merged.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "adoption",
+          "opts": [
+            "--adoption"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "Already reverted external workspace.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Owner decision: execute the exactly signed installation return.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Approval signature from the fresh installation plan.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "kit",
+        "return-install"
+      ],
+      "qualified_name": "agentic-kit kit return-install",
+      "remote_effects": [
+        "network_read"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "orchestrator",
+      "task_tags": [
+        "bounded",
+        "kit"
+      ],
+      "when_to_use": "Return only to the prior pinned 1.1.10 through the existing two-phase updater; no general downgrade."
+    },
+    {
+      "dry_run_available": true,
+      "group": "kit",
+      "help": "Preflight the recorded adoption's squash revert and stage its verified prior Kit through the existing updater.",
+      "name": "return-revert",
+      "params": [
+        {
+          "default": null,
+          "help": "Immutable v2 adoption evidence ID.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "adoption",
+          "opts": [
+            "--adoption"
+          ],
+          "param_type": "TyperOption",
+          "required": true,
+          "secondary_opts": []
+        },
+        {
+          "default": "PosixPath('.')",
+          "help": "External workspace on its return work branch.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "root",
+          "opts": [
+            "--root"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Prepare the exactly signed revert; normal work closeout follows.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "execute",
+          "opts": [
+            "--execute"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": "",
+          "help": "Approval signature from the fresh return plan.",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "expected_signature",
+          "opts": [
+            "--expected-signature"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        }
+      ],
+      "path": [
+        "kit",
+        "return-revert"
+      ],
+      "qualified_name": "agentic-kit kit return-revert",
+      "remote_effects": [
+        "network_read"
+      ],
+      "replaces_raw": [],
+      "safety": "BOUNDED",
+      "surface": "orchestrator",
+      "task_tags": [
+        "bounded",
+        "kit"
+      ],
+      "when_to_use": "Preflight the recorded adoption's squash revert and stage its verified prior Kit through the existing updater."
+    },
+    {
       "dry_run_available": false,
       "group": "kit",
       "help": "Verify the workspace-owned Kit interpreter and installation without global PATH guesses.",
@@ -20786,7 +20974,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "c75ff9f747e1",
+    "manifest_sha": "c37a88a94d05",
     "schema_version": 2
   },
   "schema_version": 3,

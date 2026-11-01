@@ -24,7 +24,7 @@
     ],
     "worktree_clean": "boolean"
   },
-  "manifest_sha": "c75ff9f747e1",
+  "manifest_sha": "c37a88a94d05",
   "routes": [
     {
       "command": "agentic-kit check",
@@ -359,6 +359,8 @@
     "agentic-kit handoff show",
     "agentic-kit init",
     "agentic-kit instruction lint",
+    "agentic-kit kit return-install",
+    "agentic-kit kit return-revert",
     "agentic-kit kit status",
     "agentic-kit ledger report",
     "agentic-kit onboarding measure",
