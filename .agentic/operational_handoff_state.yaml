@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4c4aa18104f0250edaa9898b70cab16ef2a88103
-  short: 4c4aa181
-  subject: '[codex] Stage external handoff v2 across two releases (GF-097/098) (#2712)'
+  full: 39b969e21dde0e82b4b4c693a2f7e61fd2174aad
+  short: 39b969e2
+  subject: Make the projection update-plan test independent of the running release (#2715)
 last_substantive_work_state:
-  full: 4c4aa18104f0250edaa9898b70cab16ef2a88103
-  short: 4c4aa181
-  subject: '[codex] Stage external handoff v2 across two releases (GF-097/098) (#2712)'
+  full: 39b969e21dde0e82b4b4c693a2f7e61fd2174aad
+  short: 39b969e2
+  subject: Make the projection update-plan test independent of the running release (#2715)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
