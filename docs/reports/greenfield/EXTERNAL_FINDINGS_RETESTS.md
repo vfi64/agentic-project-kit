@@ -1611,7 +1611,7 @@ Expected result fields: `{"assertions": ["READY with refresh_required=False; pro
 
 ## KIT-GF-095
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.11.
 Evidence: docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md
 
 Execution class: local (effects: none); machine contract: Real local Git adoption and return squashes, byte-exact v1 restoration including ignored runtime backup, later-touch no-mutation, wrong state/version rejection; existing update executor with installation double and real fresh-process snapshot checks.
@@ -1646,7 +1646,7 @@ Expected result fields: `{"assertions": ["Migration evidence complete for all kn
 
 ## KIT-GF-097
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.11.
 Evidence: docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md
 
 Execution class: local (effects: none); machine contract: Installed predecessor plans the first active projection migration using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.
@@ -1663,7 +1663,7 @@ Expected result fields: `{"assertions": ["Real wheels and installation; only PR 
 
 ## KIT-GF-098
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.1.11.
 Evidence: docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md
 
 Execution class: local (effects: none); machine contract: Return targets the exact previous pinned Kit version using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.

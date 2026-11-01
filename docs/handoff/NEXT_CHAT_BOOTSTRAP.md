@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `39b969e21dde0e82b4b4c693a2f7e61fd2174aad` (`39b969e2`)
-- Handoff freshness marker: `39b969e2`
-- Branch at generation: `docs/post-pr2715-handoff-refresh`
+- HEAD: `e29c7b601f9d8a1d633ca71ffa8ea9ae7b09b666` (`e29c7b60`)
+- Handoff freshness marker: `e29c7b60`
+- Branch at generation: `codex/release-1.1.11`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -108,7 +108,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: c37a88a94d05). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK c37a88a94d05. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: f770b8310c36). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK f770b8310c36. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -118,5 +118,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: c2be2dcef51ac1313609ac1023649f3ca6fb9d8a3d9f49c51519686e9c0fc25e
-- docs/reference/agentic-kit-commands.json: fb70bee006ceb4cb24bdb2e6ab484d3aab5f5fbc71d635ccafe5849fb340ae2e
+- docs/reference/AGENTIC_KIT_COMMANDS.md: b365cf3bfaafbdac9d94af4f9f49fee3488330a29d17d6787eb7c4a635ddffe2
+- docs/reference/agentic-kit-commands.json: 103bb34587140c90cd443f63f520c13f99230c33375069a614298b389b89f709

@@ -7302,7 +7302,7 @@
     {
       "id": "KIT-GF-095",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.11",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md",
       "external_retest": {
@@ -7387,7 +7387,7 @@
     {
       "id": "KIT-GF-097",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.11",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md",
       "external_retest": {
@@ -7440,7 +7440,7 @@
     {
       "id": "KIT-GF-098",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.11",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md",
       "external_retest": {
