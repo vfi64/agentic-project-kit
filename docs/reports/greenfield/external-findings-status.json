@@ -7651,7 +7651,7 @@
         "verification": "Installation is a test double, not real 1.1.10 compatibility evidence. Consumer rehearsal and owner acceptance are required before release.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.11",
       "id": "KIT-GF-095",
       "kit_state": "CLOSED",
       "prs": [],
@@ -7742,7 +7742,7 @@
         "verification": "Local machine evidence is separate from independent consumer rehearsal and owner acceptance. No release or merge authority.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.11",
       "id": "KIT-GF-097",
       "kit_state": "CLOSED",
       "prs": [],
@@ -7799,7 +7799,7 @@
         "verification": "Local machine evidence is separate from independent consumer rehearsal and owner acceptance. No release or merge authority.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.1.11",
       "id": "KIT-GF-098",
       "kit_state": "CLOSED",
       "prs": [],
@@ -7945,5 +7945,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 56,
   "schema_version": 1,
-  "source_sha256": "6f10314bfdf281aef550ee36387a5c4518197c0aa9af01e39381a23bfd8dde99"
+  "source_sha256": "caa4b3f57ab770c30992ce93f99a9747c66723edac3ec2d6830db7a167e84a86"
 }
