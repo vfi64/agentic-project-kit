@@ -17,6 +17,16 @@ import sys
 import venv
 
 
+def activate_projection_fixture(python: Path) -> None:
+    """Activate only the disposable package copy used by historical v2 contracts."""
+    subprocess.run([str(python), "-I", "-c", "\n".join([
+        "import pathlib,sys,agentic_project_kit",
+        "p=pathlib.Path(agentic_project_kit.__file__).parent/'external_projection_policy.py'",
+        "assert p.resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())",
+        "t=p.read_text(); p.write_text(t.replace('EXTERNAL_PROJECTION_V2_ACTIVE = False','EXTERNAL_PROJECTION_V2_ACTIVE = True'))",
+    ])], check=True, capture_output=True, text=True, timeout=30)
+
+
 def _is_kit_entry(name: str) -> bool:
     return name in {"agentic_project_kit", "agentic_project_kit.egg-info"} or (
         name.startswith("agentic_project_kit-") and name.endswith((".dist-info", ".egg-info")))

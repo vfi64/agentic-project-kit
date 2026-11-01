@@ -1,5 +1,44 @@
 # External successor handoff v2
 
+## Two-release adoption (KIT-GF-097)
+
+Release A is the expand release: `EXTERNAL_PROJECTION_V2_ACTIVE = False` in
+`external_projection_policy.py`. It ships the future target preview, adoption
+receipt, runtime-consumer and return capabilities while external generation and
+checks retain v1. It adds no `projection_contract_min` and does not report
+`NEEDS_PROJECTION_MIGRATION` through its external workflows. Module presence is
+never activation. There is no environment or workspace activation option.
+
+Known external workspaces first adopt A. A later, separately approved release B
+changes that one constant to True. The installed A planner previews B, signs the
+projection, manifest minimum and ignore-file changes, and writes adoption
+evidence after successful execution. A-to-A-prime remains a v1 update.
+
+GF-094 stays PARTIAL/unreleased in A and is only effective in B; GF-095 and the
+transition corrections can be delivered in A. GF-096's second-release expiry
+starts with B. B1 adoption additionally waits for recorded cycle 008.
+
+### Direct legacy-to-B completion and B release notes
+
+The required B release-note guidance is: **Install release A before B**,
+so A can plan the first migration and record evidence for return to A.
+The optional `kit status --check-release` notice explains this sequence for
+legacy installations when an update beyond 1.1.10 is available.
+
+If an old planner installs B before detecting missing migration, preserve its
+BLOCKED result and completed steps. Use the existing
+`transfer prepare-successor-handoff` route, then repeat the exact B update.
+The repeated plan must have empty `changed_paths`; B `check` and `doctor` must
+PASS. This completes forward adoption; it cannot reconstruct the absent
+original adoption receipt or authorize an installation return. A predecessor
+without adoption evidence remains explicitly blocked from that return.
+
+The local A/B/A-prime matrix uses real noneditable wheels, loopback package
+resolution, owned runtimes and real bare-origin squashes. Only PR observation
+is a test double. A direct jump simulates the unsupported preview boundary;
+installation and completion remain real. Independent consumer rehearsal and
+owner acceptance remain release gates; no release is authorized here.
+
 KIT-GF-094 replaces commit freshness with deterministic content freshness only
 for external workspaces. Self-hosting retains its v1 contract, C4 administrative
 refresh boundary and WRT-CH-001 commit binding. Approvals, signed plans, CI and

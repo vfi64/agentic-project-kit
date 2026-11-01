@@ -1,6 +1,8 @@
 ## Unreleased
 
-- Fixed: External successor handoffs use bounded deterministic content projection and read-only byte validation instead of commit freshness, preventing redundant refresh PRs after squash merges with unchanged inputs. Ignored same-run runtime identity preserves exact HEAD validation; signed update migration and the evidence-bound return to 1.1.10 retain approval, artifact-hash and fresh-process check/doctor gates. Regression tests cover integrity failures, migration, real local squash merges and incomplete installation returns (KIT-GF-094, KIT-GF-095).
+- Fixed: Stage external projection v2 across two releases: A retains v1 behavior while shipping the future migration planner; only a separately approved B activates the package-owned switch (KIT-GF-097).
+- Fixed: Record normal update adoption evidence and return to the exact prior pinned version instead of hard-coded 1.1.10; preserve signed package identity, artifact hashes, exact file restoration and fresh-process checks (KIT-GF-098, KIT-GF-095).
+- Fixed: Verify first adoption with the installed predecessor and real A/B/A-prime wheels; document direct legacy-to-B completion through existing routes and the missing-evidence return boundary. GF-094 remains PARTIAL until B; GF-096 expires from B. External deterministic content freshness remains inactive in A.
 
 ## v1.1.10 - 2026-10-31
 

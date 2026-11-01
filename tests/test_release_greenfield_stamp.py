@@ -14,6 +14,14 @@ from test_release_run import FakeRunner, _workspace
 ROOT = Path(__file__).resolve().parents[1]
 
 
+def test_expand_release_defers_gf094_and_its_activation_expiry():
+    data = json.loads((ROOT / CATALOG).read_bytes())
+    findings = {f["id"]: f for f in data["findings"]}
+    assert findings["KIT-GF-094"]["kit_state"] == "PARTIAL"
+    assert findings["KIT-GF-094"]["fixed_in"] == "unreleased"
+    assert "release B" in " ".join(findings["KIT-GF-096"]["external_retest"]["preconditions"])
+
+
 def catalog_fixture(root):
     data = json.loads((ROOT / CATALOG).read_text())
     for finding in data["findings"]:
@@ -98,6 +106,7 @@ def test_external_v2_release_requires_return_rehearsal_and_owner_acceptance(tmp_
     root = _copy_release_state_files(tmp_path)
     data = catalog_fixture(root)
     finding = next(item for item in data["findings"] if item["id"] == "KIT-GF-094")
+    finding["kit_state"] = "CLOSED"  # Later B activation, separate from the A catalog default.
     finding["fixed_in"] = "unreleased"
     (root / CATALOG).write_bytes(encoded(data))
     report = root / finding["report"]

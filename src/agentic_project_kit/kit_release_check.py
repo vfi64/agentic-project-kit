@@ -208,6 +208,13 @@ def check_release(root: Path, *, installation: dict | None = None, fetch=None) -
                 else "AHEAD"
             ),
         )
+        if result["result"] == "UPDATE_AVAILABLE" and installed <= Version("1.1.10") and Version(latest) > Version("1.1.10"):
+            result["transition_guidance"] = (
+                "Install the documented expand release A before the v2 activation release B. "
+                "A supplies the migration planner and adoption evidence needed for governed return. "
+                "After a direct legacy-to-B attempt, use prepare-successor-handoff and repeat kit update; "
+                "missing original adoption evidence cannot be reconstructed."
+            )
     except (OSError, ValueError, KeyError, TypeError, RecursionError) as exc:
         reason = (
             str(exc) if isinstance(exc, ValueError) else "index_unavailable:" + type(exc).__name__

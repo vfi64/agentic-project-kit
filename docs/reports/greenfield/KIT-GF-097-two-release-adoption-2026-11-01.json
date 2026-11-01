@@ -1,0 +1,13 @@
+{
+  "finding": "KIT-GF-097",
+  "consumer": "an external desktop controller",
+  "fixed_in": "unreleased",
+  "implementation_status": "IN_PROGRESS",
+  "machine": {
+    "status": "NOT_RUN"
+  },
+  "release_prerequisites": {
+    "consumer_rehearsal": "NOT_RUN",
+    "owner_acceptance": "PENDING"
+  }
+}

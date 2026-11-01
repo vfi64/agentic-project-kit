@@ -755,7 +755,7 @@ def work_finish_command(
             if return_context is None:
                 steps.append(_run_step("handoff-refresh", _agentic("transfer", "chat-switch-complete", "--render-prompt")))
             else:
-                steps.append(_noop_step("handoff-refresh", "GF095: preserve the verified v1 revert; staged target check/doctor passed. The current Kit still reports NEEDS_PROJECTION_MIGRATION.\n"))
+                steps.append(_noop_step("handoff-refresh", "GF095: preserve the verified v1 revert; staged target check/doctor passed. Installation return still requires owner approval.\n"))
         if all(step["ok"] for step in steps):
             handoff_status = _handoff_projection_status_step()
             steps.append(handoff_status)
@@ -921,7 +921,8 @@ def work_finish_command(
     if return_context is not None:
         payload["post_merge_handoff"] = "pending_installation_return"
         payload["return_adoption_id"] = return_context["adoption_id"]
-        payload["projection_status"] = "NEEDS_PROJECTION_MIGRATION"
+        from agentic_project_kit.kit_return import return_projection_status
+        payload["projection_status"] = return_projection_status()
         pending_marker = any("RETURN_INSTALLATION_APPROVAL_REQUIRED" in str(step.get("stdout", "")) for step in steps)
         if not dry_run and merge and (payload["result_status"] == "PASS" or pending_marker):
             payload.update(result_status="PENDING", returncode=2,

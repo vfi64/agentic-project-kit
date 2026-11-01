@@ -2,6 +2,16 @@
 
 ### External projection v2 and governed return
 
+`tests/test_external_projection_activation.py` checks the release A default and
+single activation boundary. Historical v2 contracts explicitly activate B.
+`tests/test_projection_release_wheels.py` verifies A/B/A-prime wheel identities.
+`tests/test_projection_release_transition.py` installs them through a loopback
+index: installed A plans B, real squashes retain content freshness, governed
+return restores A, A-to-A-prime stays v1, and a legacy unsupported-preview attempt
+completes through existing routes. Only PR observation is doubled. Fresh
+noneditable-wheel retests are required for KIT-GF-097 and KIT-GF-098. Release A
+does not stamp PARTIAL KIT-GF-094 as fixed.
+
 `tests/test_external_handoff_projection.py` covers pure frozen-input rendering,
 versioned golden output, complete digest inputs, byte integrity, migration,
 minimum contract, runtime identity, read-only checks and real local bare-origin

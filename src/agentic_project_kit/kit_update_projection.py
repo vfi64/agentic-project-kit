@@ -17,7 +17,11 @@ from agentic_project_kit.volatile_paths import (
 # installation. Older target wheels explicitly report lack of v2 support.
 TARGET_PROJECTION_PREVIEW = r'''
 import base64, importlib.util, json, pathlib, subprocess, sys, tempfile
-if importlib.util.find_spec("agentic_project_kit.external_handoff_projection") is None:
+contract = 1
+if importlib.util.find_spec("agentic_project_kit.external_projection_policy") is not None:
+    from agentic_project_kit.external_projection_policy import external_projection_contract_version
+    contract = external_projection_contract_version()
+if contract != 2:
     print(json.dumps({"supported": False, "files": {}}))
 else:
     from agentic_project_kit.external_handoff_projection import write_external_package

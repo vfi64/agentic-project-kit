@@ -35,7 +35,10 @@ print(json.dumps({"kit_written": is_kit_written_ci_template(json.loads(sys.argv[
 
 
 _INVENTORY = """import importlib.metadata as m, importlib.util, json, sys
-contract = 2 if importlib.util.find_spec('agentic_project_kit.external_handoff_projection') else 1
+contract = 1
+if importlib.util.find_spec('agentic_project_kit.external_projection_policy') is not None:
+    from agentic_project_kit.external_projection_policy import external_projection_contract_version
+    contract = external_projection_contract_version()
 print(json.dumps({"python": sys.version, "projection_contract_version": contract, "packages": sorted((d.metadata["Name"], d.version) for d in m.distributions())}))"""
 
 
@@ -161,11 +164,16 @@ def build_update_plan(
     desired = plan_ci_pins(
         (root / CI_TEMPLATE_PATH).read_bytes(), (root / CI_INJECTION_TARGET).read_bytes(), version
     )
+    from agentic_project_kit.kit_ci_pin_patterns import EXACT_KIT_PIN_BYTES
+    pinned_version_before = EXACT_KIT_PIN_BYTES.findall((root / CI_TEMPLATE_PATH).read_bytes())[0].decode("ascii")
     inventory = _inventory(run, python)
     tmp = ws.tmp() / "kit-update"
     if not tmp.resolve().is_relative_to(root):
         raise UpdateBlocked("workspace_tmp_must_be_local")
     target = prepare(tmp, Path(python), ws.kit.index_url, version, run)
+    if return_proof is not None:
+        from agentic_project_kit.kit_return import verify_previous_artifact
+        verify_previous_artifact(target.artifacts, return_proof.get("previous_artifact_sha256", ""))
     ci_preview = json_command(
         run, [str(target.python), "-I", "-c", _CI_PREVIEW,
               json.dumps((root / CI_TEMPLATE_PATH).read_text(encoding="utf-8"))],
@@ -242,6 +250,7 @@ def build_update_plan(
         "version": version,
         **identity,
         "installation": installation,
+        "pinned_version_before": pinned_version_before,
         "environment": inventory,
         "index_url": ws.kit.index_url,
         "artifacts": artifacts,
@@ -502,9 +511,9 @@ def run_kit_update(
             record("rule_inventory")
         elif not (root / INVENTORY).exists():
             next_action = f"Optionally run {bootstrap_route(root)}; then finish changed files through the normal Kit work lifecycle."
-        if plan.desired_projection and not return_adoption:
+        if not return_adoption and result["changed_paths"]:
             from agentic_project_kit.kit_return import record_adoption
-            adoption = record_adoption(root, adoption_id=run_id, plan={**plan.payload, "changed_paths": result["changed_paths"]}, approval_signature=sig)
+            adoption = record_adoption(root, adoption_id=run_id, plan={**plan.payload, "changed_paths": result["changed_paths"]}, approval_signature=sig, run=run)
             result["adoption_id"] = adoption["adoption_id"]
         result.update(result_status="PASS", installed_version=version, next_action=next_action)
     except (UpdateBlocked, OSError, ValueError, RuntimeError) as exc:

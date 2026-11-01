@@ -99,8 +99,8 @@ def build_patch_cycle_status(
     command_runner: PatchCycleRunner | None = None,
 ) -> PatchCycleStatus:
     runner = command_runner or run_command
-    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
-    external = is_external_manifest_workspace(project_root)
+    from agentic_project_kit.external_projection_policy import uses_external_projection_v2
+    external = uses_external_projection_v2(project_root)
     branch_command = ["git", "rev-parse", "--abbrev-ref", "HEAD"] if external else ["git", "branch", "--show-current"]
     branch = _stdout(runner(project_root, branch_command))
     head_sha = _stdout(runner(project_root, ["git", "rev-parse", "HEAD"]))

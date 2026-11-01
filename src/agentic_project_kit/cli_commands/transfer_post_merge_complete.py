@@ -448,7 +448,7 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             raise typer.Exit(2) from exc
         if pending_return is not None:
             payload = {"result_status": "PENDING", "returncode": 2, "after_pr": after_pr,
-                       "lifecycle_state": "NEEDS_PROJECTION_MIGRATION", "completion_receipt": None, **pending_return}
+                       "completion_receipt": None, **pending_return}
             typer.echo(json.dumps(payload, indent=2, sort_keys=True))
             raise typer.Exit(2)
         preflight_cleanup = restore_known_volatile_for_post_merge(Path("."))

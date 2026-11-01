@@ -9,6 +9,12 @@ import socket
 import pytest
 
 
+@pytest.fixture(autouse=True)
+def active_release_b(monkeypatch):
+    from agentic_project_kit import external_projection_policy
+    monkeypatch.setattr(external_projection_policy, "EXTERNAL_PROJECTION_V2_ACTIVE", True)
+
+
 def test_projection_renderer_is_pure_and_byte_stable(monkeypatch):
     from agentic_project_kit.external_handoff_projection import ProjectionInputs, render_projection
 
@@ -432,7 +438,7 @@ def test_external_post_merge_machine_contract_is_local_only_for_bound_fixture():
     from agentic_project_kit.greenfield_retest import execution_class
 
     retest = {"commands": ["agentic-kit transfer post-merge-check"], "workspace_kind": "external_manifest",
-              "machine": {"fixture": "external_manifest"}}
+              "machine": {"fixture": "external_projection_v2"}}
     assert execution_class(retest)[0] == "local"
     retest["machine"]["fixture"] = "git_repository"
     assert execution_class(retest)[0] == "owner_remote"

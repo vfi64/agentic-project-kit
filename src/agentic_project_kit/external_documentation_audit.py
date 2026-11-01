@@ -161,10 +161,27 @@ def _handoff(ws: Workspace) -> tuple[list[str], list[str]]:
         missing = [name for name in required if not (package / name).is_file()]
         if missing:
             return [*errors, f"Incomplete successor package: missing {', '.join(missing)}"], []
-        from agentic_project_kit.external_handoff_projection import check_projection
-        result = check_projection(ws.root)
-        if result["status"] != "PASS":
-            errors.append(f"handoff:{result['code']}: {json.dumps(result, sort_keys=True)}")
+        from agentic_project_kit.external_projection_policy import uses_external_projection_v2
+        if uses_external_projection_v2(ws.root):
+            from agentic_project_kit.external_handoff_projection import check_projection
+            result = check_projection(ws.root)
+            if result["status"] != "PASS":
+                errors.append(f"handoff:{result['code']}: {json.dumps(result, sort_keys=True)}")
+        else:
+            from agentic_project_kit.successor_handoff_package import validate_successor_outputs
+            context = _mapping(package / "successor_context.yaml")
+            repo = context.get("repo")
+            if not isinstance(repo, dict) or any(not isinstance(repo.get(k), str) or not repo[k]
+                                                 for k in ("head", "head_short")):
+                return ["successor_context.yaml: missing repo.head or repo.head_short"], []
+            outputs = {p.name: p.read_text(encoding="utf-8") for p in package.iterdir()
+                       if p.is_file() and p.name != "validation_report.json"}
+            for name in ("NEXT_CHAT_BOOTSTRAP.md", "START_NEW_CHAT_PROMPT.md", "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"):
+                path = ws.handoff_file(name)
+                if path.exists():
+                    outputs[ws.path_text(path)] = path.read_text(encoding="utf-8")
+            result = validate_successor_outputs(outputs, context, ws)
+            errors.extend(f"handoff:{f['code']}: {f['message']}" for f in result["findings"])
     return errors, [] if state.exists() or package_present else ["No previous handoff; fresh workspace."]
 
 

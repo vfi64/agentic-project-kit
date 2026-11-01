@@ -338,14 +338,14 @@ def _external_pure_check(command: str, argv: list[str]) -> bool:
         "agentic-kit docs-audit",
     }:
         return False
-    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    from agentic_project_kit.external_projection_policy import uses_external_projection_v2
     root = Path.cwd()
     for index, arg in enumerate(argv):
         if arg == "--root" and index + 1 < len(argv):
             root = Path(argv[index + 1])
         elif arg.startswith("--root="):
             root = Path(arg.split("=", 1)[1])
-    return is_external_manifest_workspace(root)
+    return uses_external_projection_v2(root)
 
 
 @contextmanager

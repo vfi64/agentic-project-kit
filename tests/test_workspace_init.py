@@ -61,7 +61,8 @@ def test_init_dry_run_writes_nothing_and_prints_tree(tmp_path: Path) -> None:
     assert PRIVATE_PUBLIC_BOUNDARY in result.output
 
 
-def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path) -> None:
+def test_init_execute_creates_exact_tree_and_valid_manifest(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", True)
     result = CliRunner().invoke(
         app,
         [
@@ -280,7 +281,8 @@ def test_init_workspace_roundtrip_with_namespace_resolvers(tmp_path: Path) -> No
     assert "Current state: initialized workspace." in status
 
 
-def test_init_gitignore_append_is_idempotent(tmp_path: Path) -> None:
+def test_init_gitignore_append_is_idempotent(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", True)
     _write(tmp_path / ".gitignore", "build/\n.agentic/tmp/\n")
 
     first = CliRunner().invoke(app, ["workspace", "init", "--root", str(tmp_path), "--execute"])
@@ -623,7 +625,8 @@ def test_init_prints_privacy_boundary(tmp_path: Path) -> None:
     assert PRIVATE_PUBLIC_BOUNDARY in result.output
 
 
-def test_init_json_shape(tmp_path: Path) -> None:
+def test_init_json_shape(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", True)
     result = CliRunner().invoke(
         app,
         ["workspace", "init", "--root", str(tmp_path), "--inject-ci", "--json"],

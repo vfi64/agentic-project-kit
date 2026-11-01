@@ -38,9 +38,10 @@ LOCAL_EFFECTS = frozenset({"none", "fetch", "push"})
 MANIFEST_FIXTURES = frozenset({
     "external_manifest", "external_owned_runtime", "external_owned_interpreter", "external_release", "external_release_check",
     "external_release_check_stale_editable",
+    "external_projection_v2",
 })
-OWNED_FIXTURES = MANIFEST_FIXTURES - {"external_manifest"}
-FIXTURES = ("git_repository", "external_kit_return", *sorted(MANIFEST_FIXTURES))
+OWNED_FIXTURES = (MANIFEST_FIXTURES - {"external_manifest"}) | {"external_kit_return"}
+FIXTURES = ("git_repository", "external_kit_return", "external_projection_transition", *sorted(MANIFEST_FIXTURES))
 STEP_KINDS = ("run", "write", "append", "replace", "assert")
 EXPECT_KEYS = frozenset(
     {"returncode", "returncode_nonzero", "json", "json_contains", "stdout_contains", "stdout_equals"}
@@ -334,6 +335,9 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
         try:
             python = prepare_owned_runtime(base, env, console=machine["fixture"] != "external_owned_interpreter")
             variables["kit_python"] = str(python)
+            if machine["fixture"] in {"external_projection_v2", "external_kit_return"}:
+                from agentic_project_kit.greenfield_retest_runtime import activate_projection_fixture
+                activate_projection_fixture(python)
         except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
             return root, variables, [f"owned runtime fixture failed: {exc}"]
     if machine["fixture"] in {"external_release_check", "external_release_check_stale_editable"}:
@@ -351,10 +355,32 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
             return root, variables, failures
     if machine["fixture"] == "external_kit_return":
         from agentic_project_kit.greenfield_retest_return import prepare_return_fixture
+        from agentic_project_kit import external_projection_policy
+        previous = external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE
         try:
+            external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE = True
             prepare_return_fixture(root, variables, env)
         except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
             return root, variables, [f"return fixture failed: {exc}"]
+        finally:
+            external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE = previous
+    if machine["fixture"] == "external_projection_v2":
+        result = _run(["agentic-kit", "transfer", "prepare-successor-handoff", "--json"], root, env)
+        if result.returncode:
+            return root, variables, ["active v2 fixture generation failed: " + result.stderr[-400:]]
+        for argv in (["git", "add", "."], ["git", "commit", "-m", "Active B fixture"], ["git", "push", "origin", "main"]):
+            result = _run(argv, root, env)
+            if result.returncode:
+                return root, variables, ["active v2 fixture commit failed: " + result.stderr[-400:]]
+    if machine["fixture"] == "external_projection_transition":
+        from agentic_project_kit.greenfield_projection_transition import run_transition
+        try:
+            proof = run_transition(base / "transition")
+            root = base / "transition/consumer"
+            (root / ".agentic/tmp/transition-proof.json").write_text(json.dumps(proof, sort_keys=True))
+            env["AGENTIC_KIT_RETEST_PYTHON"] = str(root / ".venv/bin/python")
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError, AssertionError) as exc:
+            return root, variables, [f"real wheel transition failed: {exc}"]
     return root, variables, []
 
 

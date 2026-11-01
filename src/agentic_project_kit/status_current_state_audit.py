@@ -99,8 +99,8 @@ def audit_status_current_state(
     release_status_builder: ReleaseStatusBuilder | None = None,
     max_origin_lag: int = 3,
 ) -> StatusCurrentStateAuditResult:
-    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
-    if is_external_manifest_workspace(root):
+    from agentic_project_kit.external_projection_policy import uses_external_projection_v2
+    if uses_external_projection_v2(root):
         from agentic_project_kit.external_handoff_projection import check_projection
         projection = check_projection(root)
         finding = StatusCurrentStateFinding(

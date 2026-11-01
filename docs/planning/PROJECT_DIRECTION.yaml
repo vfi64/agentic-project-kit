@@ -115,7 +115,12 @@ meta:
           finding: KIT-GF-094
           stage: 1
           owner_approved: '2026-11-01'
-          scope: External workspace deterministic content projection and ignored runtime identity only.
+          scope: Two-release external projection transition; A retains v1, then known external workspaces adopt A, then separately approved B activates v2.
+          two_release_transition:
+          - Release A ships target preview, adoption evidence, return and runtime-consumer capabilities with the package activation constant False.
+          - Record release A adoption in every known external workspace before proposing release B.
+          - Release B is a later owner-approved small PR changing the constant to True; GF-094 becomes effective and GF-096 expiry starts then.
+          - B1 adopts B only after cycle 008 is completed and recorded.
           supersedes_for_external_mode:
             source: docs/reports/POST_0_5_0_C4_REFRESH_CHAIN_DECISION_20260813.md
             decision: F1
@@ -3829,7 +3834,7 @@ plans:
       evidence: docs/reports/POST_V1_0_4_B1_COMM_SCI_CYCLE_002_RESULTS_20260824.md
     - id: B1-KIT-008
       status: released_package_retest_pass
-      adoption_sequence: The B1 Brownfield workspace adopts a Kit containing KIT-GF-094 only after cycle 008 is completed and recorded (owner decision F2, 2026-11-01).
+      adoption_sequence: The B1 Brownfield workspace adopts activation release B containing KIT-GF-094 only after cycle 008 is completed and recorded (owner decision F2, 2026-11-01).
       goal: Make post-merge-settle return cleanly after generated admin refresh
         PRs have reached a terminal PASS/NOOP state, with bounded progress or
         timeout evidence for long waits.

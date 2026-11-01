@@ -13,7 +13,37 @@ from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
 
 EVIDENCE_ROOT = ".agentic/kit-update"
-RETURN_VERSION = "1.1.10"
+
+
+def return_projection_status() -> str:
+    from agentic_project_kit.external_projection_policy import external_projection_contract_version
+    return {1: "V1", 2: "NEEDS_PROJECTION_MIGRATION"}[external_projection_contract_version()]
+
+
+def return_lifecycle_state() -> str:
+    return "NEEDS_PROJECTION_MIGRATION" if return_projection_status() == "NEEDS_PROJECTION_MIGRATION" else "BLOCKED"
+
+
+def _previous_version(receipt: dict) -> str:
+    version = receipt.get("from_version")
+    if not isinstance(version, str) or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+(?:\.post[0-9]+)?", version):
+        raise UpdateBlocked("adoption_previous_pin_invalid")
+    return version
+
+
+def previous_artifact_sha256(receipt: dict) -> str:
+    installation = receipt.get("installation_before", {})
+    if installation.get("version") != _previous_version(receipt):
+        return ""
+    return installation.get("wheel_sha256", "")
+
+
+def verify_previous_artifact(artifacts, expected: str) -> None:
+    if not expected:
+        return
+    kits = [a for a in artifacts if a["name"].lower().replace("_", "-") == "agentic-project-kit"]
+    if len(kits) != 1 or kits[0]["sha256"] != expected:
+        raise UpdateBlocked("return_previous_artifact_identity_mismatch")
 
 
 def _safe(root: Path, name: str) -> Path:
@@ -57,11 +87,12 @@ def _append(root: Path, event: dict) -> None:
         stream.flush()
 
 
-def _exclude_evidence(root: Path) -> None:
+def _exclude_evidence(root: Path, run=None) -> None:
     # Local exclusion survives reverting the versioned adoption's ignore file.
     # It is installed only by an explicit update/return action, never a check.
     import subprocess
-    result = subprocess.run(["git", "rev-parse", "--git-path", "info/exclude"], cwd=root, capture_output=True, text=True, check=False)
+    argv = ["git", "rev-parse", "--git-path", "info/exclude"]
+    result = run(argv) if run is not None else subprocess.run(argv, cwd=root, capture_output=True, text=True, check=False)
     if result.returncode:
         raise UpdateBlocked("return_git_exclude_unavailable")
     path = Path(result.stdout.strip())
@@ -74,9 +105,9 @@ def _exclude_evidence(root: Path) -> None:
             stream.write("\n" + entry + "\n")
 
 
-def record_adoption(root: Path, *, adoption_id: str, plan: dict, approval_signature: str) -> dict:
+def record_adoption(root: Path, *, adoption_id: str, plan: dict, approval_signature: str, run=None) -> dict:
     root = root.resolve()
-    _exclude_evidence(root)
+    _exclude_evidence(root, run)
     files = {}
     for name in plan["changed_paths"]:
         after = _hash(_safe(root, name))
@@ -85,9 +116,10 @@ def record_adoption(root: Path, *, adoption_id: str, plan: dict, approval_signat
             files[name] = {"before": before, "after": after}
     receipt = {
         "schema_version": 1, "kind": "kit_update_adoption", "adoption_id": adoption_id,
-        "from_version": plan["installation"]["version"], "to_version": plan["version"],
+        "from_version": plan.get("pinned_version_before", plan["installation"]["version"]), "to_version": plan["version"],
         "branch": plan["branch"], "base_head": plan["head"], "files": files,
         "approval_signature": approval_signature, "artifacts": plan["artifacts"],
+        "installation_before": plan["installation"],
     }
     path = _receipt_path(root, adoption_id)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -102,12 +134,13 @@ def load_adoption(root: Path, adoption_id: str) -> dict:
     try:
         receipt = json.loads(path.read_bytes())
     except (OSError, ValueError) as exc:
-        raise UpdateBlocked("adoption_evidence_unavailable") from exc
+        raise UpdateBlocked("adoption_evidence_unavailable: predecessor_without_adoption_evidence; no governed installation return can be inferred") from exc
     events = [event for event in _events(root) if event.get("event") == "adopted" and event.get("adoption_id") == adoption_id]
     if len(events) != 1 or events[0].get("receipt_sha256") != _hash(path):
         raise UpdateBlocked("adoption_evidence_integrity_failed")
-    if receipt.get("from_version") != RETURN_VERSION or not receipt.get("files"):
-        raise UpdateBlocked("return_outside_gf095_scope")
+    _previous_version(receipt)
+    if not receipt.get("files"):
+        raise UpdateBlocked("adoption_file_evidence_missing")
     return receipt
 
 
@@ -129,7 +162,7 @@ def _verify_reverted_files(root: Path, receipt: dict) -> None:
         raise UpdateBlocked("return_requires_v1_projection")
     for name in (CI_TEMPLATE_PATH, CI_INJECTION_TARGET):
         pins = EXACT_KIT_PIN_BYTES.findall(_safe(root, name).read_bytes())
-        if not pins or set(pins) != {RETURN_VERSION.encode()}:
+        if not pins or set(pins) != {_previous_version(receipt).encode()}:
             raise UpdateBlocked("return_ci_pin_evidence_mismatch")
 
 
@@ -157,7 +190,7 @@ def return_closeout_context(root: Path, *, run) -> dict | None:
     changed = set(checked(run, ["git", "diff", "--name-only", prepared["prepared_head"], "HEAD"]).splitlines())
     if changed - receipt["files"].keys():
         raise UpdateBlocked("return_closeout_unrelated_commits")
-    return {**prepared, "target_version": RETURN_VERSION, "paths": sorted(receipt["files"])}
+    return {**prepared, "target_version": _previous_version(receipt), "paths": sorted(receipt["files"])}
 
 
 def bind_adoption_pr(root: Path, *, branch: str, number: int, head: str) -> None:
@@ -212,9 +245,9 @@ def record_pr_evidence(root: Path, *, branch: str, output: str, run, number: int
 
 
 def verify_install_return(root: Path, adoption_id: str, version: str, *, run, observe_pr) -> dict:
-    if version != RETURN_VERSION:
-        raise UpdateBlocked("return_target_version_mismatch")
     receipt = load_adoption(root, adoption_id)
+    if version != _previous_version(receipt):
+        raise UpdateBlocked("return_target_version_mismatch")
     _verify_reverted_files(root, receipt)
     matches = [event for event in _events(root) if event.get("event") == "return_pr" and event.get("adoption_id") == adoption_id]
     if len(matches) != 1:
@@ -239,6 +272,7 @@ def verify_install_return(root: Path, adoption_id: str, version: str, *, run, ob
         if changes:
             raise UpdateBlocked(f"return_paths_changed_after_merge: {name}: {changes}")
     return {"adoption_id": adoption_id, "target_version": version, "installed_version_before": receipt["to_version"],
+            "previous_artifact_sha256": previous_artifact_sha256(receipt),
             "return_pr": binding["pr_number"], "return_merge": merge,
             "receipt_sha256": _hash(_receipt_path(root, adoption_id))}
 
@@ -255,7 +289,7 @@ def observe_return_pr(root: Path, run, number: int) -> dict:
 
 
 def record_install_return(root: Path, proof: dict, *, installed_version: str, completed_steps: list[str]) -> None:
-    if installed_version != RETURN_VERSION or not {"check", "doctor"} <= set(completed_steps):
+    if installed_version != proof["target_version"] or not {"check", "doctor"} <= set(completed_steps):
         raise UpdateBlocked("return_installation_not_verified")
     _append(root, {"event": "return_installed", **proof, "installed_version": installed_version,
                    "completed_steps": list(completed_steps)})
@@ -280,7 +314,8 @@ def pending_install_return(root: Path, *, run) -> dict | None:
     if differences.strip():
         raise UpdateBlocked("pending_return_workspace_changed")
     return {"adoption_id": proof["adoption_id"], "return_pr": proof["return_pr"],
-            "projection_status": "NEEDS_PROJECTION_MIGRATION", "RETURN_INSTALLATION_APPROVAL_REQUIRED": True,
+            "projection_status": return_projection_status(), "lifecycle_state": return_lifecycle_state(),
+            "RETURN_INSTALLATION_APPROVAL_REQUIRED": True,
             "next_action": f"agentic-kit kit return-install --adoption {proof['adoption_id']} --json"}
 
 
@@ -297,7 +332,7 @@ def record_merged_return(root: Path, after_pr: int, *, run, observe_pr=None) -> 
         if existing["return_pr"] != after_pr:
             raise UpdateBlocked("return_merge_binding_mismatch")
         return existing
-    proof = verify_install_return(root, matches[0]["adoption_id"], RETURN_VERSION, run=run,
+    proof = verify_install_return(root, matches[0]["adoption_id"], _previous_version(load_adoption(root, matches[0]["adoption_id"])), run=run,
                                   observe_pr=observe_pr or (lambda number: observe_return_pr(root, run, number)))
     _append(root, {"event": "return_merged", **proof})
     return pending_install_return(root, run=run)
@@ -316,11 +351,11 @@ def installation_return_is_pending(result) -> bool:
     return getattr(result, "result_status", "") == "PENDING" and "RETURN_INSTALLATION_APPROVAL_REQUIRED" in getattr(result, "stdout", "")
 
 
-def _return_target_data(target) -> dict:
+def _return_target_data(target, version: str) -> dict:
     if len(target.wheels) != len(target.artifacts):
         raise UpdateBlocked("return_target_artifact_set_mismatch")
     kits = [item for item in target.artifacts if item["name"].lower().replace("_", "-") == "agentic-project-kit"]
-    if len(kits) != 1 or kits[0]["version"] != RETURN_VERSION:
+    if len(kits) != 1 or kits[0]["version"] != version:
         raise UpdateBlocked("return_target_package_identity_mismatch")
     for wheel, artifact in zip(target.wheels, target.artifacts, strict=True):
         if _hash(wheel) != artifact["sha256"]:
@@ -336,7 +371,7 @@ def return_target_checks(root: Path, context: dict, *, run) -> list[str]:
     stage = context.get("staged_target")
     if not isinstance(stage, dict):
         raise UpdateBlocked("return_target_stage_missing")
-    _return_target_data(PreparedTarget(Path(stage["python"]), tuple(map(Path, stage["wheels"])), tuple(stage["artifacts"])))
+    _return_target_data(PreparedTarget(Path(stage["python"]), tuple(map(Path, stage["wheels"])), tuple(stage["artifacts"])), context["target_version"])
     argv = [stage["python"], "-I", "-m", "agentic_project_kit.cli"]
     check = json_command(run, [*argv, "check", "--root", str(root), "--json"])
     if check.get("status") != "PASS":
@@ -425,7 +460,8 @@ def plan_return_revert(root: Path, adoption_id: str, *, run, observe_pr, target=
     previous = yaml.safe_load(previous_config.stdout)
     payload["return_index_url"] = parse_kit_update_config(previous.get("kit")).index_url
     if target is not None:
-        payload["target_artifacts"] = _return_target_data(target)["artifacts"]
+        verify_previous_artifact(target.artifacts, previous_artifact_sha256(receipt))
+        payload["target_artifacts"] = _return_target_data(target, _previous_version(receipt))["artifacts"]
     if payload["branch"] in {"HEAD", "main", "master"}:
         raise UpdateBlocked("return_work_branch_required")
     return {**payload, "approval_signature": signature(payload), "result_status": "AWAITING_APPROVAL"}
@@ -445,7 +481,7 @@ def execute_return_revert(root: Path, adoption_id: str, *, expected_signature: s
                        "prepared_head": plan["head"], "merge_commit": plan["merge_commit"],
                        "approval_signature": expected_signature,
                        "plan": {key: value for key, value in plan.items() if key not in {"approval_signature", "result_status"}},
-                       **({"staged_target": _return_target_data(target)} if target is not None else {})})
+                       **({"staged_target": _return_target_data(target, _previous_version(receipt))} if target is not None else {})})
         return {**plan, "result_status": "PASS", "revert_prepared": True,
                 "next_action": "Finish the verified revert through the existing Kit work workflow; installation return follows its merged PR."}
 
@@ -462,7 +498,7 @@ def run_return_revert(root: Path, adoption_id: str, *, execute=False, expected_s
     result = {"kind": "kit_return_revert_result", "result_status": "BLOCKED", "completed_steps": [],
               "next_action": "Inspect return evidence and obtain a fresh signed plan."}
     try:
-        load_adoption(root, adoption_id)
+        receipt = load_adoption(root, adoption_id)
         run_id = uuid.uuid4().hex
         result["log_path"] = str(root / EVIDENCE_ROOT / "runs" / f"{run_id}.jsonl")
         run = run or UpdateRunner(root, Path(result["log_path"]))
@@ -470,7 +506,7 @@ def run_return_revert(root: Path, adoption_id: str, *, execute=False, expected_s
         planned = plan_return_revert(root, adoption_id, run=run, observe_pr=observe)
         ws = load_workspace(root, suppress_legacy_profile_warning=True)
         installation = _installation(root, ws.kit.interpreter, discover or discover_kit_installation)
-        target = (prepare or prepare_target)(ws.tmp() / "kit-update", Path(installation["candidate"]["python"]), planned["return_index_url"], RETURN_VERSION, run)
+        target = (prepare or prepare_target)(ws.tmp() / "kit-update", Path(installation["candidate"]["python"]), planned["return_index_url"], _previous_version(receipt), run)
         planned = plan_return_revert(root, adoption_id, run=run, observe_pr=observe, target=target)
         result.update(planned)
         result["next_action"] = (
@@ -491,10 +527,15 @@ def run_return_revert(root: Path, adoption_id: str, *, execute=False, expected_s
 
 def run_install_return(root: Path, adoption_id: str, *, execute=False, expected_signature="", **kwargs) -> dict:
     from agentic_project_kit.kit_update import run_kit_update
-    result = run_kit_update(root, RETURN_VERSION, execute=execute, expected_signature=expected_signature,
+    try:
+        version = _previous_version(load_adoption(root.resolve(), adoption_id))
+    except (OSError, ValueError, RuntimeError) as exc:
+        return {"result_status": "BLOCKED", "blocker": str(exc), "completed_steps": [],
+                "next_action": "Inspect the original adoption evidence; never infer a predecessor return."}
+    result = run_kit_update(root, version, execute=execute, expected_signature=expected_signature,
                             return_adoption=adoption_id, **kwargs)
     if execute and result["result_status"] == "PASS":
         proof = result["plan"]["return_evidence"]
         result.update(installation_return_verified=True, post_merge_handoff_pending=True,
-                      next_action=f"Resume the existing post-merge closeout under {RETURN_VERSION}: agentic-kit transfer post-merge-complete --after-pr {proof['return_pr']} --json")
+                      next_action=f"Resume the existing post-merge closeout under {version}: agentic-kit transfer post-merge-complete --after-pr {proof['return_pr']} --json")
     return result
