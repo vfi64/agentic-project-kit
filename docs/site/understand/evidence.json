@@ -56,14 +56,17 @@
     "status": "planned"
   },
   "release": {
-    "date": "2026-10-31",
-    "entry_count": 1,
+    "date": "2026-11-01",
+    "entry_count": 4,
     "notes": [
-      "Fixed: Repaired the release check of an editable installation: it reads the running package version instead of the stale distribution metadata of its last editable install and reports differing metadata as metadata_version. The check stays read-only and bounded; an unimportable package is UNKNOWN without a guessed version. A regression machine contract with an editable fixture covers it (KIT-GF-093)."
+      "Zenodo DOI verification pending for v1.1.11.",
+      "Fixed: Stage external projection v2 across two releases: A retains v1 behavior while shipping the future migration planner; only a separately approved B activates the package-owned switch (KIT-GF-097).",
+      "Fixed: Record normal update adoption evidence and return to the exact prior pinned version instead of hard-coded 1.1.10; preserve signed package identity, artifact hashes, exact file restoration and fresh-process checks (KIT-GF-098, KIT-GF-095).",
+      "Fixed: Verify first adoption with the installed predecessor and real A/B/A-prime wheels; document direct legacy-to-B completion through existing routes and the missing-evidence return boundary. GF-094 remains PARTIAL until B; GF-096 expires from B. External deterministic content freshness remains inactive in A."
     ],
     "source": "CHANGELOG.md",
     "status": "recorded",
-    "version": "1.1.10"
+    "version": "1.1.11"
   },
   "safety_evidence": {
     "baseline": {
@@ -1196,7 +1199,7 @@
     "schema_version": 1,
     "sources": {
       "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "147b837beb19a82c9a4cadaf1c9f2afc8202b39ad2da61d0ef63a13aaccd5065",
-      "docs/reference/agentic-kit-commands.json": "fb70bee006ceb4cb24bdb2e6ab484d3aab5f5fbc71d635ccafe5849fb340ae2e",
+      "docs/reference/agentic-kit-commands.json": "103bb34587140c90cd443f63f520c13f99230c33375069a614298b389b89f709",
       "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
       "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
       "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",

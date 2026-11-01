@@ -1,0 +1,250 @@
+{
+  "authorized_route": "agentic-kit release-prep",
+  "base_ref": "origin/main",
+  "changed_paths_against_base": [
+    ".agentic/dpa/acceptance/current_handoff_operational_state.json",
+    ".agentic/greenfield_findings.json",
+    "AGENTS.md",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/architecture/evidence/dpa/assessment/dp1-assessment-readiness-20260728.json",
+    "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
+    "docs/handoff/START_NEW_CHAT_PROMPT.md",
+    "docs/reference/AGENTIC_KIT_COMMANDS.md",
+    "docs/reference/agentic-kit-commands.json",
+    "docs/reports/greenfield/EXTERNAL_FINDINGS_RETESTS.md",
+    "docs/reports/greenfield/external-findings-status.json",
+    "docs/reports/handoff-packages/latest/execution_contract.json",
+    "docs/reports/handoff-packages/latest/source_manifest.json",
+    "docs/reports/handoff-packages/latest/successor_context.yaml",
+    "docs/reports/handoff-packages/latest/successor_prompt.md",
+    "docs/reports/handoff-packages/latest/validation_report.json",
+    "docs/reports/task_selection_design_20261026/README.md",
+    "docs/site/claims/claims.json",
+    "docs/site/claims/index.html",
+    "docs/site/commands/commands.json",
+    "docs/site/commands/detail-check.html",
+    "docs/site/commands/detail-doctor.html",
+    "docs/site/commands/detail-init.html",
+    "docs/site/commands/detail-kit-update.html",
+    "docs/site/commands/detail-release-run.html",
+    "docs/site/commands/detail-transfer-chat-switch-complete.html",
+    "docs/site/commands/detail-transfer-pr-closeout-complete.html",
+    "docs/site/commands/detail-transfer-pr-complete.html",
+    "docs/site/commands/detail-work-finish.html",
+    "docs/site/commands/detail-work-start.html",
+    "docs/site/commands/detail-workspace-adopt.html",
+    "docs/site/commands/detail-workspace-init.html",
+    "docs/site/commands/details.json",
+    "docs/site/commands/diagnostics.html",
+    "docs/site/commands/guided.html",
+    "docs/site/commands/index.html",
+    "docs/site/commands/tasks.json",
+    "docs/site/history/history.json",
+    "docs/site/history/index.html",
+    "docs/site/index.html",
+    "docs/site/quickstart/index.html",
+    "docs/site/quickstart/quickstart.json",
+    "docs/site/site.json",
+    "docs/site/understand/evidence.json",
+    "docs/site/understand/index.html",
+    "docs/site/understand/workflow-figures.json",
+    "docs/site/workflows/index.html",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py",
+    "src/agentic_project_kit/reference/agentic-kit-commands.json",
+    "src/agentic_project_kit/reference/external-findings-status.json"
+  ],
+  "date": "2026-11-01",
+  "explicit_summary_lines": [],
+  "from_tag": "v1.1.10",
+  "kind": "release_prepare_evidence",
+  "release_metadata_anchor_paths": [
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "README.md",
+    "docs/STATUS.md",
+    "docs/handoff/CURRENT_HANDOFF.md",
+    "pyproject.toml",
+    "src/agentic_project_kit/__init__.py"
+  ],
+  "schema_version": 1,
+  "steps": [
+    {
+      "allowed_returncodes": null,
+      "argv": [
+        "kit-ci-pin-guard"
+      ],
+      "name": "kit-ci-pin-guard",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "{\"next_action\": null, \"reasons\": [], \"result_status\": \"PASS\", \"unreadable_files\": [], \"versions\": {\"highest_pin\": null, \"installed\": \"1.1.10\", \"pins\": []}}",
+      "stdout_length": 155,
+      "stdout_sha256": "a167a9afab71a10151394b3c1916c66d616fca7c9d7c69cc7d645a36abfb1846"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-notes-generate",
+        "--version",
+        "1.1.11",
+        "--from-tag",
+        "v1.1.10",
+        "--to-ref",
+        "main",
+        "--include-github-metadata",
+        "--summary-lines-json",
+        "tmp/release-1111-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-notes-generate",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 18361,
+      "stdout_sha256": "96a7ca30c759c38be4686d6a5574cf424e9bd72b006745642acb1b2cfba6a99f"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "release-prep",
+        "--version",
+        "1.1.11",
+        "--date",
+        "2026-11-01",
+        "--summary-lines-from",
+        "tmp/release-1111-summary-lines.json",
+        "--json"
+      ],
+      "name": "release-prep",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 851,
+      "stdout_sha256": "17be9acfe1db2b53f7d77f00a662a21d1376c8427629b90466751a144abf68fe"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "commands",
+        "sync-entrypoints",
+        "--execute",
+        "--json"
+      ],
+      "name": "commands-sync-entrypoints",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 507,
+      "stdout_sha256": "8ec1801e2033fd22cc82ac174a5726f7982ac5f78e78d2aa963873b06744ccf6"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "scripts/task_selection_design_check.py",
+        "--out",
+        "docs/reports/task_selection_design_20261026/README.md"
+      ],
+      "name": "task-selection-review-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "{\"result_status\": \"PASS\", \"scope\": \"proposal structure only\", \"routes\": 11, \"runtime_enabled\": false}",
+      "stdout_length": 102,
+      "stdout_sha256": "53416fd4e80adf3a813ac4b576c481977745c461080b56f20947a8efb172c713"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "agentic-kit",
+        "release",
+        "prepare",
+        "--internal-dpa-readiness-ack-refresh"
+      ],
+      "name": "dpa-readiness-ack-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 260,
+      "stdout_sha256": "8d8365216e7b4797565f648ac1b2acab4e5464ae750188f2909e4180df4b2dd2"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/agentic-kit",
+        "transfer",
+        "chat-switch-complete",
+        "--json"
+      ],
+      "name": "successor-handoff-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 10313,
+      "stdout_sha256": "a14a5ccbeb0588c3c0fc5af26e4935569ee35d53e23c056b04547eaef6b25b07"
+    },
+    {
+      "allowed_returncodes": [
+        0
+      ],
+      "argv": [
+        "./.venv/bin/python",
+        "site/scripts/build.py",
+        "--docs-pages-fallback",
+        "--json"
+      ],
+      "name": "docs-pages-fallback-refresh",
+      "ok": true,
+      "returncode": 0,
+      "stderr_last_line": "",
+      "stderr_length": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_last_line": "}",
+      "stdout_length": 6440,
+      "stdout_sha256": "53d375a408bb8ee70b6b1df2cb48fbde66b9c828a591222e4be88114a7e20a69"
+    }
+  ],
+  "summary_lines_path": "tmp/release-1111-summary-lines.json",
+  "to_ref": "main",
+  "version": "1.1.11"
+}
