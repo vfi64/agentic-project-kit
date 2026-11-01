@@ -1637,7 +1637,7 @@ Preconditions: Every known external workspace has recorded v2 adoption; all Kit 
 
 ```text
 agentic-kit check --json
-agentic-kit transfer pr-status <migration-pr-number> --json
+agentic-kit transfer pr-status {pr} --json
 ```
 
 Expected: Remove external v1 acceptance and refresh-only descendant logic; retain only v1 detection to governed migration. Return uses old Kit own v1 support.

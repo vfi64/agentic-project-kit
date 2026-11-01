@@ -7660,11 +7660,11 @@
     {
       "external_retest": {
         "bindings": {
-          "migration-pr-number": "Exact observed v2 adoption PR from each known workspace receipt"
+          "pr": "Exact observed v2 adoption PR from each known workspace receipt"
         },
         "commands": [
           "agentic-kit check --json",
-          "agentic-kit transfer pr-status <migration-pr-number> --json"
+          "agentic-kit transfer pr-status {pr} --json"
         ],
         "execution_class": "owner_remote",
         "expected": [
@@ -7831,5 +7831,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 54,
   "schema_version": 1,
-  "source_sha256": "d8119b4f5fcb3df112d9752879e6a837b8588e1b764340d558cc6883a92b5892"
+  "source_sha256": "677d35a8c9eb343486610007ab1bcb087f80b5e2e35cf6625d3106e1c83878f2"
 }

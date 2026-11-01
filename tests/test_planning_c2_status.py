@@ -12,12 +12,16 @@ def test_owner_order_preserves_blocked_c2_without_blocking_approved_followups():
     assert order["decided"] == "2026-10-30"
     followups = [(x["id"], x.get("step")) for x in order["sequence"] if x["status"] == "planned"]
     assert followups == [
-        ("decomplexification-audit-roadmap", "transfer-lifecycle-consolidation"),
         ("mechanize-doc-registry-scope-reconcile", None),
         ("context-budgeted-handoff-projections", None),
         ("lifecycle-backlog-clearance", None),
         ("reports-retention-policy", None),
     ]
+    active_slice = next(item for item in order["sequence"] if item["id"] == "decomplexification-audit-roadmap")
+    assert active_slice["status"] == "active"
+    assert active_slice["step"] == "transfer-lifecycle-consolidation"
+    assert active_slice["first_reduction_slice"]["finding"] == "KIT-GF-094"
+    assert active_slice["first_reduction_slice"]["owner_approved"] == "2026-11-01"
     plans = {x["id"]: x for x in data["plans"]}
     retests = plans["external-retest-machine-contracts"]
     assert retests["status"] == "active"
