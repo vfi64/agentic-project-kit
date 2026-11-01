@@ -335,6 +335,7 @@ def _external_pure_check(command: str, argv: list[str]) -> bool:
         "agentic-kit check", "agentic-kit check-docs", "agentic-kit check-todo",
         "agentic-kit transfer post-merge-check", "agentic-kit audit-status-current-state",
         "agentic-kit doc-lifecycle-audit",
+        "agentic-kit docs-audit",
     }:
         return False
     from agentic_project_kit.workspace_detection import is_external_manifest_workspace

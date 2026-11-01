@@ -56,6 +56,17 @@ self-hosting expectations are retained. The direction renderer adds the existing
 canonical-source notice so its generated Markdown meets documentation coverage.
 No historical C4 report is rewritten.
 
+The owner additionally approved the complete external v1-HEAD consumer scan.
+The external documentation audit now shares byte validation; the bootstrap
+renderer dispatches by workspace mode and its validator checks the complete v2
+projection. Init applicability and work start share first-cycle detection and
+retain explicit-missing and corrupt-package failures. PR/CI heads, return v1
+proof, self-hosting audit/render paths and commit-bound closeout receipts are
+separate authorities and retain their commit binding. GF-015 and the external
+release-resolution fixture regenerate after deliberately changing captured
+registry/config bytes; the old expected PASS without regeneration is invalid
+under v2. Neither the production checker nor the fixture weakens its checks.
+
 Final gate results and noneditable-wheel machine evidence belong in the paired
 JSON report. Until recorded, no full-suite or wheel PASS is claimed here.
 KIT-GF-095 remains independently testable and supplies the bounded return.

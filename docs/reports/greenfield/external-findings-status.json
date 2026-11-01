@@ -8,8 +8,8 @@
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 55,
-    "owner_remote": 33
+    "local": 54,
+    "owner_remote": 34
   },
   "findings": [
     {
@@ -1165,6 +1165,20 @@
                 "path": "review.md",
                 "text": "Project-owned prose\n"
               }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "prepare-successor-handoff",
+                "--json"
+              ]
             },
             {
               "expect": {
@@ -7632,11 +7646,14 @@
     },
     {
       "external_retest": {
-        "bindings": {},
+        "bindings": {
+          "migration-pr-number": "Exact observed v2 adoption PR from each known workspace receipt"
+        },
         "commands": [
-          "agentic-kit check --json"
+          "agentic-kit check --json",
+          "agentic-kit transfer pr-status <migration-pr-number> --json"
         ],
-        "execution_class": "local",
+        "execution_class": "owner_remote",
         "expected": [
           "Remove external v1 acceptance and refresh-only descendant logic; retain only v1 detection to governed migration. Return uses old Kit own v1 support."
         ],
@@ -7649,6 +7666,7 @@
           "Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094."
         ],
         "remote_effects": [
+          "network_read",
           "none"
         ],
         "verification": "Open expiry follow-up; not claimed fixed or externally verified.",
@@ -7800,5 +7818,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 54,
   "schema_version": 1,
-  "source_sha256": "40a220397a1fa7539c9ff5170a7c4c17ee212f2b1efa6fca283055fca8efe98f"
+  "source_sha256": "e353166a465f97ddbe5835b5405cbbe6a8f28d7856f777c013eaa275e9bb86d4"
 }

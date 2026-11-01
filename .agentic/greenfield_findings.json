@@ -1092,6 +1092,20 @@
               }
             },
             {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "prepare-successor-handoff",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                }
+              }
+            },
+            {
               "expect": {
                 "json": {
                   "result_status": "PASS",
@@ -7340,9 +7354,12 @@
           "Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094."
         ],
         "commands": [
-          "agentic-kit check --json"
+          "agentic-kit check --json",
+          "agentic-kit transfer pr-status <migration-pr-number> --json"
         ],
-        "bindings": {},
+        "bindings": {
+          "migration-pr-number": "Exact observed v2 adoption PR from each known workspace receipt"
+        },
         "expected": [
           "Remove external v1 acceptance and refresh-only descendant logic; retain only v1 detection to governed migration. Return uses old Kit own v1 support."
         ],

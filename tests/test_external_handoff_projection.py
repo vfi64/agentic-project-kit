@@ -354,7 +354,11 @@ def test_external_patch_cycle_uses_content_freshness(tmp_path):
     assert status.handoff_fresh_for_head is True
     assert "handoff_generated_head" not in status.as_dict()
     (tmp_path / ".agentic/state/status.md").write_text("# Workspace Status\nChanged\n")
-    assert build_patch_cycle_status(tmp_path).handoff_fresh_for_head is False
+    for args in [["add", "."], ["commit", "-m", "Stale authority"], ["update-ref", "refs/remotes/origin/main", "HEAD"]]:
+        subprocess.run(["git", *args], cwd=tmp_path, check=True, capture_output=True)
+    stale = build_patch_cycle_status(tmp_path)
+    assert stale.handoff_fresh_for_head is False
+    assert "handoff_generated_head_mismatch" not in str(stale.as_dict())
 
 
 def test_v2_preserves_security_rules_and_historical_v1_identity(tmp_path):
@@ -474,6 +478,36 @@ def test_optional_direction_tasks_are_projected_from_captured_bytes(tmp_path):
     assert tasks[0]["id"] == "active-task"
 
 
+def test_external_documentation_audit_uses_byte_validation(tmp_path):
+    from agentic_project_kit.external_handoff_projection import write_external_package
+    from agentic_project_kit.external_documentation_audit import _handoff
+    from agentic_project_kit.workspace import load_workspace
+
+    ws = _external_workspace(tmp_path)
+    write_external_package(tmp_path)
+    assert _handoff(load_workspace(tmp_path))[0] == []
+    ws.package_file("execution_contract.json").write_text("{}")
+    assert "projection_integrity_mismatch" in str(_handoff(load_workspace(tmp_path))[0])
+    write_external_package(tmp_path)
+    ws.status_path().write_text("Changed input\n")
+    assert "projection_inputs_changed" in str(_handoff(load_workspace(tmp_path))[0])
+
+
+def test_bootstrap_uses_external_v2_paths_and_validates_whole_projection(tmp_path):
+    from agentic_project_kit.chat_bootloader import render_next_chat_bootstrap, validate_generated_bootstrap
+    from agentic_project_kit.external_handoff_projection import write_external_package
+
+    ws = _external_workspace(tmp_path)
+    write_external_package(tmp_path)
+    legacy_context = tmp_path / "docs/reports/handoff-packages/latest/successor_context.yaml"
+    legacy_context.parent.mkdir(parents=True)
+    legacy_context.write_bytes(ws.package_file("successor_context.yaml").read_bytes())
+    assert render_next_chat_bootstrap(tmp_path) == ws.handoff_file("NEXT_CHAT_BOOTSTRAP.md").read_text()
+    assert validate_generated_bootstrap(root=tmp_path) == []
+    ws.package_file("execution_contract.json").write_text("{}")
+    assert "projection_integrity_mismatch" in str(validate_generated_bootstrap(root=tmp_path))
+
+
 @pytest.mark.parametrize("tampered", [False, True])
 def test_all_external_pure_routes_preserve_every_repository_byte(tmp_path, monkeypatch, tampered):
     from typer.testing import CliRunner
@@ -510,7 +544,8 @@ def test_all_external_pure_routes_preserve_every_repository_byte(tmp_path, monke
                 for path in tmp_path.rglob("*") if path.is_file()}
 
     for route in (["check", "--json"], ["transfer", "post-merge-check"],
-                  ["audit-status-current-state", "--json"], ["doc-lifecycle-audit", "--json"]):
+                  ["audit-status-current-state", "--json"], ["doc-lifecycle-audit", "--json"],
+                  ["docs-audit", "--json"]):
         before = snapshot()
         result = run_cli(lambda: CliRunner().invoke(app, route), app, route)
         assert not isinstance(result.exception, AssertionError), (route, result.exception)

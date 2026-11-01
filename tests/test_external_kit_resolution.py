@@ -98,6 +98,11 @@ else:
     git("config", "user.email", "fixture@example.invalid")
     git("add", ".")
     git("commit", "-m", "Initial fixture")
+    # The fixture changed captured config after init. Adopt those bytes through
+    # the same explicit generator that an external product PR must use.
+    cli("transfer", "prepare-successor-handoff", "--json")
+    git("add", ".agentic/state/handoff")
+    git("commit", "-m", "Project configured external authority")
     git("tag", "v0.1.0")
     bare = tmp_path / "origin.git"
     git("clone", "--bare", str(root), str(bare))

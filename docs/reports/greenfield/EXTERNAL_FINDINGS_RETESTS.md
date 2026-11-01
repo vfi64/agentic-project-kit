@@ -1631,12 +1631,13 @@ Expected result fields: `{"assertions": ["The fixture compares all return assert
 Kit state: OPEN; fixed_in: not established.
 Evidence: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
 
-Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+Execution class: owner_remote (effects: network_read, none); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
 Preconditions: Every known external workspace has recorded v2 adoption; all Kit Greenfield fixtures use v2; due no later than second release after KIT-GF-094.
 
 ```text
 agentic-kit check --json
+agentic-kit transfer pr-status <migration-pr-number> --json
 ```
 
 Expected: Remove external v1 acceptance and refresh-only descendant logic; retain only v1 detection to governed migration. Return uses old Kit own v1 support.

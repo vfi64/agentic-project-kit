@@ -127,6 +127,10 @@ def render_next_chat_bootstrap(root: Path | str = ".", *, include_state: bool = 
     chat-switch-complete command remains responsible for refreshing the package
     from live local state.
     """
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(Path(root)):
+        from agentic_project_kit.external_handoff_projection import build_external_package
+        return build_external_package(root)[0].next_chat_bootstrap
     package_context = Path(root) / "docs/reports/handoff-packages/latest/successor_context.yaml"
     if package_context.exists():
         from agentic_project_kit.successor_handoff_package import (
@@ -158,6 +162,12 @@ def write_next_chat_bootstrap(
 
 
 def validate_generated_bootstrap(path: Path | str = DEFAULT_BOOTSTRAP_PATH, root: Path | str = ".") -> list[str]:
+    from agentic_project_kit.workspace_detection import is_external_manifest_workspace
+    if is_external_manifest_workspace(Path(root)):
+        from agentic_project_kit.external_handoff_projection import check_projection
+        checked = check_projection(root)
+        if checked["status"] != "PASS":
+            return [f"handoff:{checked['code']}: {checked}"]
     output_path = Path(path)
     if output_path == DEFAULT_BOOTSTRAP_PATH:
         output_path = load_workspace(Path(root)).handoff_file("NEXT_CHAT_BOOTSTRAP.md")
