@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c2be2dcef51ac1313609ac1023649f3ca6fb9d8a3d9f49c51519686e9c0fc25e
 - docs/reference/agentic-kit-commands.json: fb70bee006ceb4cb24bdb2e6ab484d3aab5f5fbc71d635ccafe5849fb340ae2e
-## Operational documentation refresh state after PR #2710
+## Operational documentation refresh state after PR #2712
 
-Current administrative handoff refresh state is `334ac052` (`External handoff v2 and governed Kit return (GF-094/095) (#2710)`). Continue next only after this post-PR2710 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4c4aa181` (`[codex] Stage external handoff v2 across two releases (GF-097/098) (#2712)`). Continue next only after this post-PR2712 refresh is committed and merged; the next substantive slice must be created from fresh main.
