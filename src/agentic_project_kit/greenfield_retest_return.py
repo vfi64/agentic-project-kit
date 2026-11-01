@@ -122,6 +122,8 @@ def prepare_return_fixture(root: Path, variables, env):
         path.write_bytes(re.sub(rb"agentic-project-kit==[0-9.]+", b"agentic-project-kit==1.1.10", path.read_bytes()))
     # This internal renderer is retained for self-hosting. It is used only to
     # seed historical fixture bytes, never as an external generation route.
+    git("add", "-A")
+    git("commit", "-m", "Seed pinned workspace before historical handoff")
     legacy = _build_legacy_successor_handoff_package(root, load_workspace(root))
     for name, value in {
         "successor_context.yaml": legacy.context, "source_manifest.json": legacy.source_manifest,
@@ -237,6 +239,7 @@ def prepare_return_fixture(root: Path, variables, env):
         results[failure or "success"] = executed
     actual = {
         "backup_complete": restored, "v2_pass": v2_pass,
+        "original_v1_head_valid": bool(re.fullmatch(r"[0-9a-f]{40}", legacy.validation_report["generated_head"])),
         "product_preserved": (root / "product.txt").read_text() == "Later unrelated product work\n",
         "before_revert_blocked": before_return_blocked, "wrong_version_blocked": wrong_version_blocked,
         "later_touch_blocked": later_touch_blocked, "later_touch_unchanged": later_touch_unchanged,
