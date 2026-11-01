@@ -508,6 +508,27 @@ def test_bootstrap_uses_external_v2_paths_and_validates_whole_projection(tmp_pat
     assert "projection_integrity_mismatch" in str(validate_generated_bootstrap(root=tmp_path))
 
 
+def test_post_merge_allows_only_existing_untracked_runtime_carriers(tmp_path):
+    from agentic_project_kit.external_handoff_projection import write_external_package, external_post_merge_check
+
+    ws = _external_workspace(tmp_path)
+    write_external_package(tmp_path)
+    for args in (["add", "-A"], ["commit", "-m", "V2 baseline"], ["update-ref", "refs/remotes/origin/main", "HEAD"]):
+        subprocess.run(["git", *args], cwd=tmp_path, capture_output=True, check=True)
+    for name in (".agentic/transfer/outbox/last_result.txt",
+                 ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json"):
+        path = tmp_path / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text("Local runtime carrier\n")
+    assert external_post_merge_check(tmp_path).result_status == "PASS"
+    product = tmp_path / "unreviewed.txt"
+    product.write_text("Unreviewed product work\n")
+    assert "worktree_dirty" in external_post_merge_check(tmp_path).stdout
+    product.unlink()
+    ws.package_file("successor_prompt.md").write_text("Uncommitted durable change\n")
+    assert "worktree_dirty" in external_post_merge_check(tmp_path).stdout
+
+
 @pytest.mark.parametrize("tampered", [False, True])
 def test_all_external_pure_routes_preserve_every_repository_byte(tmp_path, monkeypatch, tampered):
     from typer.testing import CliRunner

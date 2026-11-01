@@ -356,7 +356,18 @@ def external_post_merge_check(root, *, main_branch="main"):
         upstream = git("rev-parse", f"origin/{main_branch}")
         if head != upstream:
             raise ValueError("head_origin_main_mismatch")
-        if git("status", "--porcelain", "--untracked-files=all"):
+        from agentic_project_kit.volatile_paths import (
+            is_known_volatile_status_path, is_successor_handoff_projection_path, status_path_from_short_line,
+        )
+        dirty = git("status", "--porcelain", "--untracked-files=all")
+        # Existing outbox/report carriers are local runtime state. Preserve the
+        # old carrier boundary, but never hide tracked edits or durable v2 files.
+        unexpected = [line for line in dirty.splitlines() if not (
+            line.startswith("?? ")
+            and is_known_volatile_status_path(status_path_from_short_line(line))
+            and not is_successor_handoff_projection_path(status_path_from_short_line(line))
+        )]
+        if unexpected:
             raise ValueError("worktree_dirty")
         from agentic_project_kit.kit_return import pending_install_return
         pending = pending_install_return(root, run=run)
