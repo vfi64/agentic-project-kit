@@ -1,6 +1,6 @@
 # KIT-GF-095 — governed return after Kit adoption
 
-Status: implementation validation in progress; fixed_in: unreleased.
+Status: implementation validated; fixed_in: unreleased.
 Separate finding delivered in the KIT-GF-094 slice. No productive downgrade,
 release or merge is authorized by this report.
 
@@ -44,3 +44,7 @@ post-merge-check and v1 chat switch without manual repair. Consumer rehearsal is
 NOT_RUN and owner acceptance PENDING, so the additional release gate is BLOCKED.
 See [the return guide](../../KIT_UPDATE_RETURN.md). Final gate and machine results
 are recorded in the paired JSON; pending checks are not presented as passed.
+
+## Final local validation
+
+Full suite: 4489 passed (560 warnings), 307.41 seconds, four local test processes. Ruff, check, check-docs and doctor PASS. The paired JSON records the noneditable-wheel machine PASS and exact artifact hash. Consumer rehearsal remains NOT_RUN; owner acceptance PENDING; no release or productive migration.

@@ -1,6 +1,6 @@
 # KIT-GF-094 — external successor content projection
 
-Status: implementation validation in progress; fixed_in: unreleased.
+Status: implementation validated; fixed_in: unreleased.
 Owner scope: 2026-11-01, stage 1, external workspaces only. No release,
 production migration or merge is authorized by this report.
 
@@ -69,8 +69,8 @@ under v2. Neither the production checker nor the fixture weakens its checks.
 GF-084 now explicitly removes four package files in its disposable fixture to
 test incomplete-package rejection: init itself supplies the complete v2 set.
 
-Final gate results and noneditable-wheel machine evidence belong in the paired
-JSON report. Until recorded, no full-suite or wheel PASS is claimed here.
+The paired JSON records final gate results and noneditable-wheel machine PASS.
+Consumer rehearsal and owner acceptance remain separate, pending release gates.
 KIT-GF-095 remains independently testable and supplies the bounded return.
 
 ## Net workflow complexity, old versus new
@@ -91,6 +91,15 @@ append-only ledger bind the rare return to an exact adoption rather than adding
 a general installer or downgrade switch. Tests and existing deterministic
 renderers provide validation; DCO adds no advantage to these bounded artifacts.
 
+The slice adds 16 files: four focused modules (including the installed retest
+fixture), five test files, and seven documentation/evidence files. It adds two
+bounded return commands, no dependencies, the v2 durable contract, runtime
+schema 1 and adoption receipt schema 1 with append-only events. The shared
+content checker, example runtime consumer, return evidence checks and release
+prerequisite guard are the bounded additional checks; there is no second
+installer or generic validation framework. Recurring human steps increase by
+zero; the rare return adds the explicit owner installation approval.
+
 ## KIT-GF-096 — expiry of external v1 acceptance logic
 
 The follow-up is OPEN. Remove external v1 acceptance and refresh-only descendant
@@ -108,3 +117,7 @@ complete and recorded before B1 adoption. Release preparation and B4 require
 local return PASS, real-wheel consumer rehearsal PASS and owner acceptance from
 the paired JSON. Consumer rehearsal is NOT_RUN and owner acceptance PENDING.
 The release remains BLOCKED. The owner owns release and production adoption.
+
+## Final local validation
+
+Full suite: 4489 passed (560 warnings), 307.41 seconds, four local test processes. Ruff, check, check-docs and doctor PASS. The paired JSON records the noneditable-wheel machine PASS and exact artifact hash. Consumer rehearsal remains NOT_RUN; owner acceptance PENDING; no release or productive migration.

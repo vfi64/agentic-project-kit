@@ -1,11 +1,295 @@
 {
+  "complexity_balance": {
+    "checkers": [
+      "shared content regeneration/byte checker",
+      "example runtime consumer",
+      "bounded return evidence and existing installer preconditions",
+      "release prerequisite guard"
+    ],
+    "contracts": [
+      "external durable projection v2",
+      "ignored runtime schema 1",
+      "immutable adoption receipt schema 1 and append-only return events"
+    ],
+    "new_files": {
+      "documentation_and_evidence": 7,
+      "focused_modules": 4,
+      "test_files": 5,
+      "total": 16
+    },
+    "new_recurring_human_steps": 0,
+    "new_state": "NEEDS_PROJECTION_MIGRATION (external one-time transition)",
+    "no_new_dependencies": true,
+    "rare_return_owner_approval": 1,
+    "unchanged_inputs": {
+      "prs_and_ci_runs": {
+        "new": 1,
+        "old": 2
+      },
+      "versioned_handoff_changes_per_product_pr": {
+        "new": 0,
+        "old_observed": 5
+      }
+    }
+  },
   "consumer": "an external desktop controller",
+  "dpa_contract_diff": {
+    "changed_rules": [
+      "successor-final-head-identity"
+    ],
+    "changes": [
+      {
+        "after": [],
+        "before": [
+          ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+          ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+          ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log"
+        ],
+        "path": "dedicated_update_only_paths"
+      },
+      {
+        "after": [
+          ".agentic/state/handoff/packages/latest/execution_contract.json",
+          ".agentic/state/handoff/packages/latest/source_manifest.json",
+          ".agentic/state/handoff/packages/latest/successor_context.yaml",
+          ".agentic/state/handoff/packages/latest/successor_prompt.md",
+          ".agentic/state/handoff/packages/latest/validation_report.json",
+          ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+          ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+          ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+        ],
+        "before": [
+          ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+          ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+          ".agentic/state/handoff/packages/latest/execution_contract.json",
+          ".agentic/state/handoff/packages/latest/source_manifest.json",
+          ".agentic/state/handoff/packages/latest/successor_context.yaml",
+          ".agentic/state/handoff/packages/latest/successor_prompt.md",
+          ".agentic/state/handoff/packages/latest/validation_report.json"
+        ],
+        "path": "default_direct_write_paths"
+      },
+      {
+        "after": {
+          "acceptance_state_invalidated_without_renderer_reproducibility": true,
+          "contract_id": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v2",
+          "current_generator_command": "agentic-kit transfer chat-switch-complete --render-prompt",
+          "current_handoff_target_byte_writer": false,
+          "dedicated_update_only_paths": [],
+          "default_direct_write_paths": [
+            ".agentic/state/handoff/packages/latest/execution_contract.json",
+            ".agentic/state/handoff/packages/latest/source_manifest.json",
+            ".agentic/state/handoff/packages/latest/successor_context.yaml",
+            ".agentic/state/handoff/packages/latest/successor_prompt.md",
+            ".agentic/state/handoff/packages/latest/validation_report.json",
+            ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+            ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+          ],
+          "exact_byte_rollback_claims_renderer_reproducibility": false,
+          "full_probe_pass_claimed": false,
+          "generated_output_class": "command_generated_successor_handoff_projection",
+          "generated_outputs_manually_patched": false,
+          "generated_projection_paths": [
+            ".agentic/state/handoff/packages/latest/execution_contract.json",
+            ".agentic/state/handoff/packages/latest/source_manifest.json",
+            ".agentic/state/handoff/packages/latest/successor_context.yaml",
+            ".agentic/state/handoff/packages/latest/successor_prompt.md",
+            ".agentic/state/handoff/packages/latest/validation_report.json",
+            ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+            ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+          ],
+          "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
+          "initial_create_if_missing_paths": [],
+          "kind": "dpa_generated_successor_handoff_projection_contract",
+          "kit_conformance_claimed": false,
+          "manual_durable_target_patches_allowed": false,
+          "production_mutation_claimed": false,
+          "schema_version": 1,
+          "source_command_contract_required": true,
+          "source_paths": [
+            "src/agentic_project_kit/successor_handoff_package.py",
+            "src/agentic_project_kit/external_handoff_projection.py",
+            "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py"
+          ],
+          "target_scope": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS",
+          "writer_id": "WRT-CH-006"
+        },
+        "before": {
+          "acceptance_state_invalidated_without_renderer_reproducibility": true,
+          "contract_id": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1",
+          "current_generator_command": "agentic-kit transfer chat-switch-complete --render-prompt",
+          "current_handoff_target_byte_writer": false,
+          "dedicated_update_only_paths": [
+            ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "default_direct_write_paths": [
+            ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+            ".agentic/state/handoff/packages/latest/execution_contract.json",
+            ".agentic/state/handoff/packages/latest/source_manifest.json",
+            ".agentic/state/handoff/packages/latest/successor_context.yaml",
+            ".agentic/state/handoff/packages/latest/successor_prompt.md",
+            ".agentic/state/handoff/packages/latest/validation_report.json"
+          ],
+          "exact_byte_rollback_claims_renderer_reproducibility": false,
+          "full_probe_pass_claimed": false,
+          "generated_output_class": "command_generated_successor_handoff_projection",
+          "generated_outputs_manually_patched": false,
+          "generated_projection_paths": [
+            ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+            ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+            ".agentic/state/handoff/packages/latest/execution_contract.json",
+            ".agentic/state/handoff/packages/latest/source_manifest.json",
+            ".agentic/state/handoff/packages/latest/successor_context.yaml",
+            ".agentic/state/handoff/packages/latest/successor_prompt.md",
+            ".agentic/state/handoff/packages/latest/validation_report.json",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ],
+          "generator_command": "agentic-kit transfer prepare-successor-handoff --render-prompt",
+          "initial_create_if_missing_paths": [
+            ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md"
+          ],
+          "kind": "dpa_generated_successor_handoff_projection_contract",
+          "kit_conformance_claimed": false,
+          "manual_durable_target_patches_allowed": false,
+          "production_mutation_claimed": false,
+          "schema_version": 1,
+          "source_command_contract_required": true,
+          "source_paths": [
+            "src/agentic_project_kit/successor_handoff_package.py",
+            "src/agentic_project_kit/cli_commands/transfer_handoff_flow.py"
+          ],
+          "target_scope": "GENERATED_SUCCESSOR_HANDOFF_PACKAGE_AND_PROMPT_PROJECTIONS",
+          "writer_id": "WRT-CH-006"
+        },
+        "path": "dpa_generated_output_contract"
+      },
+      {
+        "after": {
+          "content_validation": "deterministic_regeneration_and_byte_comparison",
+          "exact_runtime_identity_required": true,
+          "model": "content_projection_with_ignored_runtime_identity",
+          "runtime_identity_path": ".agentic/tmp/handoff/runtime_identity.json"
+        },
+        "before": {
+          "allowed_final_head_statuses": [
+            "exact",
+            "refresh_only_descendant"
+          ],
+          "committed_exact_final_head_required": false,
+          "committed_projection_head": "validation_report.generated_head",
+          "committed_projection_must_validate": "PASS",
+          "committed_projection_status": "validation_report.status",
+          "durable_source_of_truth": "machine-readable successor package plus post-merge freshness evidence",
+          "exact_final_head_source": "post_merge_freshness_evidence.successor_package_current_head",
+          "problem": "A committed file cannot contain the SHA of the commit that first includes that file.",
+          "refresh_only_descendant_requires": [
+            "validation_report.status == PASS",
+            "validation_report.generated_head is an ancestor of the current HEAD",
+            "git diff generated_head..current_head touches only generated handoff refresh/projection paths",
+            "post-merge-check emits successor_package_current_head for the exact final HEAD"
+          ],
+          "refresh_only_descendant_requires_diff_allowlist": true,
+          "self_staling_loop_prevention": "Do not re-render and commit successor projections only to make validation_report.generated_head equal the commit that contains those projections. Use the checked refresh_only_descendant identity evidence as final-head authority.",
+          "volatile_exact_projection_allowed": true,
+          "workspace_projection_paths": [
+            ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+            ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+            ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+            ".agentic/state/handoff/packages/latest/execution_contract.json",
+            ".agentic/state/handoff/packages/latest/source_manifest.json",
+            ".agentic/state/handoff/packages/latest/successor_context.yaml",
+            ".agentic/state/handoff/packages/latest/successor_prompt.md",
+            ".agentic/state/handoff/packages/latest/validation_report.json",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+            ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log"
+          ]
+        },
+        "path": "final_head_identity"
+      },
+      {
+        "after": [
+          ".agentic/state/handoff/packages/latest/execution_contract.json",
+          ".agentic/state/handoff/packages/latest/source_manifest.json",
+          ".agentic/state/handoff/packages/latest/successor_context.yaml",
+          ".agentic/state/handoff/packages/latest/successor_prompt.md",
+          ".agentic/state/handoff/packages/latest/validation_report.json",
+          ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+          ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+          ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
+        ],
+        "before": [
+          ".agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md",
+          ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md",
+          ".agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
+          ".agentic/state/handoff/packages/latest/execution_contract.json",
+          ".agentic/state/handoff/packages/latest/source_manifest.json",
+          ".agentic/state/handoff/packages/latest/successor_context.yaml",
+          ".agentic/state/handoff/packages/latest/successor_prompt.md",
+          ".agentic/state/handoff/packages/latest/validation_report.json",
+          ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.json",
+          ".agentic/state/handoff/transfer_handoff_reports/latest-transfer-handoff-report.log"
+        ],
+        "path": "generated_projection_paths"
+      },
+      {
+        "after": [],
+        "before": [
+          ".agentic/state/handoff/START_NEW_CHAT_PROMPT.md"
+        ],
+        "path": "initial_create_if_missing_paths"
+      }
+    ],
+    "external_contract": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v2",
+    "reason": "External durable content has no post-merge Git facts; exact current HEAD and same-run validation are runtime-only. All other security rules retain their content.",
+    "selfhosting_contract_unchanged": "DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1",
+    "unchanged_security_rule_count": 13
+  },
   "finding": "KIT-GF-094",
   "fixed_in": "unreleased",
-  "full_suite": "PENDING",
-  "implementation_status": "VALIDATING",
+  "full_suite": "PASS",
+  "gates": {
+    "check": {
+      "command": "agentic-kit check --json",
+      "status": "PASS"
+    },
+    "check_docs": {
+      "command": "agentic-kit check-docs",
+      "status": "PASS"
+    },
+    "doctor": {
+      "command": "agentic-kit doctor",
+      "status": "PASS"
+    },
+    "pytest": {
+      "command": "python -m pytest -q -n 4",
+      "passed": 4489,
+      "seconds": 307.41,
+      "status": "PASS",
+      "warnings": 560
+    },
+    "ruff": {
+      "command": "ruff check .",
+      "status": "PASS"
+    }
+  },
+  "implementation_status": "IMPLEMENTED",
   "machine": {
+    "covers": "Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.",
+    "execution_class": "local",
     "failures": [],
+    "fixed_in": "unreleased",
+    "id": "KIT-GF-094",
+    "kit_state": "CLOSED",
+    "remote_effects": [
+      "none"
+    ],
     "result": "PASS",
     "steps": [
       {
@@ -274,11 +558,18 @@
       }
     ]
   },
-  "noneditable_wheel": "PENDING",
+  "noneditable_wheel": "PASS",
   "release_prerequisites": {
     "consumer_rehearsal": "NOT_RUN",
     "local_return": "PASS",
     "owner_acceptance": "PENDING"
   },
-  "schema_version": 1
+  "schema_version": 1,
+  "validated_product_source_commit": "350014fa09dd641b3769d71e9614766fb6269fb3",
+  "wheel": {
+    "installation": "noneditable",
+    "kind": "local_unreleased_development_wheel",
+    "sha256": "ff0f18a799179fa21c464102087aa27b5c9d1fc6d1d21148440c0f312ffe896f",
+    "version": "1.1.10"
+  }
 }

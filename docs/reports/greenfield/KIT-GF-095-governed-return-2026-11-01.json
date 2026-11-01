@@ -2,10 +2,43 @@
   "consumer": "an external desktop controller",
   "finding": "KIT-GF-095",
   "fixed_in": "unreleased",
-  "full_suite": "PENDING",
-  "implementation_status": "VALIDATING",
+  "full_suite": "PASS",
+  "gates": {
+    "check": {
+      "command": "agentic-kit check --json",
+      "status": "PASS"
+    },
+    "check_docs": {
+      "command": "agentic-kit check-docs",
+      "status": "PASS"
+    },
+    "doctor": {
+      "command": "agentic-kit doctor",
+      "status": "PASS"
+    },
+    "pytest": {
+      "command": "python -m pytest -q -n 4",
+      "passed": 4489,
+      "seconds": 307.41,
+      "status": "PASS",
+      "warnings": 560
+    },
+    "ruff": {
+      "command": "ruff check .",
+      "status": "PASS"
+    }
+  },
+  "implementation_status": "IMPLEMENTED",
   "machine": {
+    "covers": "Real local Git adoption and return squashes, byte-exact v1 restoration including ignored runtime backup, later-touch no-mutation, wrong state/version rejection; existing update executor with installation double and real fresh-process snapshot checks.",
+    "execution_class": "local",
     "failures": [],
+    "fixed_in": "unreleased",
+    "id": "KIT-GF-095",
+    "kit_state": "CLOSED",
+    "remote_effects": [
+      "none"
+    ],
     "result": "PASS",
     "steps": [
       {
@@ -32,11 +65,18 @@
       }
     ]
   },
-  "noneditable_wheel": "PENDING",
+  "noneditable_wheel": "PASS",
   "release_prerequisites": {
     "consumer_rehearsal": "NOT_RUN",
     "local_return": "PASS",
     "owner_acceptance": "PENDING"
   },
-  "schema_version": 1
+  "schema_version": 1,
+  "validated_product_source_commit": "350014fa09dd641b3769d71e9614766fb6269fb3",
+  "wheel": {
+    "installation": "noneditable",
+    "kind": "local_unreleased_development_wheel",
+    "sha256": "ff0f18a799179fa21c464102087aa27b5c9d1fc6d1d21148440c0f312ffe896f",
+    "version": "1.1.10"
+  }
 }
