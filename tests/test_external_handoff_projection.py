@@ -193,9 +193,13 @@ def _external_workspace(root):
         path.write_text("version: 1\n" if path.suffix == ".yaml" else "# Workspace authority\n")
     ws.status_path().write_text("# Workspace Status\n")
     ws.handoff_file("README.md").write_text("# Workspace Handoff\n")
+    # Newer Git starts background auto-maintenance after a commit; its transient .git/objects/maintenance.lock
+    # made whole-tree "no mutation" snapshots flaky (release 1.1.11 fix PR #2715, test-shard 1). Fixture
+    # repositories therefore never run automatic maintenance or garbage collection.
     for args in [
         ["init", "-b", "main"], ["config", "user.email", "fixture@example.invalid"],
-        ["config", "user.name", "Fixture"], ["add", "."], ["commit", "-m", "Initial"],
+        ["config", "user.name", "Fixture"], ["config", "maintenance.auto", "false"], ["config", "gc.auto", "0"],
+        ["add", "."], ["commit", "-m", "Initial"],
     ]:
         subprocess.run(["git", *args], cwd=root, check=True, capture_output=True)
     return ws
@@ -578,3 +582,13 @@ def test_all_external_pure_routes_preserve_every_repository_byte(tmp_path, monke
         assert not isinstance(result.exception, AssertionError), (route, result.exception)
         assert result.exit_code in {0, 1, 2}, (route, result.exception)
         assert snapshot() == before, route
+
+
+def test_fixture_repositories_never_start_background_git_maintenance(tmp_path):
+    """A background maintenance run can leave .git/objects/maintenance.lock between two snapshots of a read-only
+    check; the fixture disables it so those snapshots compare only what the Kit itself wrote."""
+    _external_workspace(tmp_path)
+    for key, expected in (("maintenance.auto", "false"), ("gc.auto", "0")):
+        value = subprocess.run(["git", "config", "--local", key], cwd=tmp_path, capture_output=True, text=True,
+                               check=True).stdout.strip()
+        assert value == expected, key

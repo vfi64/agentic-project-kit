@@ -8,6 +8,12 @@ import runpy
 import pytest
 
 
+def _newer_than_running() -> str:
+    from agentic_project_kit import __version__
+    major, minor, patch = (int(part) for part in __version__.split(".")[:3])
+    return f"{major}.{minor}.{patch + 1}"
+
+
 def test_target_preview_transfers_large_inputs_without_large_process_arguments(tmp_path):
     import base64
     import json
@@ -64,14 +70,18 @@ def test_signed_update_plan_binds_projection_paths_and_bytes(tmp_path, monkeypat
 
     fixture_type = runpy.run_path(str(Path(__file__).with_name("test_kit_update.py")))["Fixture"]
     fixture = fixture_type(tmp_path)
-    fixture.target = replace(fixture.target, artifacts=({**fixture.target.artifacts[0], "version": "1.1.10"},))
+    # The planner previews the target projection only for a target at or above its own version (never on a
+    # downgrade). A fixed target such as "1.1.10" stopped satisfying that once release preparation raised the
+    # package version (release 1.1.11, PR #2714), so the target follows the running version.
+    target = _newer_than_running()
+    fixture.target = replace(fixture.target, artifacts=({**fixture.target.artifacts[0], "version": target},))
     desired = {
         ".agentic/config.yaml": (tmp_path / ".agentic/config.yaml").read_bytes() + b"handoff: {projection_contract_min: 2}\n",
         ".gitignore": b"/.agentic/tmp/handoff/runtime_identity.json\n",
         ".agentic/state/handoff/packages/latest/validation_report.json": b'{"projection_contract_version":2}\n',
     }
     monkeypatch.setattr(kit_update_projection, "preview_target_projection", lambda *args: desired)
-    plan = build_update_plan(tmp_path.resolve(), "1.1.10", fixture.run,
+    plan = build_update_plan(tmp_path.resolve(), target, fixture.run,
                              prepare=lambda *args: fixture.target, discover=fixture.discover)
     assert set(desired) <= set(plan.payload["changed_paths"])
     assert plan.payload["projection_hashes_after"] == {
@@ -111,3 +121,23 @@ def test_same_version_different_wheel_is_explicitly_reinstalled(tmp_path):
     assert result["result_status"] == "PASS", result
     installation = next(argv for argv in fixture.calls if "pip" in argv and "install" in argv)
     assert "--force-reinstall" in installation
+
+
+@pytest.mark.parametrize("running", ["1.1.10", "1.1.11", "1.2.0"])
+def test_the_projection_plan_does_not_depend_on_the_running_release(tmp_path, monkeypatch, running):
+    """Release preparation raises the package version; the signed plan must still bind the projection of a newer
+    target (regression for the release 1.1.11 CI failure of the test above)."""
+    import agentic_project_kit
+    from agentic_project_kit import kit_update_projection
+    from agentic_project_kit.kit_update import build_update_plan
+
+    monkeypatch.setattr(agentic_project_kit, "__version__", running)
+    target = _newer_than_running()
+    fixture_type = runpy.run_path(str(Path(__file__).with_name("test_kit_update.py")))["Fixture"]
+    fixture = fixture_type(tmp_path)
+    fixture.target = replace(fixture.target, artifacts=({**fixture.target.artifacts[0], "version": target},))
+    desired = {".gitignore": b"/.agentic/tmp/handoff/runtime_identity.json\n"}
+    monkeypatch.setattr(kit_update_projection, "preview_target_projection", lambda *args: desired)
+    plan = build_update_plan(tmp_path.resolve(), target, fixture.run,
+                             prepare=lambda *args: fixture.target, discover=fixture.discover)
+    assert ".gitignore" in plan.payload["changed_paths"]
