@@ -6091,7 +6091,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest",
         "machine": {
-          "fixture": "external_manifest",
+          "fixture": "external_projection_v2",
           "covers": "docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.",
           "steps": [
             {

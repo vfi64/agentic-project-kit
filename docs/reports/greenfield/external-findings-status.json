@@ -6184,7 +6184,7 @@
         },
         "machine": {
           "covers": "docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.",
-          "fixture": "external_manifest",
+          "fixture": "external_projection_v2",
           "steps": [
             {
               "expect": {
@@ -7945,5 +7945,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 56,
   "schema_version": 1,
-  "source_sha256": "378fbb75d6ca1c3ff2df47a3c8b86fd2f22796df9045eca9f72fa8f0269e9029"
+  "source_sha256": "6f10314bfdf281aef550ee36387a5c4518197c0aa9af01e39381a23bfd8dde99"
 }

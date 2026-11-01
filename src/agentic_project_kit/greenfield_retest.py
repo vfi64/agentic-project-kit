@@ -368,7 +368,17 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
         result = _run(["agentic-kit", "transfer", "prepare-successor-handoff", "--json"], root, env)
         if result.returncode:
             return root, variables, ["active v2 fixture generation failed: " + result.stderr[-400:]]
-        for argv in (["git", "add", "."], ["git", "commit", "-m", "Active B fixture"], ["git", "push", "origin", "main"]):
+        steps = [["git", "add", "."], ["git", "commit", "-m", "Active B fixture"]]
+        if machine.get("origin"):
+            # Match the existing release fixture: construct only the confined
+            # disposable bare origin, without a protected-branch push.
+            origin = Path(variables["origin"]).resolve()
+            if not origin.is_relative_to(base.resolve()):
+                return root, variables, ["active v2 fixture origin escapes its temporary root"]
+            steps += [["git", "-C", str(origin), "fetch", "--quiet", "--no-tags",
+                       str(root), "refs/heads/main:refs/heads/main"],
+                      ["git", "update-ref", "refs/remotes/origin/main", "HEAD"]]
+        for argv in steps:
             result = _run(argv, root, env)
             if result.returncode:
                 return root, variables, ["active v2 fixture commit failed: " + result.stderr[-400:]]
