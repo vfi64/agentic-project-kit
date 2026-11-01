@@ -15,15 +15,19 @@ without changing conflict bytes or the index. Linked Git worktrees are covered.
 
 ### External projection v2 and governed return
 
-`tests/test_external_projection_activation.py` checks the release A default and
-single activation boundary. Historical v2 contracts explicitly activate B.
+`tests/test_external_projection_activation.py` checks the shipped release B
+default (contract 2), the explicit False release A fixtures and the single
+activation boundary. Isolated A probe processes also explicitly patch False;
+there is no production environment override. Historical v2 contracts activate B.
 `tests/test_projection_release_wheels.py` verifies A/B/A-prime wheel identities.
 `tests/test_projection_release_transition.py` installs them through a loopback
 index: installed A plans B, real squashes retain content freshness, governed
 return restores A, A-to-A-prime stays v1, and a legacy unsupported-preview attempt
 completes through existing routes. Only PR observation is doubled. Fresh
-noneditable-wheel retests are required for KIT-GF-097 and KIT-GF-098. Release A
-does not stamp PARTIAL KIT-GF-094 as fixed.
+noneditable-wheel retests are required for KIT-GF-097 and KIT-GF-098.
+`tests/test_release_greenfield_stamp.py` retains A's PARTIAL exclusion fixture
+and requires B's CLOSED/unreleased catalog, without weakening the consumer
+rehearsal and owner acceptance gates. KIT-GF-096 expires from B, not A.
 The target-preview regression also transfers inputs larger than Linux's
 individual argument limit through a temporary input file and checks its cleanup.
 

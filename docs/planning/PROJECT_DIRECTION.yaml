@@ -117,10 +117,10 @@ meta:
           owner_approved: '2026-11-01'
           scope: Two-release external projection transition; A retains v1, then known external workspaces adopt A, then separately approved B activates v2.
           two_release_transition:
-          - Release A ships target preview, adoption evidence, return and runtime-consumer capabilities with the package activation constant False.
-          - Record release A adoption in every known external workspace before proposing release B.
-          - Release B is a later owner-approved small PR changing the constant to True; GF-094 becomes effective and GF-096 expiry starts then.
-          - B1 adopts B only after cycle 008 is completed and recorded.
+          - Released A (1.1.11) ships target preview, adoption evidence, return and runtime-consumer capabilities with the package activation constant False.
+          - Prepare B on an open PR branch; keep main False until the owner explicitly confirms release A adoption in every known external workspace.
+          - B changes the single constant to True; no partial merge or publication before the adoption confirmation, independent consumer rehearsal and owner acceptance. Rebase the whole PR if main advances.
+          - KIT-GF-094 stays unreleased until B stamping; KIT-GF-096 expires no later than the second release after B. A remaining known workspace adopts A after its current cycle.
           supersedes_for_external_mode:
             source: docs/reports/POST_0_5_0_C4_REFRESH_CHAIN_DECISION_20260813.md
             decision: F1

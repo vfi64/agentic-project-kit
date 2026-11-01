@@ -31,7 +31,17 @@ def test_external_generation_and_init_follow_one_package_policy(tmp_path, monkey
     assert result.validation_report["status"] == "PASS"
 
 
-def test_release_a_default_is_not_an_implicit_migration(tmp_path):
+def test_shipped_default_is_projection_v2():
+    from agentic_project_kit.external_projection_policy import external_projection_contract_version
+    from agentic_project_kit.kit_update import _INVENTORY
+
+    assert external_projection_contract_version() == 2
+    inventory = subprocess.run([sys.executable, "-I", "-c", _INVENTORY], capture_output=True, text=True, check=True)
+    assert json.loads(inventory.stdout)["projection_contract_version"] == 2
+
+
+def test_release_a_default_is_not_an_implicit_migration(tmp_path, monkeypatch):
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", False)
     from agentic_project_kit.external_projection_policy import external_projection_contract_version
     from agentic_project_kit.workspace_init import build_workspace_init_plan, execute_workspace_init
     from agentic_project_kit.checks import check_all
@@ -41,18 +51,30 @@ def test_release_a_default_is_not_an_implicit_migration(tmp_path):
     assert check_all(tmp_path) == []
 
 
-def test_release_a_target_probes_do_not_treat_module_presence_as_activation():
+def test_release_a_target_probes_do_not_treat_module_presence_as_activation(monkeypatch):
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", False)
     from agentic_project_kit.kit_update import _INVENTORY
     from agentic_project_kit.kit_update_projection import TARGET_PROJECTION_PREVIEW
 
-    inventory = subprocess.run([sys.executable, "-I", "-c", _INVENTORY], capture_output=True, text=True, check=True)
+    # -I starts a separate interpreter; scope the same A policy explicitly
+    # inside that process rather than adding a production environment switch.
+    def release_a_script(script):
+        return (
+            "from unittest.mock import patch\n"
+            "from agentic_project_kit import external_projection_policy as policy\n"
+            "with patch.object(policy, 'EXTERNAL_PROJECTION_V2_ACTIVE', False):\n"
+            f"    exec({script!r})\n"
+        )
+
+    inventory = subprocess.run([sys.executable, "-I", "-c", release_a_script(_INVENTORY)], capture_output=True, text=True, check=True)
     assert json.loads(inventory.stdout)["projection_contract_version"] == 1
-    preview = subprocess.run([sys.executable, "-I", "-c", TARGET_PROJECTION_PREVIEW], capture_output=True, text=True)
+    preview = subprocess.run([sys.executable, "-I", "-c", release_a_script(TARGET_PROJECTION_PREVIEW)], capture_output=True, text=True)
     assert preview.returncode == 0, preview.stderr
     assert json.loads(preview.stdout) == {"supported": False, "files": {}}
 
 
 def test_release_a_update_records_adoption_without_a_projection_migration(tmp_path, monkeypatch):
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", False)
     from pathlib import Path
     import runpy
     from agentic_project_kit import kit_return
@@ -75,6 +97,7 @@ def test_release_a_update_records_adoption_without_a_projection_migration(tmp_pa
 
 
 def test_release_a_malformed_return_evidence_is_a_structured_stop(tmp_path, monkeypatch):
+    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", False)
     from agentic_project_kit.transfer_repo_actions import post_merge_check
     path = tmp_path / ".agentic/kit-update/ledger.jsonl"
     path.parent.mkdir(parents=True)

@@ -5,6 +5,9 @@
 - Fixed: Resolve conflicted files during an owned detached-HEAD rebase while preserving branch and target guards (KIT-GF-100).
 
 - Fixed: Preserve the repository identity in target handoff previews by decoding Git-quoted origin values in the target and writing Git syntax in future planners. Legacy 1.1.11 payloads remain compatible; real-wheel regressions now use a GitHub-shaped origin distinct from the project name (KIT-GF-099). No release or v2 activation is performed by this fix.
+- Changed: Enable external handoff projection v2 for release B (KIT-GF-094). First adopt release A **1.1.11**, then B. All known external workspaces must adopt A before B is released.
+- Changed: External content merges with current captured inputs require no refresh-only PR. Chat switches keep versioned handoff projections byte-identical; volatile identity remains in the ignored runtime file, producing no tracked handoff diff. Self-hosting retains its existing lifecycle.
+- Fixed: The release-check advisory covers installations below 1.1.11. A direct jump from **1.1.10 or older** to B requires the documented migration route followed by another `kit update`; missing original adoption evidence leaves no governed installation return. KIT-GF-096 must remove external v1 compatibility no later than the second release after B.
 
 ## v1.1.11 - 2026-11-01
 

@@ -6975,10 +6975,10 @@
     },
     {
       "id": "KIT-GF-094",
-      "kit_state": "PARTIAL",
+      "kit_state": "CLOSED",
       "fixed_in": "unreleased",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md",
+      "report": "docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
         "preconditions": [
@@ -7296,7 +7296,7 @@
             }
           ]
         },
-        "verification": "Implementation retained behind the package activation constant. Release A remains v1; GF-094 becomes effective only in separately approved release B. Consumer rehearsal and owner acceptance remain required."
+        "verification": "B activates the single package constant. CLOSED/unreleased is eligible for KIT-GF-091 stamping only when the existing consumer rehearsal and owner acceptance prerequisites pass. Release A retained PARTIAL/unreleased. No release or merge is authorized by this preparation."
       }
     },
     {

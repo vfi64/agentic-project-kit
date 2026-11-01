@@ -50,6 +50,8 @@ rules:
     - EXTERNAL_PROJECTION_V2_ACTIVE
     - release A
     - release B
+    - all known external
+    - PyPI 1.1.11
   - path: docs/KIT_UPDATE_RETURN.md
     terms:
     - KIT-GF-095

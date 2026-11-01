@@ -7,17 +7,34 @@ strings. A GitHub-shaped fixture origin is transported only to a disposable
 local bare repository through Git insteadOf rewriting. This parsing fix does
 not change the projection activation policy.
 
+## Release B activation
+
+Release B activates `EXTERNAL_PROJECTION_V2_ACTIVE = True`; its shipped default
+is projection contract 2. Release A (1.1.11) retains the same single constant as
+False. There is no second switch or environment override.
+
+Before B is released, all known external workspaces must adopt A. The independent
+disposable consumer rehearsal uses published PyPI 1.1.11 as the actual planner
+and a B target wheel: A-to-B, B chat switch, a content merge with post-merge-check
+and no refresh PR, B-to-A return, and direct 1.1.10-to-B completion. Owner
+acceptance follows that rehearsal. Local self-built A wheels do not replace it.
+
+KIT-GF-091 stamps GF-094 at release B after these prerequisites are satisfied;
+the fix version is not guessed. Release A retains PARTIAL/unreleased and
+excludes 094 from A stamping. KIT-GF-096 expires no later than the second release
+after B.
+
 ## Two-release adoption (KIT-GF-097)
 
-Release A is the expand release: `EXTERNAL_PROJECTION_V2_ACTIVE = False` in
+Release A (1.1.11) is the expand release: `EXTERNAL_PROJECTION_V2_ACTIVE = False` in
 `external_projection_policy.py`. It ships the future target preview, adoption
 receipt, runtime-consumer and return capabilities while external generation and
 checks retain v1. It adds no `projection_contract_min` and does not report
 `NEEDS_PROJECTION_MIGRATION` through its external workflows. Module presence is
 never activation. There is no environment or workspace activation option.
 
-Known external workspaces first adopt A. A later, separately approved release B
-changes that one constant to True. The installed A planner previews B, signs the
+Known external workspaces first adopt A (1.1.11). Release B changes that one
+constant to True. The installed A planner previews B, signs the
 projection, manifest minimum and ignore-file changes, and writes adoption
 evidence after successful execution. A-to-A-prime remains a v1 update.
 
@@ -27,10 +44,10 @@ starts with B. B1 adoption additionally waits for recorded cycle 008.
 
 ### Direct legacy-to-B completion and B release notes
 
-The required B release-note guidance is: **Install release A before B**,
+The required B release-note guidance is: **Install release A (1.1.11) before B**,
 so A can plan the first migration and record evidence for return to A.
 The optional `kit status --check-release` notice explains this sequence for
-legacy installations when an update beyond 1.1.10 is available.
+installations below 1.1.11 when release A or a newer release is available.
 
 If an old planner installs B before detecting missing migration, preserve its
 BLOCKED result and completed steps. Use the existing
@@ -44,7 +61,7 @@ The local A/B/A-prime matrix uses real noneditable wheels, loopback package
 resolution, owned runtimes and real bare-origin squashes. Only PR observation
 is a test double. A direct jump simulates the unsupported preview boundary;
 installation and completion remain real. Independent consumer rehearsal and
-owner acceptance remain release gates; no release is authorized here.
+owner acceptance remain release gates.
 
 When release B is active, KIT-GF-094 replaces commit freshness with deterministic content freshness only
 for external workspaces. Self-hosting retains its v1 contract, C4 administrative

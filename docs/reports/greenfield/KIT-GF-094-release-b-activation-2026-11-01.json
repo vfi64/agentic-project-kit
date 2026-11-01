@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "finding": "KIT-GF-094",
+  "fixed_in": "unreleased",
+  "implementation_status": "IN_PROGRESS",
+  "consumer": "an external desktop controller",
+  "base_commit": "6dde207eb96cbd9a0cee0a75113070fd4b836b75",
+  "release_A": "1.1.11",
+  "activation": true,
+  "merge_hold": "PENDING_ALL_KNOWN_WORKSPACES_ON_A",
+  "consumer_evidence": "Owner-reported A adoption only; B consumer rehearsal not yet performed.",
+  "release_prerequisites": {
+    "local_return": "NOT_RUN",
+    "consumer_rehearsal": "NOT_RUN",
+    "owner_acceptance": "PENDING"
+  },
+  "machine_contracts": {
+    "KIT-GF-094": "NOT_RUN",
+    "KIT-GF-095": "NOT_RUN",
+    "KIT-GF-097": "NOT_RUN",
+    "KIT-GF-098": "NOT_RUN"
+  },
+  "full_suite": {
+    "status": "NOT_RUN"
+  },
+  "gates": {},
+  "complexity": {
+    "new_production_modules": 0,
+    "new_dependencies": 0,
+    "new_public_commands": 0,
+    "external_refresh_pr_after_current_input_content_merge": false,
+    "tracked_handoff_changes_after_chat_switch": false,
+    "ignored_runtime_evidence_retained": true,
+    "selfhosting_changed": false
+  },
+  "expiry": "KIT-GF-096: no later than the second release after B",
+  "release_performed": false,
+  "merge_performed": false
+}

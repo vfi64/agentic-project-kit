@@ -1592,8 +1592,8 @@ Expected result fields: `{"assertions": ["release_check.installed equals the run
 
 ## KIT-GF-094
 
-Kit state: PARTIAL; fixed_in: unreleased.
-Evidence: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md
 
 Execution class: local (effects: none); machine contract: Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.
 

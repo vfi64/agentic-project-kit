@@ -4,7 +4,7 @@ from pathlib import Path
 
 from agentic_project_kit.workspace_detection import is_external_manifest_workspace
 
-EXTERNAL_PROJECTION_V2_ACTIVE = False
+EXTERNAL_PROJECTION_V2_ACTIVE = True
 
 
 def external_projection_contract_version() -> int:
