@@ -132,8 +132,12 @@ def test_return_rechecks_evidence_inside_mutation_lock(tmp_path, monkeypatch):
     assert result["blocker"] == "return_evidence_changed"
 
 
-def test_existing_work_finish_preserves_verified_v1_return_and_never_claims_completion(monkeypatch):
+def test_existing_work_finish_preserves_verified_v1_return_and_never_claims_completion(monkeypatch, tmp_path):
     from agentic_project_kit.cli_commands import human_workflows
+
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(human_workflows, "default_agentic_kit", lambda root: "./.venv/bin/agentic-kit")
+    monkeypatch.setattr(human_workflows, "default_python", lambda root: "./.venv/bin/python")
 
     helper = runpy.run_path(str(Path(__file__).with_name("test_human_workflows.py")))["_work_finish_execute"]
     context = {"adoption_id": "a" * 32, "target_version": "1.1.10", "paths": ["src/demo.py"]}

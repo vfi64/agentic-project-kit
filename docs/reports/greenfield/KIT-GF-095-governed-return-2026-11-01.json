@@ -1,4 +1,15 @@
 {
+  "ci_fixture_followup": {
+    "cause": "The imported closeout mock helper did not inherit its original module autouse interpreter stubs; an empty working directory reproduced the failure.",
+    "correction": "The regression explicitly sets the same interpreter stubs and runs from an empty temporary directory.",
+    "first_run": "https://github.com/vfi64/agentic-project-kit/actions/runs/41313940785",
+    "production_changes": false,
+    "targeted_tests": {
+      "passed": 45,
+      "status": "PASS"
+    },
+    "wheel_unchanged": true
+  },
   "consumer": "an external desktop controller",
   "finding": "KIT-GF-095",
   "fixed_in": "unreleased",

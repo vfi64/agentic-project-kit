@@ -48,3 +48,10 @@ are recorded in the paired JSON; pending checks are not presented as passed.
 ## Final local validation
 
 Full suite: 4489 passed (560 warnings), 307.41 seconds, four local test processes. Ruff, check, check-docs and doctor PASS. The paired JSON records the noneditable-wheel machine PASS and exact artifact hash. Consumer rehearsal remains NOT_RUN; owner acceptance PENDING; no release or productive migration.
+
+The first PR CI run exposed a test-only interpreter-resolution dependency in
+the closeout mock helper. Running the regression in an empty temporary working
+directory reproduced it locally. The test now explicitly supplies the helper's
+interpreter stubs, preserving all return/PENDING assertions. The 45 return and
+human-workflow tests pass with this isolation. Production source and the tested
+wheel are unchanged; the PR reruns CI for the corrected test fixture.
