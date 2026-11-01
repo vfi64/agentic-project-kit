@@ -1421,7 +1421,7 @@ Expected result fields: `{"result.stale_files": "names the stale reference file"
 Kit state: CLOSED; fixed_in: 1.1.5.
 Evidence: docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md
 
-Execution class: local (effects: none); machine contract: docs-audit passes in a freshly initialized external workspace whose successor package directory is still empty; a package with only some of its files still fails as incomplete
+Execution class: local (effects: none); machine contract: docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.
 
 Preconditions: Disposable initialized external manifest workspace; synchronize command reference; no Kit tests or documentation registry.
 

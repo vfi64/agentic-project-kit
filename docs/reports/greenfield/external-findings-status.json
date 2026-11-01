@@ -6183,7 +6183,7 @@
           "stdout": "Incomplete successor package for a partial package"
         },
         "machine": {
-          "covers": "docs-audit passes in a freshly initialized external workspace whose successor package directory is still empty; a package with only some of its files still fails as incomplete",
+          "covers": "docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.",
           "fixture": "external_manifest",
           "steps": [
             {
@@ -6205,6 +6205,19 @@
                 "path": ".agentic/state/handoff/packages/latest/successor_prompt.md",
                 "text": "# partial\n"
               }
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "rm",
+                ".agentic/state/handoff/packages/latest/execution_contract.json",
+                ".agentic/state/handoff/packages/latest/source_manifest.json",
+                ".agentic/state/handoff/packages/latest/successor_context.yaml",
+                ".agentic/state/handoff/packages/latest/validation_report.json"
+              ]
             },
             {
               "expect": {
@@ -7818,5 +7831,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 54,
   "schema_version": 1,
-  "source_sha256": "e353166a465f97ddbe5835b5405cbbe6a8f28d7856f777c013eaa275e9bb86d4"
+  "source_sha256": "d8119b4f5fcb3df112d9752879e6a837b8588e1b764340d558cc6883a92b5892"
 }

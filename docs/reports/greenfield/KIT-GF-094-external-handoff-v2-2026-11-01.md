@@ -66,6 +66,8 @@ separate authorities and retain their commit binding. GF-015 and the external
 release-resolution fixture regenerate after deliberately changing captured
 registry/config bytes; the old expected PASS without regeneration is invalid
 under v2. Neither the production checker nor the fixture weakens its checks.
+GF-084 now explicitly removes four package files in its disposable fixture to
+test incomplete-package rejection: init itself supplies the complete v2 set.
 
 Final gate results and noneditable-wheel machine evidence belong in the paired
 JSON report. Until recorded, no full-suite or wheel PASS is claimed here.

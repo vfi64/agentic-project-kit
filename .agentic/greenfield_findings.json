@@ -6092,7 +6092,7 @@
         "workspace_kind": "external_manifest",
         "machine": {
           "fixture": "external_manifest",
-          "covers": "docs-audit passes in a freshly initialized external workspace whose successor package directory is still empty; a package with only some of its files still fails as incomplete",
+          "covers": "docs-audit passes for a complete initial v2 projection; explicitly removing four package files leaves an incomplete package that must fail.",
           "steps": [
             {
               "run": [
@@ -6112,6 +6112,19 @@
               "write": {
                 "path": ".agentic/state/handoff/packages/latest/successor_prompt.md",
                 "text": "# partial\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "rm",
+                ".agentic/state/handoff/packages/latest/execution_contract.json",
+                ".agentic/state/handoff/packages/latest/source_manifest.json",
+                ".agentic/state/handoff/packages/latest/successor_context.yaml",
+                ".agentic/state/handoff/packages/latest/validation_report.json"
+              ],
+              "expect": {
+                "returncode": 0
               }
             },
             {
