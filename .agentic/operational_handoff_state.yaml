@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 532d2dd11711b11be8c4fd897376d6d70172f9d3
-  short: 532d2dd1
-  subject: Archive release 1.1.11 evidence (#2721)
+  full: c2b6a70cf19c3b846eeba5264cf5386550c94058
+  short: c2b6a70c
+  subject: '[codex] Preserve target preview repository identity (GF-099) (#2724)'
 last_substantive_work_state:
-  full: 532d2dd11711b11be8c4fd897376d6d70172f9d3
-  short: 532d2dd1
-  subject: Archive release 1.1.11 evidence (#2721)
+  full: c2b6a70cf19c3b846eeba5264cf5386550c94058
+  short: c2b6a70c
+  subject: '[codex] Preserve target preview repository identity (GF-099) (#2724)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
