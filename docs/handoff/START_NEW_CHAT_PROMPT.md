@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: b365cf3bfaafbdac9d94af4f9f49fee3488330a29d17d6787eb7c4a635ddffe2
 - docs/reference/agentic-kit-commands.json: 103bb34587140c90cd443f63f520c13f99230c33375069a614298b389b89f709
-## Operational documentation refresh state after PR #2724
+## Operational documentation refresh state after PR #2726
 
-Current administrative handoff refresh state is `c2b6a70c` (`[codex] Preserve target preview repository identity (GF-099) (#2724)`). Continue next only after this post-PR2724 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `144a36a5` (`[codex] Resolve owned detached-rebase conflicts (GF-100) (#2726)`). Continue next only after this post-PR2726 refresh is committed and merged; the next substantive slice must be created from fresh main.
