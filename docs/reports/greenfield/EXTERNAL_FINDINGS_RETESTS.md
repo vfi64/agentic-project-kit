@@ -1678,6 +1678,23 @@ Expected: Installed A plans and executes B, writes migration and adoption eviden
 
 Expected result fields: `{"assertions": ["Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."]}`.
 
+## KIT-GF-099
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.md
+
+Execution class: local (effects: none); machine contract: Real wheel adoption and return with a GitHub-shaped origin distinct from project_name, local insteadOf transport and target preview identity checks.
+
+Preconditions: Disposable real wheels; synthetic GitHub origin distinct from project_name; Git URL rewrite confines all transport to a local bare repository.
+
+```text
+agentic-kit check --json
+```
+
+Expected: Target preview preserves repository_name and execution_contract for legacy quoted origin payloads and future Git-encoded payloads; A-to-B and evidence-bound return pass.
+
+Expected result fields: `{"assertions": ["repository_name and execution_contract.repo.full_name equal example/transition-fixture, never the workspace project name; old-parser counterprobe must fail with projection_inputs_changed."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

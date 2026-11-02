@@ -1979,3 +1979,13 @@ documents:
   - path: docs/reports/release/release-run-1.1.11.json
     class: evidence/log
     owner: maintainers
+  - path: docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Target-side origin parsing fix, old-parser real-wheel counterprobe and released-planner compatibility.
+  - path: docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Sanitized counterprobe and current parser, preview and wheel-contract verification.
