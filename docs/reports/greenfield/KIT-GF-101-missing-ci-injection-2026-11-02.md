@@ -31,6 +31,10 @@ freshness test: the command-manifest change also affects generated website
 metadata. The checked-in fallback was regenerated with the existing site build
 script. No source behavior or freshness assertion was weakened.
 
+The next full run stopped after 3,309 passes on the generated task-selection
+review matrix, whose current-manifest marker also needed regeneration. The
+existing matrix generator refreshed it; all 38 matrix tests then passed.
+
 No dependencies, version bump, release or B activation are part of this fix.
 The two managed paths remain derived Kit outputs; consumers do not hand-edit
 them. External workspace identities and local evidence paths are kept private.
