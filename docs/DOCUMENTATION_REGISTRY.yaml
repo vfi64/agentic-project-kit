@@ -1989,3 +1989,8 @@ documents:
     owner: maintainers
     status: active
     summary: Sanitized counterprobe and current parser, preview and wheel-contract verification.
+  - path: docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Owned detached-rebase resolver regression and fix evidence.
