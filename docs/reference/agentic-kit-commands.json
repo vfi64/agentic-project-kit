@@ -20489,6 +20489,20 @@
         },
         {
           "default": false,
+          "help": "Opt in to creating a missing managed CI workflow.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "inject_ci",
+          "opts": [
+            "--inject-ci"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
           "help": "Emit machine-readable JSON.",
           "is_flag": true,
           "metavar": null,
@@ -20974,7 +20988,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "f770b8310c36",
+    "manifest_sha": "0623f13d984e",
     "schema_version": 2
   },
   "schema_version": 3,

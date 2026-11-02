@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f770b8310c36
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 0623f13d984e
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -4365,6 +4365,7 @@ Plan or update the managed workspace CI template.
 |---|---:|---|---:|---|---|
 | `root` | `TyperOption` | --root | `False` | `PosixPath('.')` | Target repository root. |
 | `execute` | `TyperOption` | --execute | `False` | `False` | Write the current managed CI template. |
+| `inject_ci` | `TyperOption` | --inject-ci | `False` | `False` | Opt in to creating a missing managed CI workflow. |
 | `json_output` | `TyperOption` | --json | `False` | `False` | Emit machine-readable JSON. |
 
 ### `agentic-kit workspace dpa-intake`

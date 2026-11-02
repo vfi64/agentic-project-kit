@@ -3,6 +3,17 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: explicit-missing-ci-injection
+  description: Explicit CI injection for initialized workspaces remains documented.
+  documents:
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - workspace ci-update --inject-ci
+    - KIT-GF-101
+  - path: docs/TEST_GATES.md
+    terms:
+    - tests/test_workspace_ci_injection.py
+    - KIT-GF-101
 - id: owned-detached-rebase-resolution
   description: Detached rebase ownership and rejection regressions remain documented.
   documents:
