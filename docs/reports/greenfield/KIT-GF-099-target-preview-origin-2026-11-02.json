@@ -2,7 +2,7 @@
   "schema_version": 1,
   "finding": "KIT-GF-099",
   "fixed_in": "unreleased",
-  "implementation_status": "IN_PROGRESS",
+  "implementation_status": "VERIFIED_LOCALLY",
   "consumer": "an external desktop controller",
   "counterprobe": {
     "source_base": "6dde207eb96cbd9a0cee0a75113070fd4b836b75",
@@ -10,6 +10,7 @@
     "fixture_origin": "https://github.com/example/transition-fixture.git",
     "project_name": "external",
     "expected": "FAIL_WITH_OLD_PARSER",
+    "injection": "Only the disposable B wheel receives the unchanged old parser; final packaged fixture is unchanged.",
     "result_status": "BLOCKED",
     "completed_steps": [
       "install",
@@ -18,28 +19,53 @@
       "projection"
     ],
     "blocker": "target check failed after projection; inspect update log",
-    "counterprobe": "REPRODUCED",
     "target_checks": [
       {
         "status": "FAIL",
         "errors": [
-          "projection_inputs_changed: Eingabe geändert, Projektion nicht neu erzeugt; changed_inputs=['execution_contract', 'repository_name']; differing_paths=['.agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md', '.agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md', '.agentic/state/handoff/START_NEW_CHAT_PROMPT.md', '.agentic/state/handoff/packages/latest/execution_contract.json', '.agentic/state/handoff/packages/latest/successor_context.yaml', '.agentic/state/handoff/packages/latest/successor_prompt.md', '.agentic/state/handoff/packages/latest/validation_report.json']; regenerate with agentic-kit transfer prepare-successor-handoff --render-prompt"
+          "projection_inputs_changed: Eingabe ge\u00e4ndert, Projektion nicht neu erzeugt; changed_inputs=['execution_contract', 'repository_name']; differing_paths=['.agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md', '.agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md', '.agentic/state/handoff/START_NEW_CHAT_PROMPT.md', '.agentic/state/handoff/packages/latest/execution_contract.json', '.agentic/state/handoff/packages/latest/successor_context.yaml', '.agentic/state/handoff/packages/latest/successor_prompt.md', '.agentic/state/handoff/packages/latest/validation_report.json']; regenerate with agentic-kit transfer prepare-successor-handoff --render-prompt"
         ]
       }
     ],
+    "counterprobe": "REPRODUCED",
     "adoption_evidence_written": false
   },
   "full_suite": {
-    "status": "NOT_RUN"
+    "status": "PASS",
+    "passed": 4522,
+    "warnings": 560,
+    "seconds": 420.5,
+    "source_commit": "55bb1f62739fe281abaf8c0229e936858c9aa6a1",
+    "command": "python -m pytest -q -n 4 --dist worksteal"
   },
   "machine_contracts": {
-    "KIT-GF-094": "NOT_RUN",
-    "KIT-GF-095": "NOT_RUN",
-    "KIT-GF-097": "NOT_RUN",
-    "KIT-GF-098": "NOT_RUN",
-    "KIT-GF-099": "NOT_RUN"
+    "KIT-GF-094": "PASS",
+    "KIT-GF-095": "PASS",
+    "KIT-GF-097": "PASS",
+    "KIT-GF-098": "PASS",
+    "KIT-GF-099": "PASS"
   },
   "release_performed": false,
   "main_activation": false,
-  "independent_published_A_rehearsal": "NOT_RUN"
+  "independent_published_A_rehearsal": "NOT_RUN",
+  "installed_wheel": {
+    "version": "1.1.11",
+    "editable": false,
+    "sha256": "3474f4cbd1d4153371955317d1adcfd0ad71d9c60be808828d105501adce828e"
+  },
+  "gates": {
+    "check": "PASS",
+    "check-docs": "PASS",
+    "doctor": "PASS",
+    "ruff check .": "PASS"
+  },
+  "audit_correction": {
+    "initial_full_suite": {
+      "passed": 4521,
+      "failed": 1
+    },
+    "failure": "audit-path-literals --enforce-active rejected a synthetic GitHub identity in runtime code",
+    "correction": "Move the synthetic identity into packaged fixture data; audit unchanged",
+    "focused_audit_and_wheel_tests": 34
+  }
 }

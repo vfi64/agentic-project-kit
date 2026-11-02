@@ -5,7 +5,7 @@ workspace project name (KIT-GF-099). The target accepts Git-quoted values sent
 by published 1.1.11; future planners serialize Git strings rather than JSON
 strings. A GitHub-shaped fixture origin is transported only to a disposable
 local bare repository through Git insteadOf rewriting. This parsing fix does
-not activate v2 on main or authorize a release.
+not change the projection activation policy.
 
 ## Two-release adoption (KIT-GF-097)
 

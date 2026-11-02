@@ -19,7 +19,10 @@ rendering and byte validation. No Git subprocess is added to the parser.
 ## Required old-parser counterprobe
 
 Before either production correction, the new real-wheel fixture was executed
-with the unchanged main parser. Its origin is the synthetic public-shaped
+with the unchanged main parser. The final packaged-data fixture was then tested
+again by replacing only repo_identity.py in the disposable B wheel with the
+unchanged main parser (SHA256 in the adjacent JSON), regenerating wheel RECORD.
+The source tree, fixture and A planner were not patched in that second probe. Its origin is the synthetic public-shaped
 https://github.com/example/transition-fixture.git, while project_name is external.
 Git insteadOf maps all fetch/push traffic to the disposable local bare origin.
 No request is sent to that GitHub repository.
@@ -39,8 +42,18 @@ values. Parser tests include an unmatched leading quote and an escaped final quo
 
 ## Verification and boundaries
 
-Full suite and fresh noneditable-wheel contracts 094, 095, 097, 098 and 099:
-IN_PROGRESS. Contract 096 is not a machine contract. Source catalog is
+- Full suite: `python -m pytest -q -n 4 --dist worksteal`: **4,522 PASS**,
+  560 warnings, 420.50 seconds at source commit
+  `55bb1f62739fe281abaf8c0229e936858c9aa6a1`.
+- Fresh noneditable wheel: contracts **094, 095, 097, 098 and 099 PASS**;
+  real self-built A/B/A-prime wheels, installers and return/completion paths.
+- `ruff check .`, `agentic-kit check`, `check-docs`, `doctor`: **PASS**.
+- The initial full run had 4,521 PASS and one FAIL: the existing literal audit
+  rejected the inline synthetic origin. The identity is now explicit packaged
+  fixture data; the audit is unchanged. The focused audit/wheel retest had
+  34 PASS before the successful complete rerun.
+
+Contract 096 is not a machine contract. Source catalog is
 CLOSED/unreleased; canonical exports are regenerated through the Kit.
 
 The main activation constant stays False. Only this fix PR may merge after green
@@ -55,7 +68,7 @@ without a probe patch; local synthetic A wheels do not replace it.
 Two small symmetric Git string helpers remain in the cohesive identity module;
 the preview writer reuses the encoder. No dependency, CLI route, new activation
 switch, format migration or general Git configuration framework is added.
-The existing real-wheel fixture gains identity/transport separation and exact
-repository assertions. It retains real installers and Git; PR observation remains
+The existing real-wheel fixture gains packaged synthetic identity data,
+identity/transport separation and exact repository assertions. It retains real installers and Git; PR observation remains
 a double. Structured existing evidence is sufficient; no additional DCO layer
 is warranted. External v2 refresh reduction and self-hosting boundaries are unchanged.
