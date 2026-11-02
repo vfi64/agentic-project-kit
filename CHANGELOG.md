@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Resolve conflicted files during an owned detached-HEAD rebase while preserving branch and target guards (KIT-GF-100).
+
 - Fixed: Preserve the repository identity in target handoff previews by decoding Git-quoted origin values in the target and writing Git syntax in future planners. Legacy 1.1.11 payloads remain compatible; real-wheel regressions now use a GitHub-shaped origin distinct from the project name (KIT-GF-099). No release or v2 activation is performed by this fix.
 
 ## v1.1.11 - 2026-11-01

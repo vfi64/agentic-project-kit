@@ -263,6 +263,10 @@ def conflict_resolve_file_command(
 
     branch_result = run_step("current-branch", ["git", "branch", "--show-current"])
     current_branch = str(branch_result["stdout"]).strip()
+    if branch_result["returncode"] == 0 and not current_branch:
+        from agentic_project_kit.conflict_rebase_branch import detached_rebase_branch
+
+        current_branch = detached_rebase_branch(run_step)
     if branch_result["returncode"] != 0 or not current_branch:
         blockers.append("current_branch_missing")
     if current_branch in {"main", "master"}:

@@ -7542,6 +7542,301 @@
         },
         "verification": "Local self-built wheel proof; the separate published PyPI 1.1.11 consumer rehearsal and owner acceptance remain pending. No release authority."
       }
+    },
+    {
+      "id": "KIT-GF-100",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Isolated owned local Git rebase stopped on a conflicted example.txt; HEAD detached; rebase metadata names the feature branch; resolved.txt contains reviewed replacement bytes."
+        ],
+        "commands": [
+          "agentic-kit transfer conflict-status --json",
+          "agentic-kit transfer conflict-resolve-file example.txt --source resolved.txt --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "Resolve and stage the owned detached-rebase conflict; reject a wrong expected branch without changing the conflict or index."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "valid rebase resolver PASS",
+            "wrong expected branch BLOCKED with unchanged conflict",
+            "resolved index has no unmerged paths"
+          ]
+        },
+        "verification": "Real Git regression proves owned detached-rebase resolution; unit and CLI tests reject invalid metadata, moved branches, unrelated targets and protected branches. No release authority.",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "Real Git regression proves owned detached-rebase resolution; unit and CLI tests reject invalid metadata, moved branches, unrelated targets and protected branches. No release authority.",
+          "steps": [
+            {
+              "write": {
+                "path": "example.txt",
+                "text": "base\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "example.txt"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "Seed"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "switch",
+                "-c",
+                "codex/rebase-probe"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "write": {
+                "path": "example.txt",
+                "text": "feature\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-am",
+                "Feature"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "switch",
+                "main"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "write": {
+                "path": "example.txt",
+                "text": "main\n"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-am",
+                "Main"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "switch",
+                "codex/rebase-probe"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "rebase",
+                "main"
+              ],
+              "expect": {
+                "returncode": 1,
+                "stdout_contains": "CONFLICT"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "branch",
+                "--show-current"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--binary",
+                "--output",
+                "before.patch",
+                "--",
+                "example.txt"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "write": {
+                "path": "resolved.txt",
+                "text": "resolved\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "conflict-status",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "repo.branch": "",
+                  "repo.unmerged_files": [
+                    "example.txt"
+                  ]
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "conflict-resolve-file",
+                "example.txt",
+                "--source",
+                "resolved.txt",
+                "--json",
+                "--branch",
+                "codex/wrong"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "result_status": "BLOCKED",
+                  "branch": "codex/rebase-probe",
+                  "blockers": [
+                    "branch_mismatch_expected_codex/wrong_actual_codex/rebase-probe"
+                  ],
+                  "unmerged_files": [
+                    "example.txt"
+                  ]
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--binary",
+                "--output",
+                "after.patch",
+                "--",
+                "example.txt"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--no-index",
+                "--",
+                "before.patch",
+                "after.patch"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--name-only",
+                "--diff-filter=U"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "example.txt"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "conflict-resolve-file",
+                "example.txt",
+                "--source",
+                "resolved.txt",
+                "--branch",
+                "codex/rebase-probe",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "branch": "codex/rebase-probe",
+                  "blockers": []
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--name-only",
+                "--diff-filter=U"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": ""
+              }
+            },
+            {
+              "run": [
+                "git",
+                "show",
+                ":example.txt"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "resolved"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "kind": "external_findings_catalog",

@@ -1,5 +1,12 @@
 # Test Gates
 
+### Detached rebase conflict resolution
+
+KIT-GF-100 is covered by `tests/test_conflict_resolver_rebase.py` and its
+real-Git machine contract. An owned detached rebase can resolve a file; invalid
+metadata, mismatched/protected branches and unrelated targets remain blocked
+without changing conflict bytes or the index. Linked Git worktrees are covered.
+
 ### External projection v2 and governed return
 
 `tests/test_external_projection_activation.py` checks the release A default and
