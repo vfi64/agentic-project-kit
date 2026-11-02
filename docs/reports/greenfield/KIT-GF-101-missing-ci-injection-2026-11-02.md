@@ -26,6 +26,11 @@ after planning, creation of both missing paths and a symlinked parent escape.
 Ruff passed. The machine contract checks the same opt-in boundary from a wheel.
 Final suite and gate results will be recorded after execution.
 
+The first full run stopped after 3,102 passes on the unchanged website fallback
+freshness test: the command-manifest change also affects generated website
+metadata. The checked-in fallback was regenerated with the existing site build
+script. No source behavior or freshness assertion was weakened.
+
 No dependencies, version bump, release or B activation are part of this fix.
 The two managed paths remain derived Kit outputs; consumers do not hand-edit
 them. External workspace identities and local evidence paths are kept private.

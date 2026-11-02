@@ -19,7 +19,7 @@
     "version": "0.2.0"
   },
   "kind": "bounded_history_projection",
-  "manifest_sha": "f770b8310c36",
+  "manifest_sha": "0623f13d984e",
   "overhead": {
     "admin_refresh_prs": 83,
     "evidence_class": "historical classification",
