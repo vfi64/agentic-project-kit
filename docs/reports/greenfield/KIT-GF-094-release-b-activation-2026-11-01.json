@@ -473,5 +473,31 @@
   "fixture_corrections": [
     "Skip a no-op v2 migration commit after B init.",
     "Remove the extracted caller PYTHONPATH before the final owned A-prime check."
-  ]
+  ],
+  "rebase_validation": {
+    "date": "2026-11-02",
+    "base_commit": "daa149180937f03982187824b54f0d4acd11d999",
+    "source_revision": "acd77b9b2a2a01d1c2338dca7569996058ba3354",
+    "full_suite": {
+      "status": "PASS",
+      "passed": 4526,
+      "warnings": 560,
+      "seconds": 393.48
+    },
+    "machine_contracts": {
+      "KIT-GF-094": "PASS",
+      "KIT-GF-095": "PASS",
+      "KIT-GF-097": "PASS",
+      "KIT-GF-098": "PASS",
+      "KIT-GF-099": "PASS"
+    },
+    "six_original_B_source_and_test_files_unchanged": true,
+    "GF_099_inherited_unchanged": true,
+    "finding": "KIT-GF-100",
+    "finding_status": "OPEN",
+    "resolver_fix_included": false,
+    "report": "docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md",
+    "merge_performed": false,
+    "release_performed": false
+  }
 }

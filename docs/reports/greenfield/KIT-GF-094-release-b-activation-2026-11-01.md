@@ -82,3 +82,18 @@ existing test-wheel builder can give the PR target a distinct disposable test
 version. Its synthetic A wheel must not replace the published PyPI 1.1.11
 planner in the independent rehearsal. Main and all published artifacts remain
 unchanged; this activation stays on the unmerged PR branch.
+
+## Rebase verification, 2026-11-02
+
+After GF-099 #2724 and complete post-merge handoff #2725, all three B commits
+were rebased onto daa14918. The implementation head acd77b9b passed the full
+suite (4,526 tests, 560 warnings, 393.48 seconds), fresh installed-wheel
+contracts 094/095/097/098/099 and all local gates. Original source/test changes
+and main's GF-099 code are preserved byte-for-byte.
+
+The [KIT-GF-100 rebase report](KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md)
+records exact Git continuation, all affected paths, the complete implementation
+range-diff, total diff review and a separate isolated negative resolver probe.
+100 is OPEN; its fix is not part of B. The guide and changelog now describe
+release semantics; the current draft/merge/release hold stays in #2723.
+Published-A consumer rehearsal and owner acceptance are still pending.
