@@ -3,6 +3,20 @@ purpose: Machine-checkable documentation coverage matrix for public commands, go
   concepts, user workflows, and project-state files. This file prevents implemented
   capabilities from becoming invisible in the documentation set.
 rules:
+- id: target-preview-origin-identity
+  description: Target-side Git origin decoding preserves released-planner compatibility and repository identity.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - KIT-GF-099
+    - tests/test_repo_identity.py
+    - insteadOf
+    - counterprobe
+  - path: docs/reference/EXTERNAL_HANDOFF_V2.md
+    terms:
+    - KIT-GF-099
+    - published 1.1.11
+    - Git-quoted
 - id: external-handoff-v2-and-bound-return
   description: External deterministic projections and evidence-bound installation returns remain visible and independently verified.
   documents:

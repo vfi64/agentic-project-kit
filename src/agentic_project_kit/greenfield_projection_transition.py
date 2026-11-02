@@ -88,7 +88,11 @@ print(json.dumps({'status':'PASS'}))
         self.git("commit", "-m", "Pinned v1 handoff")
         origin = self.root.parent / (self.root.name + "-origin.git")
         self.git("clone", "--bare", ".", str(origin))
-        self.git("remote", "add", "origin", str(origin))
+        # Keep a GitHub-shaped identity distinct from project.name, while all
+        # transport is rewritten by Git to the disposable local bare origin.
+        identity = "https://github.com/example/transition-fixture.git"
+        self.git("config", f"url.{origin}.insteadOf", identity)
+        self.git("remote", "add", "origin", identity)
         self.git("fetch", "origin")
         # Origin identity is a durable projection input, so generate once more.
         self.cli("transfer", "prepare-successor-handoff", "--json")
@@ -144,6 +148,14 @@ def run_transition(base: Path) -> dict:
         assert any(p.endswith("successor_context.yaml") for p in paths)
         adoption_id = adopted["result"]["adoption_id"]
         ws.checks()
+        identity = ws.script("""
+import json,pathlib
+from agentic_project_kit.external_handoff_projection import collect_projection_inputs
+i=collect_projection_inputs(pathlib.Path.cwd())
+print(json.dumps({'repository_name':i.repository_name,'execution_contract':json.loads(i.execution_contract)['repo']['full_name']}))
+""")
+        assert identity == {"repository_name": "example/transition-fixture",
+                            "execution_contract": "example/transition-fixture"}, identity
         ws.git("add", ".")
         ws.git("commit", "-m", "Adopt active B")
         ws.script("""

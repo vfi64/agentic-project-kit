@@ -14,6 +14,14 @@ does not stamp PARTIAL KIT-GF-094 as fixed.
 The target-preview regression also transfers inputs larger than Linux's
 individual argument limit through a temporary input file and checks its cleanup.
 
+KIT-GF-099 adds quoted/unquoted origin parsing and Git-escape regressions in
+`tests/test_repo_identity.py`. `tests/test_kit_update_projection.py` checks Git
+syntax, exact legacy 1.1.11 quoted payloads and preview/check input parity when
+repository_name differs from project_name. Contracts 097/098/099 use a synthetic
+GitHub origin with local insteadOf transport. The required old-parser
+counterprobe fails after projection with execution_contract/repository_name
+drift; the corrected target must pass without changing the published planner.
+
 `tests/test_external_handoff_projection.py` covers pure frozen-input rendering,
 versioned golden output, complete digest inputs, byte integrity, migration,
 minimum contract, runtime identity, read-only checks and real local bare-origin

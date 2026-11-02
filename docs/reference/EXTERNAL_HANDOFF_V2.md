@@ -1,5 +1,12 @@
 # External successor handoff v2
 
+Target previews preserve the origin repository identity independently of the
+workspace project name (KIT-GF-099). The target accepts Git-quoted values sent
+by published 1.1.11; future planners serialize Git strings rather than JSON
+strings. A GitHub-shaped fixture origin is transported only to a disposable
+local bare repository through Git insteadOf rewriting. This parsing fix does
+not activate v2 on main or authorize a release.
+
 ## Two-release adoption (KIT-GF-097)
 
 Release A is the expand release: `EXTERNAL_PROJECTION_V2_ACTIVE = False` in

@@ -8,6 +8,84 @@ import runpy
 import pytest
 
 
+@pytest.mark.parametrize("origin", [
+    "https://github.com/example/fixture.git",
+    'path\\with"quote; and space',
+    "https://github.com/example/répô.git",
+])
+def test_preview_origin_config_is_valid_git_syntax(tmp_path, monkeypatch, origin):
+    import json
+    import subprocess
+    from agentic_project_kit import repo_identity
+    from agentic_project_kit.kit_update_projection import preview_target_projection
+
+    root = tmp_path / "consumer"
+    fixture_type = runpy.run_path(str(Path(__file__).with_name("test_kit_update.py")))["Fixture"]
+    fixture_type(root)
+    monkeypatch.setattr(repo_identity, "_origin_url_from_git_config", lambda root: origin)
+
+    def run(argv, **kwargs):
+        payload = json.loads(Path(argv[-1]).read_bytes())
+        config = tmp_path / "syntax.config"
+        config.write_text(payload["git_config"], encoding="utf-8")
+        actual = subprocess.run(["git", "config", "--file", str(config), "--get", "remote.origin.url"],
+                                capture_output=True, text=True)
+        assert actual.returncode == 0, actual.stderr
+        assert actual.stdout[:-1] == origin
+        return subprocess.CompletedProcess(argv, 0, json.dumps({"supported": False, "files": {}}), "")
+
+    assert preview_target_projection(root.resolve(), Path("/fixture/python"), {}, run) == {}
+
+
+@pytest.mark.parametrize("legacy_111_payload", [False, True])
+def test_target_preview_preserves_distinct_origin_inputs(tmp_path, monkeypatch, legacy_111_payload):
+    import json
+    import os
+    import subprocess
+    from agentic_project_kit import external_projection_policy
+    from agentic_project_kit.external_handoff_projection import collect_projection_inputs, input_hashes, check_projection
+    from agentic_project_kit.greenfield_retest_runtime import prepare_owned_runtime, activate_projection_fixture
+    from agentic_project_kit.kit_update_projection import preview_target_projection
+    from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
+    from agentic_project_kit.workspace_init import build_workspace_init_plan, execute_workspace_init
+
+    env = dict(os.environ)
+    python = prepare_owned_runtime(tmp_path / "target", env, console=False)
+    activate_projection_fixture(python)
+    monkeypatch.setattr(external_projection_policy, "EXTERNAL_PROJECTION_V2_ACTIVE", True)
+    root = tmp_path / "consumer"
+    root.mkdir()
+    origin = "https://github.com/example/remote-identity.git"
+    for args in (["init", "-b", "main"], ["remote", "add", "origin", origin]):
+        subprocess.run(["git", *args], cwd=root, check=True, capture_output=True)
+    execute_workspace_init(build_workspace_init_plan(root, name="different-project", execute=True))
+    subprocess.run([str(python), "-I", "-m", "agentic_project_kit.cli", "commands",
+                    "sync-entrypoints", "--root", str(root), "--execute", "--json"],
+                   env=env, check=True, capture_output=True)
+    write_successor_handoff_package(root)
+
+    def run(argv, **kwargs):
+        if legacy_111_payload:
+            path = Path(argv[-1])
+            payload = json.loads(path.read_bytes())
+            # Exact origin serialization emitted by published 1.1.11.
+            payload["git_config"] = '[remote "origin"]\n\turl = ' + json.dumps(origin) + "\n"
+            path.write_text(json.dumps(payload))
+        return subprocess.run(argv, cwd=root, env=env, capture_output=True,
+                              text=not kwargs.get("binary", False), check=False)
+
+    preview = preview_target_projection(root.resolve(), python, {}, run)
+    package = ".agentic/state/handoff/packages/latest/"
+    context = json.loads(preview[package + "successor_context.yaml"])
+    assert context["repo"]["full_name"] == "example/remote-identity"
+    hashes = json.loads(preview[package + "validation_report.json"])["input_hashes"]
+    actual = collect_projection_inputs(root)
+    for key in ("repository_name", "execution_contract"):
+        assert hashes[key] == input_hashes(actual)[key], key
+    assert check_projection(root)["status"] == "PASS"
+    assert all((root / name).read_bytes() == content for name, content in preview.items())
+
+
 def _newer_than_running() -> str:
     from agentic_project_kit import __version__
     major, minor, patch = (int(part) for part in __version__.split(".")[:3])

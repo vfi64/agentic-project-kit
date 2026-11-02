@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 95,
+    "CLOSED": 96,
     "NOT_APPLICABLE": 0,
     "OPEN": 1,
     "PARTIAL": 1
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 56,
+    "local": 57,
     "owner_remote": 34
   },
   "findings": [
@@ -7807,6 +7807,63 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit check --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Target preview preserves repository_name and execution_contract for legacy quoted origin payloads and future Git-encoded payloads; A-to-B and evidence-bound return pass."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "repository_name and execution_contract.repo.full_name equal example/transition-fixture, never the workspace project name; old-parser counterprobe must fail with projection_inputs_changed."
+          ]
+        },
+        "machine": {
+          "covers": "Real wheel adoption and return with a GitHub-shaped origin distinct from project_name, local insteadOf transport and target preview identity checks.",
+          "fixture": "external_projection_transition",
+          "origin": false,
+          "steps": [
+            {
+              "assert": {
+                "exists": [
+                  ".agentic/tmp/transition-proof.json"
+                ]
+              }
+            },
+            {
+              "expect": {
+                "json_contains": {
+                  "status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable real wheels; synthetic GitHub origin distinct from project_name; Git URL rewrite confines all transport to a local bare repository."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Local self-built wheel proof; the separate published PyPI 1.1.11 consumer rehearsal and owner acceptance remain pending. No release authority.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-099",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -7943,7 +8000,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 56,
+  "machine_contracts": 57,
   "schema_version": 1,
-  "source_sha256": "caa4b3f57ab770c30992ce93f99a9747c66723edac3ec2d6830db7a167e84a86"
+  "source_sha256": "8da0c620c16689fe14517b68ae5451d88d52090230f631eef1434a8dc366f9de"
 }

@@ -60,7 +60,7 @@ def projection_update_paths(root: Path) -> tuple[str, ...]:
 
 def preview_target_projection(root: Path, python: Path, desired_pins: dict[str, bytes], run) -> dict[str, bytes]:
     from agentic_project_kit.successor_handoff_package import _external_long_term_sources
-    from agentic_project_kit.repo_identity import _origin_url_from_git_config
+    from agentic_project_kit.repo_identity import _origin_url_from_git_config, _quote_git_config_value
 
     ws = load_workspace(root, suppress_legacy_profile_warning=True)
     source_paths = {
@@ -78,9 +78,9 @@ def preview_target_projection(root: Path, python: Path, desired_pins: dict[str, 
     origin = _origin_url_from_git_config(root)
     git_config = ""
     if origin:
-        # ConfigParser/Git quoted string; JSON escaping also escapes quotes and
-        # newlines here. This string is data for a temporary config, not a shell.
-        git_config = '[remote "origin"]\n\turl = ' + json.dumps(origin) + "\n"
+        # Git syntax, not JSON: legacy 1.1.11 payloads remain readable by the
+        # target parser, while future planners also preserve UTF-8 and escapes.
+        git_config = '[remote "origin"]\n\turl = ' + _quote_git_config_value(origin) + "\n"
     allowed = projection_update_paths(root)
     # The packaged command reference alone exceeds Linux's per-argument exec
     # limit. Keep the captured bytes outside argv and outside the workspace;

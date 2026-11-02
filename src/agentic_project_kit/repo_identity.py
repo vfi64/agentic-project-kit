@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import configparser
 import os
+import re
 import subprocess
 from pathlib import Path
 from typing import Mapping
@@ -75,6 +76,23 @@ def _git_config_candidates(root: Path) -> tuple[Path, ...]:
     return tuple(candidates)
 
 
+def _decode_git_quoted_value(value: str) -> str:
+    """Decode complete Git string quotes without changing unquoted values."""
+    if len(value) < 2 or not (value.startswith('"') and value.endswith('"')):
+        return value
+    body = value[1:-1]
+    if (len(body) - len(body.rstrip("\\"))) % 2:
+        return value  # The final quote is escaped, not a closing delimiter.
+    escapes = {'"': '"', "\\": "\\", "n": "\n", "t": "\t", "b": "\b"}
+    return re.sub(r'\\(["\\ntb])', lambda match: escapes[match[1]], body)
+
+
+def _quote_git_config_value(value: str) -> str:
+    """Use Git escapes, retaining UTF-8 rather than JSON's invalid \\u escapes."""
+    escapes = str.maketrans({"\\": "\\\\", '"': '\\"', "\n": "\\n", "\t": "\\t", "\b": "\\b"})
+    return '"' + value.translate(escapes) + '"'
+
+
 def _origin_url_from_git_config(root: Path) -> str | None:
     for candidate in _git_config_candidates(root):
         if not candidate.exists():
@@ -87,7 +105,7 @@ def _origin_url_from_git_config(root: Path) -> str | None:
         except configparser.Error:
             continue
         if parser.has_option('remote "origin"', "url"):
-            return parser.get('remote "origin"', "url")
+            return _decode_git_quoted_value(parser.get('remote "origin"', "url"))
     return None
 
 
