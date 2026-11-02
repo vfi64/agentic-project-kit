@@ -36,7 +36,12 @@ Fresh noneditable wheel: KIT-GF-100 PASS, including all 22 machine steps.
 Ruff, check, check-docs and doctor passed. The initial full-suite run encountered
 the unchanged audit test's source-versus-HEAD guard while product edits were
 uncommitted. A committed-source rerun is required; the guard is not weakened.
-Full-suite and final gate results are recorded below when run.
+Final full suite: 4536 passed, 560 warnings in 1212.37s (0:20:12).
+The run used the local virtualenv CLI on PATH and native macOS isolation
+outside the outer agent sandbox. An earlier run stopped when a CLI test
+could not find the Kit executable; all six affected CLI tests subsequently
+passed with the correct PATH. No product changes or test exclusions were
+used to resolve either environment limitation.
 This fix is separate from the B activation PR. Main's activation remains False.
 
 ## Scope and limitations
@@ -46,3 +51,10 @@ staging behavior remains in the CLI; only the cohesive new ownership check is
 extracted, avoiding unrelated refactoring of the existing command module.
 The active rebase metadata is treated as local Git state, not a security boundary
 against a malicious actor who can rewrite the repository and its Git metadata.
+
+## Preserved historical evidence
+
+The original reproduction and exact direct-Git B rebase continuation remain
+available in the [immutable pre-fix report](https://github.com/vfi64/agentic-project-kit/blob/29f792bc362e7dd130e735e0793833ca5ea2dfc4/docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md). Its OPEN finding
+and negative-only contract describe the historical state, superseded by
+this fix and its positive/negative contract. B is not modified here.
