@@ -498,6 +498,7 @@
     "resolver_fix_included": false,
     "report": "docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md",
     "merge_performed": false,
-    "release_performed": false
+    "release_performed": false,
+    "finding_negative_reproduction_contract": "PASS; 19 steps, OPEN remains"
   }
 }

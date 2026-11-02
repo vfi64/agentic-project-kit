@@ -52,5 +52,10 @@
     "example.txt"
   ],
   "fixture": "isolated synthetic local Git rebase; no actual PR or branch mutation",
-  "schema_version": 1
+  "schema_version": 1,
+  "negative_machine_contract": {
+    "result": "PASS",
+    "steps": 19,
+    "scope": "Negative reproduction and unchanged conflict bytes/index only; does not prove successful resolution or close the OPEN finding."
+  }
 }
