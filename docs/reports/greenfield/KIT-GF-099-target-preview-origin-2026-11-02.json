@@ -17,7 +17,7 @@
       "entrypoints",
       "projection"
     ],
-    "blocker": "command_failed: /private/tmp/gf099-old-parser-countercase/consumer/.venv/bin/python -I -m agentic_project_kit.cli; inspect update log",
+    "blocker": "target check failed after projection; inspect update log",
     "counterprobe": "REPRODUCED",
     "target_checks": [
       {

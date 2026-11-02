@@ -5,6 +5,7 @@ from __future__ import annotations
 from contextlib import contextmanager
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+from importlib.resources import files
 import hashlib
 import json
 import os
@@ -47,6 +48,10 @@ def _index(base):
 class _Workspace:
     def __init__(self, root, wheels, env):
         self.root, self.env = root, env
+        identity = json.loads(files("agentic_project_kit").joinpath("reference/fixtures/transition-origin.json").read_text(encoding="utf-8"))
+        self.origin_url = identity["origin"]
+        self.repository_name = identity["repository_name"]
+        assert self.repository_name != "external"
         root.mkdir(parents=True)
         venv.EnvBuilder(with_pip=True).create(root / ".venv")
         self.python = root / ".venv/bin/python"
@@ -90,9 +95,8 @@ print(json.dumps({'status':'PASS'}))
         self.git("clone", "--bare", ".", str(origin))
         # Keep a GitHub-shaped identity distinct from project.name, while all
         # transport is rewritten by Git to the disposable local bare origin.
-        identity = "https://github.com/example/transition-fixture.git"
-        self.git("config", f"url.{origin}.insteadOf", identity)
-        self.git("remote", "add", "origin", identity)
+        self.git("config", f"url.{origin}.insteadOf", self.origin_url)
+        self.git("remote", "add", "origin", self.origin_url)
         self.git("fetch", "origin")
         # Origin identity is a durable projection input, so generate once more.
         self.cli("transfer", "prepare-successor-handoff", "--json")
@@ -154,8 +158,8 @@ from agentic_project_kit.external_handoff_projection import collect_projection_i
 i=collect_projection_inputs(pathlib.Path.cwd())
 print(json.dumps({'repository_name':i.repository_name,'execution_contract':json.loads(i.execution_contract)['repo']['full_name']}))
 """)
-        assert identity == {"repository_name": "example/transition-fixture",
-                            "execution_contract": "example/transition-fixture"}, identity
+        assert identity == {"repository_name": ws.repository_name,
+                            "execution_contract": ws.repository_name}, identity
         ws.git("add", ".")
         ws.git("commit", "-m", "Adopt active B")
         ws.script("""
