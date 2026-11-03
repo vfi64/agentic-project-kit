@@ -24,7 +24,12 @@ workspace initialization/CI regressions and eight new checks. They cover preview
 execution, idempotence, the default opt-out, custom files, a workflow appearing
 after planning, creation of both missing paths and a symlinked parent escape.
 Ruff passed. The machine contract checks the same opt-in boundary from a wheel.
-Final suite and gate results will be recorded after execution.
+Final full suite: 4545 passed, 560 warnings in 1039.09s (0:17:19).
+Ruff, check, check-docs and doctor: PASS. The initial doctor authority
+mismatch was resolved by the canonical successor-package generator, not
+by editing generated contracts. Fresh noneditable wheel: KIT-GF-101 PASS.
+The real external workspace preview names exactly the two managed paths
+and reports PASS; execution/adoption is a separate subsequent step.
 
 The first full run stopped after 3,102 passes on the unchanged website fallback
 freshness test: the command-manifest change also affects generated website
