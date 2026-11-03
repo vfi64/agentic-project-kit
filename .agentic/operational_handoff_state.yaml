@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9d431c924df3a3071f6aa38ba1fc6f89a47fe301
-  short: 9d431c92
-  subject: Activate external projection v2 for release B (KIT-GF-094) (#2723)
+  full: 7317b17345e4f42ea6eb0eb37583411af9004392
+  short: 7317b173
+  subject: Release 1.2.0 (#2731)
 last_substantive_work_state:
-  full: 9d431c924df3a3071f6aa38ba1fc6f89a47fe301
-  short: 9d431c92
-  subject: Activate external projection v2 for release B (KIT-GF-094) (#2723)
+  full: 7317b17345e4f42ea6eb0eb37583411af9004392
+  short: 7317b173
+  subject: Release 1.2.0 (#2731)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

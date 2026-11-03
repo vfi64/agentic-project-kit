@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `9d431c924df3a3071f6aa38ba1fc6f89a47fe301` (`9d431c92`), after `Activate external projection v2 for release B (KIT-GF-094) (#2723)`.
-Last substantive work state is `9d431c924df3a3071f6aa38ba1fc6f89a47fe301` (`9d431c92`), after `Activate external projection v2 for release B (KIT-GF-094) (#2723)`.
+Current verified main/admin HEAD is `7317b17345e4f42ea6eb0eb37583411af9004392` (`7317b173`), after `Release 1.2.0 (#2731)`.
+Last substantive work state is `7317b17345e4f42ea6eb0eb37583411af9004392` (`7317b173`), after `Release 1.2.0 (#2731)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
