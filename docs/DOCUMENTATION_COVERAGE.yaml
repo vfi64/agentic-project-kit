@@ -36,6 +36,24 @@ rules:
     - KIT-GF-099
     - published 1.1.11
     - Git-quoted
+- id: transient-pr-merge-state-readiness
+  description: PR readiness waits through GitHub's transient UNSTABLE state while preserving required-check and failure gates.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - KIT-GF-102
+    - tests/test_pr_ci_readiness.py
+    - pr-wait-ci
+    - TIMEOUT
+- id: case-stable-external-projection-identity
+  description: External v2 projections preserve matching stored repository spelling across case-variant clone origins without migration.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms:
+    - KIT-GF-103
+    - tests/test_external_handoff_projection.py
+    - byte-identical
+    - without a migration
 - id: external-handoff-v2-and-bound-return
   description: External deterministic projections and evidence-bound installation returns remain visible and independently verified.
   documents:

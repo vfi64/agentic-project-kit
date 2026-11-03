@@ -184,6 +184,14 @@ def classify_pr_readiness(
 
     merge_state = str(snapshot.get("mergeStateStatus") or "").upper()
     mergeable = snapshot.get("mergeable")
+    if merge_state == "UNSTABLE":
+        if mergeable in (False, "CONFLICTING"):
+            return ReadinessDecision(BLOCKED, (f"PR is not mergeable: {mergeable!r}",), True)
+        return ReadinessDecision(
+            WAITING,
+            ("mergeStateStatus is UNSTABLE; waiting for GitHub merge state to settle",),
+            False,
+        )
     if merge_state != "CLEAN":
         return ReadinessDecision(
             BLOCKED,

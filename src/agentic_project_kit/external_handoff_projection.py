@@ -33,8 +33,23 @@ class ProjectionInputs:
     mandatory_source_paths: tuple[str, ...] = ()
 
 
+def _stored_repository_spelling(ws, origin_name: str | None) -> str | None:
+    """Preserve a matching v2 projection's spelling across case-variant clones."""
+    if not origin_name:
+        return None
+    try:
+        stored = json.loads(ws.package_file("successor_context.yaml").read_bytes())
+        repo = stored.get("repo") if isinstance(stored, dict) else None
+        full_name = repo.get("full_name") if isinstance(repo, dict) else None
+    except (OSError, UnicodeError, json.JSONDecodeError):
+        return None
+    if isinstance(full_name, str) and full_name.casefold() == origin_name.casefold():
+        return full_name
+    return None
+
+
 def collect_projection_inputs(root, *, config_bytes: bytes | None = None) -> ProjectionInputs:
-    """Read every content input once; no Git command or mutable runtime input."""
+    """Capture content and stable identity inputs at the filesystem boundary."""
     from pathlib import Path
 
     from agentic_project_kit import __version__
@@ -84,7 +99,13 @@ def collect_projection_inputs(root, *, config_bytes: bytes | None = None) -> Pro
         "must_not_reconstruct_commands_from_memory": True,
         "source_hashes": {packaged_path: hashlib.sha256(packaged_text.encode("utf-8")).hexdigest()},
     }
-    repository_name = (_repo_name_from_remote_url(origin) if origin else None) or ws.project_name or root.name
+    origin_name = _repo_name_from_remote_url(origin) if origin else None
+    repository_name = (
+        _stored_repository_spelling(ws, origin_name)
+        or origin_name
+        or ws.project_name
+        or root.name
+    )
     tasks = [{
         "id": "external-workspace-no-project-direction", "status": "review",
         "summary": "Continue from external workspace status, handoff and project authority files.",

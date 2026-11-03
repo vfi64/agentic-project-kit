@@ -3,13 +3,13 @@
   "counts": {
     "CLOSED": 99,
     "NOT_APPLICABLE": 0,
-    "OPEN": 1,
+    "OPEN": 3,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 59,
-    "owner_remote": 34
+    "local": 60,
+    "owner_remote": 35
   },
   "findings": [
     {
@@ -8305,6 +8305,154 @@
     {
       "external_retest": {
         "bindings": {
+          "head": "Exact observed full pull request head SHA",
+          "pr": "Exact observed pull request number"
+        },
+        "commands": [
+          "agentic-kit pr wait-ci {pr} --expected-head-sha {head} --timeout-seconds 60"
+        ],
+        "execution_class": "owner_remote",
+        "expected": [
+          "Transient UNSTABLE is polled until CLEAN or timeout; an actual failed check remains immediately terminal."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Local deterministic readiness regressions cover missing required checks, UNSTABLE-to-CLEAN, failed checks and timeout; live GitHub observation is separate."
+          ]
+        },
+        "preconditions": [
+          "Observe an open pull request on the exact expected head with all required checks successful and no reported failed or aborted check."
+        ],
+        "remote_effects": [
+          "network_read"
+        ],
+        "verification": "Native regression tests prove deterministic state transitions. Live GitHub timing and owner merge approval remain separate; no release is claimed.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "",
+      "id": "KIT-GF-102",
+      "kit_state": "OPEN",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer prepare-successor-handoff --json",
+          "agentic-kit check --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Case-variant origin preserves the stored matching repository spelling, exact projection bytes and check PASS without migration."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Two-clone native regression produces identical projection bytes and check PASS in both clones; a different repository does not reuse stored identity."
+          ]
+        },
+        "machine": {
+          "covers": "Installed-runtime v2 projection keeps its stored repository spelling when the GitHub-shaped origin changes only letter case.",
+          "fixture": "external_projection_v2",
+          "origin": false,
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "config",
+                "remote.origin.url",
+                "https://github.com/ExampleOwner/ExampleRepo.git"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "prepare-successor-handoff",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "Stored projection identity"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "config",
+                "remote.origin.url",
+                "https://github.com/exampleowner/examplerepo.git"
+              ]
+            },
+            {
+              "expect": {
+                "json_contains": {
+                  "status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "diff",
+                "--exit-code"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable v2 external workspace with a matching stored repository identity; origin URLs differ only by case."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Native counterprobe failed before the fix. The installed-runtime machine contract checks lowercase-origin adoption and no tracked projection diff; no release is claimed.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "",
+      "id": "KIT-GF-103",
+      "kit_state": "OPEN",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
         "commands": [
@@ -8440,7 +8588,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 59,
+  "machine_contracts": 60,
   "schema_version": 1,
-  "source_sha256": "884eb6bcdbb61f065a17f98b0a5315a9ffa654dfffce9eb1efbb38206a054efc"
+  "source_sha256": "3554a25a2a98ba037e1fe071f55e1dd463cda2c03a8a5d9a9e324b3cb16609b9"
 }

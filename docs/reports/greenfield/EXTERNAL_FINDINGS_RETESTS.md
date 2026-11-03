@@ -1730,6 +1730,41 @@ Expected: Dry-run preserves absence; explicit execution creates the managed pair
 
 Expected result fields: `{"assertions": ["preview PASS", "execution PASS", "repeat changed_paths=[]", "foreign workflow BLOCKED"]}`.
 
+## KIT-GF-102
+
+Kit state: OPEN; fixed_in: not established.
+Evidence: docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md
+
+Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: Observe an open pull request on the exact expected head with all required checks successful and no reported failed or aborted check.
+
+```text
+agentic-kit pr wait-ci {pr} --expected-head-sha {head} --timeout-seconds 60
+```
+
+Expected: Transient UNSTABLE is polled until CLEAN or timeout; an actual failed check remains immediately terminal.
+
+Expected result fields: `{"assertions": ["Local deterministic readiness regressions cover missing required checks, UNSTABLE-to-CLEAN, failed checks and timeout; live GitHub observation is separate."]}`.
+
+## KIT-GF-103
+
+Kit state: OPEN; fixed_in: not established.
+Evidence: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
+
+Execution class: local (effects: none); machine contract: Installed-runtime v2 projection keeps its stored repository spelling when the GitHub-shaped origin changes only letter case.
+
+Preconditions: Disposable v2 external workspace with a matching stored repository identity; origin URLs differ only by case.
+
+```text
+agentic-kit transfer prepare-successor-handoff --json
+agentic-kit check --json
+```
+
+Expected: Case-variant origin preserves the stored matching repository spelling, exact projection bytes and check PASS without migration.
+
+Expected result fields: `{"assertions": ["Two-clone native regression produces identical projection bytes and check PASS in both clones; a different repository does not reuse stored identity."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

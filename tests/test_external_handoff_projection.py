@@ -225,6 +225,78 @@ def test_generated_external_projection_is_stable_and_runtime_is_separate(tmp_pat
     assert subprocess.run(["git", "check-ignore", RUNTIME_PATH], cwd=tmp_path, capture_output=True).returncode == 0
 
 
+def test_case_variant_clone_origin_preserves_stored_repository_spelling(tmp_path):
+    from agentic_project_kit.external_handoff_projection import (
+        check_projection,
+        collect_projection_inputs,
+        render_projection,
+    )
+    from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
+    clone_a = tmp_path / "clone-a"
+    clone_b = tmp_path / "clone-b"
+    clone_a.mkdir()
+    clone_b.mkdir()
+    ws_a = _external_workspace(clone_a)
+    _external_workspace(clone_b)
+    subprocess.run(
+        ["git", "remote", "add", "origin", "https://github.com/ExampleOwner/ExampleRepo.git"],
+        cwd=clone_a,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "remote", "add", "origin", "https://github.com/exampleowner/examplerepo.git"],
+        cwd=clone_b,
+        check=True,
+        capture_output=True,
+    )
+
+    write_successor_handoff_package(clone_a)
+    (clone_b / ".agentic/config.yaml").write_bytes((clone_a / ".agentic/config.yaml").read_bytes())
+    for source in [*ws_a.handoff_packages_latest().glob("*"), *ws_a.handoff_dir().glob("*.md")]:
+        target = clone_b / source.relative_to(clone_a)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(source.read_bytes())
+
+    inputs_a = collect_projection_inputs(clone_a)
+    inputs_b = collect_projection_inputs(clone_b)
+    assert inputs_a.repository_name == "ExampleOwner/ExampleRepo"
+    assert inputs_b.repository_name == inputs_a.repository_name
+    rendered_a = render_projection(inputs_a)
+    rendered_b = render_projection(inputs_b)
+    assert rendered_a == rendered_b, {
+        path: (rendered_a[path].decode(), rendered_b[path].decode())
+        for path in rendered_a
+        if rendered_a[path] != rendered_b[path]
+    }
+    assert check_projection(clone_a)["status"] == "PASS"
+    assert check_projection(clone_b)["status"] == "PASS"
+
+
+def test_case_variant_different_repository_does_not_trust_stored_spelling(tmp_path):
+    from agentic_project_kit.external_handoff_projection import collect_projection_inputs
+    from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
+
+    ws = _external_workspace(tmp_path)
+    subprocess.run(
+        ["git", "remote", "add", "origin", "https://github.com/ExampleOwner/ExampleRepo.git"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
+    write_successor_handoff_package(tmp_path)
+    subprocess.run(
+        ["git", "remote", "set-url", "origin", "https://github.com/otherowner/ExampleRepo.git"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
+
+    inputs = collect_projection_inputs(tmp_path)
+    assert inputs.repository_name == "otherowner/ExampleRepo"
+    assert ws.project_name == "external-demo"
+
+
 def test_projection_check_is_read_only_on_pass_and_failure(tmp_path, monkeypatch):
     from agentic_project_kit.external_handoff_projection import check_projection
     from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
