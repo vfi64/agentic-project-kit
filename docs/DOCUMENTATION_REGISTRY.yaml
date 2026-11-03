@@ -2016,3 +2016,6 @@ documents:
     status: active
     summary: Historical pre-fix detached-rebase failure evidence; superseded by the GF-100
       fix.
+  - path: docs/reports/release/release-run-1.2.0.json
+    class: evidence/log
+    owner: maintainers
