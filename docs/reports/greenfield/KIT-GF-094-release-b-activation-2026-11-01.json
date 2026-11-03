@@ -7,38 +7,41 @@
   "base_commit": "6dde207eb96cbd9a0cee0a75113070fd4b836b75",
   "release_A": "1.1.11",
   "activation": true,
-  "merge_hold": "PENDING_ALL_KNOWN_WORKSPACES_ON_A",
-  "consumer_evidence": "Prior full independent published-A rehearsal PASS; complete repeat on the GF-101-rebased B target pending before merge.",
+  "merge_hold": "SATISFIED_ALL_KNOWN_EXTERNAL_WORKSPACES_ON_A",
+  "consumer_evidence": "PASS: independent six-run real-wheel rehearsal from published A 1.1.11 through B and the legacy 1.1.10 completion path; no probe patch.",
   "release_prerequisites": {
     "local_return": "PASS",
-    "consumer_rehearsal": "NOT_RUN",
+    "consumer_rehearsal": "PASS",
     "owner_acceptance": "PASS"
   },
   "machine_contracts": {
     "KIT-GF-094": "PASS",
     "KIT-GF-095": "PASS",
     "KIT-GF-097": "PASS",
-    "KIT-GF-098": "PASS"
+    "KIT-GF-098": "PASS",
+    "KIT-GF-099": "PASS",
+    "KIT-GF-100": "PASS",
+    "KIT-GF-101": "PASS"
   },
   "full_suite": {
     "status": "PASS",
-    "command": "python -m pytest -q -n 4",
-    "passed": 4513,
+    "command": "python -m pytest -q -x",
+    "passed": 4549,
     "warnings": 560,
-    "seconds": 399.28,
-    "source_revision": "54c507457ef25318076b574dbe18fcc696c0c904"
+    "seconds": 1035.35,
+    "source_revision": "b141df65c45c88031710e8b26836595fed5f5aba"
   },
   "gates": {
+    "ruff": {
+      "command": "ruff check .",
+      "status": "PASS"
+    },
     "check": {
-      "command": "agentic-kit check --json",
+      "command": "agentic-kit check",
       "status": "PASS"
     },
     "check_docs": {
       "command": "agentic-kit check-docs",
-      "status": "PASS"
-    },
-    "ruff": {
-      "command": "ruff check .",
       "status": "PASS"
     },
     "doctor": {
@@ -58,7 +61,7 @@
   "expiry": "KIT-GF-096: no later than the second release after B",
   "release_performed": false,
   "merge_performed": false,
-  "implementation_revision": "54c507457ef25318076b574dbe18fcc696c0c904",
+  "implementation_revision": "b141df65c45c88031710e8b26836595fed5f5aba",
   "final_release_stamp_tests": {
     "status": "PASS",
     "passed": 7,
@@ -475,41 +478,50 @@
     "Remove the extracted caller PYTHONPATH before the final owned A-prime check."
   ],
   "rebase_validation": {
-    "date": "2026-11-02",
-    "base_commit": "daa149180937f03982187824b54f0d4acd11d999",
-    "source_revision": "acd77b9b2a2a01d1c2338dca7569996058ba3354",
+    "date": "2026-11-03",
+    "previous_base": "daa149180937f03982187824b54f0d4acd11d999",
+    "base_commit": "0681508bbfe771634d6822f6858af88cd7f4eb45",
+    "source_revision": "b141df65c45c88031710e8b26836595fed5f5aba",
+    "requested_range_diff": "6dde207e..6569fba5 compared with daa14918..b141df65",
     "full_suite": {
       "status": "PASS",
-      "passed": 4526,
+      "passed": 4549,
       "warnings": 560,
-      "seconds": 393.48
+      "seconds": 1035.35
     },
     "machine_contracts": {
       "KIT-GF-094": "PASS",
       "KIT-GF-095": "PASS",
       "KIT-GF-097": "PASS",
       "KIT-GF-098": "PASS",
-      "KIT-GF-099": "PASS"
+      "KIT-GF-099": "PASS",
+      "KIT-GF-100": "PASS",
+      "KIT-GF-101": "PASS"
     },
     "six_original_B_source_and_test_files_unchanged": true,
-    "GF_099_inherited_unchanged": true,
-    "finding": "KIT-GF-100",
-    "finding_status": "OPEN",
-    "resolver_fix_included": false,
-    "report": "docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md",
+    "GF_100_GF_101_source_and_tests_match_main": true,
+    "full_total_diff": "20 files, 846 insertions, 46 deletions",
+    "report_appendix": "Full requested range-diff and full diff patch included in the Markdown report; patch snapshot predates final evidence-only update",
     "merge_performed": false,
-    "release_performed": false,
-    "finding_negative_reproduction_contract": "PASS; 19 steps, OPEN remains"
+    "release_performed": false
   },
   "final_preparation": {
     "date": "2026-11-03",
     "main_base": "0681508bbfe771634d6822f6858af88cd7f4eb45",
+    "tested_revision": "b141df65c45c88031710e8b26836595fed5f5aba",
     "B_original_six_files_byte_identical": true,
     "GF100_GF101_source_and_tests_match_main": true,
     "owner_authorized_steps": "1 through 5, including conditional merge and handoff; no release",
     "owner_acceptance_source": "Owner chat: Owner-Abnahme B auf Grundlage der dokumentierten Verbraucherprobe erteilt.",
-    "full_suite": "PENDING",
-    "independent_rehearsal": "PENDING",
-    "all_known_external_workspaces_A": "PENDING_REMOTE_CLOSEOUT"
+    "full_suite": "PASS: 4549 passed, 560 warnings, 1035.35 seconds",
+    "machine_contracts": "PASS: 094, 095, 097, 098, 099, 100, 101 from a fresh noneditable 1.1.12 wheel",
+    "independent_rehearsal": "PASS: six runs; published A 1.1.11 planner, unpatched B wheel, published 1.1.10 legacy path",
+    "all_known_external_workspaces_A": "PASS: each known external workspace is on published 1.1.11; no private identities recorded",
+    "personal_local_changes": "Restored byte-for-byte after the approved local update; not published",
+    "rebase_range_diff": "Included in the report appendix; original B implementation commits preserved and later commits accounted for",
+    "total_diff_against_main": "20 files, 846 insertions, 46 deletions (pre-report-update snapshot; full patch in appendix)",
+    "merge": "PENDING_GITHUB_CI_AND_KIT_CLOSEOUT",
+    "release": "NOT_AUTHORIZED; owner local script remains step 6",
+    "B_wheel_sha256": "6ead7761df956a5dc8f66cd63d0719477e68402211e98bb97f29d43c501e3e48"
   }
 }
