@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e2fa971ed185acdaae6664e42ef9698d33a90f22` (`e2fa971e`), after `[codex] Enable explicit missing CI injection (GF-101) (#2728)`.
-Last substantive work state is `e2fa971ed185acdaae6664e42ef9698d33a90f22` (`e2fa971e`), after `[codex] Enable explicit missing CI injection (GF-101) (#2728)`.
+Current verified main/admin HEAD is `9d431c924df3a3071f6aa38ba1fc6f89a47fe301` (`9d431c92`), after `Activate external projection v2 for release B (KIT-GF-094) (#2723)`.
+Last substantive work state is `9d431c924df3a3071f6aa38ba1fc6f89a47fe301` (`9d431c92`), after `Activate external projection v2 for release B (KIT-GF-094) (#2723)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

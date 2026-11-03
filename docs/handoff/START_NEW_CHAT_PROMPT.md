@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 031de955ad03f32211e2ed68263f440e687382d204791cecb67d360febfec69d
 - docs/reference/agentic-kit-commands.json: f605f04e79d6af0871fb9ceaf3bd3f4c13942b8d67e7f932b85f09d2a4db6174
-## Operational documentation refresh state after PR #2728
+## Operational documentation refresh state after PR #2723
 
-Current administrative handoff refresh state is `e2fa971e` (`[codex] Enable explicit missing CI injection (GF-101) (#2728)`). Continue next only after this post-PR2728 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `9d431c92` (`Activate external projection v2 for release B (KIT-GF-094) (#2723)`). Continue next only after this post-PR2723 refresh is committed and merged; the next substantive slice must be created from fresh main.
