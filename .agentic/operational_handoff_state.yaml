@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 3455ec729c35f69c5754e62e36bc0fa2fce66d82
-  short: 3455ec72
-  subject: Archive release 1.2.0 evidence (#2735)
+  full: c73951d77f6f7152048db95424857732771eac8f
+  short: c73951d7
+  subject: Fix transient PR readiness and stable external projections (#2737)
 last_substantive_work_state:
-  full: 3455ec729c35f69c5754e62e36bc0fa2fce66d82
-  short: 3455ec72
-  subject: Archive release 1.2.0 evidence (#2735)
+  full: c73951d77f6f7152048db95424857732771eac8f
+  short: c73951d7
+  subject: Fix transient PR readiness and stable external projections (#2737)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
