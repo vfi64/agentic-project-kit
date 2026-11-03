@@ -19,4 +19,5 @@ def test_return_fixture_runs_without_remote_services():
     }
     validate_machine("KIT-GF-095", retest)
     result = run_machine(retest["machine"])
-    assert result["result"] == "PASS", result
+    diff = result["steps"][-1].get("stdout_tail", "") if result["steps"] else ""
+    assert result["result"] == "PASS", f"{result}; expected/actual diff:\n{diff}"
