@@ -7591,7 +7591,7 @@
         "verification": "This local machine contract is not consumer acceptance. Independent published-PyPI-A rehearsal, local return and owner acceptance are recorded in the linked release-prerequisite report; consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.2.0",
       "id": "KIT-GF-094",
       "kit_state": "CLOSED",
       "prs": [],
@@ -7856,7 +7856,7 @@
         "verification": "Local self-built wheel proof; the separate published PyPI 1.1.11 consumer rehearsal and owner acceptance remain pending. No release authority.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.2.0",
       "id": "KIT-GF-099",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8155,7 +8155,7 @@
         "verification": "Real Git regression proves owned detached-rebase resolution; unit and CLI tests reject invalid metadata, moved branches, unrelated targets and protected branches. No release authority.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.2.0",
       "id": "KIT-GF-100",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8296,7 +8296,7 @@
         "verification": "Local real-wheel contract only; external adoption and release remain independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.2.0",
       "id": "KIT-GF-101",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8442,5 +8442,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 59,
   "schema_version": 1,
-  "source_sha256": "76ed5e84bb6bd4479d1ebb53824d0747220af758cf4e9fcdf194e791a5810e7a"
+  "source_sha256": "884eb6bcdbb61f065a17f98b0a5315a9ffa654dfffce9eb1efbb38206a054efc"
 }

@@ -1592,7 +1592,7 @@ Expected result fields: `{"assertions": ["release_check.installed equals the run
 
 ## KIT-GF-094
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md
 
 Execution class: local (effects: none); machine contract: Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.
@@ -1680,7 +1680,7 @@ Expected result fields: `{"assertions": ["Real wheels and installation; only PR 
 
 ## KIT-GF-099
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.md
 
 Execution class: local (effects: none); machine contract: Real wheel adoption and return with a GitHub-shaped origin distinct from project_name, local insteadOf transport and target preview identity checks.
@@ -1697,7 +1697,7 @@ Expected result fields: `{"assertions": ["repository_name and execution_contract
 
 ## KIT-GF-100
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md
 
 Execution class: local (effects: none); machine contract: Real Git regression proves owned detached-rebase resolution; unit and CLI tests reject invalid metadata, moved branches, unrelated targets and protected branches. No release authority.
@@ -1715,7 +1715,7 @@ Expected result fields: `{"assertions": ["valid rebase resolver PASS", "wrong ex
 
 ## KIT-GF-101
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md
 
 Execution class: local (effects: none); machine contract: Explicit missing-CI injection, idempotence and foreign-workflow preservation.

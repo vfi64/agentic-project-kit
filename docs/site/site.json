@@ -58,7 +58,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.1.11",
+            "detail": "project.version=1.2.0",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -262,12 +262,14 @@
         "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
       },
       {
-        "blockers": [],
+        "blockers": [
+          "PyPI publication workflow evidence for this version is unverified."
+        ],
         "evidence": [
           {
-            "detail": "The PyPI publication workflow for version 1.1.11 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+            "detail": "PyPI publication workflow evidence for this version is unverified.",
             "evidence_type": "release-pypi-workflow",
-            "status": "verified"
+            "status": "unverified"
           }
         ],
         "id": "current-release-pypi-workflow",
@@ -275,7 +277,7 @@
         "required": false,
         "scope": "historical-observation",
         "scope_note": "C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.",
-        "status": "verified",
+        "status": "unverified",
         "text": "The PyPI publication workflow for the current package version completed successfully in its release run (C3)."
       }
     ],
@@ -289,8 +291,8 @@
     "status": "PASS",
     "status_counts": {
       "planned": 0,
-      "unverified": 0,
-      "verified": 15
+      "unverified": 1,
+      "verified": 14
     }
   },
   "command_catalog": {
@@ -4913,7 +4915,7 @@
             "required": false
           },
           {
-            "default": "1.1.11",
+            "default": "1.2.0",
             "help": "",
             "name": "version",
             "opts": [
@@ -6937,7 +6939,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.1.11",
+            "default": "1.2.0",
             "help": "",
             "name": "version",
             "opts": [
@@ -7948,7 +7950,7 @@
             "required": false
           },
           {
-            "default": "1.1.11",
+            "default": "1.2.0",
             "help": "",
             "name": "version",
             "opts": [
@@ -14883,7 +14885,7 @@
     ],
     "execution_authorized": false,
     "kind": "command_detail_projection",
-    "manifest_sha": "0623f13d984e",
+    "manifest_sha": "8ec3727bd6f1",
     "schema_version": 1
   },
   "explanation_projection": {
@@ -14944,16 +14946,20 @@
       "status": "planned"
     },
     "release": {
-      "date": "2026-11-01",
-      "entry_count": 3,
+      "date": "2026-11-03",
+      "entry_count": 7,
       "notes": [
-        "Fixed: Stage external projection v2 across two releases: A retains v1 behavior while shipping the future migration planner; only a separately approved B activates the package-owned switch (KIT-GF-097).",
-        "Fixed: Record normal update adoption evidence and return to the exact prior pinned version instead of hard-coded 1.1.10; preserve signed package identity, artifact hashes, exact file restoration and fresh-process checks (KIT-GF-098, KIT-GF-095).",
-        "Fixed: Verify first adoption with the installed predecessor and real A/B/A-prime wheels; document direct legacy-to-B completion through existing routes and the missing-evidence return boundary. GF-094 remains PARTIAL until B; GF-096 expires from B. External deterministic content freshness remains inactive in A."
+        "Zenodo DOI verification pending for v1.2.0.",
+        "Fixed: Allow initialized external workspaces to explicitly add a missing managed CI workflow through workspace ci-update --inject-ci, retaining custom-file and stale-plan guards (KIT-GF-101).",
+        "Fixed: Resolve conflicted files during an owned detached-HEAD rebase while preserving branch and target guards (KIT-GF-100).",
+        "Fixed: Preserve the repository identity in target handoff previews by decoding Git-quoted origin values in the target and writing Git syntax in future planners. Legacy 1.1.11 payloads remain compatible; real-wheel regressions now use a GitHub-shaped origin distinct from the project name (KIT-GF-099). No release or v2 activation is performed by this fix.",
+        "Changed: Enable external handoff projection v2 for release B (KIT-GF-094). First adopt release A **1.1.11**, then B. All known external workspaces must adopt A before B is released.",
+        "Changed: External content merges with current captured inputs require no refresh-only PR. Chat switches keep versioned handoff projections byte-identical; volatile identity remains in the ignored runtime file, producing no tracked handoff diff. Self-hosting retains its existing lifecycle.",
+        "Fixed: The release-check advisory covers installations below 1.1.11. A direct jump from **1.1.10 or older** to B requires the documented migration route followed by another kit update; missing original adoption evidence leaves no governed installation return. KIT-GF-096 must remove external v1 compatibility no later than the second release after B."
       ],
       "source": "CHANGELOG.md",
       "status": "recorded",
-      "version": "1.1.11"
+      "version": "1.2.0"
     },
     "safety_evidence": {
       "baseline": {
@@ -16086,7 +16092,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "cfe2fc748411c38963705eeeac5220cfa353833a101425848c384014a58ec66f",
-        "docs/reference/agentic-kit-commands.json": "f605f04e79d6af0871fb9ceaf3bd3f4c13942b8d67e7f932b85f09d2a4db6174",
+        "docs/reference/agentic-kit-commands.json": "8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -16122,7 +16128,7 @@
       "version": "0.2.0"
     },
     "kind": "bounded_history_projection",
-    "manifest_sha": "0623f13d984e",
+    "manifest_sha": "8ec3727bd6f1",
     "overhead": {
       "admin_refresh_prs": 83,
       "evidence_class": "historical classification",
@@ -16178,14 +16184,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "0623f13d984e",
+    "manifest_sha": "8ec3727bd6f1",
     "package_name": "agentic-project-kit",
-    "package_version": "1.1.11",
+    "package_version": "1.2.0",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.1.11",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "0623f13d984e",
+    "reproduced_manifest_sha": "8ec3727bd6f1",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 178,
@@ -16221,7 +16227,7 @@
     "current_release_tag": "v1.1.11",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.1.11",
-    "current_version": "1.1.11",
+    "current_version": "1.2.0",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.23864349"
@@ -16252,7 +16258,7 @@
       ],
       "worktree_clean": "boolean"
     },
-    "manifest_sha": "0623f13d984e",
+    "manifest_sha": "8ec3727bd6f1",
     "routes": [
       {
         "command": "agentic-kit check",
