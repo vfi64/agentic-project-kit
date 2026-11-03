@@ -3,7 +3,7 @@
   "kind": "local_to_llm_last_result",
   "last_result": {
     "action": "refresh-llm-context-carriers",
-    "created_at_utc": "2026-10-29T10:46:25.166036+00:00",
+    "created_at_utc": "2026-11-03T13:09:10.616217+00:00",
     "final_signal": "d",
     "kind": "llm_context_carriers_refresh",
     "label": "llm-context-carriers-refresh",
@@ -93,7 +93,7 @@
       "status": "active"
     },
     "command_reference": {
-      "command_count": 273,
+      "command_count": 275,
       "generated_by": "",
       "important_wrappers": [
         {
@@ -318,12 +318,12 @@
       "kit_internal_files_must_not_be_supplied_by_target_repo_user": false,
       "target_repo_decisions_must_be_documented_or_blocked": false
     },
-    "generated_at_utc": "2026-10-29T10:46:25.559091+00:00",
+    "generated_at_utc": "2026-11-03T13:09:10.837176+00:00",
     "generated_from_current_repo": true,
     "git_state": {
-      "branch": "codex/fix-release-tag-sync",
-      "head": "0524bca6bc0d6b027b590a307bc9b4ceb72f8dce",
-      "status_short": "M docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md"
+      "branch": "codex/kit-gf-102-103-readiness-projection",
+      "head": "321dc07d1914412e6a5f5c5607e1904f12af3a7b",
+      "status_short": ""
     },
     "kind": "llm_execution_context",
     "llm_to_local_transfer_policy": {
@@ -384,8 +384,8 @@
       ".agentic/compiled_agent_context.yaml": "ea9b613eb5c0d78435fc96153eea8ee6042819bb57283a56635087d313c688f2",
       ".agentic/transfer/one_command_transfer_protocol.yaml": "90f00b95be07b870417e4a552ce814a43a9c1168f859866bb280a24d07826e04",
       ".agentic/transfer_safety_rules.yaml": "b0c38369ebc4814e8ad6310f5f88ded71446b4443bc619fe260c489a23b5b17b",
-      "docs/reference/AGENTIC_KIT_COMMANDS.md": "f528efb911e8a938f11f70eadf992fefee08a6ce882392e7addb32815ab44b46",
-      "docs/reference/agentic-kit-commands.json": "6a5f531d113e182851b6a68f1012901ee96e19cd10a11fcc5ee334a875984330"
+      "docs/reference/AGENTIC_KIT_COMMANDS.md": "8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2",
+      "docs/reference/agentic-kit-commands.json": "8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc"
     },
     "terminal_resilience": {
       "avoid_process_ended_terminal_dead_end": true,
@@ -426,11 +426,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "638efa892febfd71684933dab409863ad2dd19d289beffa9736f0a304a6633b9"
+        "sha256": "ab31737a9f9ce48d4f400026f2bafff350551545a76c77d16fc2c0f30ec67d4b"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "b7f8c6f6e94f55c31358f5bf467206f173066cec4d8c2fc110c7970f1a377fb6"
+        "sha256": "8c6ce6b285b61b4ff37e724a3cd31949116dcf4fc6bac46470f540d180ac1737"
       }
     ],
     "canonical_cli_usage": {
@@ -931,9 +931,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/fix-release-tag-sync",
-      "dirty_status": "M docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
-      "head": "0524bca6bc0d6b027b590a307bc9b4ceb72f8dce",
+      "branch": "codex/kit-gf-102-103-readiness-projection",
+      "dirty_status": "",
+      "head": "321dc07d1914412e6a5f5c5607e1904f12af3a7b",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
@@ -998,11 +998,11 @@
       },
       {
         "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-        "sha256": "638efa892febfd71684933dab409863ad2dd19d289beffa9736f0a304a6633b9"
+        "sha256": "ab31737a9f9ce48d4f400026f2bafff350551545a76c77d16fc2c0f30ec67d4b"
       },
       {
         "path": "docs/planning/PROJECT_DIRECTION.yaml",
-        "sha256": "b7f8c6f6e94f55c31358f5bf467206f173066cec4d8c2fc110c7970f1a377fb6"
+        "sha256": "8c6ce6b285b61b4ff37e724a3cd31949116dcf4fc6bac46470f540d180ac1737"
       }
     ],
     "canonical_cli_usage": {
@@ -1503,9 +1503,9 @@
       "canonical_inbox_file_must_compile_as_python_source"
     ],
     "repo_state": {
-      "branch": "codex/fix-release-tag-sync",
-      "dirty_status": "M docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
-      "head": "0524bca6bc0d6b027b590a307bc9b4ceb72f8dce",
+      "branch": "codex/kit-gf-102-103-readiness-projection",
+      "dirty_status": "",
+      "head": "321dc07d1914412e6a5f5c5607e1904f12af3a7b",
       "head_matches_upstream": false,
       "upstream": "",
       "upstream_head": ""
