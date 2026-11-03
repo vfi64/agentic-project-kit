@@ -8,11 +8,11 @@
   "release_A": "1.1.11",
   "activation": true,
   "merge_hold": "PENDING_ALL_KNOWN_WORKSPACES_ON_A",
-  "consumer_evidence": "Owner-reported A adoption only; B consumer rehearsal not yet performed.",
+  "consumer_evidence": "Prior full independent published-A rehearsal PASS; complete repeat on the GF-101-rebased B target pending before merge.",
   "release_prerequisites": {
     "local_return": "PASS",
     "consumer_rehearsal": "NOT_RUN",
-    "owner_acceptance": "PENDING"
+    "owner_acceptance": "PASS"
   },
   "machine_contracts": {
     "KIT-GF-094": "PASS",
@@ -500,5 +500,16 @@
     "merge_performed": false,
     "release_performed": false,
     "finding_negative_reproduction_contract": "PASS; 19 steps, OPEN remains"
+  },
+  "final_preparation": {
+    "date": "2026-11-03",
+    "main_base": "0681508bbfe771634d6822f6858af88cd7f4eb45",
+    "B_original_six_files_byte_identical": true,
+    "GF100_GF101_source_and_tests_match_main": true,
+    "owner_authorized_steps": "1 through 5, including conditional merge and handoff; no release",
+    "owner_acceptance_source": "Owner chat: Owner-Abnahme B auf Grundlage der dokumentierten Verbraucherprobe erteilt.",
+    "full_suite": "PENDING",
+    "independent_rehearsal": "PENDING",
+    "all_known_external_workspaces_A": "PENDING_REMOTE_CLOSEOUT"
   }
 }

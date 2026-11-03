@@ -7296,7 +7296,7 @@
             }
           ]
         },
-        "verification": "B activates the single package constant. CLOSED/unreleased is eligible for KIT-GF-091 stamping only when the existing consumer rehearsal and owner acceptance prerequisites pass. Release A retained PARTIAL/unreleased. No release or merge is authorized by this preparation."
+        "verification": "This local machine contract is not consumer acceptance. Independent published-PyPI-A rehearsal, local return and owner acceptance are recorded in the linked release-prerequisite report; consumer VERIFIED_FIXED remains independent."
       }
     },
     {

@@ -2000,3 +2000,19 @@ documents:
     status: active
     summary: Explicit managed CI injection for initialized external workspaces; regression
       and gate evidence.
+  - path: docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Release B activation, rebased verification and consumer acceptance evidence.
+  - path: docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Machine-readable B activation and release prerequisites.
+  - path: docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.json
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Historical pre-fix detached-rebase failure evidence; superseded by the GF-100
+      fix.

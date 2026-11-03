@@ -1,5 +1,21 @@
 # KIT-GF-094: release B activation preparation
 
+## Current preparation, 2026-11-03
+
+The owner accepted the documented consumer rehearsal and authorized steps 1–5:
+verified A adoption by all known external workspaces, complete B rebase,
+revalidation, merge and post-merge handoff. Release is reserved for the owner.
+The companion JSON's `final_preparation` and `release_prerequisites` fields
+record the current verified state. Pending checks are never treated as PASS.
+The complete original six B source/test files remain byte-identical; GF-100
+and GF-101 code/tests are inherited unchanged from main. The isolated external
+A adoption and complete real-wheel consumer matrix are verified separately.
+
+## Historical preparation snapshot
+
+The dated sections below preserve earlier evidence and hold states; they do
+not override the current owner authorization or the companion JSON's results.
+
 Status: preparation on an unmerged PR branch. No release or version bump.
 
 The one package-owned activation constant is True in the B branch. Release A
