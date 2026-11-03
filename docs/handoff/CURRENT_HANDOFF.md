@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `144a36a55859788e3e6563a7fdd7ffb80d35910b` (`144a36a5`), after `[codex] Resolve owned detached-rebase conflicts (GF-100) (#2726)`.
-Last substantive work state is `144a36a55859788e3e6563a7fdd7ffb80d35910b` (`144a36a5`), after `[codex] Resolve owned detached-rebase conflicts (GF-100) (#2726)`.
+Current verified main/admin HEAD is `e2fa971ed185acdaae6664e42ef9698d33a90f22` (`e2fa971e`), after `[codex] Enable explicit missing CI injection (GF-101) (#2728)`.
+Last substantive work state is `e2fa971ed185acdaae6664e42ef9698d33a90f22` (`e2fa971e`), after `[codex] Enable explicit missing CI injection (GF-101) (#2728)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

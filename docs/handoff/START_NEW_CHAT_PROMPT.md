@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 031de955ad03f32211e2ed68263f440e687382d204791cecb67d360febfec69d
 - docs/reference/agentic-kit-commands.json: f605f04e79d6af0871fb9ceaf3bd3f4c13942b8d67e7f932b85f09d2a4db6174
-## Operational documentation refresh state after PR #2726
+## Operational documentation refresh state after PR #2728
 
-Current administrative handoff refresh state is `144a36a5` (`[codex] Resolve owned detached-rebase conflicts (GF-100) (#2726)`). Continue next only after this post-PR2726 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `e2fa971e` (`[codex] Enable explicit missing CI injection (GF-101) (#2728)`). Continue next only after this post-PR2728 refresh is committed and merged; the next substantive slice must be created from fresh main.
