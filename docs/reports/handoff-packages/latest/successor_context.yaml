@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-02T21:11:46.653772+00:00",
+  "generated_at_utc": "2026-11-03T04:31:58.135429+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,14 +57,14 @@
     "package_version": "1.1.11"
   },
   "repo": {
-    "branch": "codex/gf101-missing-ci-injection",
+    "branch": "docs/post-pr2728-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "cc2104c6dd3050cb3f41fdd12bdbeeb420fb9ad6",
+    "head": "e2fa971ed185acdaae6664e42ef9698d33a90f22",
     "head_matches_origin_main": true,
-    "head_short": "cc2104c6",
+    "head_short": "e2fa971e",
     "local_path": "cd /path/to/",
-    "origin_main": "cc2104c6dd3050cb3f41fdd12bdbeeb420fb9ad6",
-    "origin_main_short": "cc2104c6",
+    "origin_main": "e2fa971ed185acdaae6664e42ef9698d33a90f22",
+    "origin_main_short": "e2fa971e",
     "worktree_clean": false
   },
   "schema_version": 1,

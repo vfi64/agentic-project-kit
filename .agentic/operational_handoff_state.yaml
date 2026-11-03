@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 144a36a55859788e3e6563a7fdd7ffb80d35910b
-  short: 144a36a5
-  subject: '[codex] Resolve owned detached-rebase conflicts (GF-100) (#2726)'
+  full: e2fa971ed185acdaae6664e42ef9698d33a90f22
+  short: e2fa971e
+  subject: '[codex] Enable explicit missing CI injection (GF-101) (#2728)'
 last_substantive_work_state:
-  full: 144a36a55859788e3e6563a7fdd7ffb80d35910b
-  short: 144a36a5
-  subject: '[codex] Resolve owned detached-rebase conflicts (GF-100) (#2726)'
+  full: e2fa971ed185acdaae6664e42ef9698d33a90f22
+  short: e2fa971e
+  subject: '[codex] Enable explicit missing CI injection (GF-101) (#2728)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
