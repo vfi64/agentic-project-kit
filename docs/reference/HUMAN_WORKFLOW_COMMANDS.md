@@ -179,6 +179,12 @@ target version's full managed template, with the resulting file hashes included
 in the approval signature. The `workspace ci-update` replacement policy remains
 strict (KIT-GF-042).
 
+For an initialized workspace that originally omitted CI injection,
+`agentic-kit workspace ci-update --inject-ci --root PATH` previews the missing
+managed workflow. Add `--execute` only after reviewing that preview. The default
+never creates a missing workflow; custom sources and workflows remain protected.
+Execution rechecks the plan under the workspace lock (KIT-GF-101).
+
 Optional `.agentic/config.yaml` configuration:
 
     kit:

@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Allow initialized external workspaces to explicitly add a missing managed CI workflow through `workspace ci-update --inject-ci`, retaining custom-file and stale-plan guards (KIT-GF-101).
+
 - Fixed: Resolve conflicted files during an owned detached-HEAD rebase while preserving branch and target guards (KIT-GF-100).
 
 - Fixed: Preserve the repository identity in target handoff previews by decoding Git-quoted origin values in the target and writing Git syntax in future planners. Legacy 1.1.11 payloads remain compatible; real-wheel regressions now use a GitHub-shaped origin distinct from the project name (KIT-GF-099). No release or v2 activation is performed by this fix.

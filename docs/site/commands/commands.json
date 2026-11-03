@@ -12475,6 +12475,15 @@
         },
         {
           "default": false,
+          "help": "Opt in to creating a missing managed CI workflow.",
+          "name": "inject_ci",
+          "opts": [
+            "--inject-ci"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
           "help": "Emit machine-readable JSON.",
           "name": "json_output",
           "opts": [

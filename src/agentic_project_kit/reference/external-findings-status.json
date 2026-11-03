@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 97,
+    "CLOSED": 98,
     "NOT_APPLICABLE": 0,
     "OPEN": 1,
     "PARTIAL": 1
   },
   "execution_classes": {
     "kit_release": 7,
-    "local": 58,
+    "local": 59,
     "owner_remote": 34
   },
   "findings": [
@@ -8163,6 +8163,147 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace ci-update --inject-ci --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Dry-run preserves absence; explicit execution creates the managed pair; repeat is a no-op; foreign workflow blocks without writes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "preview PASS",
+            "execution PASS",
+            "repeat changed_paths=[]",
+            "foreign workflow BLOCKED"
+          ]
+        },
+        "machine": {
+          "covers": "Explicit missing-CI injection, idempotence and foreign-workflow preservation.",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/config.yaml",
+                "text": "kit_schema_version: 2\nproject: {name: fixture, type: generic}\nhygiene: {doc_lifecycle: \"off\"}\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "changed_paths": [
+                    ".agentic/ci/agentic-gate.yaml",
+                    ".github/workflows/agentic-gate.yaml"
+                  ],
+                  "result_status": "PASS",
+                  "written": false
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "PASS",
+                  "written": true
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json",
+                "--execute"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "changed_paths": [],
+                  "result_status": "PASS",
+                  "written": false
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json",
+                "--execute"
+              ]
+            },
+            {
+              "write": {
+                "path": ".github/workflows/agentic-gate.yaml",
+                "text": "name: foreign workflow\n"
+              }
+            },
+            {
+              "write": {
+                "path": "expected.txt",
+                "text": "name: foreign workflow\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "BLOCKED"
+                },
+                "returncode": 2
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json",
+                "--execute"
+              ]
+            },
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "diff",
+                "--no-index",
+                "--",
+                "expected.txt",
+                ".github/workflows/agentic-gate.yaml"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Initialized external workspace without its optional managed CI injection."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Local real-wheel contract only; external adoption and release remain independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-101",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -8299,7 +8440,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 58,
+  "machine_contracts": 59,
   "schema_version": 1,
-  "source_sha256": "733096b2d9a218535d9715084835f150ba0f22ddf03dd99cbd0d1ccff413467e"
+  "source_sha256": "b564f951720c16cf7cab1b034a5d3f47127b5aef17ca8f839703f97169a143c9"
 }

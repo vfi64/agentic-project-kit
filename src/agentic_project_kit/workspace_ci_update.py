@@ -50,6 +50,7 @@ class WorkspaceCiUpdatePlan:
     changed_paths: tuple[str, ...]
     blockers: tuple[WorkspaceCiUpdateFinding, ...]
     message: str
+    inject_ci: bool = False
 
     @property
     def ok(self) -> bool:
@@ -110,6 +111,7 @@ def build_workspace_ci_update_plan(
     root: Path | str = Path("."),
     *,
     execute: bool = False,
+    inject_ci: bool = False,
 ) -> WorkspaceCiUpdatePlan:
     root_path = Path(root)
     manifest_path = root_path / ".agentic" / "config.yaml"
@@ -130,6 +132,15 @@ def build_workspace_ci_update_plan(
 
     changed: list[str] = []
     blockers: list[WorkspaceCiUpdateFinding] = []
+
+    for relative in (CI_TEMPLATE_PATH, CI_INJECTION_TARGET):
+        path = root_path / relative
+        if path.is_symlink() or not path.resolve().is_relative_to(root_path.resolve()):
+            return WorkspaceCiUpdatePlan(
+                root=root_path, execute=execute, result_status="BLOCKED", changed_paths=(),
+                blockers=(WorkspaceCiUpdateFinding(relative, "unsafe_managed_ci_path"),),
+                message="managed CI paths must remain inside the workspace", inject_ci=inject_ci,
+            )
 
     source_path = root_path / CI_TEMPLATE_PATH
     desired_source = managed_ci_template_text()
@@ -160,6 +171,8 @@ def build_workspace_ci_update_plan(
             blockers.append(
                 WorkspaceCiUpdateFinding(CI_INJECTION_TARGET, "modified_managed_ci_workflow")
             )
+    elif inject_ci:
+        changed.append(CI_INJECTION_TARGET)
 
     status: WorkspaceCiUpdateStatus = "BLOCKED" if blockers else "PASS"
     if blockers:
@@ -178,6 +191,7 @@ def build_workspace_ci_update_plan(
         changed_paths=tuple(changed),
         blockers=tuple(blockers),
         message=message,
+        inject_ci=inject_ci,
     )
 
 
@@ -187,12 +201,16 @@ def execute_workspace_ci_update(plan: WorkspaceCiUpdatePlan) -> None:
     if not plan.changed_paths:
         return
     with acquire_workspace_lock(plan.root, "workspace_ci_update"):
+        current = build_workspace_ci_update_plan(plan.root, execute=plan.execute, inject_ci=plan.inject_ci)
+        if current.result_status != "PASS" or current.changed_paths != plan.changed_paths:
+            raise WorkspaceCiUpdateError("CI update plan changed; inspect and replan", code="BLOCKED")
         if CI_TEMPLATE_PATH in plan.changed_paths:
             path = plan.root / CI_TEMPLATE_PATH
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(managed_ci_template_text(), encoding="utf-8")
         if CI_INJECTION_TARGET in plan.changed_paths:
             path = plan.root / CI_INJECTION_TARGET
+            path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(managed_injected_ci_text(), encoding="utf-8")
 
 

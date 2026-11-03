@@ -7837,6 +7837,143 @@
           ]
         }
       }
+    },
+    {
+      "id": "KIT-GF-101",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Initialized external workspace without its optional managed CI injection."
+        ],
+        "commands": [
+          "agentic-kit workspace ci-update --inject-ci --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "Dry-run preserves absence; explicit execution creates the managed pair; repeat is a no-op; foreign workflow blocks without writes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "preview PASS",
+            "execution PASS",
+            "repeat changed_paths=[]",
+            "foreign workflow BLOCKED"
+          ]
+        },
+        "verification": "Local real-wheel contract only; external adoption and release remain independent.",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "Explicit missing-CI injection, idempotence and foreign-workflow preservation.",
+          "steps": [
+            {
+              "write": {
+                "path": ".agentic/config.yaml",
+                "text": "kit_schema_version: 2\nproject: {name: fixture, type: generic}\nhygiene: {doc_lifecycle: \"off\"}\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "written": false,
+                  "changed_paths": [
+                    ".agentic/ci/agentic-gate.yaml",
+                    ".github/workflows/agentic-gate.yaml"
+                  ]
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json",
+                "--execute"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "written": true
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json",
+                "--execute"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "changed_paths": [],
+                  "written": false
+                }
+              }
+            },
+            {
+              "write": {
+                "path": ".github/workflows/agentic-gate.yaml",
+                "text": "name: foreign workflow\n"
+              }
+            },
+            {
+              "write": {
+                "path": "expected.txt",
+                "text": "name: foreign workflow\n"
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "ci-update",
+                "--inject-ci",
+                "--json",
+                "--execute"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "result_status": "BLOCKED"
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--no-index",
+                "--",
+                "expected.txt",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "kind": "external_findings_catalog",

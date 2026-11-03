@@ -1994,3 +1994,9 @@ documents:
     owner: maintainers
     status: active
     summary: Owned detached-rebase resolver regression and fix evidence.
+  - path: docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Explicit managed CI injection for initialized external workspaces; regression
+      and gate evidence.

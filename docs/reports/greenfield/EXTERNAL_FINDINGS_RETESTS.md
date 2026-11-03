@@ -1713,6 +1713,23 @@ Expected: Resolve and stage the owned detached-rebase conflict; reject a wrong e
 
 Expected result fields: `{"assertions": ["valid rebase resolver PASS", "wrong expected branch BLOCKED with unchanged conflict", "resolved index has no unmerged paths"]}`.
 
+## KIT-GF-101
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md
+
+Execution class: local (effects: none); machine contract: Explicit missing-CI injection, idempotence and foreign-workflow preservation.
+
+Preconditions: Initialized external workspace without its optional managed CI injection.
+
+```text
+agentic-kit workspace ci-update --inject-ci --json
+```
+
+Expected: Dry-run preserves absence; explicit execution creates the managed pair; repeat is a no-op; foreign workflow blocks without writes.
+
+Expected result fields: `{"assertions": ["preview PASS", "execution PASS", "repeat changed_paths=[]", "foreign workflow BLOCKED"]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

@@ -1,5 +1,11 @@
 # Test Gates
 
+### Missing managed CI injection
+
+KIT-GF-101: `tests/test_workspace_ci_injection.py` checks explicit CI opt-in,
+dry-run, execution, idempotence, custom-file preservation, stale-plan rejection
+and path confinement. The installed-wheel machine contract covers the public CLI.
+
 ### Detached rebase conflict resolution
 
 KIT-GF-100 is covered by `tests/test_conflict_resolver_rebase.py` and its

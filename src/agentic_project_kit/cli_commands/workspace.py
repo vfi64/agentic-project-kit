@@ -233,12 +233,15 @@ def workspace_ci_update_command(
         bool,
         typer.Option("--execute", help="Write the current managed CI template."),
     ] = False,
+    inject_ci: Annotated[
+        bool, typer.Option("--inject-ci", help="Opt in to creating a missing managed CI workflow.")
+    ] = False,
     json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
 ) -> None:
     """Plan or update the managed workspace CI template."""
 
     try:
-        plan = build_workspace_ci_update_plan(root.resolve(), execute=execute)
+        plan = build_workspace_ci_update_plan(root.resolve(), execute=execute, inject_ci=inject_ci)
         if execute and plan.result_status == "PASS":
             execute_workspace_ci_update(plan)
         written = execute and plan.result_status == "PASS" and bool(plan.changed_paths)
