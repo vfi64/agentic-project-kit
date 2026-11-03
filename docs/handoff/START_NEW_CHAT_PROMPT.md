@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2
 - docs/reference/agentic-kit-commands.json: 8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc
-## Operational documentation refresh state after PR #2723
+## Operational documentation refresh state after PR #2731
 
-Current administrative handoff refresh state is `9d431c92` (`Activate external projection v2 for release B (KIT-GF-094) (#2723)`). Continue next only after this post-PR2723 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `7317b173` (`Release 1.2.0 (#2731)`). Continue next only after this post-PR2731 refresh is committed and merged; the next substantive slice must be created from fresh main.
