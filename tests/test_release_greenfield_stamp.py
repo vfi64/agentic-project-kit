@@ -14,11 +14,17 @@ from test_release_run import FakeRunner, _workspace
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_expand_release_defers_gf094_and_its_activation_expiry():
+def test_b_catalog_makes_gf094_eligible_only_for_future_release_stamping():
+    from packaging.version import Version
+    from agentic_project_kit import __version__
+
     data = json.loads((ROOT / CATALOG).read_bytes())
     findings = {f["id"]: f for f in data["findings"]}
-    assert findings["KIT-GF-094"]["kit_state"] == "PARTIAL"
-    assert findings["KIT-GF-094"]["fixed_in"] == "unreleased"
+    assert findings["KIT-GF-094"]["kit_state"] == "CLOSED"
+    fixed = findings["KIT-GF-094"]["fixed_in"]
+    # Preparation is unreleased; the same regression must also allow the
+    # subsequent real B stamp, while permanently excluding released A.
+    assert fixed == "unreleased" or (fixed == __version__ and Version(fixed) > Version("1.1.11"))
     assert "release B" in " ".join(findings["KIT-GF-096"]["external_retest"]["preconditions"])
 
 
@@ -40,6 +46,21 @@ def catalog_fixture(root):
 def prepare(root, dry_run=False):
     return prepare_release_state(root, version=TARGET_VERSION, date=TARGET_DATE,
                                  summary_lines=SUMMARY_LINES, dry_run=dry_run)
+
+
+def test_expand_release_defers_gf094_without_losing_other_closed_fixes(tmp_path):
+    from agentic_project_kit.release_greenfield_stamp import plan_stamp
+
+    root = _copy_release_state_files(tmp_path)
+    data = catalog_fixture(root)
+    findings = {f["id"]: f for f in data["findings"]}
+    findings["KIT-GF-094"].update(kit_state="PARTIAL", fixed_in="unreleased")
+    findings["KIT-GF-095"].update(kit_state="CLOSED", fixed_in="unreleased")
+    (root / CATALOG).write_bytes(encoded(data))
+    plan = plan_stamp(root, TARGET_VERSION)
+    assert "KIT-GF-094" not in plan["finding_ids"]
+    assert "KIT-GF-095" in plan["finding_ids"]
+    assert json.loads((root / CATALOG).read_bytes())["findings"] == data["findings"]
 
 
 def test_prepare_plans_then_stamps_only_closed_unreleased_and_exports(tmp_path):
@@ -121,6 +142,7 @@ def test_external_v2_release_requires_return_rehearsal_and_owner_acceptance(tmp_
     report.write_bytes(encoded({"release_prerequisites": states}))
     plan = plan_stamp(root, TARGET_VERSION)
     assert plan["release_prerequisites_sha256"]
+    assert "KIT-GF-094" in plan["finding_ids"]
     states["local_return"] = "FAIL"
     report.write_bytes(encoded({"release_prerequisites": states}))
     with pytest.raises(ValueError, match="local_return"):

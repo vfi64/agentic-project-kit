@@ -1,0 +1,61 @@
+{
+  "finding": "KIT-GF-100",
+  "expected": "BLOCKED_CURRENT_BRANCH_MISSING",
+  "result": "REPRODUCED",
+  "resolver_returncode": 2,
+  "resolver": {
+    "schema_version": 1,
+    "kind": "transfer_conflict_resolve_file_result",
+    "action": "conflict-resolve-file",
+    "result_status": "BLOCKED",
+    "final_signal": "f",
+    "branch": "",
+    "path": "example.txt",
+    "source": "resolved.txt",
+    "blockers": [
+      "current_branch_missing"
+    ],
+    "unmerged_files": [
+      "example.txt"
+    ],
+    "steps": [
+      {
+        "name": "current-branch",
+        "argv": [
+          "git",
+          "branch",
+          "--show-current"
+        ],
+        "returncode": 0,
+        "stdout": "",
+        "stderr": "",
+        "ok": true
+      },
+      {
+        "name": "unmerged-files",
+        "argv": [
+          "git",
+          "diff",
+          "--name-only",
+          "--diff-filter=U"
+        ],
+        "returncode": 0,
+        "stdout": "example.txt\n",
+        "stderr": "",
+        "ok": true
+      }
+    ],
+    "next_action": "Inspect conflict-resolve-file blockers before continuing: current_branch_missing"
+  },
+  "conflicted_file_unchanged": true,
+  "unmerged_files": [
+    "example.txt"
+  ],
+  "fixture": "isolated synthetic local Git rebase; no actual PR or branch mutation",
+  "schema_version": 1,
+  "negative_machine_contract": {
+    "result": "PASS",
+    "steps": 19,
+    "scope": "Negative reproduction and unchanged conflict bytes/index only; does not prove successful resolution or close the OPEN finding."
+  }
+}

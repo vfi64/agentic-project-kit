@@ -56,13 +56,24 @@ def test_release_relation(root, installed, expected):
     assert urls == ["https://pypi.org/simple/agentic-project-kit/"]
 
 
-def test_legacy_update_notice_prefers_expand_release_before_v2(root):
+@pytest.mark.parametrize("installed", ["1.1.10", "1.1.10.post1"])
+def test_legacy_update_notice_prefers_expand_release_before_v2(root, installed):
     result = release.check_release(
-        root, installation={"installed": "1.1.10", "installation_kind": "wheel"},
+        root, installation={"installed": installed, "installation_kind": "wheel"},
         fetch=lambda url: index(("1.1.12", False)),
     )
     assert "release A" in result["transition_guidance"]
     assert "adoption evidence" in result["transition_guidance"]
+    assert "1.1.11" in result["transition_guidance"]
+    assert "no governed installation return" in result["transition_guidance"]
+
+
+def test_release_a_has_no_legacy_transition_notice(root):
+    result = release.check_release(
+        root, installation={"installed": "1.1.11", "installation_kind": "wheel"},
+        fetch=lambda url: index(("1.1.12", False)),
+    )
+    assert "transition_guidance" not in result
 
 
 def test_post_release_wins_over_final_but_not_prerelease_or_yanked():

@@ -1,0 +1,527 @@
+{
+  "schema_version": 1,
+  "finding": "KIT-GF-094",
+  "fixed_in": "unreleased",
+  "implementation_status": "IMPLEMENTED_LOCALLY_VERIFIED",
+  "consumer": "an external desktop controller",
+  "base_commit": "6dde207eb96cbd9a0cee0a75113070fd4b836b75",
+  "release_A": "1.1.11",
+  "activation": true,
+  "merge_hold": "SATISFIED_ALL_KNOWN_EXTERNAL_WORKSPACES_ON_A",
+  "consumer_evidence": "PASS: independent six-run real-wheel rehearsal from published A 1.1.11 through B and the legacy 1.1.10 completion path; no probe patch.",
+  "release_prerequisites": {
+    "local_return": "PASS",
+    "consumer_rehearsal": "PASS",
+    "owner_acceptance": "PASS"
+  },
+  "machine_contracts": {
+    "KIT-GF-094": "PASS",
+    "KIT-GF-095": "PASS",
+    "KIT-GF-097": "PASS",
+    "KIT-GF-098": "PASS",
+    "KIT-GF-099": "PASS",
+    "KIT-GF-100": "PASS",
+    "KIT-GF-101": "PASS"
+  },
+  "full_suite": {
+    "status": "PASS",
+    "command": "python -m pytest -q -x",
+    "passed": 4549,
+    "warnings": 560,
+    "seconds": 1035.35,
+    "source_revision": "b141df65c45c88031710e8b26836595fed5f5aba"
+  },
+  "gates": {
+    "ruff": {
+      "command": "ruff check .",
+      "status": "PASS"
+    },
+    "check": {
+      "command": "agentic-kit check",
+      "status": "PASS"
+    },
+    "check_docs": {
+      "command": "agentic-kit check-docs",
+      "status": "PASS"
+    },
+    "doctor": {
+      "command": "agentic-kit doctor",
+      "status": "PASS"
+    }
+  },
+  "complexity": {
+    "new_production_modules": 0,
+    "new_dependencies": 0,
+    "new_public_commands": 0,
+    "external_refresh_pr_after_current_input_content_merge": false,
+    "tracked_handoff_changes_after_chat_switch": false,
+    "ignored_runtime_evidence_retained": true,
+    "selfhosting_changed": false
+  },
+  "expiry": "KIT-GF-096: no later than the second release after B",
+  "release_performed": false,
+  "merge_performed": false,
+  "implementation_revision": "b141df65c45c88031710e8b26836595fed5f5aba",
+  "final_release_stamp_tests": {
+    "status": "PASS",
+    "passed": 7,
+    "command": "python -m pytest -q tests/test_release_greenfield_stamp.py",
+    "scope": "A exclusion, B eligibility, pending prerequisites and future real B stamp compatibility"
+  },
+  "machine": {
+    "result_status": "PASS",
+    "counts": {
+      "FAIL": 0,
+      "NOT_RUN_LOCALLY": 0,
+      "NO_MACHINE_CONTRACT": 0,
+      "PASS": 4
+    },
+    "executed_from": "fresh_noneditable_installed_wheel",
+    "source_revision": "54c507457ef25318076b574dbe18fcc696c0c904",
+    "records": [
+      {
+        "covers": "Real local bare-origin squash, stale input rejection, regeneration, exact runtime HEAD, unique runs and unchanged durable bytes.",
+        "execution_class": "local",
+        "failures": [],
+        "fixed_in": "unreleased",
+        "id": "KIT-GF-094",
+        "kit_state": "CLOSED",
+        "remote_effects": [
+          "none"
+        ],
+        "result": "PASS",
+        "steps": [
+          {
+            "argv": [
+              "git",
+              "switch",
+              "-c",
+              "product"
+            ],
+            "failures": [],
+            "index": 0,
+            "returncode": 0
+          },
+          {
+            "failures": [],
+            "index": 1,
+            "write": "product.txt"
+          },
+          {
+            "argv": [
+              "git",
+              "add",
+              "product.txt"
+            ],
+            "failures": [],
+            "index": 2,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "commit",
+              "-m",
+              "Product work without handoff inputs"
+            ],
+            "failures": [],
+            "index": 3,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "switch",
+              "main"
+            ],
+            "failures": [],
+            "index": 4,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "merge",
+              "--squash",
+              "product"
+            ],
+            "failures": [],
+            "index": 5,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "commit",
+              "-m",
+              "Squash product"
+            ],
+            "failures": [],
+            "index": 6,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "push",
+              "origin",
+              "main"
+            ],
+            "failures": [],
+            "index": 7,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "transfer",
+              "post-merge-check"
+            ],
+            "failures": [],
+            "index": 8,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "switch",
+              "-c",
+              "authority"
+            ],
+            "failures": [],
+            "index": 9,
+            "returncode": 0
+          },
+          {
+            "failures": [],
+            "index": 10,
+            "write": ".agentic/state/status.md"
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "check"
+            ],
+            "failures": [],
+            "index": 11,
+            "returncode": 1
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "transfer",
+              "chat-switch-complete",
+              "--json"
+            ],
+            "failures": [],
+            "index": 12,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "add",
+              "-A"
+            ],
+            "failures": [],
+            "index": 13,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "commit",
+              "-m",
+              "Update authority with deterministic projection"
+            ],
+            "failures": [],
+            "index": 14,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "switch",
+              "main"
+            ],
+            "failures": [],
+            "index": 15,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "merge",
+              "--squash",
+              "authority"
+            ],
+            "failures": [],
+            "index": 16,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "commit",
+              "-m",
+              "Squash authority"
+            ],
+            "failures": [],
+            "index": 17,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "push",
+              "origin",
+              "main"
+            ],
+            "failures": [],
+            "index": 18,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "transfer",
+              "post-merge-check"
+            ],
+            "failures": [],
+            "index": 19,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "transfer",
+              "chat-switch-complete",
+              "--json"
+            ],
+            "failures": [],
+            "index": 20,
+            "returncode": 0
+          },
+          {
+            "argv": [
+              "git",
+              "rev-parse",
+              "HEAD"
+            ],
+            "failures": [],
+            "index": 21,
+            "returncode": 0
+          },
+          {
+            "failures": [],
+            "index": 22,
+            "write": ".agentic/tmp/first-run"
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "transfer",
+              "chat-switch-complete",
+              "--json"
+            ],
+            "failures": [],
+            "index": 23,
+            "returncode": 0
+          },
+          {
+            "failures": [],
+            "index": 24,
+            "write": ".agentic/tmp/second-run"
+          },
+          {
+            "argv": [
+              "git",
+              "diff",
+              "--no-index",
+              ".agentic/tmp/first-run",
+              ".agentic/tmp/second-run"
+            ],
+            "failures": [],
+            "index": 25,
+            "returncode": 1
+          },
+          {
+            "argv": [
+              "git",
+              "diff",
+              "--exit-code"
+            ],
+            "failures": [],
+            "index": 26,
+            "returncode": 0
+          }
+        ]
+      },
+      {
+        "covers": "Real local Git adoption and return squashes, byte-exact v1 restoration including ignored runtime backup, later-touch no-mutation, wrong state/version rejection; existing update executor with installation double and real fresh-process snapshot checks.",
+        "execution_class": "local",
+        "failures": [],
+        "fixed_in": "1.1.11",
+        "id": "KIT-GF-095",
+        "kit_state": "CLOSED",
+        "remote_effects": [
+          "none"
+        ],
+        "result": "PASS",
+        "steps": [
+          {
+            "argv": [
+              "agentic-kit",
+              "check",
+              "--json"
+            ],
+            "failures": [],
+            "index": 0,
+            "returncode": 1
+          },
+          {
+            "argv": [
+              "git",
+              "diff",
+              "--no-index",
+              ".agentic/tmp/return-contract/expected.json",
+              ".agentic/tmp/return-contract/actual.json"
+            ],
+            "failures": [],
+            "index": 1,
+            "returncode": 0
+          }
+        ]
+      },
+      {
+        "covers": "Installed predecessor plans the first active projection migration using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.",
+        "execution_class": "local",
+        "failures": [],
+        "fixed_in": "1.1.11",
+        "id": "KIT-GF-097",
+        "kit_state": "CLOSED",
+        "remote_effects": [
+          "none"
+        ],
+        "result": "PASS",
+        "steps": [
+          {
+            "assert": {
+              "exists": [
+                ".agentic/tmp/transition-proof.json"
+              ]
+            },
+            "failures": [],
+            "index": 0
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "check",
+              "--json"
+            ],
+            "failures": [],
+            "index": 1,
+            "returncode": 0
+          }
+        ]
+      },
+      {
+        "covers": "Return targets the exact previous pinned Kit version using real noneditable A/B/A-prime wheels, actual pip installation, local origin and squashes.",
+        "execution_class": "local",
+        "failures": [],
+        "fixed_in": "1.1.11",
+        "id": "KIT-GF-098",
+        "kit_state": "CLOSED",
+        "remote_effects": [
+          "none"
+        ],
+        "result": "PASS",
+        "steps": [
+          {
+            "assert": {
+              "exists": [
+                ".agentic/tmp/transition-proof.json"
+              ]
+            },
+            "failures": [],
+            "index": 0
+          },
+          {
+            "argv": [
+              "agentic-kit",
+              "check",
+              "--json"
+            ],
+            "failures": [],
+            "index": 1,
+            "returncode": 0
+          }
+        ]
+      }
+    ]
+  },
+  "wheel": {
+    "filename": "agentic_project_kit-1.1.11-py3-none-any.whl",
+    "sha256": "98e21b343286951cc6e5899cc2650283ea270e8708eb2daa21f9addcf7bf6ea8",
+    "kind": "local_unreleased_B_branch_test_build",
+    "published": false
+  },
+  "fixture_versions": {
+    "A": "1.1.11",
+    "B": "1.1.12",
+    "A_prime": "1.1.11.post1",
+    "kind": "synthetic_test_versions"
+  },
+  "fixture_corrections": [
+    "Skip a no-op v2 migration commit after B init.",
+    "Remove the extracted caller PYTHONPATH before the final owned A-prime check."
+  ],
+  "rebase_validation": {
+    "date": "2026-11-03",
+    "previous_base": "daa149180937f03982187824b54f0d4acd11d999",
+    "base_commit": "0681508bbfe771634d6822f6858af88cd7f4eb45",
+    "source_revision": "b141df65c45c88031710e8b26836595fed5f5aba",
+    "requested_range_diff": "6dde207e..6569fba5 compared with daa14918..b141df65",
+    "full_suite": {
+      "status": "PASS",
+      "passed": 4549,
+      "warnings": 560,
+      "seconds": 1035.35
+    },
+    "machine_contracts": {
+      "KIT-GF-094": "PASS",
+      "KIT-GF-095": "PASS",
+      "KIT-GF-097": "PASS",
+      "KIT-GF-098": "PASS",
+      "KIT-GF-099": "PASS",
+      "KIT-GF-100": "PASS",
+      "KIT-GF-101": "PASS"
+    },
+    "six_original_B_source_and_test_files_unchanged": true,
+    "GF_100_GF_101_source_and_tests_match_main": true,
+    "full_total_diff": "20 files, 846 insertions, 46 deletions",
+    "report_appendix": "Full requested range-diff and full diff patch included in the Markdown report; patch snapshot predates final evidence-only update",
+    "merge_performed": false,
+    "release_performed": false
+  },
+  "final_preparation": {
+    "date": "2026-11-03",
+    "main_base": "0681508bbfe771634d6822f6858af88cd7f4eb45",
+    "tested_revision": "b141df65c45c88031710e8b26836595fed5f5aba",
+    "B_original_six_files_byte_identical": true,
+    "GF100_GF101_source_and_tests_match_main": true,
+    "owner_authorized_steps": "1 through 5, including conditional merge and handoff; no release",
+    "owner_acceptance_source": "Owner chat: Owner-Abnahme B auf Grundlage der dokumentierten Verbraucherprobe erteilt.",
+    "full_suite": "PASS: 4549 passed, 560 warnings, 1035.35 seconds",
+    "machine_contracts": "PASS: 094, 095, 097, 098, 099, 100, 101 from a fresh noneditable 1.1.12 wheel",
+    "independent_rehearsal": "PASS: six runs; published A 1.1.11 planner, unpatched B wheel, published 1.1.10 legacy path",
+    "all_known_external_workspaces_A": "PASS: each known external workspace is on published 1.1.11; no private identities recorded",
+    "personal_local_changes": "Restored byte-for-byte after the approved local update; not published",
+    "rebase_range_diff": "Included in the report appendix; original B implementation commits preserved and later commits accounted for",
+    "total_diff_against_main": "20 files, 846 insertions, 46 deletions (pre-report-update snapshot; full patch in appendix)",
+    "merge": "PENDING_GITHUB_CI_AND_KIT_CLOSEOUT",
+    "release": "NOT_AUTHORIZED; owner local script remains step 6",
+    "B_wheel_sha256": "6ead7761df956a5dc8f66cd63d0719477e68402211e98bb97f29d43c501e3e48"
+  }
+}
