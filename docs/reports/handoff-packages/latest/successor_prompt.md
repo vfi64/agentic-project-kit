@@ -459,9 +459,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/self-hosted-projection-v2-idea",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "090185c2f7e7b27e6fe56d18fbf03bef6f12b174",
+    "head": "c424e553796cc90b6cc4109872b6203ee373c74e",
     "head_matches_origin_main": false,
-    "head_short": "090185c2",
+    "head_short": "c424e553",
     "local_path": "cd /path/to/",
     "origin_main": "4ba492ab7be02fee55dcf7cd0497968d69cf0a60",
     "origin_main_short": "4ba492ab",
