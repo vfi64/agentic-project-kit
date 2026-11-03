@@ -14947,9 +14947,8 @@
     },
     "release": {
       "date": "2026-11-03",
-      "entry_count": 7,
+      "entry_count": 6,
       "notes": [
-        "Zenodo DOI verification pending for v1.2.0.",
         "Fixed: Allow initialized external workspaces to explicitly add a missing managed CI workflow through workspace ci-update --inject-ci, retaining custom-file and stale-plan guards (KIT-GF-101).",
         "Fixed: Resolve conflicted files during an owned detached-HEAD rebase while preserving branch and target guards (KIT-GF-100).",
         "Fixed: Preserve the repository identity in target handoff previews by decoding Git-quoted origin values in the target and writing Git syntax in future planners. Legacy 1.1.11 payloads remain compatible; real-wheel regressions now use a GitHub-shaped origin distinct from the project name (KIT-GF-099). No release or v2 activation is performed by this fix.",
@@ -16189,7 +16188,7 @@
     "package_version": "1.2.0",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
-    "release_tag": "v1.1.11",
+    "release_tag": "v1.2.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "8ec3727bd6f1",
     "requires_python": ">=3.10",
@@ -16204,7 +16203,7 @@
       "orchestrator": 37,
       "primitive": 107
     },
-    "version_doi": "10.5281/zenodo.23864349"
+    "version_doi": "10.5281/zenodo.23910692"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -16224,13 +16223,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.1.11",
+    "current_release_tag": "v1.2.0",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.1.11",
+    "current_verified_release": "1.2.0",
     "current_version": "1.2.0",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.23864349"
+    "version_doi": "10.5281/zenodo.23910692"
   },
   "task_projection": {
     "execution_authorized": false,
