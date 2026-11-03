@@ -67,7 +67,7 @@
       "yaml_valid": true
     },
     {
-      "bytes": 33370,
+      "bytes": 33368,
       "exists": true,
       "path": "docs/STATUS.md"
     },
@@ -77,12 +77,12 @@
       "path": "docs/TEST_GATES.md"
     },
     {
-      "bytes": 35425,
+      "bytes": 35423,
       "exists": true,
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7711,
+      "bytes": 7725,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
