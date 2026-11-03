@@ -5240,6 +5240,32 @@ ideas:
     - ADRs for durable architecture choices
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+- id: self-hosted-handoff-v2-projection
+  status: candidate
+  title: Evaluate projection v2 for Kit self-hosting (stage 2)
+  decision_needed: true
+  decision_status: deferred
+  rationale: >-
+    Examine whether the KIT-GF-094 handoff projection v2, currently enabled only
+    for external workspaces, should also govern the Kit repository. The basis is
+    45 of 90 merged Kit PRs being handoff-only refreshes from 2026-10-24 through
+    2026-10-31, and the owner-reported ongoing measurement in an external
+    workspace showing no refresh PR across 10 PRs after adopting Kit 1.2.0.
+    KIT-GF-094 deliberately excluded self-hosting: the global
+    DPA-GENERATED-SUCCESSOR-HANDOFF-PROJECTION-v1 contract remains in force, as
+    do administrative refresh boundary C4 and the WRT-CH-001 commit binding
+    used by approvals, signed plans, and release completion. A bootstrap failure
+    could also impair the tool needed to repair it. Revisit only when the
+    external measurement is complete at 10 PRs without a refresh PR and the
+    owner decides to take up this idea. The first step is analysis only, with
+    numbered options that identify which self-hosting commit bindings are
+    necessary and which could be replaced by content binding, and assess
+    migration, rollback, and rehearsal. The owner decides after that analysis;
+    any implementation must be staged and probed. This idea does not change C4,
+    WRT-CH-001, or the DPA classification.
+  source_files:
+  - docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+  - docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md
 - id: layered-cli-usability
   status: candidate
   title: Layered CLI usability model
