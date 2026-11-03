@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2
 - docs/reference/agentic-kit-commands.json: 8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc
-## Operational documentation refresh state after PR #2733
+## Operational documentation refresh state after PR #2735
 
-Current administrative handoff refresh state is `6280cdae` (`Record DOI for release 1.2.0 (#2733)`). Continue next only after this post-PR2733 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `3455ec72` (`Archive release 1.2.0 evidence (#2735)`). Continue next only after this post-PR2735 refresh is committed and merged; the next substantive slice must be created from fresh main.
