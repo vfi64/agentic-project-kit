@@ -7974,6 +7974,146 @@
           ]
         }
       }
+    },
+    {
+      "id": "KIT-GF-102",
+      "kit_state": "OPEN",
+      "fixed_in": "",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Observe an open pull request on the exact expected head with all required checks successful and no reported failed or aborted check."
+        ],
+        "commands": [
+          "agentic-kit pr wait-ci {pr} --expected-head-sha {head} --timeout-seconds 60"
+        ],
+        "bindings": {
+          "pr": "Exact observed pull request number",
+          "head": "Exact observed full pull request head SHA"
+        },
+        "expected": [
+          "Transient UNSTABLE is polled until CLEAN or timeout; an actual failed check remains immediately terminal."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Local deterministic readiness regressions cover missing required checks, UNSTABLE-to-CLEAN, failed checks and timeout; live GitHub observation is separate."
+          ]
+        },
+        "verification": "Native regression tests prove deterministic state transitions. Live GitHub timing and owner merge approval remain separate; no release is claimed."
+      }
+    },
+    {
+      "id": "KIT-GF-103",
+      "kit_state": "OPEN",
+      "fixed_in": "",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Disposable v2 external workspace with a matching stored repository identity; origin URLs differ only by case."
+        ],
+        "commands": [
+          "agentic-kit transfer prepare-successor-handoff --json",
+          "agentic-kit check --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "Case-variant origin preserves the stored matching repository spelling, exact projection bytes and check PASS without migration."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Two-clone native regression produces identical projection bytes and check PASS in both clones; a different repository does not reuse stored identity."
+          ]
+        },
+        "verification": "Native counterprobe failed before the fix. The installed-runtime machine contract checks lowercase-origin adoption and no tracked projection diff; no release is claimed.",
+        "machine": {
+          "fixture": "external_projection_v2",
+          "origin": false,
+          "covers": "Installed-runtime v2 projection keeps its stored repository spelling when the GitHub-shaped origin changes only letter case.",
+          "steps": [
+            {
+              "run": [
+                "git",
+                "config",
+                "remote.origin.url",
+                "https://github.com/ExampleOwner/ExampleRepo.git"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "transfer",
+                "prepare-successor-handoff",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "add",
+                "-A"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "commit",
+                "-m",
+                "Stored projection identity"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "config",
+                "remote.origin.url",
+                "https://github.com/exampleowner/examplerepo.git"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "check",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json_contains": {
+                  "status": "PASS"
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "diff",
+                "--exit-code"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "kind": "external_findings_catalog",

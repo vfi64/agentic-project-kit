@@ -181,6 +181,68 @@ def test_missing_expected_check_waits_not_passes():
     assert "expected check missing: lint" in decision.reasons
 
 
+def test_missing_expected_check_waits_while_merge_state_is_unstable():
+    snapshot = clean_snapshot()
+    snapshot["mergeStateStatus"] = "UNSTABLE"
+    decision = classify_pr_readiness(snapshot, expected_checks=("test", "gate"))
+    assert decision.outcome == WAITING
+    assert not decision.terminal
+    assert "expected check missing: gate" in decision.reasons
+
+
+def test_unstable_all_green_snapshot_waits_until_clean():
+    snapshots = [
+        {**clean_snapshot(), "mergeStateStatus": "UNSTABLE"},
+        clean_snapshot(),
+    ]
+    ticks = iter([0, 0, 1])
+    sleeps = []
+
+    decision = wait_for_pr_readiness(
+        lambda: snapshots.pop(0),
+        expected_head_sha="abc123",
+        expected_checks=("test",),
+        timeout_seconds=30,
+        interval_seconds=5,
+        clock=lambda: next(ticks),
+        sleep=sleeps.append,
+    )
+
+    assert decision.outcome == READY_TO_MERGE
+    assert decision.success
+    assert sleeps == [5]
+
+
+def test_unstable_with_failed_check_is_terminal():
+    snapshot = {**clean_snapshot(), "mergeStateStatus": "UNSTABLE"}
+    snapshot["statusCheckRollup"][0]["conclusion"] = "FAILURE"
+    decision = classify_pr_readiness(snapshot, expected_checks=("test",))
+    assert decision.outcome == BLOCKED
+    assert decision.terminal
+    assert "check failed: test" in decision.reasons
+
+
+def test_unstable_without_failures_times_out_with_wait_reason():
+    snapshot = {**clean_snapshot(), "mergeStateStatus": "UNSTABLE"}
+    ticks = iter([0, 0, 1, 2, 3])
+    sleeps = []
+
+    decision = wait_for_pr_readiness(
+        lambda: snapshot,
+        expected_checks=("test",),
+        timeout_seconds=2,
+        interval_seconds=1,
+        clock=lambda: next(ticks),
+        sleep=sleeps.append,
+    )
+
+    assert decision.outcome == TIMEOUT
+    assert decision.terminal
+    assert not decision.success
+    assert decision.reasons == ("timeout reached while waiting for CI",)
+    assert sleeps == [1, 1]
+
+
 def test_merged_pr_with_successful_checks_is_idempotent_success():
     snapshot = clean_snapshot()
     snapshot["state"] = "MERGED"
@@ -338,6 +400,27 @@ def test_pr_wait_ci_help_is_registered_without_running_gh():
     assert result.exit_code == 0
     assert "Polling interval" in result.output
     assert "Maximum wait time" in result.output
+
+
+def test_pr_wait_ci_passes_declared_managed_checks_to_readiness(monkeypatch):
+    import agentic_project_kit.ci_light_skip as ci_light_skip
+    import agentic_project_kit.cli_commands.pr as pr_commands
+    from agentic_project_kit.ci_readiness import ReadinessDecision
+
+    captured = {}
+
+    def fake_wait(provider, **kwargs):
+        captured.update(kwargs)
+        return ReadinessDecision(READY_TO_MERGE, (), True)
+
+    monkeypatch.setattr(ci_light_skip, "declared_required_checks", lambda root: ("test", "gate"))
+    monkeypatch.setattr(pr_commands, "gh_pr_snapshot_provider", lambda pr_number: lambda: {})
+    monkeypatch.setattr(pr_commands, "wait_for_pr_readiness", fake_wait)
+
+    result = CliRunner().invoke(app, ["pr", "wait-ci", "42"])
+
+    assert result.exit_code == 0
+    assert captured["expected_checks"] == ("test", "gate")
 
 
 def test_pr_status_help_is_registered_without_running_gh():
