@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: bc7b1336cbf0e521a8bfe880b031e3e65abef952
-  short: bc7b1336
-  subject: Plan stage 2 self-hosted handoff projection v2 (#2739)
+  full: 6b0e84716af24a5e02f484edf6b332aec1fa736c
+  short: 6b0e8471
+  subject: Plan shared coding-agent entrypoints (#2741)
 last_substantive_work_state:
-  full: bc7b1336cbf0e521a8bfe880b031e3e65abef952
-  short: bc7b1336
-  subject: Plan stage 2 self-hosted handoff projection v2 (#2739)
+  full: 6b0e84716af24a5e02f484edf6b332aec1fa736c
+  short: 6b0e8471
+  subject: Plan shared coding-agent entrypoints (#2741)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
