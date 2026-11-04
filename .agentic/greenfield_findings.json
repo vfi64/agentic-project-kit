@@ -7977,8 +7977,8 @@
     },
     {
       "id": "KIT-GF-102",
-      "kit_state": "OPEN",
-      "fixed_in": "",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md",
       "external_retest": {
@@ -8006,8 +8006,8 @@
     },
     {
       "id": "KIT-GF-103",
-      "kit_state": "OPEN",
-      "fixed_in": "",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md",
       "external_retest": {

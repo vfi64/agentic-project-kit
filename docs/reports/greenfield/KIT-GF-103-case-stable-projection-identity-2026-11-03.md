@@ -2,7 +2,7 @@
 
 Date: 2026-11-03  
 Scope: v2 external successor projection in case-variant clones.  
-Status: implementation present on an unreleased feature branch; no merge or release is claimed.
+Status: fix merged on Kit `main` in PR #2737 (`c73951d7`); not released.
 
 ## Finding
 
@@ -37,4 +37,5 @@ tracked projection diff.
 
 The pre-fix counterprobe is the native regression test run against the original
 implementation. The installed-runtime contract verifies the corrected behavior;
-no release or external consumer acceptance is inferred from that local result.
+Kit closure does not establish external consumer `VERIFIED_FIXED`. No release
+or external consumer acceptance is inferred from that local result.

@@ -1732,7 +1732,7 @@ Expected result fields: `{"assertions": ["preview PASS", "execution PASS", "repe
 
 ## KIT-GF-102
 
-Kit state: OPEN; fixed_in: not established.
+Kit state: CLOSED; fixed_in: unreleased.
 Evidence: docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md
 
 Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -1749,7 +1749,7 @@ Expected result fields: `{"assertions": ["Local deterministic readiness regressi
 
 ## KIT-GF-103
 
-Kit state: OPEN; fixed_in: not established.
+Kit state: CLOSED; fixed_in: unreleased.
 Evidence: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
 
 Execution class: local (effects: none); machine contract: Installed-runtime v2 projection keeps its stored repository spelling when the GitHub-shaped origin changes only letter case.
