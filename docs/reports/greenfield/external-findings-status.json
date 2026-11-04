@@ -1,9 +1,9 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 99,
+    "CLOSED": 101,
     "NOT_APPLICABLE": 0,
-    "OPEN": 3,
+    "OPEN": 1,
     "PARTIAL": 0
   },
   "execution_classes": {
@@ -8329,9 +8329,9 @@
         "verification": "Native regression tests prove deterministic state transitions. Live GitHub timing and owner merge approval remain separate; no release is claimed.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "",
+      "fixed_in": "unreleased",
       "id": "KIT-GF-102",
-      "kit_state": "OPEN",
+      "kit_state": "CLOSED",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md"
     },
@@ -8444,9 +8444,9 @@
         "verification": "Native counterprobe failed before the fix. The installed-runtime machine contract checks lowercase-origin adoption and no tracked projection diff; no release is claimed.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "",
+      "fixed_in": "unreleased",
       "id": "KIT-GF-103",
-      "kit_state": "OPEN",
+      "kit_state": "CLOSED",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md"
     },
@@ -8590,5 +8590,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 60,
   "schema_version": 1,
-  "source_sha256": "3554a25a2a98ba037e1fe071f55e1dd463cda2c03a8a5d9a9e324b3cb16609b9"
+  "source_sha256": "6a0ae40b8621ebae17670a81341b2b7e2abb4826ddf165d4d08ee077d77f9740"
 }

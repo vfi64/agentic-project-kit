@@ -2,7 +2,7 @@
 
 Date: 2026-11-03  
 Scope: deterministic local readiness and workflow delegation regressions.  
-Status: implementation present on an unreleased feature branch; no merge or release is claimed.
+Status: fix merged on Kit `main` in PR #2737 (`c73951d7`); not released.
 
 ## Finding
 
@@ -35,4 +35,5 @@ repository gates are tracked separately in the PR verification record.
 ## Boundaries
 
 This report uses no live GitHub timing as proof. Live check-run observation and
-owner merge authority remain separate. No release evidence is claimed.
+owner merge authority remain separate. Kit closure does not establish external
+consumer `VERIFIED_FIXED`; no release evidence is claimed.

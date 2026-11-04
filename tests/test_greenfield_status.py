@@ -30,6 +30,13 @@ def test_committed_projection_is_deterministic_and_complete():
     assert len(build(ROOT)["findings"]) >= 65
 
 
+def test_merged_gf_102_103_have_versioned_kit_closure():
+    findings = {finding["id"]: finding for finding in build(ROOT)["findings"]}
+    for finding_id in ("KIT-GF-102", "KIT-GF-103"):
+        assert findings[finding_id]["kit_state"] == "CLOSED"
+        assert findings[finding_id]["fixed_in"]
+
+
 @pytest.mark.parametrize(
     "change", ["state", "missing", "duplicate", "report", "commands", "evidence", "schema"]
 )
