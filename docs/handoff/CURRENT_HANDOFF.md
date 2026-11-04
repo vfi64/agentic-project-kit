@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `fe455530d698ea03989ff09a3762e421d3b9c689` (`fe455530`), after `Reconcile merged GF-102 and GF-103 findings (#2745)`.
-Last substantive work state is `fe455530d698ea03989ff09a3762e421d3b9c689` (`fe455530`), after `Reconcile merged GF-102 and GF-103 findings (#2745)`.
+Current verified main/admin HEAD is `d0bff1380e6e02b5d84c725f1056ff978e28421d` (`d0bff138`), after `Measure Kit strategy baseline at 2026-11-04 main (#2747)`.
+Last substantive work state is `d0bff1380e6e02b5d84c725f1056ff978e28421d` (`d0bff138`), after `Measure Kit strategy baseline at 2026-11-04 main (#2747)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
