@@ -21,6 +21,21 @@ def _digest(content):
     return hashlib.sha256(content).hexdigest()
 
 
+def _return_state_snapshot(root: Path, git) -> dict:
+    files = {
+        path.relative_to(root).as_posix(): _digest(path.read_bytes())
+        for path in root.rglob("*")
+        if path.is_file() and path.relative_to(root).parts[:1] != (".git",)
+    }
+    return {
+        "branch": git("branch", "--show-current"),
+        "files": files,
+        "head": git("rev-parse", "HEAD"),
+        "refs": git("for-each-ref", "--format=%(refname) %(objectname)"),
+        "status": git("status", "--porcelain=v1", "--untracked-files=all"),
+    }
+
+
 def _write_json(path, data):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, sort_keys=True, indent=2) + "\n")
@@ -190,16 +205,13 @@ def prepare_return_fixture(root: Path, variables, env):
     config.write_bytes(config.read_bytes() + b"# Later authority change\n")
     git("add", ".agentic/config.yaml")
     git("commit", "-m", "Later adoption path change")
-    touched_snapshot = {path.relative_to(root).as_posix(): _digest(path.read_bytes())
-                        for path in root.rglob("*") if path.is_file()}
+    touched_snapshot = _return_state_snapshot(root, git)
     later_touch_blocked = False
     try:
         plan_return_revert(root, adoption_id, run=run, observe_pr=observed)
     except UpdateBlocked as exc:
         later_touch_blocked = "adoption_paths_changed" in str(exc) and ".agentic/config.yaml" in str(exc)
-    later_touch_unchanged = touched_snapshot == {
-        path.relative_to(root).as_posix(): _digest(path.read_bytes()) for path in root.rglob("*") if path.is_file()
-    }
+    later_touch_unchanged = touched_snapshot == _return_state_snapshot(root, git)
     git("switch", "return")
     revert = plan_return_revert(root, adoption_id, run=run, observe_pr=observed)
     execute_return_revert(root, adoption_id, expected_signature=revert["approval_signature"], run=run, observe_pr=observed)
