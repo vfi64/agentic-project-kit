@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e4b288c89e6c049c9173d373e4daae2959eb3e8b` (`e4b288c8`), after `Stabilize GF-095 return contract snapshot (#2743)`.
-Last substantive work state is `e4b288c89e6c049c9173d373e4daae2959eb3e8b` (`e4b288c8`), after `Stabilize GF-095 return contract snapshot (#2743)`.
+Current verified main/admin HEAD is `fe455530d698ea03989ff09a3762e421d3b9c689` (`fe455530`), after `Reconcile merged GF-102 and GF-103 findings (#2745)`.
+Last substantive work state is `fe455530d698ea03989ff09a3762e421d3b9c689` (`fe455530`), after `Reconcile merged GF-102 and GF-103 findings (#2745)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
