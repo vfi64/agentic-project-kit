@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: fe455530d698ea03989ff09a3762e421d3b9c689
-  short: fe455530
-  subject: Reconcile merged GF-102 and GF-103 findings (#2745)
+  full: d0bff1380e6e02b5d84c725f1056ff978e28421d
+  short: d0bff138
+  subject: Measure Kit strategy baseline at 2026-11-04 main (#2747)
 last_substantive_work_state:
-  full: fe455530d698ea03989ff09a3762e421d3b9c689
-  short: fe455530
-  subject: Reconcile merged GF-102 and GF-103 findings (#2745)
+  full: d0bff1380e6e02b5d84c725f1056ff978e28421d
+  short: d0bff138
+  subject: Measure Kit strategy baseline at 2026-11-04 main (#2747)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

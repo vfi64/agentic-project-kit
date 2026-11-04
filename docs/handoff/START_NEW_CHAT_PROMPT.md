@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2
 - docs/reference/agentic-kit-commands.json: 8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc
-## Operational documentation refresh state after PR #2745
+## Operational documentation refresh state after PR #2747
 
-Current administrative handoff refresh state is `fe455530` (`Reconcile merged GF-102 and GF-103 findings (#2745)`). Continue next only after this post-PR2745 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d0bff138` (`Measure Kit strategy baseline at 2026-11-04 main (#2747)`). Continue next only after this post-PR2747 refresh is committed and merged; the next substantive slice must be created from fresh main.
