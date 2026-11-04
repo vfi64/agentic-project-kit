@@ -1,0 +1,292 @@
+{
+  "schema_version": 1,
+  "kind": "strategy_baseline",
+  "measurement_date": "2026-11-04",
+  "pinned_head": "a2e4528820f7729ce248313a8ef4decdc1b6f81e",
+  "no_thresholds": true,
+  "steps": [
+    {
+      "name": "first_parent_history",
+      "command": "git log --first-parent --since=2026-10-01 --format='%H%x09%cI%x09%s' origin/main",
+      "returncode": 0,
+      "status": "MEASURED"
+    },
+    {
+      "name": "context_report",
+      "command": "agentic-kit context report --json",
+      "returncode": 0,
+      "status": "MEASURED"
+    },
+    {
+      "name": "context_render_four_profiles",
+      "command": "agentic-kit context render --profile {handoff,planning,release,slice}",
+      "returncodes": {
+        "handoff": 0,
+        "planning": 0,
+        "release": 0,
+        "slice": 0
+      },
+      "status": "MEASURED"
+    },
+    {
+      "name": "mandatory_file_sizes",
+      "command": "wc -c <four files>",
+      "returncode": 0,
+      "status": "MEASURED"
+    },
+    {
+      "name": "static_command_audit",
+      "command": "run_usage_audit.py --repo . --kit-python .venv/bin/python --out <temporary> (without --with-tests, --with-sim, or --history-clone)",
+      "returncode": 0,
+      "stage_returncodes": {
+        "map-callbacks": 0,
+        "analyze": 0,
+        "aggregate": 0,
+        "build-targets": 0,
+        "compare": 0
+      },
+      "status": "MEASURED"
+    },
+    {
+      "name": "local_invocation_ledger",
+      "command": "agentic-kit ledger report --json",
+      "returncode": 0,
+      "status": "MEASURED"
+    },
+    {
+      "name": "github_pr_head_ci",
+      "source": "GitHub REST GET pulls, commit workflow runs, actions/runs/{id}",
+      "http_status": 200,
+      "status": "MEASURED"
+    },
+    {
+      "name": "lifecycle_source_inspection",
+      "command": "rg and sed over the source and documentation locations cited in README.md B4",
+      "returncode": 0,
+      "status": "MEASURED"
+    }
+  ],
+  "administration": {
+    "status": "MEASURED",
+    "method": "First-parent commits on pinned origin/main since 2026-10-01, anchored subject prefixes, local commit-date Monday buckets",
+    "counts": {
+      "refresh_handoff": 198,
+      "other": 148,
+      "archive": 14,
+      "doi": 16,
+      "release": 20,
+      "refresh_successor": 1
+    },
+    "total": 397,
+    "weekly": {
+      "2026-11-02": {
+        "refresh_handoff": 12,
+        "other": 9,
+        "archive": 1,
+        "doi": 1,
+        "release": 1
+      },
+      "2026-10-26": {
+        "refresh_handoff": 39,
+        "archive": 6,
+        "doi": 5,
+        "release": 5,
+        "other": 23
+      },
+      "2026-10-19": {
+        "refresh_handoff": 44,
+        "doi": 5,
+        "release": 6,
+        "other": 28,
+        "archive": 5
+      },
+      "2026-10-12": {
+        "refresh_handoff": 37,
+        "other": 29,
+        "archive": 2,
+        "release": 3,
+        "doi": 2
+      },
+      "2026-10-05": {
+        "other": 37,
+        "refresh_handoff": 44,
+        "doi": 3,
+        "release": 5
+      },
+      "2026-09-28": {
+        "refresh_handoff": 22,
+        "other": 22,
+        "refresh_successor": 1
+      }
+    },
+    "comparison_at_4e952bd5": {
+      "total": 395,
+      "refresh": 198,
+      "release_doi_archive": 50
+    }
+  },
+  "ci": {
+    "status": "MEASURED",
+    "window_utc": "2026-11-04T00:00:00Z/2026-11-05T00:00:00Z",
+    "method": "Merged main PRs in window; final PR head SHA; completed CI workflow run; updated_at - run_started_at, latest fetched run per head",
+    "runs": [
+      {
+        "pr": 2746,
+        "type": "administrative",
+        "run_id": 41847356519,
+        "start": "2026-11-04T14:25:10Z",
+        "end": "2026-11-04T14:26:29Z",
+        "duration_seconds": 79,
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "pr": 2745,
+        "type": "content",
+        "run_id": 41845911867,
+        "start": "2026-11-04T14:16:28Z",
+        "end": "2026-11-04T14:23:03Z",
+        "duration_seconds": 395,
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "pr": 2744,
+        "type": "administrative",
+        "run_id": 41827166144,
+        "start": "2026-11-04T12:11:45Z",
+        "end": "2026-11-04T12:13:04Z",
+        "duration_seconds": 79,
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "pr": 2743,
+        "type": "content",
+        "run_id": 41825780475,
+        "start": "2026-11-04T12:02:03Z",
+        "end": "2026-11-04T12:10:03Z",
+        "duration_seconds": 480,
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "pr": 2742,
+        "type": "administrative",
+        "run_id": 41817826555,
+        "start": "2026-11-04T10:59:00Z",
+        "end": "2026-11-04T11:00:18Z",
+        "duration_seconds": 78,
+        "attempt": 1,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "pr": 2741,
+        "type": "content",
+        "run_id": 41808072120,
+        "start": "2026-11-04T10:47:29Z",
+        "end": "2026-11-04T10:55:02Z",
+        "duration_seconds": 453,
+        "attempt": 2,
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "administrative_median_seconds": 79,
+    "non_refresh_median_seconds": 453
+  },
+  "context": {
+    "status": "MEASURED",
+    "estimated_tokens_status": "ESTIMATED",
+    "estimator": "ceil(characters / 4)",
+    "required_reads": {
+      "bytes": 871866,
+      "estimated_tokens": 217961,
+      "file_count": 9
+    },
+    "packets": {
+      "handoff": {
+        "characters": 13996,
+        "estimated_tokens": 3499
+      },
+      "planning": {
+        "characters": 14807,
+        "estimated_tokens": 3702
+      },
+      "release": {
+        "characters": 14800,
+        "estimated_tokens": 3700
+      },
+      "slice": {
+        "characters": 15071,
+        "estimated_tokens": 3768
+      }
+    },
+    "mandatory_file_bytes": {
+      "docs/reference/agentic-kit-commands.json": 566079,
+      "docs/STATUS.md": 33458,
+      "docs/handoff/CURRENT_HANDOFF.md": 35483,
+      "docs/planning/PROJECT_DIRECTION.yaml": 314556
+    },
+    "actual_agent_tokens": {
+      "status": "NOT_MEASURED",
+      "reason": "No paid model execution or consumption telemetry"
+    }
+  },
+  "cli": {
+    "status": "ESTIMATED",
+    "method": "Current static callback graph combined with 2026-10-15 test/simulation/history evidence; new commands static only or UNKNOWN",
+    "manifest_total": 275,
+    "orchestrators": 37,
+    "diagnostics": 131,
+    "primitives": 107,
+    "non_orchestrators": 238,
+    "static_reachable_non_orchestrators": 80,
+    "tiers": {
+      "A": 76,
+      "B": 21,
+      "C": 114,
+      "D": 22,
+      "UNKNOWN": 5,
+      "orchestrator": 37
+    },
+    "new_commands": {
+      "orchestrator": [
+        "agentic-kit kit return-install",
+        "agentic-kit kit return-revert",
+        "agentic-kit release abandon"
+      ],
+      "B": [
+        "agentic-kit greenfield retest"
+      ],
+      "UNKNOWN": [
+        "agentic-kit audit-drift-signals",
+        "agentic-kit context render",
+        "agentic-kit context report",
+        "agentic-kit ledger report",
+        "agentic-kit transfer merge-upstream"
+      ]
+    },
+    "full_test_trace": {
+      "status": "NOT_MEASURED",
+      "reason": "Excluded by Slice B task"
+    },
+    "local_ledger": {
+      "status": "MEASURED",
+      "record_count": 7561,
+      "root_invocation_count": 1984,
+      "distinct_commands": 104,
+      "ledger_error_count": 0,
+      "note": "Local ignored ledger only; counts include nested and failed invocations"
+    }
+  },
+  "facts": {
+    "status": "MEASURED",
+    "source": "README.md B4, with code references"
+  }
+}

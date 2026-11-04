@@ -2031,3 +2031,12 @@ documents:
     status: active
     summary: Case-variant clone projection identity regression and installed-runtime retest
       evidence.
+  - path: docs/reports/baseline_20261104/README.md
+    class: evidence/log
+    owner: maintainers
+    summary: 'Measured Kit strategy baseline at pinned main: administration, context,
+      CLI, lifecycle facts'
+  - path: docs/reports/baseline_20261104/baseline.json
+    class: evidence/log
+    owner: maintainers
+    summary: Machine-readable appendix for 2026-11-04 Kit strategy baseline
