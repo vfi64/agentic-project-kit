@@ -5581,6 +5581,77 @@ ideas:
       as a separately gated research slice.
   source_files:
   - docs/planning/PROJECT_DIRECTION.yaml
+- id: shared-coding-agent-entrypoints
+  status: candidate
+  title: Shared coding-agent entrypoints through AGENTS.md
+  rationale: Keep AGENTS.md as the canonical shared instruction source and make Kit
+    initialization and synchronization expose that entrypoint to supported coding agents.
+    Validate agent support by entrypoint loading, repository access, and Kit execution
+    capability rather than by product name or GitHub connector availability alone.
+  decision_needed: true
+  decision_status: proposed
+  binding_policy: planning proposal only; E0 and implementation require explicit owner approval
+  implementation_authorized: false
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
+  preserved_information:
+    proposed_direction: Variant B; AGENTS.md is the single canonical source. Do not
+      create a new CLAUDE.md. For an existing root CLAUDE.md, add a marked @AGENTS.md
+      import using the exact block shared by the Kit and Cockpit. Generate missing
+      AGENTS.md files through workspace init and sync-entrypoints; kit update must
+      allow the root CLAUDE.md path. Keep E2 generation/synchronization separate from
+      E3 advisory detection. E2b hardening of the existing AGENTS.md manifest-block
+      upsert remains a separately approved follow-up. E4 protocol changes and E5 hooks
+      remain separate future decisions.
+    e2_acceptance: Test the real sync_entrypoint_files path without the kit-update
+      fixture fake; align that fixture to real behavior before the feature fix. Cover
+      missing and existing AGENTS.md, root CLAUDE.md absent/present, unique unmarked
+      @AGENTS.md import wrapping, ambiguous imports, malformed or repeated CLAUDE.md
+      markers with whole-run no-write behavior, idempotence, workspace-init behavior,
+      and kit-update allowed-path handling. Preserve both existing
+      ENTRYPOINT_MANIFEST_BLOCK_MISSING and ENTRYPOINT_MANIFEST_SHA_MISMATCH blockers.
+    e2_test_cases:
+    - >-
+      Missing AGENTS.md and no CLAUDE.md: create AGENTS.md with the current manifest block.
+    - >-
+      Existing AGENTS.md without the block: insert the block and preserve other content;
+      existing multiple-marker hardening remains E2b.
+    - >-
+      Root CLAUDE.md with no AGENTS.md or import: create AGENTS.md and add the import
+      block at the start of CLAUDE.md while preserving its remaining bytes.
+    - >-
+      One standalone unmarked @AGENTS.md line: wrap it in place, without adding a second import.
+    - >-
+      Ambiguous import candidates: fail before writing and prove affected files remain byte-identical.
+    - >-
+      Incomplete or repeated CLAUDE.md import markers: fail before any writes in the run;
+      verify both CLAUDE.md and AGENTS.md remain byte-identical.
+    - >-
+      Idempotence: repeat initialization or synchronization after supported cases and
+      verify no second write or duplicate block.
+    - >-
+      kit update: permit the root CLAUDE.md path and continue to reject nested or
+      .claude/CLAUDE.md and CLAUDE.local.md paths.
+    - >-
+      workspace init with existing root CLAUDE.md and no AGENTS.md: generate AGENTS.md,
+      add the import at the start of CLAUDE.md, preserve the rest byte-for-byte, and
+      verify a second init makes no changes.
+    existing_gate_tests: >-
+      Add a regression test for ENTRYPOINT_MANIFEST_BLOCK_MISSING, for which no test
+      currently exists; retain the existing coverage for ENTRYPOINT_MANIFEST_SHA_MISMATCH.
+      Neither blocker may be weakened.
+    e1_acceptance: Cockpit uses the identical marked import block; Claude Code
+      /context confirms it loads, and a later Kit sync produces no duplicate change.
+    e3_acceptance: Report missing AGENTS.md and existing but ineffective entrypoints
+      as distinct warnings; preserve the current blockers for stale manifest references
+      and missing current manifest blocks.
+    scope_boundary: No execution is authorized by this idea. No public-command,
+      manifest-protocol, hook, multi-agent-rule-file, or release change is included.
+    sequence:
+    - Owner decides E0 and approves the bounded direction.
+    - Finalize the shared import-block contract, then perform E1 and E2 as separate
+      authorized slices; E1 may proceed alongside E2 after the contract is fixed.
+    - Consider E3 separately; decide E4 and E5 independently.
 done:
 - id: resumable-release-run-orchestrator
   status: done

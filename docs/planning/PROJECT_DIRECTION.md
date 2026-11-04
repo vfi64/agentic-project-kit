@@ -160,6 +160,8 @@ Review policy: required
   A post-merge hook could later mark direction items with completed PR evidence as done, reducing manual drift, but it needs bounded rules so it does not infer semantic completion from a merge alone.
 - `governed-recursive-harness-learning` - **Governed recursive harness learning (Harness2-inspired)** (`candidate`)
   Research whether evidence-backed, recursive optimization of agent prompts, skills, tool choices and non-privileged orchestration strategies can reduce recurring failures and context drift across Kit-governed tasks without transferring policy, gate, merge or release authority to an LLM.
+- `shared-coding-agent-entrypoints` - **Shared coding-agent entrypoints through AGENTS.md** (`candidate`)
+  Keep AGENTS.md as the canonical shared instruction source and make Kit initialization and synchronization expose that entrypoint to supported coding agents. Validate agent support by entrypoint loading, repository access, and Kit execution capability rather than by product name or GitHub connector availability alone.
 
 ## Done
 
