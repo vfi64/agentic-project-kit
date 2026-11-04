@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e4b288c89e6c049c9173d373e4daae2959eb3e8b
-  short: e4b288c8
-  subject: Stabilize GF-095 return contract snapshot (#2743)
+  full: fe455530d698ea03989ff09a3762e421d3b9c689
+  short: fe455530
+  subject: Reconcile merged GF-102 and GF-103 findings (#2745)
 last_substantive_work_state:
-  full: e4b288c89e6c049c9173d373e4daae2959eb3e8b
-  short: e4b288c8
-  subject: Stabilize GF-095 return contract snapshot (#2743)
+  full: fe455530d698ea03989ff09a3762e421d3b9c689
+  short: fe455530
+  subject: Reconcile merged GF-102 and GF-103 findings (#2745)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
