@@ -39,7 +39,7 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2747-handoff-refresh`
+- branch: `docs/post-pr2748-handoff-refresh`
 - head_matches_origin_main: `True`
 - worktree_clean: `False`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
@@ -445,6 +445,15 @@ Wenn der Bootstrap grün ist:
       "id": "external-retest-machine-contracts",
       "status": "active",
       "summary": "Give every local finding retest a machine contract and resync the external ledger"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "external-v1-acceptance-removal",
+      "status": "planned",
+      "summary": "Remove external v1 acceptance after v2 migration"
     }
   ],
   "recent_lessons": [
@@ -457,14 +466,14 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2747-handoff-refresh",
+    "branch": "docs/post-pr2748-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "d0bff1380e6e02b5d84c725f1056ff978e28421d",
+    "head": "e2a418bbe509799b2c7ac4458f7a729bcfc459c1",
     "head_matches_origin_main": true,
-    "head_short": "d0bff138",
+    "head_short": "e2a418bb",
     "local_path": "cd /path/to/",
-    "origin_main": "d0bff1380e6e02b5d84c725f1056ff978e28421d",
-    "origin_main_short": "d0bff138",
+    "origin_main": "e2a418bbe509799b2c7ac4458f7a729bcfc459c1",
+    "origin_main_short": "e2a418bb",
     "worktree_clean": false
   }
 }
