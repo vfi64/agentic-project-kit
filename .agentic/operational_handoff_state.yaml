@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6b0e84716af24a5e02f484edf6b332aec1fa736c
-  short: 6b0e8471
-  subject: Plan shared coding-agent entrypoints (#2741)
+  full: e4b288c89e6c049c9173d373e4daae2959eb3e8b
+  short: e4b288c8
+  subject: Stabilize GF-095 return contract snapshot (#2743)
 last_substantive_work_state:
-  full: 6b0e84716af24a5e02f484edf6b332aec1fa736c
-  short: 6b0e8471
-  subject: Plan shared coding-agent entrypoints (#2741)
+  full: e4b288c89e6c049c9173d373e4daae2959eb3e8b
+  short: e4b288c8
+  subject: Stabilize GF-095 return contract snapshot (#2743)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
