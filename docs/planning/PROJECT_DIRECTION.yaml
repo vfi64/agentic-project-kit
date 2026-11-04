@@ -120,7 +120,7 @@ meta:
           - Released A (1.1.11) ships target preview, adoption evidence, return and runtime-consumer capabilities with the package activation constant False.
           - Prepare B on an open PR branch; keep main False until the owner explicitly confirms release A adoption in every known external workspace.
           - B changes the single constant to True; no partial merge or publication before the adoption confirmation, independent consumer rehearsal and owner acceptance. Rebase the whole PR if main advances.
-          - KIT-GF-094 stays unreleased until B stamping; KIT-GF-096 expires no later than the second release after B. A remaining known workspace adopts A after its current cycle.
+          - KIT-GF-094 stays unreleased until B stamping; KIT-GF-096 expires no later than the second release after B. A remaining known workspace adopts A after its current cycle. Follow-up plan: external-v1-acceptance-removal.
           supersedes_for_external_mode:
             source: docs/reports/POST_0_5_0_C4_REFRESH_CHAIN_DECISION_20260813.md
             decision: F1
@@ -5074,6 +5074,31 @@ plans:
   evidence:
   - docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
   - docs/reports/PLANNING_RECONCILIATION_20261021.md
+- id: external-v1-acceptance-removal
+  status: planned
+  title: Remove external v1 acceptance after v2 migration
+  finding: KIT-GF-096
+  deadline:
+    kind: release_count_after
+    anchor_release: 1.2.0
+    max_releases: 2
+  prerequisite:
+  - Every known external workspace records release A adoption and subsequent v2 migration evidence.
+  - All Kit Greenfield fixtures use v2.
+  scope: Remove external v1 acceptance and refresh-only descendant logic after the migration
+    evidence is complete. Retain v1 detection only to enter the governed migration route;
+    an old Kit restored by the bounded return retains its own v1 support.
+  follow_up: Add a separate release gate that blocks release ready and release prepare when
+    an OPEN finding reaches its machine-readable release deadline. This plan does not
+    implement that gate.
+  source_files:
+  - .agentic/greenfield_findings.json
+  - docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+  acceptance:
+  - Known external migrations and v2 fixtures are evidenced before removal.
+  - External v1 acceptance and refresh-only descendant logic are removed by a separate
+    implementation slice; v1 detection still routes to governed migration.
+  - The release-count deadline is enforced by a separately reviewed gate before expiry.
 ideas:
 - id: project-direction-gui-panel
   status: accepted
@@ -5652,6 +5677,27 @@ ideas:
     - Finalize the shared import-block contract, then perform E1 and E2 as separate
       authorized slices; E1 may proceed alongside E2 after the contract is fixed.
     - Consider E3 separately; decide E4 and E5 independently.
+- id: model-selection-by-task-class
+  status: candidate
+  title: Select model class by task risk and complexity
+  decision_needed: true
+  decision_status: deferred
+  rationale: Match model capability and reasoning effort to task risk and complexity,
+    and record the reason so the choice can be reviewed without assuming a fixed model name.
+  proposed_classes:
+    routine: Bounded documentation and low-risk maintenance with proportionate effort.
+    critical: Kit code review, fault diagnosis, architecture, approvals, Git and release
+      decisions requiring stronger reasoning and explicit justification.
+  proposed_trial:
+    duration_weeks: 4
+    mode: convention_only
+    task_record: Name the recommended model class and the reason in each agent task.
+    closeout_record: Report the class used, known model and reasoning effort, any deviation,
+      and the observed result in the completion report.
+    next_decision: Decide whether a schema or gate is useful only after reviewing trial evidence.
+  binding_policy: Candidate idea only; no schema, gate or automatic model selection in this slice.
+  source_files:
+  - docs/planning/PROJECT_DIRECTION.yaml
 done:
 - id: resumable-release-run-orchestrator
   status: done

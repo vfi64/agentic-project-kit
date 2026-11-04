@@ -131,6 +131,7 @@ Review policy: required
 - `guided-gui-alternative` - **Validate an optional guided Kit GUI over shared guarded actions** (`active`)
 - `external-retest-machine-contracts` - **Give every local finding retest a machine contract and resync the external ledger** (`active`)
   At the historical 1.1.4 baseline KIT-GF-070 was PARTIAL; the Cockpit retest returned PASS 8, FAIL 0, NO_MACHINE_CONTRACT 34, NOT_RUN_LOCALLY 37, and 16 consumer families were OPEN against a Kit closure. The step evidence below supersedes those baseline counts. Kit closure and released-consumer VERIFIED_FIXED remain separate decisions.
+- `external-v1-acceptance-removal` - **Remove external v1 acceptance after v2 migration** (`planned`)
 
 ## Ideas
 
@@ -162,6 +163,8 @@ Review policy: required
   Research whether evidence-backed, recursive optimization of agent prompts, skills, tool choices and non-privileged orchestration strategies can reduce recurring failures and context drift across Kit-governed tasks without transferring policy, gate, merge or release authority to an LLM.
 - `shared-coding-agent-entrypoints` - **Shared coding-agent entrypoints through AGENTS.md** (`candidate`)
   Keep AGENTS.md as the canonical shared instruction source and make Kit initialization and synchronization expose that entrypoint to supported coding agents. Validate agent support by entrypoint loading, repository access, and Kit execution capability rather than by product name or GitHub connector availability alone.
+- `model-selection-by-task-class` - **Select model class by task risk and complexity** (`candidate`)
+  Match model capability and reasoning effort to task risk and complexity, and record the reason so the choice can be reviewed without assuming a fixed model name.
 
 ## Done
 
