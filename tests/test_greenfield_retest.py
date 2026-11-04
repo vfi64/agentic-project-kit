@@ -55,8 +55,9 @@ def _contract_ids():
 @pytest.mark.parametrize("finding_id", _contract_ids())
 def test_every_machine_contract_passes_with_the_installed_wheel(installed_kit, tmp_path, finding_id):
     rc, result = _retest(installed_kit, tmp_path, "--id", finding_id, "--json")
+    assert "results" in result, json.dumps(result, indent=2, sort_keys=True)
     record, = result["results"]
-    assert rc == 0 and record["result"] == "PASS", (record.get("failures"), record.get("steps", [])[-1:])
+    assert rc == 0 and record["result"] == "PASS", json.dumps(record, indent=2, sort_keys=True)
     assert record["covers"] and record["steps"]
 
 
