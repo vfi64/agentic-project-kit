@@ -16,6 +16,8 @@ from agentic_project_kit.cli_commands import human_workflows
 def stable_workflow_executables(monkeypatch):
     monkeypatch.setattr(human_workflows, "default_agentic_kit", lambda root: "./.venv/bin/agentic-kit")
     monkeypatch.setattr(human_workflows, "default_python", lambda root: "./.venv/bin/python")
+    # Adapter fixtures pin the published anchor; deadline counting is tested separately.
+    monkeypatch.setattr("agentic_project_kit.release_deadline_gate._tags", lambda root: ["v1.2.0"])
 
 
 def _completed(argv: list[str], stdout: str = '{"result_status": "PASS"}\n', stderr: str = "", returncode: int = 0):
