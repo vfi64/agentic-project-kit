@@ -16,6 +16,7 @@ from agentic_project_kit.cli_executable import default_agentic_kit, default_pyth
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
 from agentic_project_kit.release_prepare import refresh_dpa_readiness_command_manifest_ack
+from agentic_project_kit.release_deadline_gate import deadline_blockers
 from agentic_project_kit.release_run import ReleaseRunOptions, run_release
 from agentic_project_kit.release_review_projection import review_projection_command
 from agentic_project_kit.work_discard_changes import discard_all_changes
@@ -150,6 +151,20 @@ def _emit(payload: dict[str, object], *, json_output: bool) -> None:
 def _exit_if_blocked(payload: dict[str, object]) -> None:
     if payload["result_status"] != "PASS":
         raise typer.Exit(code=int(payload["returncode"]))
+
+
+def _require_release_deadline(version: str, *, action: str, json_output: bool, dry_run: bool = False) -> None:
+    try:
+        blockers = deadline_blockers(Path("."), version)
+    except ValueError as exc:
+        blockers = [str(exc)]
+    if not blockers:
+        return
+    step = {"name": "release-deadline", "argv": [], "returncode": 2, "ok": False,
+            "allowed_returncodes": [0], "stdout": "\n".join(blockers) + "\n", "stderr": ""}
+    payload = _payload(action, [step], dry_run=dry_run, extra={"version": version})
+    _emit(payload, json_output=json_output)
+    _exit_if_blocked(payload)
 
 
 def _agentic(*parts: str) -> list[str]:
@@ -1019,6 +1034,7 @@ def release_ready_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Run release readiness through the standard-error scan wrapper."""
+    _require_release_deadline(version, action="release-ready", json_output=json_output)
     summary_line_args = _summary_line_args(summary_lines)
     release_date = date or date_cls.today().isoformat()
     effective_from_tag = from_tag or _latest_release_tag()
@@ -1065,6 +1081,7 @@ def release_prepare_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Generate release summary evidence and run release-prep safely."""
+    _require_release_deadline(version, action="release-prepare", json_output=json_output, dry_run=dry_run)
     from .. import __version__ as installed_kit_version
     from ..kit_ci_pin_guard import check_kit_ci_pin
     kit_pin_guard = check_kit_ci_pin(Path(".").resolve(), installed_kit_version)

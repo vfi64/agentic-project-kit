@@ -1,5 +1,13 @@
 # Test Gates
 
+### Release-count deadline for open findings
+
+KIT-GF-096: `tests/test_release_deadline_gate.py` covers the release before the
+deadline, the deadline release, CLOSED findings, malformed deadline data,
+external workspaces and both public release entrypoints. The gate blocks before
+release preparation; existing Greenfield stamping remains separately covered by
+`tests/test_release_greenfield_stamp.py`.
+
 ### Missing managed CI injection
 
 KIT-GF-101: `tests/test_workspace_ci_injection.py` checks explicit CI opt-in,

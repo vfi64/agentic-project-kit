@@ -301,6 +301,14 @@ Use this when `main` has uncommitted changes or local commits that block normal 
 
 Run release readiness through standard-error scan and release-status checks.
 
+KIT-GF-096: in the Kit checkout, an OPEN finding with a `release_count_after`
+deadline blocks readiness once the proposed target is the deadline release.
+The gate counts local published version tags after the anchor, plus the proposed
+target; it does not infer a count from patch-version arithmetic. The anchor tag
+must exist. Malformed deadline authority blocks instead of silently passing.
+External workspaces without the Kit planning authority are unaffected. The
+same read-only check runs before `release prepare` (including its write mode).
+
 Typical use:
 
     agentic-kit release ready --version <version> --from-tag <from-tag> --date <date> --json
