@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2
 - docs/reference/agentic-kit-commands.json: 8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc
-## Operational documentation refresh state after PR #2753
+## Operational documentation refresh state after PR #2755
 
-Current administrative handoff refresh state is `d6956cd2` (`Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)`). Continue next only after this post-PR2753 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `212cddcf` (`Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)`). Continue next only after this post-PR2755 refresh is committed and merged; the next substantive slice must be created from fresh main.

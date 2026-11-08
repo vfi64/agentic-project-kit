@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d6956cd237ae0fd4207d0cb893448fc992c398fb` (`d6956cd2`), after `Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)`.
-Last substantive work state is `d6956cd237ae0fd4207d0cb893448fc992c398fb` (`d6956cd2`), after `Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)`.
+Current verified main/admin HEAD is `212cddcfc591b100936cfe8ef788d71623473b63` (`212cddcf`), after `Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)`.
+Last substantive work state is `212cddcfc591b100936cfe8ef788d71623473b63` (`212cddcf`), after `Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

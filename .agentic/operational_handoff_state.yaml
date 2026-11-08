@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d6956cd237ae0fd4207d0cb893448fc992c398fb
-  short: d6956cd2
-  subject: Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)
+  full: 212cddcfc591b100936cfe8ef788d71623473b63
+  short: 212cddcf
+  subject: Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)
 last_substantive_work_state:
-  full: d6956cd237ae0fd4207d0cb893448fc992c398fb
-  short: d6956cd2
-  subject: Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)
+  full: 212cddcfc591b100936cfe8ef788d71623473b63
+  short: 212cddcf
+  subject: Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
