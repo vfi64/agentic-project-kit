@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ff34258d840572e1e83693246020beebbff34b91
-  short: ff34258d
-  subject: Enforce GF-096 release-count deadline at release entrypoints (#2751)
+  full: d6956cd237ae0fd4207d0cb893448fc992c398fb
+  short: d6956cd2
+  subject: Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)
 last_substantive_work_state:
-  full: ff34258d840572e1e83693246020beebbff34b91
-  short: ff34258d
-  subject: Enforce GF-096 release-count deadline at release entrypoints (#2751)
+  full: d6956cd237ae0fd4207d0cb893448fc992c398fb
+  short: d6956cd2
+  subject: Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

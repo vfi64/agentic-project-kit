@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `ff34258d840572e1e83693246020beebbff34b91` (`ff34258d`), after `Enforce GF-096 release-count deadline at release entrypoints (#2751)`.
-Last substantive work state is `ff34258d840572e1e83693246020beebbff34b91` (`ff34258d`), after `Enforce GF-096 release-count deadline at release entrypoints (#2751)`.
+Current verified main/admin HEAD is `d6956cd237ae0fd4207d0cb893448fc992c398fb` (`d6956cd2`), after `Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)`.
+Last substantive work state is `d6956cd237ae0fd4207d0cb893448fc992c398fb` (`d6956cd2`), after `Fix git-aware scan trusting a parent repository's ignore rules (KIT-GF-105) (#2753)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
