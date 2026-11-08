@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 212cddcfc591b100936cfe8ef788d71623473b63
-  short: 212cddcf
-  subject: Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)
+  full: 6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42
+  short: 6e0ae1ae
+  subject: Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)
 last_substantive_work_state:
-  full: 212cddcfc591b100936cfe8ef788d71623473b63
-  short: 212cddcf
-  subject: Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)
+  full: 6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42
+  short: 6e0ae1ae
+  subject: Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

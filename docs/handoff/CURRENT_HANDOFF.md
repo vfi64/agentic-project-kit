@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `212cddcfc591b100936cfe8ef788d71623473b63` (`212cddcf`), after `Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)`.
-Last substantive work state is `212cddcfc591b100936cfe8ef788d71623473b63` (`212cddcf`), after `Map generator type to workspace type in partial recovery (KIT-GF-104) (#2755)`.
+Current verified main/admin HEAD is `6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42` (`6e0ae1ae`), after `Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)`.
+Last substantive work state is `6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42` (`6e0ae1ae`), after `Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
