@@ -17,7 +17,10 @@ from agentic_project_kit.dpa_workspace_init_projection import (
     DPA_WORKSPACE_INIT_MANIFEST_PATH,
     validate_workspace_init_projection_manifest,
 )
-from agentic_project_kit.workspace import load_workspace
+from agentic_project_kit.workspace import (
+    GENERATOR_TO_WORKSPACE_PROJECT_TYPES,
+    load_workspace,
+)
 from agentic_project_kit.workspace_detection import is_agentic_project_kit_development_checkout
 from agentic_project_kit.workspace_init import (
     _append_gitignore_volatile,
@@ -75,10 +78,16 @@ def _recovery_plan(root: Path, *, name: str | None, project_type: str | None, pr
     if contract is None or validate_project_contract(contract):
         raise ValueError("A valid generated project.yaml contract is required for partial recovery.")
     project = contract["project"]
-    if (name and name != project["name"]) or (project_type and project_type != project["type"]):
+    generator_type = project["type"]
+    workspace_type = GENERATOR_TO_WORKSPACE_PROJECT_TYPES.get(generator_type)
+    if workspace_type is None:
+        raise ValueError(
+            f"Unsupported generated project type {generator_type!r} for workspace recovery."
+        )
+    if (name and name != project["name"]) or (project_type and project_type != workspace_type):
         raise ValueError("Recovery overrides conflict with the preserved project contract.")
     plan = build_workspace_init_plan(
-        root, name=project["name"], project_type=project["type"], profile=profile,
+        root, name=project["name"], project_type=workspace_type, profile=profile,
         recovery_plan=True,
     )
     allowed = set(plan.files) | {".agentic/project.yaml", ".agentic/todo.yaml"}
@@ -105,6 +114,8 @@ def _recovery_plan(root: Path, *, name: str | None, project_type: str | None, pr
         if not isinstance(data, dict) or not isinstance(data.get("items"), list):
             raise ValueError("Existing todo.yaml must contain an items list.")
     subject = {
+        "generator_project_type": generator_type,
+        "workspace_project_type": workspace_type,
         "root": str(root), "head": _head(root), "before": inventory,
         "additions": {path: _digest(content.encode()) for path, content in sorted(additions.items())},
         "gitignore_diff": list(_gitignore_diff(root)),

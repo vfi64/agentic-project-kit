@@ -23,6 +23,14 @@ LEGACY_PROFILE_DEPRECATION_MESSAGE = (
     f"or set {LEGACY_PROFILE_WARNING_ENV}=1 to suppress this warning."
 )
 ALLOWED_PROJECT_TYPES = frozenset({"python", "node", "generic"})
+# Generated project.yaml types accepted only by partial recovery.
+# Keep the workspace manifest type vocabulary unchanged.
+GENERATOR_TO_WORKSPACE_PROJECT_TYPES = MappingProxyType({
+    "python-cli": "python",
+    "python-lib": "python",
+    "governance-wrapper": "python",
+    "generic": "generic",
+})
 ALLOWED_PROFILES = frozenset({"python-default", "generic"})
 ALLOWED_MODULES = frozenset(
     {"release_governance", "doc_registry", "rule_registry", "transfer"}

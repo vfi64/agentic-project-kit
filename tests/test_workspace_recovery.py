@@ -234,3 +234,66 @@ def test_cli_recovery_plan_and_execution(partial):
                                  "--approved-by", "owner", "--consent-source", "test"])
     assert result.exit_code == 0, result.output
     assert json.loads(result.stdout)["result_status"] == "PASS"
+
+
+def _git_identity(monkeypatch):
+    """`init` commits only with a Git identity; CI runners have none (KIT-GF-104)."""
+    for key, value in {"GIT_AUTHOR_NAME": "Fixture", "GIT_AUTHOR_EMAIL": "fixture@example.invalid",
+                       "GIT_COMMITTER_NAME": "Fixture", "GIT_COMMITTER_EMAIL": "fixture@example.invalid"}.items():
+        monkeypatch.setenv(key, value)
+
+
+@pytest.mark.parametrize("generator_type", ["python-cli", "python-lib", "governance-wrapper"])
+def test_generated_type_mapping_recovery(tmp_path, monkeypatch, generator_type):
+    """Real generator contracts remain byte-for-byte intact through signed recovery."""
+    _git_identity(monkeypatch)
+    runner = CliRunner()
+    target = tmp_path / f"generated-{generator_type}"
+    init = runner.invoke(app, ["init", str(target), "--type", generator_type,
+                               "--description", "GF-104 fixture", "--no-github",
+                               "--no-pre-commit", "--no-github-actions"])
+    assert init.exit_code == 0, init.output
+    project_path = target / ".agentic/project.yaml"
+    original = project_path.read_bytes()
+    assert not (target / ".agentic/config.yaml").exists()
+    plan = recover_workspace(target)
+    assert plan["result_status"] == "AWAITING_APPROVAL", plan
+    assert plan["approval_subject"]["generator_project_type"] == generator_type
+    assert plan["approval_subject"]["workspace_project_type"] == "python"
+    assert project_path.read_bytes() == original
+    result = execute(target, plan)
+    assert result["result_status"] == "PASS", result
+    assert (target / ".agentic/config.yaml").exists()
+    assert project_path.read_bytes() == original
+    monkeypatch.chdir(target)
+    for command in ("check", "doctor"):
+        outcome = runner.invoke(app, [command] + (["--json"] if command == "check" else []))
+        assert outcome.exit_code == 0, (command, outcome.output)
+    before = snapshot(target)
+    again = recover_workspace(target)
+    assert again["result_status"] == "PASS" and not again["written"]
+    assert snapshot(target) == before
+
+
+def test_generator_type_override_and_unknown_block_without_writes(tmp_path, monkeypatch):
+    _git_identity(monkeypatch)
+    target = tmp_path / "generated-cli"
+    runner = CliRunner()
+    init = runner.invoke(app, ["init", str(target), "--type", "python-cli",
+                               "--description", "GF-104 fixture", "--no-github",
+                               "--no-pre-commit", "--no-github-actions"])
+    assert init.exit_code == 0, init.output
+    before = snapshot(target)
+    allowed = recover_workspace(target, project_type="python")
+    assert allowed["result_status"] == "AWAITING_APPROVAL", allowed
+    rejected = recover_workspace(target, project_type="node")
+    assert rejected["result_status"] == "BLOCKED"
+    assert snapshot(target) == before
+    path = target / ".agentic/project.yaml"
+    contract = yaml.safe_load(path.read_text())
+    contract["project"]["type"] = "unknown-generator"
+    path.write_text(yaml.safe_dump(contract))
+    before_unknown = snapshot(target)
+    unknown = recover_workspace(target)
+    assert unknown["result_status"] == "BLOCKED"
+    assert snapshot(target) == before_unknown
