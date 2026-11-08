@@ -236,9 +236,17 @@ def test_cli_recovery_plan_and_execution(partial):
     assert json.loads(result.stdout)["result_status"] == "PASS"
 
 
+def _git_identity(monkeypatch):
+    """`init` commits only with a Git identity; CI runners have none (KIT-GF-104)."""
+    for key, value in {"GIT_AUTHOR_NAME": "Fixture", "GIT_AUTHOR_EMAIL": "fixture@example.invalid",
+                       "GIT_COMMITTER_NAME": "Fixture", "GIT_COMMITTER_EMAIL": "fixture@example.invalid"}.items():
+        monkeypatch.setenv(key, value)
+
+
 @pytest.mark.parametrize("generator_type", ["python-cli", "python-lib", "governance-wrapper"])
 def test_generated_type_mapping_recovery(tmp_path, monkeypatch, generator_type):
     """Real generator contracts remain byte-for-byte intact through signed recovery."""
+    _git_identity(monkeypatch)
     runner = CliRunner()
     target = tmp_path / f"generated-{generator_type}"
     init = runner.invoke(app, ["init", str(target), "--type", generator_type,
@@ -267,7 +275,8 @@ def test_generated_type_mapping_recovery(tmp_path, monkeypatch, generator_type):
     assert snapshot(target) == before
 
 
-def test_generator_type_override_and_unknown_block_without_writes(tmp_path):
+def test_generator_type_override_and_unknown_block_without_writes(tmp_path, monkeypatch):
+    _git_identity(monkeypatch)
     target = tmp_path / "generated-cli"
     runner = CliRunner()
     init = runner.invoke(app, ["init", str(target), "--type", "python-cli",
