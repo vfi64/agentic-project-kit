@@ -1,13 +1,63 @@
-# KIT-GF-105 — Git-aware scan must verify repository root
+# KIT-GF-105: Git-aware scan must verify the repository root
 
-## Befund
-`_git_aware_scan_files(root, scan_root)` trusted `git ls-files` with exit code 0 even when `root` was inside an unrelated parent Git repository. When the parent ignored `inner/`, the file set was empty and the metadata projection scanner incorrectly returned PASS.
+Date: 2026-11-08
 
-## Reproduktion (vor der Korrektur)
-Step 247: `test_parent_repo_ignored_child_is_scanned` failed (expected BLOCKED, got PASS); the existing projection test also failed in the Cockpit temporary directory. This is the required red regression evidence.
+Scope: `_git_aware_scan_files` in `cli_commands/transfer_diagnostics.py`.
 
-## Korrektur
-Only use `git ls-files` if `git -C root rev-parse --show-prefix` succeeds with an empty prefix; otherwise recursively scan files. Genuine Git repositories retain `.gitignore` filtering.
+Status: fix merged on Kit `main` in PR #2753 (`d6956cd2`); not released.
 
-## Nachweis und Einschränkungen
-Step 248: original 51 pytest-core tests passed; Kit work check was BLOCKED solely on five Ruff formatting findings in the new test. Step 249: Kit work check PASS, no blockers; `git diff --check` PASS. Call sites: `transfer_diagnostics.py` lines near 381 and 500; their `root` semantics still need explicit review. No GF-104 slice or Owner stash modified. Full suite and CI/PR not yet verified.
+## Finding
+
+`_git_aware_scan_files(root, scan_root)` trusted `git -C root ls-files` with
+exit code 0 even when `root` was not a repository root but lay inside an
+unrelated parent Git working tree. When the parent ignored the directory
+containing `root`, the file list was empty and the static meta-preference
+projection scan returned PASS instead of BLOCKED.
+
+The defect surfaced only in AGP Cockpit runs: for a steered repository the
+Cockpit sets the work-order `TMPDIR` below its own checkout
+(`.local/agp-cockpit/repos/<name>-<hash>/tmp/<step>`, Git-ignored there), so
+pytest temporary projects sat inside an ignored part of a foreign working tree.
+
+## Change
+
+`git ls-files` is used only if `git -C root rev-parse --show-prefix` succeeds
+with an empty prefix, i.e. `root` is itself the top of a working tree.
+Otherwise the scan falls back to a recursive file walk. Genuine repository
+roots keep `.gitignore` filtering.
+
+## Regression evidence
+
+New tests in `tests/test_transfer_diagnostics_git_root.py`:
+
+- `test_parent_repo_ignored_child_is_scanned`: a child directory ignored by a
+  parent repository is scanned and the drift is BLOCKED.
+- `test_own_repository_still_respects_ignore`: in a real repository root,
+  ignored paths stay excluded and the scan is PASS.
+
+Counterprobe (2026-11-08): the test module from `d6956cd2` run against the
+source of the PR base `78a38d95` gives `1 failed, 1 passed`
+(`test_parent_repo_ignored_child_is_scanned`: PASS instead of BLOCKED).
+Against `d6956cd2` it gives `2 passed`.
+
+CI on PR head `95198cb`: `test`, `test-shard (0..2)` and `classify` succeeded,
+`pytest-parallel-shadow` skipped.
+
+## Call-site review
+
+Both callers pass the project root as `root`:
+
+- `_scan_static_meta_preference_projection_drift` (line ~381) filters excluded
+  directory names on the path relative to the scan root; correct under the fix.
+- `_known_bad_pattern_scan` (line ~500) filters `.git`, `.venv`, `tmp` and
+  `__pycache__` against all parts of the absolute path. A project located
+  below any directory named `tmp` is therefore skipped completely and the scan
+  reports no matches. Reproduced locally on 2026-11-08 (same file, 0 matches
+  below `/tmp`, 1 match elsewhere). This is a separate defect, not caused or
+  fixed by KIT-GF-105, and needs its own finding.
+
+## Boundaries
+
+Kit closure does not establish external consumer `VERIFIED_FIXED`. The finding
+has no entry in `.agentic/greenfield_findings.json` and no external retest
+contract yet. No release is claimed.
