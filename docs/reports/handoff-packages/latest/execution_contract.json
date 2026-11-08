@@ -332,14 +332,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "fix/gf-105-git-scan-parent-repo",
+      "branch": "docs/post-pr2753-handoff-refresh",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "a8b9a1de3938a6a07837f01db9f764b15d4b1ecd",
-      "head_matches_origin_main": false,
+      "head": "d6956cd237ae0fd4207d0cb893448fc992c398fb",
+      "head_matches_origin_main": true,
       "local_path": "cd /path/to/",
-      "origin_main": "78a38d95ba31235ccfaf06cf4f4e8110479fbd99",
-      "worktree_clean": true
+      "origin_main": "d6956cd237ae0fd4207d0cb893448fc992c398fb",
+      "worktree_clean": false
     },
     "scope": "current-continuation-state"
   },
@@ -519,14 +519,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "fix/gf-105-git-scan-parent-repo",
+    "branch": "docs/post-pr2753-handoff-refresh",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "a8b9a1de3938a6a07837f01db9f764b15d4b1ecd",
-    "head_matches_origin_main": false,
+    "head": "d6956cd237ae0fd4207d0cb893448fc992c398fb",
+    "head_matches_origin_main": true,
     "local_path": "cd /path/to/",
-    "origin_main": "78a38d95ba31235ccfaf06cf4f4e8110479fbd99",
-    "worktree_clean": true
+    "origin_main": "d6956cd237ae0fd4207d0cb893448fc992c398fb",
+    "worktree_clean": false
   },
   "rules": [
     {
