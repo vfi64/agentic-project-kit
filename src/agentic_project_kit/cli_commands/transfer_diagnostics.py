@@ -32,6 +32,12 @@ def _load_command_reference_names(root: Path) -> set[str]:
 def _git_aware_scan_files(root: Path, scan_root: Path) -> list[Path]:
     if not scan_root.exists():
         return []
+    prefix = subprocess.run(
+        ["git", "-C", root.as_posix(), "rev-parse", "--show-prefix"],
+        text=True, capture_output=True, check=False,
+    )
+    if prefix.returncode != 0 or prefix.stdout.strip():
+        return sorted(path for path in scan_root.rglob("*") if path.is_file())
     completed = subprocess.run(
         ["git", "-C", root.as_posix(), "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", scan_root.relative_to(root).as_posix()],
         text=True,
