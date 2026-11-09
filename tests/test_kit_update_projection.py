@@ -42,17 +42,14 @@ def test_target_preview_preserves_distinct_origin_inputs(tmp_path, monkeypatch, 
     import json
     import os
     import subprocess
-    from agentic_project_kit import external_projection_policy
     from agentic_project_kit.external_handoff_projection import collect_projection_inputs, input_hashes, check_projection
-    from agentic_project_kit.greenfield_retest_runtime import prepare_owned_runtime, activate_projection_fixture
+    from agentic_project_kit.greenfield_retest_runtime import prepare_owned_runtime
     from agentic_project_kit.kit_update_projection import preview_target_projection
     from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
     from agentic_project_kit.workspace_init import build_workspace_init_plan, execute_workspace_init
 
     env = dict(os.environ)
     python = prepare_owned_runtime(tmp_path / "target", env, console=False)
-    activate_projection_fixture(python)
-    monkeypatch.setattr(external_projection_policy, "EXTERNAL_PROJECTION_V2_ACTIVE", True)
     root = tmp_path / "consumer"
     root.mkdir()
     origin = "https://github.com/example/remote-identity.git"

@@ -10,5 +10,6 @@ def test_source_wheels_have_explicit_a_and_b_policy(tmp_path):
     for version, active in (("1.1.11", False), ("1.1.12", True), ("1.1.11.post1", False)):
         with zipfile.ZipFile(wheels[version]) as wheel:
             assert f'__version__ = "{version}"' in wheel.read("agentic_project_kit/__init__.py").decode()
-            assert f"EXTERNAL_PROJECTION_V2_ACTIVE = {active}" in wheel.read("agentic_project_kit/external_projection_policy.py").decode()
+            policy = wheel.read("agentic_project_kit/external_projection_policy.py").decode()
+            assert ("EXTERNAL_PROJECTION_V2_ACTIVE = False" in policy) is (not active)
             assert f"Version: {version}\n" in wheel.read(f"agentic_project_kit-{version}.dist-info/METADATA").decode()

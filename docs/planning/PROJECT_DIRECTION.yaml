@@ -5094,6 +5094,7 @@ plans:
   source_files:
   - .agentic/greenfield_findings.json
   - docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+  - docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md
   acceptance:
   - Known external migrations and v2 fixtures are evidenced before removal.
   - External v1 acceptance and refresh-only descendant logic are removed by a separate

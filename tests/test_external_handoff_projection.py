@@ -9,12 +9,6 @@ import socket
 import pytest
 
 
-@pytest.fixture(autouse=True)
-def active_release_b(monkeypatch):
-    from agentic_project_kit import external_projection_policy
-    monkeypatch.setattr(external_projection_policy, "EXTERNAL_PROJECTION_V2_ACTIVE", True)
-
-
 def test_projection_renderer_is_pure_and_byte_stable(monkeypatch):
     from agentic_project_kit.external_handoff_projection import ProjectionInputs, render_projection
 

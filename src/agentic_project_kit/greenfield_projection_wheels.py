@@ -1,6 +1,6 @@
 """Source-built test wheels and installed dependency wheels for offline retests.
 
-Only the disposable Kit copies change version and the package activation constant.
+Only disposable Kit copies change version; historical A copies retain their old policy.
 Dependencies retain their installed bytes, metadata and platform tags. No package
 resolution, source download, consumer runtime or invoking installation is mutated.
 """
@@ -48,8 +48,17 @@ def build_fixture_wheels(directory: Path) -> dict[str, Path]:
                  for p in package.rglob("*") if p.is_file() and "__pycache__" not in p.parts and p.suffix != ".pyc"}
         files["agentic_project_kit/__init__.py"] = f'__version__ = "{version}"\n'.encode()
         policy = "agentic_project_kit/external_projection_policy.py"
-        files[policy] = re.sub(rb"EXTERNAL_PROJECTION_V2_ACTIVE = (?:True|False)",
-                               f"EXTERNAL_PROJECTION_V2_ACTIVE = {active}".encode(), files[policy])
+        if not active:
+            files[policy] = (
+                b'"""Historical release A external projection policy (fixture only)."""\n'
+                b'from pathlib import Path\n'
+                b'from agentic_project_kit.workspace_detection import is_external_manifest_workspace\n'
+                b'EXTERNAL_PROJECTION_V2_ACTIVE = False\n'
+                b'def external_projection_contract_version() -> int:\n'
+                b'    return 2 if EXTERNAL_PROJECTION_V2_ACTIVE else 1\n'
+                b'def uses_external_projection_v2(root: Path) -> bool:\n'
+                b'    return external_projection_contract_version() == 2 and is_external_manifest_workspace(root)\n'
+            )
         text = dist.read_text("METADATA")
         files[info + "/METADATA"] = re.sub(r"(?m)^Version: .*$", "Version: " + version, text).encode()
         files[info + "/WHEEL"] = b"Wheel-Version: 1.0\nGenerator: agentic-kit-local-retest\nRoot-Is-Purelib: true\nTag: py3-none-any\n"
