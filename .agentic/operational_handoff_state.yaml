@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42
-  short: 6e0ae1ae
-  subject: Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)
+  full: 90ce81a2955a7dc1847f4e359651d3dcfc8ba186
+  short: 90ce81a2
+  subject: Retire external v1 projection acceptance for GF-096 (#2759)
 last_substantive_work_state:
-  full: 6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42
-  short: 6e0ae1ae
-  subject: Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)
+  full: 90ce81a2955a7dc1847f4e359651d3dcfc8ba186
+  short: 90ce81a2
+  subject: Retire external v1 projection acceptance for GF-096 (#2759)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
