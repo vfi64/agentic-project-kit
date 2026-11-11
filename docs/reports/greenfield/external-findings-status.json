@@ -1,9 +1,9 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 101,
+    "CLOSED": 102,
     "NOT_APPLICABLE": 0,
-    "OPEN": 1,
+    "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
@@ -7676,20 +7676,22 @@
           ]
         },
         "preconditions": [
-          "Every known external workspace first records release A adoption and then v2 adoption; all Kit Greenfield fixtures use v2; due no later than the second release after activation release B."
+          "Every known external workspace first records release A adoption and then v2 adoption; current Kit Greenfield workspace fixtures use v2 (historical A wheel fixtures remain for return tests); due no later than the second release after activation release B."
         ],
         "remote_effects": [
           "network_read",
           "none"
         ],
-        "verification": "Open expiry follow-up; not claimed fixed or externally verified.",
+        "verification": "Kit implementation merged in PR #2759 with handoff closeout PR #2760, full local gates and green PR CI. Cockpit PR #432 and Comm-SCI-Control-private PR #21 record v2 adoption. Kit fix is unreleased; owner_remote retest is NOT_RUN_LOCALLY and consumer VERIFIED_FIXED remains separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "",
+      "fixed_in": "unreleased",
       "id": "KIT-GF-096",
-      "kit_state": "OPEN",
-      "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md"
+      "kit_state": "CLOSED",
+      "prs": [
+        2759
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md"
     },
     {
       "external_retest": {
@@ -8590,5 +8592,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 60,
   "schema_version": 1,
-  "source_sha256": "6a0ae40b8621ebae17670a81341b2b7e2abb4826ddf165d4d08ee077d77f9740"
+  "source_sha256": "5a413af916bd94fc4a03490973e8d911a4a7f6ba3397cc2775d4683c87bec6d0"
 }

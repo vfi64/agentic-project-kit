@@ -7357,14 +7357,14 @@
     },
     {
       "id": "KIT-GF-096",
-      "kit_state": "OPEN",
-      "fixed_in": "",
-      "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [2759],
+      "report": "docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
         "preconditions": [
-          "Every known external workspace first records release A adoption and then v2 adoption; all Kit Greenfield fixtures use v2; due no later than the second release after activation release B."
+          "Every known external workspace first records release A adoption and then v2 adoption; current Kit Greenfield workspace fixtures use v2 (historical A wheel fixtures remain for return tests); due no later than the second release after activation release B."
         ],
         "commands": [
           "agentic-kit check --json",
@@ -7381,7 +7381,7 @@
             "Migration evidence complete for all known external workspaces; no external v1 acceptance or refresh remains."
           ]
         },
-        "verification": "Open expiry follow-up; not claimed fixed or externally verified."
+        "verification": "Kit implementation merged in PR #2759 with handoff closeout PR #2760, full local gates and green PR CI. Cockpit PR #432 and Comm-SCI-Control-private PR #21 record v2 adoption. Kit fix is unreleased; owner_remote retest is NOT_RUN_LOCALLY and consumer VERIFIED_FIXED remains separate."
       }
     },
     {

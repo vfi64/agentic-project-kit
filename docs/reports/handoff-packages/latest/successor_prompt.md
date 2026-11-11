@@ -39,9 +39,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2759-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/gf096-status-stamp`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -445,15 +445,6 @@ Wenn der Bootstrap grün ist:
       "id": "external-retest-machine-contracts",
       "status": "active",
       "summary": "Give every local finding retest a machine contract and resync the external ledger"
-    },
-    {
-      "files": [
-        "docs/planning/PROJECT_DIRECTION.yaml",
-        "docs/DOCUMENTATION_REGISTRY.yaml"
-      ],
-      "id": "external-v1-acceptance-removal",
-      "status": "planned",
-      "summary": "Remove external v1 acceptance after v2 migration"
     }
   ],
   "recent_lessons": [
@@ -466,15 +457,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2759-handoff-refresh",
+    "branch": "codex/gf096-status-stamp",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-    "head_matches_origin_main": true,
-    "head_short": "90ce81a2",
+    "head": "0a33b8470cdf870162d179d2302c46fdeeab309e",
+    "head_matches_origin_main": false,
+    "head_short": "0a33b847",
     "local_path": "cd /path/to/",
-    "origin_main": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-    "origin_main_short": "90ce81a2",
-    "worktree_clean": false
+    "origin_main": "89967a6957108b5acd9ec223bdb19a98edd203f1",
+    "origin_main_short": "89967a69",
+    "worktree_clean": true
   }
 }
 ```

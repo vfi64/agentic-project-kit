@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-11T07:16:19.975290+00:00",
+  "generated_at_utc": "2026-11-11T07:22:28.563890+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.2.0"
   },
   "repo": {
-    "branch": "docs/post-pr2759-handoff-refresh",
+    "branch": "codex/gf096-status-stamp",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-    "head_matches_origin_main": true,
-    "head_short": "90ce81a2",
+    "head": "0a33b8470cdf870162d179d2302c46fdeeab309e",
+    "head_matches_origin_main": false,
+    "head_short": "0a33b847",
     "local_path": "cd /path/to/",
-    "origin_main": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-    "origin_main_short": "90ce81a2",
-    "worktree_clean": false
+    "origin_main": "89967a6957108b5acd9ec223bdb19a98edd203f1",
+    "origin_main_short": "89967a69",
+    "worktree_clean": true
   },
   "schema_version": 1,
   "short_term_memory": {
@@ -366,15 +366,6 @@
         "id": "external-retest-machine-contracts",
         "status": "active",
         "summary": "Give every local finding retest a machine contract and resync the external ledger"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "external-v1-acceptance-removal",
-        "status": "planned",
-        "summary": "Remove external v1 acceptance after v2 migration"
       }
     ],
     "recent_lessons": [
