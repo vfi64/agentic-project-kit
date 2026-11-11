@@ -5075,7 +5075,7 @@ plans:
   - docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
   - docs/reports/PLANNING_RECONCILIATION_20261021.md
 - id: external-v1-acceptance-removal
-  status: planned
+  status: done
   title: Remove external v1 acceptance after v2 migration
   finding: KIT-GF-096
   deadline:

@@ -1,6 +1,6 @@
 # KIT-GF-096: external v1 retirement evidence
 
-Status: implementation evidence for review; no release or `fixed_in` is claimed here.
+Status: Kit implementation merged in [PR #2759](https://github.com/vfi64/agentic-project-kit/pull/2759), with successor handoff closeout [PR #2760](https://github.com/vfi64/agentic-project-kit/pull/2760). Kit finding: CLOSED, `fixed_in: unreleased`. No release or consumer `VERIFIED_FIXED` is claimed.
 
 ## Known external workspace migrations
 
@@ -15,4 +15,4 @@ The Comm-SCI migration updates both managed CI pins, sets `handoff.projection_co
 
 The current Kit policy always selects external projection v2. Historical A behavior remains confined to disposable versioned test wheels and explicit test simulations; a restored old Kit retains its own v1 implementation. An external v1 report in a current Kit enters the existing governed migration diagnosis. Kit self-hosting keeps its separate refresh-only descendant handling.
 
-The code slice is complete only after focused and full gates, PR CI, and release retest. `KIT-GF-096` remains OPEN with no `fixed_in` until those steps have evidence.
+The code slice passed 252 focused tests and 4,572 full tests, Ruff, check-docs, doctor and protected-diff-plan. PR #2759 had green CI. Post-merge status on `main` at `89967a69` was `READY` with no further refresh required. The owner_remote retest remains `NOT_RUN_LOCALLY`; its CLI reports `INCOMPLETE` by design. Release stamping and consumer `VERIFIED_FIXED` remain separate from this Kit implementation status.

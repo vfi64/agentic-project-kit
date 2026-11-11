@@ -1628,12 +1628,12 @@ Expected result fields: `{"assertions": ["The fixture compares all return assert
 
 ## KIT-GF-096
 
-Kit state: OPEN; fixed_in: not established.
-Evidence: docs/reports/greenfield/KIT-GF-094-external-handoff-v2-2026-11-01.md
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md
 
 Execution class: owner_remote (effects: network_read, none); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
 
-Preconditions: Every known external workspace first records release A adoption and then v2 adoption; all Kit Greenfield fixtures use v2; due no later than the second release after activation release B.
+Preconditions: Every known external workspace first records release A adoption and then v2 adoption; current Kit Greenfield workspace fixtures use v2 (historical A wheel fixtures remain for return tests); due no later than the second release after activation release B.
 
 ```text
 agentic-kit check --json
