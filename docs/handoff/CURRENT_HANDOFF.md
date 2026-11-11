@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42` (`6e0ae1ae`), after `Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)`.
-Last substantive work state is `6e0ae1ae84fbc045a470f3b035a46b2fc01fdf42` (`6e0ae1ae`), after `Bring KIT-GF-104 and KIT-GF-105 reports to merged state (#2757)`.
+Current verified main/admin HEAD is `90ce81a2955a7dc1847f4e359651d3dcfc8ba186` (`90ce81a2`), after `Retire external v1 projection acceptance for GF-096 (#2759)`.
+Last substantive work state is `90ce81a2955a7dc1847f4e359651d3dcfc8ba186` (`90ce81a2`), after `Retire external v1 projection acceptance for GF-096 (#2759)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
