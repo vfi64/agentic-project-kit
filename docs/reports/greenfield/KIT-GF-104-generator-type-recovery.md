@@ -54,5 +54,5 @@ head `ecb93c5`: `test`, `test-shard (0..2)` and `classify` succeeded,
 ## Boundaries
 
 Kit closure does not establish external consumer `VERIFIED_FIXED`. The finding
-has no entry in `.agentic/greenfield_findings.json` and no external retest
-contract yet. No release is claimed.
+now has a catalog retest description, but the installed-runtime harness has no
+partial generator project fixture. No release is claimed.

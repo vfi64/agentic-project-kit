@@ -32,11 +32,8 @@ def _load_command_reference_names(root: Path) -> set[str]:
 def _git_aware_scan_files(root: Path, scan_root: Path) -> list[Path]:
     if not scan_root.exists():
         return []
-    prefix = subprocess.run(
-        ["git", "-C", root.as_posix(), "rev-parse", "--show-prefix"],
-        text=True, capture_output=True, check=False,
-    )
-    if prefix.returncode != 0 or prefix.stdout.strip():
+    from agentic_project_kit.git_scan_root import is_git_worktree_root
+    if not is_git_worktree_root(root):
         return sorted(path for path in scan_root.rglob("*") if path.is_file())
     completed = subprocess.run(
         ["git", "-C", root.as_posix(), "ls-files", "--cached", "--others", "--exclude-standard", "-z", "--", scan_root.relative_to(root).as_posix()],
@@ -498,7 +495,7 @@ def _known_bad_pattern_scan(root: Path) -> dict[str, object]:
         if not base.exists():
             continue
         for file_path in _git_aware_scan_files(root, base):
-            if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in file_path.parts):
+            if any(part in {".git", ".venv", "tmp", "__pycache__"} for part in file_path.relative_to(root).parts):
                 continue
             try:
                 content = file_path.read_text(encoding="utf-8")

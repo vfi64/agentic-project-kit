@@ -190,3 +190,19 @@ def test_ns_legacy_audit_still_blocks_tracked_file_with_git_excludes(tmp_path: P
     assert result.ok is False
     assert [blocker.path for blocker in result.blockers] == ["docs/handoff/START.md"]
 
+
+def test_ns_legacy_audit_scans_ignored_child_of_parent_repository(tmp_path: Path) -> None:
+    outer = tmp_path / "outer"
+    outer.mkdir()
+    subprocess.run(["git", "init", "-q", str(outer)], check=True)
+    (outer / ".gitignore").write_text("child/\n", encoding="utf-8")
+    root = outer / "child"
+    doc = root / "docs" / "handoff" / "START.md"
+    doc.parent.mkdir(parents=True)
+    doc.write_text("Run ./" + "ns release-prep 0.4.9\n", encoding="utf-8")
+
+    result = audit_ns_legacy_references(root)
+
+    assert result.status == "BLOCK"
+    assert [blocker.path for blocker in result.blockers] == ["docs/handoff/START.md"]
+

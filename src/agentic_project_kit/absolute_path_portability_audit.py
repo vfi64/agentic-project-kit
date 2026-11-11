@@ -134,6 +134,9 @@ def _is_text_file(path: Path) -> bool:
 
 
 def _git_listed_files(root: Path) -> list[Path] | None:
+    from agentic_project_kit.git_scan_root import is_git_worktree_root
+    if not is_git_worktree_root(root):
+        return None
     completed = subprocess.run(
         ["git", "-C", root.as_posix(), "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
         text=True,
