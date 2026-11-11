@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `90ce81a2955a7dc1847f4e359651d3dcfc8ba186` (`90ce81a2`), after `Retire external v1 projection acceptance for GF-096 (#2759)`.
-Last substantive work state is `90ce81a2955a7dc1847f4e359651d3dcfc8ba186` (`90ce81a2`), after `Retire external v1 projection acceptance for GF-096 (#2759)`.
+Current verified main/admin HEAD is `5ac1abe4a818bc4f6374c3f1c05d842c861b55b3` (`5ac1abe4`), after `Stamp GF-096 closed as unreleased (#2761)`.
+Last substantive work state is `5ac1abe4a818bc4f6374c3f1c05d842c861b55b3` (`5ac1abe4`), after `Stamp GF-096 closed as unreleased (#2761)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

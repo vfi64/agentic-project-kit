@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2
 - docs/reference/agentic-kit-commands.json: 8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc
-## Operational documentation refresh state after PR #2759
+## Operational documentation refresh state after PR #2761
 
-Current administrative handoff refresh state is `90ce81a2` (`Retire external v1 projection acceptance for GF-096 (#2759)`). Continue next only after this post-PR2759 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `5ac1abe4` (`Stamp GF-096 closed as unreleased (#2761)`). Continue next only after this post-PR2761 refresh is committed and merged; the next substantive slice must be created from fresh main.
