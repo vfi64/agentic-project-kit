@@ -32,6 +32,12 @@ with `ancestry_unknown`; the full clone remains PASS. A divergent commit whose
 `generated_head` exists locally still requests refresh. The test also checks
 that the settle and lifecycle refresh selectors have no action for BLOCKED.
 
+Full Kit suite on committed branch head `e1ec2b9f`: 4577 passed, 570
+deprecation warnings in 1150.65 seconds. The first full-suite attempt exposed
+the catalog meta-test's requirement for machine contracts on all local retests;
+the four explicitly justified fixture exceptions were added before this green
+rerun.
+
 ## Other ancestry call sites
 
 A source inventory found `merge-base --is-ancestor` in
