@@ -6,10 +6,10 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `90ce81a2955a7dc1847f4e359651d3dcfc8ba186` (`90ce81a2`)
-- Handoff freshness marker: `90ce81a2`
-- Branch at generation: `docs/post-pr2759-handoff-refresh`
-- Worktree clean at generation: `False`
+- HEAD: `0a33b8470cdf870162d179d2302c46fdeeab309e` (`0a33b847`)
+- Handoff freshness marker: `0a33b847`
+- Branch at generation: `codex/gf096-status-stamp`
+- Worktree clean at generation: `True`
 
 ## Successor handoff package
 
@@ -104,7 +104,6 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 - `proof-assurance-assessment` (planned): PAA — Proof Assurance Assessment: investigation and development plan for trustworthy software evidence
 - `guided-gui-alternative` (active): Validate an optional guided Kit GUI over shared guarded actions for GUI
 - `external-retest-machine-contracts` (active): Give every local finding retest a machine contract and resync the external ledger
-- `external-v1-acceptance-removal` (planned): Remove external v1 acceptance after v2 migration
 
 ### RESULT: PASS ###
 

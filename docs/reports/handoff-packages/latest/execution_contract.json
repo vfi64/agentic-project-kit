@@ -310,15 +310,6 @@
         "id": "external-retest-machine-contracts",
         "status": "active",
         "summary": "Give every local finding retest a machine contract and resync the external ledger"
-      },
-      {
-        "files": [
-          "docs/planning/PROJECT_DIRECTION.yaml",
-          "docs/DOCUMENTATION_REGISTRY.yaml"
-        ],
-        "id": "external-v1-acceptance-removal",
-        "status": "planned",
-        "summary": "Remove external v1 acceptance after v2 migration"
       }
     ],
     "open_tasks_source": "docs/planning/PROJECT_DIRECTION.yaml",
@@ -332,14 +323,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2759-handoff-refresh",
+      "branch": "codex/gf096-status-stamp",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-      "head_matches_origin_main": true,
+      "head": "0a33b8470cdf870162d179d2302c46fdeeab309e",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-      "worktree_clean": false
+      "origin_main": "89967a6957108b5acd9ec223bdb19a98edd203f1",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -519,14 +510,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2759-handoff-refresh",
+    "branch": "codex/gf096-status-stamp",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-    "head_matches_origin_main": true,
+    "head": "0a33b8470cdf870162d179d2302c46fdeeab309e",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "90ce81a2955a7dc1847f4e359651d3dcfc8ba186",
-    "worktree_clean": false
+    "origin_main": "89967a6957108b5acd9ec223bdb19a98edd203f1",
+    "worktree_clean": true
   },
   "rules": [
     {
