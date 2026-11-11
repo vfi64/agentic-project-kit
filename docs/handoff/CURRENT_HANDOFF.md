@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `5ac1abe4a818bc4f6374c3f1c05d842c861b55b3` (`5ac1abe4`), after `Stamp GF-096 closed as unreleased (#2761)`.
-Last substantive work state is `5ac1abe4a818bc4f6374c3f1c05d842c861b55b3` (`5ac1abe4`), after `Stamp GF-096 closed as unreleased (#2761)`.
+Current verified main/admin HEAD is `b34161a2a2f0019bb2974ab5a6b414ce805facf5` (`b34161a2`), after `Fix GF106-108 audits and catalog GF104-108 (#2763)`.
+Last substantive work state is `b34161a2a2f0019bb2974ab5a6b414ce805facf5` (`b34161a2`), after `Fix GF106-108 audits and catalog GF104-108 (#2763)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

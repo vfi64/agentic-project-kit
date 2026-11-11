@@ -1,5 +1,5 @@
 {
-  "generated_at_utc": "2026-11-11T13:21:53.598042+00:00",
+  "generated_at_utc": "2026-11-11T17:45:00.664827+00:00",
   "generated_by": "agentic-kit transfer chat-switch-complete",
   "handoff_validity": {
     "canonical_bootstrap": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
@@ -57,15 +57,15 @@
     "package_version": "1.2.0"
   },
   "repo": {
-    "branch": "codex/gf104-108-audit-hardening-v2",
+    "branch": "docs/post-pr2763-handoff-refresh",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "35a15accd275874ac356142ea03b19bd7fee442a",
-    "head_matches_origin_main": false,
-    "head_short": "35a15acc",
+    "head": "b34161a2a2f0019bb2974ab5a6b414ce805facf5",
+    "head_matches_origin_main": true,
+    "head_short": "b34161a2",
     "local_path": "cd /path/to/",
-    "origin_main": "b07b02ee85ca1dbf1606a6a08dae8dd0a2a93542",
-    "origin_main_short": "b07b02ee",
-    "worktree_clean": true
+    "origin_main": "b34161a2a2f0019bb2974ab5a6b414ce805facf5",
+    "origin_main_short": "b34161a2",
+    "worktree_clean": false
   },
   "schema_version": 1,
   "short_term_memory": {
