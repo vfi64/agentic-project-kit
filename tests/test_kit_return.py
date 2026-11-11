@@ -9,12 +9,6 @@ import subprocess
 import pytest
 
 
-@pytest.fixture(autouse=True)
-def active_projection_contract(monkeypatch):
-    from agentic_project_kit import external_projection_policy
-    monkeypatch.setattr(external_projection_policy, "EXTERNAL_PROJECTION_V2_ACTIVE", True)
-
-
 def _git(root, *args):
     return subprocess.check_output(["git", *args], cwd=root, text=True, stderr=subprocess.STDOUT).strip()
 
@@ -267,7 +261,9 @@ def test_pending_installation_return_is_read_only_and_never_plans_migration(tmp_
     def observed(number):
         return {"number": number, "state": "MERGED", "baseRefName": "main", "headRefOid": head, "mergeCommit": {"oid": merge}}
     record_merged_return(tmp_path, 102, run=run, observe_pr=observed)
-    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", active)
+    if not active:
+        monkeypatch.setattr("agentic_project_kit.transfer_repo_actions.uses_external_projection_v2", lambda _root: False)
+        monkeypatch.setattr("agentic_project_kit.external_projection_policy.external_projection_contract_version", lambda: 1)
     monkeypatch.chdir(tmp_path)
     before = {p.relative_to(tmp_path).as_posix(): p.read_bytes() for p in tmp_path.rglob("*") if p.is_file()}
     result = post_merge_check()

@@ -3844,7 +3844,6 @@ def test_successor_package_freshness_detects_missing_execution_contract(tmp_path
 
 
 def test_successor_package_freshness_requires_external_v1_migration(tmp_path, monkeypatch) -> None:
-    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", True)
     import json
     import subprocess
 

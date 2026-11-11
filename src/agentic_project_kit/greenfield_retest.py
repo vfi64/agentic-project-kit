@@ -335,9 +335,6 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
         try:
             python = prepare_owned_runtime(base, env, console=machine["fixture"] != "external_owned_interpreter")
             variables["kit_python"] = str(python)
-            if machine["fixture"] in {"external_projection_v2", "external_kit_return"}:
-                from agentic_project_kit.greenfield_retest_runtime import activate_projection_fixture
-                activate_projection_fixture(python)
         except (OSError, RuntimeError, subprocess.SubprocessError) as exc:
             return root, variables, [f"owned runtime fixture failed: {exc}"]
     if machine["fixture"] in {"external_release_check", "external_release_check_stale_editable"}:
@@ -355,15 +352,10 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
             return root, variables, failures
     if machine["fixture"] == "external_kit_return":
         from agentic_project_kit.greenfield_retest_return import prepare_return_fixture
-        from agentic_project_kit import external_projection_policy
-        previous = external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE
         try:
-            external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE = True
             prepare_return_fixture(root, variables, env)
         except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
             return root, variables, [f"return fixture failed: {exc}"]
-        finally:
-            external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE = previous
     if machine["fixture"] == "external_projection_v2":
         result = _run(["agentic-kit", "transfer", "prepare-successor-handoff", "--json"], root, env)
         if result.returncode:

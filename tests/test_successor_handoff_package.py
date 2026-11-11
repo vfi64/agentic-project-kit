@@ -280,7 +280,6 @@ def test_successor_handoff_artifacts_snapshot(tmp_path):
 
 
 def test_external_workspace_successor_handoff_package_uses_operating_layer_paths(tmp_path, monkeypatch):
-    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", True)
     import json
 
     from agentic_project_kit import successor_handoff_package as package
@@ -350,7 +349,6 @@ def test_external_workspace_successor_handoff_package_uses_operating_layer_paths
 
 
 def test_external_workspace_chat_switch_cli_defaults_to_workspace_package_path(tmp_path, monkeypatch):
-    monkeypatch.setattr("agentic_project_kit.external_projection_policy.EXTERNAL_PROJECTION_V2_ACTIVE", True)
     import json
 
     from typer.testing import CliRunner
