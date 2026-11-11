@@ -50,6 +50,7 @@ class RepoActionResult:
 class SuccessorPackageFreshnessCheck:
     findings: tuple[str, ...]
     notes: tuple[str, ...]
+    ancestry_unknown: bool = False
 
 
 @dataclass(frozen=True)
@@ -429,7 +430,7 @@ def _result(action: str, command: list[str], completed: subprocess.CompletedProc
 
 
 
-def _is_refresh_only_successor_package_head(generated_head: str, current_head: str, ws: Workspace) -> bool:
+def _is_refresh_only_successor_package_head(generated_head: str, current_head: str, ws: Workspace) -> bool | None:
     """Return true when commits after generated_head only touch refresh artifacts.
 
     Successor package files are generated before they are committed. Therefore a
@@ -444,12 +445,14 @@ def _is_refresh_only_successor_package_head(generated_head: str, current_head: s
 
     root = ws.root
     merge_base = _run(["git", "merge-base", "--is-ancestor", generated_head, current_head], cwd=root)
-    if merge_base.returncode != 0:
+    if merge_base.returncode == 1:
         return False
+    if merge_base.returncode != 0:
+        return None
 
     diff = _run(["git", "diff", "--name-only", f"{generated_head}..{current_head}"], cwd=root)
     if diff.returncode != 0:
-        return False
+        return None
 
     changed = {line.strip() for line in diff.stdout.splitlines() if line.strip()}
     if not changed:
@@ -527,6 +530,7 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
     if validation.get("status") != "PASS":
         findings.append("validation_report.json status is not PASS")
     generated_head = str(validation.get("generated_head") or "")
+    ancestry_unknown = False
     if head and generated_head:
         if generated_head == head:
             notes.extend(
@@ -536,18 +540,30 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
                     f"successor_package_current_head={head}",
                 ]
             )
-        elif _is_refresh_only_successor_package_head(generated_head, head, ws):
-            notes.extend(
-                [
-                    "successor_package_head_status=refresh_only_descendant",
-                    "successor_package_identity_model=refresh_only_descendant",
-                    "successor_package_final_head_authority=post_merge_freshness_evidence",
-                    f"successor_package_generated_head={generated_head}",
-                    f"successor_package_current_head={head}",
-                ]
-            )
         else:
-            findings.append("validation_report.json generated_head does not match HEAD or refresh-only ancestry")
+            refresh_only = _is_refresh_only_successor_package_head(generated_head, head, ws)
+            if refresh_only is True:
+                notes.extend(
+                    [
+                        "successor_package_head_status=refresh_only_descendant",
+                        "successor_package_identity_model=refresh_only_descendant",
+                        "successor_package_final_head_authority=post_merge_freshness_evidence",
+                        f"successor_package_generated_head={generated_head}",
+                        f"successor_package_current_head={head}",
+                    ]
+                )
+            elif refresh_only is None:
+                ancestry_unknown = True
+                notes.extend(
+                    [
+                        "successor_package_head_status=ancestry_unknown",
+                        f"successor_package_generated_head={generated_head}",
+                        f"successor_package_current_head={head}",
+                        "successor_package_ancestry_hint=check_local_git_history_including_shallow_clone",
+                    ]
+                )
+            else:
+                findings.append("validation_report.json generated_head does not match HEAD or refresh-only ancestry")
 
     try:
         execution_contract = json.loads(execution_text) if execution_text else {}
@@ -594,7 +610,9 @@ def _successor_package_freshness_check(repo_root: Path | None = None) -> Success
     if "\\n## Operational documentation refresh state" in combined or "\\n\\n## Operational documentation refresh state" in combined:
         findings.append("successor handoff package contains literal newline artifacts")
 
-    return SuccessorPackageFreshnessCheck(findings=tuple(findings), notes=tuple(notes))
+    return SuccessorPackageFreshnessCheck(
+        findings=tuple(findings), notes=tuple(notes), ancestry_unknown=ancestry_unknown
+    )
 
 
 def _successor_package_freshness_findings(repo_root: Path | None = None) -> list[str]:
@@ -610,10 +628,12 @@ def _successor_package_freshness_notes(repo_root: Path | None = None) -> list[st
 
 
 def _successor_package_freshness_summary() -> str:
-    findings = _successor_package_freshness_findings()
-    if not findings:
+    check = _successor_package_freshness_check()
+    if check.ancestry_unknown:
+        return "successor package ancestry unknown"
+    if not check.findings:
         return "successor package fresh"
-    return "successor package stale: " + "; ".join(findings)
+    return "successor package stale: " + "; ".join(check.findings)
 
 
 def final_signal(result: RepoActionResult) -> str:
@@ -1916,6 +1936,15 @@ def post_merge_check(*, main_branch: str = "main") -> RepoActionResult:
             completed.returncode,
             completed.stdout + ("\n" if completed.stdout else "") + "\n".join(package_notes),
             completed.stderr,
+        )
+
+    if "successor_package_head_status=ancestry_unknown" in package_notes:
+        return RepoActionResult(
+            action="post-merge-check", result_status="BLOCKED", returncode=2,
+            command=command, stdout=completed.stdout, stderr=completed.stderr,
+            next_action=_post_merge_state_lines(
+                state="BLOCKED", next_action="diagnose_successor_package_ancestry_unknown"
+            ).strip(),
         )
 
     package_findings = _successor_package_freshness_findings()

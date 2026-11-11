@@ -1,14 +1,14 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 102,
+    "CLOSED": 107,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
-    "kit_release": 7,
-    "local": 60,
+    "kit_release": 8,
+    "local": 64,
     "owner_remote": 35
   },
   "findings": [
@@ -8455,6 +8455,165 @@
     {
       "external_retest": {
         "bindings": {
+          "signature": "Signature returned by the recovery plan"
+        },
+        "commands": [
+          "agentic-kit workspace init --recover-partial --root . --json",
+          "agentic-kit workspace init --recover-partial --root . --execute --expected-signature {signature} --json",
+          "agentic-kit check --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Plan and signed execution PASS; generated project contract is preserved and check PASS."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_generated_type_mapping_recovery covers three generator types and idempotence; test_generator_type_override_and_unknown_block_without_writes covers rejection without writes."
+          ]
+        },
+        "preconditions": [
+          "Disposable generator project created with python-cli type, explicit Git identity, and no .agentic/config.yaml."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Native real-Git regression tests passed; the installed-runtime retest harness cannot construct a partial generator project with signed recovery preconditions. Consumer verification and release remain separate.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-104",
+      "kit_state": "CLOSED",
+      "prs": [
+        2755
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer standard-error-scan --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Static meta-preference drift in the child is reported BLOCKED; a real Git root still excludes ignored files."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_parent_repo_ignored_child_is_scanned and test_own_repository_still_respects_ignore cover both sides."
+          ]
+        },
+        "preconditions": [
+          "Project root lies inside an ignored child of an unrelated parent Git repository."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Native real-Git counterprobe and control passed; retest harness has no ignored-parent-repository fixture. Consumer verification and release remain separate.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-105",
+      "kit_state": "CLOSED",
+      "prs": [
+        2753
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer standard-error-scan --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Exactly one active pattern is found; internal tmp and .venv paths remain excluded."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_known_bad_scan_finds_source_below_outer_tmp_component and test_known_bad_scan_skips_internal_tmp_and_venv pass."
+          ]
+        },
+        "preconditions": [
+          "Disposable project root is below an outer tmp directory and contains an active known-bad pattern in src."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Native positive counterprobe failed before and passed after the fix; retest harness has no outer-tmp fixture. Consumer verification and release remain separate.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-106",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit transfer post-merge-check --json"
+        ],
+        "execution_class": "kit_release",
+        "expected": [
+          "BLOCKED with ancestry_unknown and no successor-package refresh request; full clone stays refresh_only_descendant."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_post_merge_check_shallow_ancestry_blocks_without_refresh covers shallow and full clones and no refresh plan."
+          ]
+        },
+        "preconditions": [
+          "Kit self-hosting clone at a refresh-only successor package commit, cloned with depth 1 so generated_head is absent locally."
+        ],
+        "remote_effects": [
+          "network_read"
+        ],
+        "verification": "Native real-Git shallow counterprobe failed before and passed after the fix; retest harness has no shallow self-hosting clone fixture. Consumer verification and release remain separate.",
+        "workspace_kind": "kit_release"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-107",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit audit-absolute-path-portability --json",
+          "agentic-kit audit-ns-legacy-references --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Both audits BLOCK and report at least one reference; own Git root continues to exclude ignored files."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native ignored-parent-repository and own-root control tests in both audit test modules pass."
+          ]
+        },
+        "preconditions": [
+          "Project root is an ignored child of an unrelated parent Git repository and contains an active absolute path or ns legacy instruction."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Native real-Git counterprobes failed before and passed after the fix; retest harness has no ignored-parent-repository fixture. Consumer verification and release remain separate.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-108",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md"
+    },
+    {
+      "external_retest": {
+        "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
         "commands": [
@@ -8592,5 +8751,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 60,
   "schema_version": 1,
-  "source_sha256": "5a413af916bd94fc4a03490973e8d911a4a7f6ba3397cc2775d4683c87bec6d0"
+  "source_sha256": "60a3d6c2801a98975ff988c950ae1c1c70cd91990b43cdc5a0bc0bb800b81b05"
 }

@@ -67,6 +67,31 @@ rules:
     - tests/test_external_handoff_projection.py
     - byte-identical
     - without a migration
+- id: greenfield-generator-recovery
+  description: Generator project types can use signed partial workspace recovery.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-104, tests/test_workspace_recovery.py, signed plan]
+- id: greenfield-git-scan-root
+  description: A foreign parent repository must not hide project scan files.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-105, tests/test_transfer_diagnostics_git_root.py, foreign Git]
+- id: greenfield-known-bad-outer-tmp
+  description: Outer temporary path components do not suppress known-bad scanning.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-106, tests/test_transfer_diagnostics_git_root.py, outer]
+- id: greenfield-shallow-successor-ancestry
+  description: Unknown shallow-clone ancestry blocks without requesting a refresh.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-107, tests/test_transfer_repo_actions.py, BLOCKED]
+- id: greenfield-audit-parent-repository
+  description: Two content audits scan ignored children of foreign repositories.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-108, tests/test_absolute_path_portability_audit.py, tests/test_ns_legacy_reference_audit.py]
 - id: external-handoff-v2-and-bound-return
   description: External deterministic projections and evidence-bound installation returns remain visible and independently verified.
   documents:

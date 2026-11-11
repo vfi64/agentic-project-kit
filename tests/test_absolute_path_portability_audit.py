@@ -156,3 +156,19 @@ def test_absolute_path_audit_still_blocks_tracked_file_with_git_excludes(tmp_pat
     assert result.ok is False
     assert [blocker.path for blocker in result.blockers] == ["docs/guide.md"]
 
+
+def test_absolute_path_audit_scans_ignored_child_of_parent_repository(tmp_path: Path) -> None:
+    outer = tmp_path / "outer"
+    outer.mkdir()
+    subprocess.run(["git", "init", "-q", str(outer)], check=True)
+    (outer / ".gitignore").write_text("child/\n", encoding="utf-8")
+    root = outer / "child"
+    doc = root / "docs" / "guide.md"
+    doc.parent.mkdir(parents=True)
+    doc.write_text("Use /Users/" + "hof/project/script.py now.\n", encoding="utf-8")
+
+    result = audit_absolute_path_portability(root)
+
+    assert result.ok is False
+    assert [blocker.path for blocker in result.blockers] == ["docs/guide.md"]
+

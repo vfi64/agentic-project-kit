@@ -1,5 +1,34 @@
 # Test Gates
 
+### Greenfield audit and recovery regressions
+
+KIT-GF-104: `tests/test_workspace_recovery.py` covers generator type recovery,
+the signed plan and execution, preservation, idempotence and refusal without
+writes. The pre-fix counterprobe returned BLOCKED for valid generator types.
+
+KIT-GF-105: `tests/test_transfer_diagnostics_git_root.py` covers an ignored
+child of a foreign Git repository and own-root ignore behavior. The pre-fix
+counterprobe missed the child drift.
+
+KIT-GF-106: `tests/test_transfer_diagnostics_git_root.py` requires a positive
+known-bad match below outer `tmp`, while internal `tmp` and `.venv` remain
+excluded. The positive test failed before the fix with zero matches.
+
+KIT-GF-107: `tests/test_transfer_repo_actions.py` uses real shallow and full
+Git clones. Unknown ancestry is BLOCKED without a refresh action; the full
+clone is a refresh-only descendant and a proven non-ancestor remains stale.
+The shallow test failed before the fix with a refresh request.
+
+KIT-GF-108: `tests/test_absolute_path_portability_audit.py` and
+`tests/test_ns_legacy_reference_audit.py` require BLOCK for active references
+inside an ignored child of a parent Git repository. Own-root ignore controls
+remain. Both positive tests falsely passed before the fix.
+
+`tests/test_greenfield_retest.py` names GF-104/105/106/108 as the only local
+retests without machine contracts. Their catalog entries must state a native
+regression and the unsupported fixture topology; other new local findings
+still require machine contracts.
+
 ### Release-count deadline for open findings
 
 KIT-GF-096: `tests/test_release_deadline_gate.py` covers the release before the

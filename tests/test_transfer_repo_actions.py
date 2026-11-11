@@ -3954,6 +3954,93 @@ def test_successor_package_freshness_detects_stale_generated_head(tmp_path, monk
     assert "validation_report.json generated_head does not match HEAD or refresh-only ancestry" in findings
 
 
+def test_post_merge_check_shallow_ancestry_blocks_without_refresh(tmp_path, monkeypatch) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    _init_repo(source)
+    generated_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
+    package = source / "docs" / "reports" / "handoff-packages" / "latest"
+    package.mkdir(parents=True)
+    (package / "validation_report.json").write_text(
+        json.dumps({"status": "PASS", "generated_head": generated_head}), encoding="utf-8"
+    )
+    (package / "execution_contract.json").write_text(
+        json.dumps({"kind": "successor_execution_contract", "rules": [
+            {"rule_id": name} for name in (
+                "local-copy-paste-protocol", "strict-start-decision",
+                "protected-file-preservation", "bootstrap_acceptance_gate",
+            )
+        ]}), encoding="utf-8"
+    )
+    (package / "successor_prompt.md").write_text(
+        "Zusätzliche Startbremse nach dem Bootstrap\n"
+        "RESULT=NEW_CHAT_BOOTSTRAP_DONE\n"
+        "Übergabe akzeptiert, keine Admin-Arbeit nötig\n", encoding="utf-8"
+    )
+    start = source / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    start.parent.mkdir(parents=True)
+    start.write_text("Zusätzliche Startbremse nach dem Bootstrap\n", encoding="utf-8")
+    subprocess.run(["git", "add", "."], cwd=source, check=True)
+    subprocess.run(["git", "commit", "-m", "Refresh successor package"], cwd=source, check=True, capture_output=True)
+    refresh_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=source, text=True).strip()
+
+    shallow = tmp_path / "shallow"
+    full = tmp_path / "full"
+    subprocess.run(["git", "clone", "--depth", "1", source.as_uri(), str(shallow)], check=True, capture_output=True)
+    subprocess.run(["git", "clone", source.as_uri(), str(full)], check=True, capture_output=True)
+
+    original_run = transfer_repo_actions._run
+    def run_with_handoff_status(command, *, cwd=None):
+        if command == ["agentic-kit", "handoff", "post-merge-refresh-status"]:
+            return subprocess.CompletedProcess(command, 0, "result=NOOP\n", "")
+        return original_run(command, cwd=cwd)
+    monkeypatch.setattr(transfer_repo_actions, "_run", run_with_handoff_status)
+    monkeypatch.setattr(transfer_repo_actions, "_agentic_kit_command", lambda: "agentic-kit")
+
+    monkeypatch.chdir(full)
+    fresh = post_merge_check(main_branch="main")
+    assert fresh.returncode == 0
+    assert "successor_package_head_status=refresh_only_descendant" in fresh.stdout
+
+    monkeypatch.chdir(shallow)
+    blocked = post_merge_check(main_branch="main")
+    assert blocked.result_status == "BLOCKED"
+    assert blocked.returncode != 0
+    assert "successor_package_head_status=ancestry_unknown" in blocked.stdout
+    assert f"successor_package_generated_head={generated_head}" in blocked.stdout
+    assert "STATE=BLOCKED" in blocked.next_action
+    assert "NEEDS_SUCCESSOR_PACKAGE_REFRESH" not in blocked.next_action + blocked.stdout
+    from agentic_project_kit.transfer_post_merge_state import post_merge_state
+    from agentic_project_kit.transfer_post_merge_settle import _refresh_factory
+    from agentic_project_kit.transfer_post_merge_lifecycle import _refresh_plan_for_state
+
+    assert post_merge_state(blocked) == "BLOCKED"
+    assert _refresh_factory(state="BLOCKED", main_branch="main") is None
+    assert _refresh_plan_for_state("BLOCKED", main_branch="main") is None
+
+    divergent = tmp_path / "divergent"
+    subprocess.run(["git", "clone", source.as_uri(), str(divergent)], check=True, capture_output=True)
+    subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=divergent, check=True)
+    subprocess.run(["git", "config", "user.name", "Test User"], cwd=divergent, check=True)
+    subprocess.run(["git", "switch", "-c", "divergent", generated_head], cwd=divergent, check=True, capture_output=True)
+    divergent_package = divergent / "docs" / "reports" / "handoff-packages" / "latest"
+    divergent_package.mkdir(parents=True)
+    for name in ("execution_contract.json", "successor_prompt.md"):
+        (divergent_package / name).write_bytes((package / name).read_bytes())
+    (divergent_package / "validation_report.json").write_text(
+        json.dumps({"status": "PASS", "generated_head": refresh_head}), encoding="utf-8"
+    )
+    divergent_start = divergent / "docs" / "handoff" / "START_NEW_CHAT_PROMPT.md"
+    divergent_start.parent.mkdir(parents=True)
+    divergent_start.write_bytes(start.read_bytes())
+    subprocess.run(["git", "add", "."], cwd=divergent, check=True)
+    subprocess.run(["git", "commit", "-m", "Divergent package"], cwd=divergent, check=True, capture_output=True)
+    monkeypatch.chdir(divergent)
+    stale = post_merge_check(main_branch="divergent")
+    assert stale.returncode != 0
+    assert "STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH" in stale.next_action
+
+
 def test_successor_package_freshness_allows_refresh_only_head_drift(monkeypatch, tmp_path):
     from agentic_project_kit import transfer_repo_actions as actions
 

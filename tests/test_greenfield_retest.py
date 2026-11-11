@@ -26,9 +26,10 @@ from test_external_rule_registry import installed_kit as installed_kit
 
 ROOT = Path(__file__).resolve().parents[1]
 PILOT = ["KIT-GF-001", "KIT-GF-066", "KIT-GF-070", "KIT-GF-072", "KIT-GF-074", "KIT-GF-075", "KIT-GF-076", "KIT-GF-077"]
-# external-retest-machine-contracts c1 (2026-10-21): local retests still without a machine contract.
-# The set may only shrink; a new local finding needs its contract in the same slice.
-LOCAL_WITHOUT_CONTRACT = set()
+# These four approved findings need repository layouts the installed-runtime
+# harness cannot construct. Each has a native regression and a catalog reason.
+# Any other new local finding still needs a machine contract in its slice.
+LOCAL_WITHOUT_CONTRACT = {"KIT-GF-104", "KIT-GF-105", "KIT-GF-106", "KIT-GF-108"}
 
 
 def _catalog():
@@ -65,6 +66,10 @@ def test_only_the_named_local_retests_lack_a_contract():
     records = {f["id"]: f["external_retest"] for f in build(ROOT)["findings"]}
     missing = {i for i, r in records.items() if r["execution_class"] == "local" and "machine" not in r}
     assert missing == LOCAL_WITHOUT_CONTRACT
+    for finding_id in missing:
+        verification = records[finding_id]["verification"]
+        assert "Native" in verification and "harness" in verification
+        assert records[finding_id]["expected_result_fields"]["assertions"]
     assert _finding(_catalog(), "KIT-GF-070")["kit_state"] == "CLOSED"
 
 

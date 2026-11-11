@@ -1765,6 +1765,94 @@ Expected: Case-variant origin preserves the stored matching repository spelling,
 
 Expected result fields: `{"assertions": ["Two-clone native regression produces identical projection bytes and check PASS in both clones; a different repository does not reuse stored identity."]}`.
 
+## KIT-GF-104
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
+Preconditions: Disposable generator project created with python-cli type, explicit Git identity, and no .agentic/config.yaml.
+
+```text
+agentic-kit workspace init --recover-partial --root . --json
+agentic-kit workspace init --recover-partial --root . --execute --expected-signature {signature} --json
+agentic-kit check --json
+```
+
+Expected: Plan and signed execution PASS; generated project contract is preserved and check PASS.
+
+Expected result fields: `{"assertions": ["Native test_generated_type_mapping_recovery covers three generator types and idempotence; test_generator_type_override_and_unknown_block_without_writes covers rejection without writes."]}`.
+
+## KIT-GF-105
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
+Preconditions: Project root lies inside an ignored child of an unrelated parent Git repository.
+
+```text
+agentic-kit transfer standard-error-scan --json
+```
+
+Expected: Static meta-preference drift in the child is reported BLOCKED; a real Git root still excludes ignored files.
+
+Expected result fields: `{"assertions": ["Native test_parent_repo_ignored_child_is_scanned and test_own_repository_still_respects_ignore cover both sides."]}`.
+
+## KIT-GF-106
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
+Preconditions: Disposable project root is below an outer tmp directory and contains an active known-bad pattern in src.
+
+```text
+agentic-kit transfer standard-error-scan --json
+```
+
+Expected: Exactly one active pattern is found; internal tmp and .venv paths remain excluded.
+
+Expected result fields: `{"assertions": ["Native test_known_bad_scan_finds_source_below_outer_tmp_component and test_known_bad_scan_skips_internal_tmp_and_venv pass."]}`.
+
+## KIT-GF-107
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md
+
+Execution class: kit_release (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: Kit self-hosting clone at a refresh-only successor package commit, cloned with depth 1 so generated_head is absent locally.
+
+```text
+agentic-kit transfer post-merge-check --json
+```
+
+Expected: BLOCKED with ancestry_unknown and no successor-package refresh request; full clone stays refresh_only_descendant.
+
+Expected result fields: `{"assertions": ["Native test_post_merge_check_shallow_ancestry_blocks_without_refresh covers shallow and full clones and no refresh plan."]}`.
+
+## KIT-GF-108
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md
+
+Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
+
+Preconditions: Project root is an ignored child of an unrelated parent Git repository and contains an active absolute path or ns legacy instruction.
+
+```text
+agentic-kit audit-absolute-path-portability --json
+agentic-kit audit-ns-legacy-references --json
+```
+
+Expected: Both audits BLOCK and report at least one reference; own Git root continues to exclude ignored files.
+
+Expected result fields: `{"assertions": ["Native ignored-parent-repository and own-root control tests in both audit test modules pass."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Kit state: CLOSED; fixed_in: 1.0.25.

@@ -54,10 +54,13 @@ Both callers pass the project root as `root`:
   below any directory named `tmp` is therefore skipped completely and the scan
   reports no matches. Reproduced locally on 2026-11-08 (same file, 0 matches
   below `/tmp`, 1 match elsewhere). This is a separate defect, not caused or
-  fixed by KIT-GF-105, and needs its own finding.
+  fixed by KIT-GF-105; it is tracked as KIT-GF-106.
+
+The absolute-path and ns-legacy audits used the same Git file-list pattern;
+their parent-repository false negatives are tracked as KIT-GF-108.
 
 ## Boundaries
 
 Kit closure does not establish external consumer `VERIFIED_FIXED`. The finding
-has no entry in `.agentic/greenfield_findings.json` and no external retest
-contract yet. No release is claimed.
+now has a catalog retest description, but the installed-runtime harness has no
+ignored-parent-repository fixture. No release is claimed.

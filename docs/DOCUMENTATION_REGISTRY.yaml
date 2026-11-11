@@ -2025,6 +2025,31 @@ documents:
     status: active
     summary: Transient UNSTABLE PR readiness regression, managed-check wiring and deterministic
       timeout evidence.
+  - path: docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Generator-type recovery counterprobe and bounded signed fix.
+  - path: docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Parent-Git-root scan counterprobe and own-root control.
+  - path: docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Outer-tmp known-bad scan counterprobe and fix.
+  - path: docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Shallow-clone unknown-ancestry classification and no-refresh evidence.
+  - path: docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Parent-Git-root audit counterprobes and shared root check.
   - path: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
     class: evidence/log
     owner: maintainers
