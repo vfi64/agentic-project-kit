@@ -24,6 +24,11 @@ KIT-GF-108: `tests/test_absolute_path_portability_audit.py` and
 inside an ignored child of a parent Git repository. Own-root ignore controls
 remain. Both positive tests falsely passed before the fix.
 
+`tests/test_greenfield_retest.py` names GF-104/105/106/108 as the only local
+retests without machine contracts. Their catalog entries must state a native
+regression and the unsupported fixture topology; other new local findings
+still require machine contracts.
+
 ### Release-count deadline for open findings
 
 KIT-GF-096: `tests/test_release_deadline_gate.py` covers the release before the
