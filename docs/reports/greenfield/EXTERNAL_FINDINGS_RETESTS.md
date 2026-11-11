@@ -1628,7 +1628,7 @@ Expected result fields: `{"assertions": ["The fixture compares all return assert
 
 ## KIT-GF-096
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md
 
 Execution class: owner_remote (effects: network_read, none); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -1732,7 +1732,7 @@ Expected result fields: `{"assertions": ["preview PASS", "execution PASS", "repe
 
 ## KIT-GF-102
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md
 
 Execution class: owner_remote (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -1749,7 +1749,7 @@ Expected result fields: `{"assertions": ["Local deterministic readiness regressi
 
 ## KIT-GF-103
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
 
 Execution class: local (effects: none); machine contract: Installed-runtime v2 projection keeps its stored repository spelling when the GitHub-shaped origin changes only letter case.
@@ -1767,7 +1767,7 @@ Expected result fields: `{"assertions": ["Two-clone native regression produces i
 
 ## KIT-GF-104
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md
 
 Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
@@ -1786,7 +1786,7 @@ Expected result fields: `{"assertions": ["Native test_generated_type_mapping_rec
 
 ## KIT-GF-105
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md
 
 Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
@@ -1803,7 +1803,7 @@ Expected result fields: `{"assertions": ["Native test_parent_repo_ignored_child_
 
 ## KIT-GF-106
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md
 
 Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
@@ -1820,7 +1820,7 @@ Expected result fields: `{"assertions": ["Native test_known_bad_scan_finds_sourc
 
 ## KIT-GF-107
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md
 
 Execution class: kit_release (effects: network_read); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -1837,7 +1837,7 @@ Expected result fields: `{"assertions": ["Native test_post_merge_check_shallow_a
 
 ## KIT-GF-108
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md
 
 Execution class: local (effects: none); no machine contract; `greenfield retest` reports NO_MACHINE_CONTRACT.
