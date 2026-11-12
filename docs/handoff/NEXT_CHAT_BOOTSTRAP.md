@@ -6,9 +6,9 @@ Do not start from chat memory. Read the Successor Handoff Package first.
 ## Current verified repository state
 
 - Repo: `vfi64/agentic-project-kit`
-- HEAD: `a7293fc94a37a4fca62e8bf3548418551215c25b` (`a7293fc9`)
-- Handoff freshness marker: `a7293fc9`
-- Branch at generation: `docs/post-pr2766-handoff-refresh`
+- HEAD: `5f78aaff4f369c49c0230a994f445edc914d3dbf` (`5f78aaff`)
+- Handoff freshness marker: `5f78aaff`
+- Branch at generation: `codex/release-1.3.0`
 - Worktree clean at generation: `False`
 
 ## Successor handoff package
@@ -108,7 +108,7 @@ Source: `docs/planning/PROJECT_DIRECTION.yaml` or external workspace state.
 ### RESULT: PASS ###
 
 Command manifest entrypoint:
-- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: 8ec3727bd6f1). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK 8ec3727bd6f1. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
+- MANDATORY FIRST READ: docs/reference/agentic-kit-commands.json (manifest_sha: c50035614231). Every reply containing commands MUST start with: COMMAND_MANIFEST_ACK c50035614231. Consult `agentic-kit command-for` before proposing commands and choose the most specific available Kit workflow command.
 - Before proposing ANY command run/consult `agentic-kit command-for` and choose the most specific available Kit workflow command.
 - raw git/gh commands with a mapped wrapper are rejected by instruction lint.
 
@@ -118,5 +118,5 @@ Command reference contract:
 - `must_not_reconstruct_commands_from_memory: true`.
 - Treat `source_hashes` as freshness evidence.
 source_hashes:
-- docs/reference/AGENTIC_KIT_COMMANDS.md: 8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2
-- docs/reference/agentic-kit-commands.json: 8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc
+- docs/reference/AGENTIC_KIT_COMMANDS.md: c41fd4b12edcc3dad714dfcdff9c7290b9f350056c3875ef727e04406dcbf29f
+- docs/reference/agentic-kit-commands.json: 5c62112b875ac11cf6b48202b183140c8125f8f5de9570a850860fc9a1cd3803

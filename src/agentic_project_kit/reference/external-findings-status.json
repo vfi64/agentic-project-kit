@@ -7685,7 +7685,7 @@
         "verification": "Kit implementation merged in PR #2759 with handoff closeout PR #2760, full local gates and green PR CI. Cockpit PR #432 and Comm-SCI-Control-private PR #21 record v2 adoption. Kit fix is unreleased; owner_remote retest is NOT_RUN_LOCALLY and consumer VERIFIED_FIXED remains separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-096",
       "kit_state": "CLOSED",
       "prs": [
@@ -8331,7 +8331,7 @@
         "verification": "Native regression tests prove deterministic state transitions. Live GitHub timing and owner merge approval remain separate; no release is claimed.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-102",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8446,7 +8446,7 @@
         "verification": "Native counterprobe failed before the fix. The installed-runtime machine contract checks lowercase-origin adoption and no tracked projection diff; no release is claimed.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-103",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8480,7 +8480,7 @@
         "verification": "Native real-Git regression tests passed; the installed-runtime retest harness cannot construct a partial generator project with signed recovery preconditions. Consumer verification and release remain separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-104",
       "kit_state": "CLOSED",
       "prs": [
@@ -8512,7 +8512,7 @@
         "verification": "Native real-Git counterprobe and control passed; retest harness has no ignored-parent-repository fixture. Consumer verification and release remain separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-105",
       "kit_state": "CLOSED",
       "prs": [
@@ -8544,7 +8544,7 @@
         "verification": "Native positive counterprobe failed before and passed after the fix; retest harness has no outer-tmp fixture. Consumer verification and release remain separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-106",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8574,7 +8574,7 @@
         "verification": "Native real-Git shallow counterprobe failed before and passed after the fix; retest harness has no shallow self-hosting clone fixture. Consumer verification and release remain separate.",
         "workspace_kind": "kit_release"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-107",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8605,7 +8605,7 @@
         "verification": "Native real-Git counterprobes failed before and passed after the fix; retest harness has no ignored-parent-repository fixture. Consumer verification and release remain separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "id": "KIT-GF-108",
       "kit_state": "CLOSED",
       "prs": [],
@@ -8751,5 +8751,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 60,
   "schema_version": 1,
-  "source_sha256": "60a3d6c2801a98975ff988c950ae1c1c70cd91990b43cdc5a0bc0bb800b81b05"
+  "source_sha256": "41d7f18d08f86c359253944b18e4310a34c7c76970208c6ea7f6f40040ff5b74"
 }

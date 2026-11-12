@@ -7358,8 +7358,10 @@
     {
       "id": "KIT-GF-096",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
-      "prs": [2759],
+      "fixed_in": "1.3.0",
+      "prs": [
+        2759
+      ],
       "report": "docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
@@ -7978,7 +7980,7 @@
     {
       "id": "KIT-GF-102",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md",
       "external_retest": {
@@ -8007,7 +8009,7 @@
     {
       "id": "KIT-GF-103",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md",
       "external_retest": {
@@ -8118,80 +8120,139 @@
     {
       "id": "KIT-GF-104",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
-      "prs": [2755],
+      "fixed_in": "1.3.0",
+      "prs": [
+        2755
+      ],
       "report": "docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
-        "preconditions": ["Disposable generator project created with python-cli type, explicit Git identity, and no .agentic/config.yaml."],
-        "commands": ["agentic-kit workspace init --recover-partial --root . --json", "agentic-kit workspace init --recover-partial --root . --execute --expected-signature {signature} --json", "agentic-kit check --json"],
-        "bindings": {"signature": "Signature returned by the recovery plan"},
-        "expected": ["Plan and signed execution PASS; generated project contract is preserved and check PASS."],
-        "expected_result_fields": {"assertions": ["Native test_generated_type_mapping_recovery covers three generator types and idempotence; test_generator_type_override_and_unknown_block_without_writes covers rejection without writes."]},
+        "preconditions": [
+          "Disposable generator project created with python-cli type, explicit Git identity, and no .agentic/config.yaml."
+        ],
+        "commands": [
+          "agentic-kit workspace init --recover-partial --root . --json",
+          "agentic-kit workspace init --recover-partial --root . --execute --expected-signature {signature} --json",
+          "agentic-kit check --json"
+        ],
+        "bindings": {
+          "signature": "Signature returned by the recovery plan"
+        },
+        "expected": [
+          "Plan and signed execution PASS; generated project contract is preserved and check PASS."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_generated_type_mapping_recovery covers three generator types and idempotence; test_generator_type_override_and_unknown_block_without_writes covers rejection without writes."
+          ]
+        },
         "verification": "Native real-Git regression tests passed; the installed-runtime retest harness cannot construct a partial generator project with signed recovery preconditions. Consumer verification and release remain separate."
       }
     },
     {
       "id": "KIT-GF-105",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
-      "prs": [2753],
+      "fixed_in": "1.3.0",
+      "prs": [
+        2753
+      ],
       "report": "docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
-        "preconditions": ["Project root lies inside an ignored child of an unrelated parent Git repository."],
-        "commands": ["agentic-kit transfer standard-error-scan --json"],
+        "preconditions": [
+          "Project root lies inside an ignored child of an unrelated parent Git repository."
+        ],
+        "commands": [
+          "agentic-kit transfer standard-error-scan --json"
+        ],
         "bindings": {},
-        "expected": ["Static meta-preference drift in the child is reported BLOCKED; a real Git root still excludes ignored files."],
-        "expected_result_fields": {"assertions": ["Native test_parent_repo_ignored_child_is_scanned and test_own_repository_still_respects_ignore cover both sides."]},
+        "expected": [
+          "Static meta-preference drift in the child is reported BLOCKED; a real Git root still excludes ignored files."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_parent_repo_ignored_child_is_scanned and test_own_repository_still_respects_ignore cover both sides."
+          ]
+        },
         "verification": "Native real-Git counterprobe and control passed; retest harness has no ignored-parent-repository fixture. Consumer verification and release remain separate."
       }
     },
     {
       "id": "KIT-GF-106",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
-        "preconditions": ["Disposable project root is below an outer tmp directory and contains an active known-bad pattern in src."],
-        "commands": ["agentic-kit transfer standard-error-scan --json"],
+        "preconditions": [
+          "Disposable project root is below an outer tmp directory and contains an active known-bad pattern in src."
+        ],
+        "commands": [
+          "agentic-kit transfer standard-error-scan --json"
+        ],
         "bindings": {},
-        "expected": ["Exactly one active pattern is found; internal tmp and .venv paths remain excluded."],
-        "expected_result_fields": {"assertions": ["Native test_known_bad_scan_finds_source_below_outer_tmp_component and test_known_bad_scan_skips_internal_tmp_and_venv pass."]},
+        "expected": [
+          "Exactly one active pattern is found; internal tmp and .venv paths remain excluded."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_known_bad_scan_finds_source_below_outer_tmp_component and test_known_bad_scan_skips_internal_tmp_and_venv pass."
+          ]
+        },
         "verification": "Native positive counterprobe failed before and passed after the fix; retest harness has no outer-tmp fixture. Consumer verification and release remain separate."
       }
     },
     {
       "id": "KIT-GF-107",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md",
       "external_retest": {
         "workspace_kind": "kit_release",
-        "preconditions": ["Kit self-hosting clone at a refresh-only successor package commit, cloned with depth 1 so generated_head is absent locally."],
-        "commands": ["agentic-kit transfer post-merge-check --json"],
+        "preconditions": [
+          "Kit self-hosting clone at a refresh-only successor package commit, cloned with depth 1 so generated_head is absent locally."
+        ],
+        "commands": [
+          "agentic-kit transfer post-merge-check --json"
+        ],
         "bindings": {},
-        "expected": ["BLOCKED with ancestry_unknown and no successor-package refresh request; full clone stays refresh_only_descendant."],
-        "expected_result_fields": {"assertions": ["Native test_post_merge_check_shallow_ancestry_blocks_without_refresh covers shallow and full clones and no refresh plan."]},
+        "expected": [
+          "BLOCKED with ancestry_unknown and no successor-package refresh request; full clone stays refresh_only_descendant."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_post_merge_check_shallow_ancestry_blocks_without_refresh covers shallow and full clones and no refresh plan."
+          ]
+        },
         "verification": "Native real-Git shallow counterprobe failed before and passed after the fix; retest harness has no shallow self-hosting clone fixture. Consumer verification and release remain separate."
       }
     },
     {
       "id": "KIT-GF-108",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.3.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md",
       "external_retest": {
         "workspace_kind": "external_manifest",
-        "preconditions": ["Project root is an ignored child of an unrelated parent Git repository and contains an active absolute path or ns legacy instruction."],
-        "commands": ["agentic-kit audit-absolute-path-portability --json", "agentic-kit audit-ns-legacy-references --json"],
+        "preconditions": [
+          "Project root is an ignored child of an unrelated parent Git repository and contains an active absolute path or ns legacy instruction."
+        ],
+        "commands": [
+          "agentic-kit audit-absolute-path-portability --json",
+          "agentic-kit audit-ns-legacy-references --json"
+        ],
         "bindings": {},
-        "expected": ["Both audits BLOCK and report at least one reference; own Git root continues to exclude ignored files."],
-        "expected_result_fields": {"assertions": ["Native ignored-parent-repository and own-root control tests in both audit test modules pass."]},
+        "expected": [
+          "Both audits BLOCK and report at least one reference; own Git root continues to exclude ignored files."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native ignored-parent-repository and own-root control tests in both audit test modules pass."
+          ]
+        },
         "verification": "Native real-Git counterprobes failed before and passed after the fix; retest harness has no ignored-parent-repository fixture. Consumer verification and release remain separate."
       }
     }
