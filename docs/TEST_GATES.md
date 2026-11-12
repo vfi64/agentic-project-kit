@@ -63,7 +63,8 @@ return restores A, A-to-A-prime stays v1, and a legacy unsupported-preview attem
 completes through existing routes. Only PR observation is doubled. Fresh
 noneditable-wheel retests are required for KIT-GF-097 and KIT-GF-098.
 `tests/test_release_greenfield_stamp.py` retains A's PARTIAL exclusion fixture
-and requires B's CLOSED/unreleased catalog, without weakening the consumer
+and B's CLOSED/unreleased preparation fixture. After B's 1.2.0 stamp, later
+releases retain that historical version without weakening the consumer
 rehearsal and owner acceptance gates. KIT-GF-096 expires from B, not A.
 The target-preview regression also transfers inputs larger than Linux's
 individual argument limit through a temporary input file and checks its cleanup.
