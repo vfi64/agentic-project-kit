@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b34161a2a2f0019bb2974ab5a6b414ce805facf5
-  short: b34161a2
-  subject: Fix GF106-108 audits and catalog GF104-108 (#2763)
+  full: a7293fc94a37a4fca62e8bf3548418551215c25b
+  short: a7293fc9
+  subject: Fix GF-094 historical release stamp regression (#2766)
 last_substantive_work_state:
-  full: b34161a2a2f0019bb2974ab5a6b414ce805facf5
-  short: b34161a2
-  subject: Fix GF106-108 audits and catalog GF104-108 (#2763)
+  full: a7293fc94a37a4fca62e8bf3548418551215c25b
+  short: a7293fc9
+  subject: Fix GF-094 historical release stamp regression (#2766)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
