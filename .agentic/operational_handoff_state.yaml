@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a7293fc94a37a4fca62e8bf3548418551215c25b
-  short: a7293fc9
-  subject: Fix GF-094 historical release stamp regression (#2766)
+  full: 66ad4b71ef18389ce01452a23f1534114df00dbe
+  short: 66ad4b71
+  subject: Release 1.3.0 (#2768)
 last_substantive_work_state:
-  full: a7293fc94a37a4fca62e8bf3548418551215c25b
-  short: a7293fc9
-  subject: Fix GF-094 historical release stamp regression (#2766)
+  full: 66ad4b71ef18389ce01452a23f1534114df00dbe
+  short: 66ad4b71
+  subject: Release 1.3.0 (#2768)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
