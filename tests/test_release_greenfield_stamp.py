@@ -22,9 +22,9 @@ def test_b_catalog_makes_gf094_eligible_only_for_future_release_stamping():
     findings = {f["id"]: f for f in data["findings"]}
     assert findings["KIT-GF-094"]["kit_state"] == "CLOSED"
     fixed = findings["KIT-GF-094"]["fixed_in"]
-    # Preparation is unreleased; the same regression must also allow the
-    # subsequent real B stamp, while permanently excluding released A.
-    assert fixed == "unreleased" or (fixed == __version__ and Version(fixed) > Version("1.1.11"))
+    # Preparation is unreleased; after B, later releases retain its 1.2.0
+    # stamp while permanently excluding released A and future stamps.
+    assert fixed == "unreleased" or (fixed == "1.2.0" and Version(fixed) <= Version(__version__))
     assert "release B" in " ".join(findings["KIT-GF-096"]["external_retest"]["preconditions"])
 
 
