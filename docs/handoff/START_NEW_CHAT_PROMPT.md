@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 8c75755eebfee469b9090d156cdec6899d7ca5923b748b8c0d27fab2056528f2
 - docs/reference/agentic-kit-commands.json: 8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc
-## Operational documentation refresh state after PR #2763
+## Operational documentation refresh state after PR #2766
 
-Current administrative handoff refresh state is `b34161a2` (`Fix GF106-108 audits and catalog GF104-108 (#2763)`). Continue next only after this post-PR2763 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `a7293fc9` (`Fix GF-094 historical release stamp regression (#2766)`). Continue next only after this post-PR2766 refresh is committed and merged; the next substantive slice must be created from fresh main.
