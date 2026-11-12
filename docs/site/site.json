@@ -58,7 +58,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "project.version=1.2.0",
+            "detail": "project.version=1.3.0",
             "evidence_type": "pyproject-value",
             "status": "verified"
           }
@@ -262,12 +262,14 @@
         "text": "In the historical B1 threshold window, five real Brownfield maintenance cycles reached the predeclared B1_EVALUABLE threshold while preserving the generalization boundary."
       },
       {
-        "blockers": [],
+        "blockers": [
+          "PyPI publication workflow evidence for this version is unverified."
+        ],
         "evidence": [
           {
-            "detail": "The PyPI publication workflow for version 1.2.0 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+            "detail": "PyPI publication workflow evidence for this version is unverified.",
             "evidence_type": "release-pypi-workflow",
-            "status": "verified"
+            "status": "unverified"
           }
         ],
         "id": "current-release-pypi-workflow",
@@ -275,7 +277,7 @@
         "required": false,
         "scope": "historical-observation",
         "scope_note": "C3 proves successful workflow completion for the version in pyproject.toml; index visibility and installability need separate observations.",
-        "status": "verified",
+        "status": "unverified",
         "text": "The PyPI publication workflow for the current package version completed successfully in its release run (C3)."
       }
     ],
@@ -289,8 +291,8 @@
     "status": "PASS",
     "status_counts": {
       "planned": 0,
-      "unverified": 0,
-      "verified": 15
+      "unverified": 1,
+      "verified": 14
     }
   },
   "command_catalog": {
@@ -4913,7 +4915,7 @@
             "required": false
           },
           {
-            "default": "1.2.0",
+            "default": "1.3.0",
             "help": "",
             "name": "version",
             "opts": [
@@ -6937,7 +6939,7 @@
         "lifecycle_rank": 73,
         "params": [
           {
-            "default": "1.2.0",
+            "default": "1.3.0",
             "help": "",
             "name": "version",
             "opts": [
@@ -7948,7 +7950,7 @@
             "required": false
           },
           {
-            "default": "1.2.0",
+            "default": "1.3.0",
             "help": "",
             "name": "version",
             "opts": [
@@ -14883,7 +14885,7 @@
     ],
     "execution_authorized": false,
     "kind": "command_detail_projection",
-    "manifest_sha": "8ec3727bd6f1",
+    "manifest_sha": "c50035614231",
     "schema_version": 1
   },
   "explanation_projection": {
@@ -14944,19 +14946,22 @@
       "status": "planned"
     },
     "release": {
-      "date": "2026-11-03",
-      "entry_count": 6,
+      "date": "2026-11-12",
+      "entry_count": 9,
       "notes": [
-        "Fixed: Allow initialized external workspaces to explicitly add a missing managed CI workflow through workspace ci-update --inject-ci, retaining custom-file and stale-plan guards (KIT-GF-101).",
-        "Fixed: Resolve conflicted files during an owned detached-HEAD rebase while preserving branch and target guards (KIT-GF-100).",
-        "Fixed: Preserve the repository identity in target handoff previews by decoding Git-quoted origin values in the target and writing Git syntax in future planners. Legacy 1.1.11 payloads remain compatible; real-wheel regressions now use a GitHub-shaped origin distinct from the project name (KIT-GF-099). No release or v2 activation is performed by this fix.",
-        "Changed: Enable external handoff projection v2 for release B (KIT-GF-094). First adopt release A **1.1.11**, then B. All known external workspaces must adopt A before B is released.",
-        "Changed: External content merges with current captured inputs require no refresh-only PR. Chat switches keep versioned handoff projections byte-identical; volatile identity remains in the ignored runtime file, producing no tracked handoff diff. Self-hosting retains its existing lifecycle.",
-        "Fixed: The release-check advisory covers installations below 1.1.11. A direct jump from **1.1.10 or older** to B requires the documented migration route followed by another kit update; missing original adoption evidence leaves no governed installation return. KIT-GF-096 must remove external v1 compatibility no later than the second release after B."
+        "Zenodo DOI verification pending for v1.3.0.",
+        "Changed: External workspaces always use handoff projection v2; acceptance of external v1 projections is retired and an external v1 report enters the governed migration diagnosis. Workspaces below 1.2.0 adopt 1.1.11 first, then 1.2.0 (KIT-GF-096).",
+        "Fixed: PR readiness no longer fails on a transient UNSTABLE merge state (KIT-GF-102).",
+        "Fixed: External handoff projections keep a case-stable repository identity (KIT-GF-103).",
+        "Fixed: workspace init --recover-partial accepts projects generated by agentic-kit init --type python-cli|python-lib|governance-wrapper by mapping the generator type to the workspace type (KIT-GF-104).",
+        "Fixed: Transfer diagnostics scan a root nested in another repository instead of trusting that repository's ignore rules (KIT-GF-105).",
+        "Fixed: The known-bad pattern scan applies its tmp/.venv exclusions relative to the project root, so projects below a directory named tmp are scanned (KIT-GF-106).",
+        "Fixed: transfer post-merge-check reports unknown successor-package ancestry (e.g. in a shallow clone) as BLOCKED instead of requesting a package refresh (KIT-GF-107).",
+        "Fixed: The absolute-path portability and ns-legacy reference audits no longer pass a root nested in another repository that ignores it (KIT-GF-108)."
       ],
       "source": "CHANGELOG.md",
       "status": "recorded",
-      "version": "1.2.0"
+      "version": "1.3.0"
     },
     "safety_evidence": {
       "baseline": {
@@ -16089,7 +16094,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "6690ed76059378790038c975089664a499d607ad496251ffbbfd1c6c81961d44",
-        "docs/reference/agentic-kit-commands.json": "8c72a09192113a19625aa7772ef5376942427ebb783c8fa78054b29d0798d3fc",
+        "docs/reference/agentic-kit-commands.json": "5c62112b875ac11cf6b48202b183140c8125f8f5de9570a850860fc9a1cd3803",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -16125,7 +16130,7 @@
       "version": "0.2.0"
     },
     "kind": "bounded_history_projection",
-    "manifest_sha": "8ec3727bd6f1",
+    "manifest_sha": "c50035614231",
     "overhead": {
       "admin_refresh_prs": 83,
       "evidence_class": "historical classification",
@@ -16181,14 +16186,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "8ec3727bd6f1",
+    "manifest_sha": "c50035614231",
     "package_name": "agentic-project-kit",
-    "package_version": "1.2.0",
+    "package_version": "1.3.0",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.2.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "8ec3727bd6f1",
+    "reproduced_manifest_sha": "c50035614231",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 178,
@@ -16224,7 +16229,7 @@
     "current_release_tag": "v1.2.0",
     "current_verified_main": "See docs/STATUS.md",
     "current_verified_release": "1.2.0",
-    "current_version": "1.2.0",
+    "current_version": "1.3.0",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
     "version_doi": "10.5281/zenodo.23910692"
@@ -16255,7 +16260,7 @@
       ],
       "worktree_clean": "boolean"
     },
-    "manifest_sha": "8ec3727bd6f1",
+    "manifest_sha": "c50035614231",
     "routes": [
       {
         "command": "agentic-kit check",

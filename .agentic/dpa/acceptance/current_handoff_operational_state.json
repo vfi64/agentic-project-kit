@@ -1,33 +1,33 @@
 {
-  "accepted_at": "2026-11-12T17:08:36.392020+00:00",
+  "accepted_at": "2026-11-12T17:16:12.778930+00:00",
   "accepted_gate_result": "pass",
   "accepted_gate_set_id": "dpa-current-handoff-minimal-gate-set-v1",
   "accepted_lifecycle_outcome": "accepted",
-  "branch": "docs/post-pr2766-handoff-refresh",
+  "branch": "codex/release-1.3.0",
   "claims": {
     "generated_outputs_manually_patched": false,
     "kit_conformance_claimed": false,
     "production_mutation_performed": false
   },
-  "contract_id": "DPA-CURRENT-HANDOFF-OPERATIONAL-STATE-v1",
+  "contract_id": "DPA-CURRENT-HANDOFF-RELEASE-PREP-v1",
   "kind": "dpa_acceptance_state",
   "renderer": {
-    "id": "agentic_project_kit.operational_handoff_projection",
+    "id": "agentic_project_kit.release_prepare",
     "semantic_version": "1"
   },
   "schema_version": 1,
   "source": {
-    "fingerprint": "0cb806d6a1319976af04dccdeed2819c7452836da0363c032ff0b61aec4a9207",
-    "path": ".agentic/operational_handoff_state.yaml"
+    "fingerprint": "eeaa4a9b7e4f47d01f85825c343e00d6a652f58be6aeaf52794d1991ed103f08",
+    "path": "<agentic-kit-release-prep-inputs>"
   },
   "status": "accepted",
   "target": {
-    "complete_target_fingerprint": "5dab73b1f3222c4598813bda6a6a944a8e32f1f5cf215963077999f054785bf6",
+    "complete_target_fingerprint": "bbe3315f5e6068ed931424caf826f284ecea86ab7394ae0c80972470fbe9eb28",
     "path": "docs/handoff/CURRENT_HANDOFF.md",
-    "payload_fingerprint": "5dab73b1f3222c4598813bda6a6a944a8e32f1f5cf215963077999f054785bf6",
-    "pre_write_fingerprint": "b46a8dcd1cc6f6bddf05e840ca21bc114e229bf80ef0bb2de6dcfdb6c0d105e4"
+    "payload_fingerprint": "bbe3315f5e6068ed931424caf826f284ecea86ab7394ae0c80972470fbe9eb28",
+    "pre_write_fingerprint": "5dab73b1f3222c4598813bda6a6a944a8e32f1f5cf215963077999f054785bf6"
   },
-  "target_scope": "CURRENT_HANDOFF_OPERATIONAL_STATE_BLOCK",
-  "validation_ref": "a7293fc94a37a4fca62e8bf3548418551215c25b",
-  "writer_id": "WRT-CH-001"
+  "target_scope": "CURRENT_HANDOFF_RELEASE_METADATA",
+  "validation_ref": "5f78aaff4f369c49c0230a994f445edc914d3dbf",
+  "writer_id": "WRT-CH-002"
 }
