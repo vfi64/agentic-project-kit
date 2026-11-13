@@ -868,7 +868,7 @@ def _validate_release_notes(
     missing_evidence: tuple[dict[str, object], ...],
 ) -> ReleaseNotesValidation:
     reasons: list[str] = []
-    if unclassified_items:
+    if unclassified_items:  # KIT-CHK-RELEASE-NOTE-CATEGORY
         refs = ", ".join(item.commit_sha[:8] for item in unclassified_items)
         reasons.append(f"Unclassified product release-note items must be classified before release: {refs}")
     product_missing_pr = [

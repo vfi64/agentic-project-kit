@@ -212,9 +212,12 @@ def _require_projected_changelog_quality(root: Path, changelog_text: str, *, ver
     from agentic_project_kit.checks import check_changelog_quality_text
     from agentic_project_kit.publication_policy import publication_policy_for
 
+    from agentic_project_kit.release_changelog import changelog_summary_mode
+
     errors = check_changelog_quality_text(
         _projected_changelog_section(changelog_text, version),
         uses_zenodo=publication_policy_for(root).uses_zenodo,
+        curated=changelog_summary_mode(root) == "curated",
     )
     if errors:
         raise ValueError("Release changelog quality blocked release-prep: " + "; ".join(errors))

@@ -370,6 +370,7 @@ def check_changelog_quality_text(
     *,
     uses_zenodo: bool,
     path_label: str = "CHANGELOG.md",
+    curated: bool = False,
 ) -> list[str]:
     """Check recent release-history text without pretending to judge prose quality.
 
@@ -400,8 +401,10 @@ def check_changelog_quality_text(
         if not _substantive_changelog_bullets(body):
             errors.append(f"{path_label}: v{version} has no substantive release bullet beyond generic metadata")
 
+        # Owner decision E2 b (2026-11-13, V11): curated sections are lines a human approved; the
+        # keyword-category count does not apply to them. Placeholder and substance checks stay.
         categories = _substance_categories(section_text)
-        if len(categories) < 3:
+        if not curated and len(categories) < 3:  # KIT-CHK-CHANGELOG-CATEGORIES
             found = ", ".join(sorted(categories)) or "none"
             errors.append(f"{path_label}: v{version} lacks enough release-quality categories (found: {found})")
 
@@ -413,9 +416,12 @@ def check_changelog_quality(project_root: Path) -> list[str]:
     path = project_root / "CHANGELOG.md"
     if not path.exists():
         return []
+    from agentic_project_kit.release_changelog import changelog_summary_mode
+
     return check_changelog_quality_text(
         path.read_text(encoding="utf-8"),
         uses_zenodo=publication_policy_for(project_root).uses_zenodo,
+        curated=changelog_summary_mode(project_root) == "curated",
     )
 
 

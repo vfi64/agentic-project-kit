@@ -85,9 +85,74 @@ def curated_summary_lines(text: str, version: str, explicit: Sequence[str]) -> l
                             text, re.MULTILINE | re.DOTALL)
         lines = [line for line in _bullets(section.group("body")) if not line.startswith("Zenodo DOI verification pending")] if section else []
     left = [entry for entry in pending if entry not in lines]
-    if left:
+    if left:  # KIT-CHK-CURATED-UNRELEASED-COVERED
         raise ValueError("curated changelog: Unreleased entries missing from the release summary: "
                          + "; ".join(entry[:80] for entry in left))
-    if not lines:
+    if not lines:  # KIT-CHK-CURATED-SUMMARY
         raise ValueError("curated changelog: no summary lines and no Unreleased entries")
     return lines
+
+
+def changelog_summary_mode(root) -> str:
+    """Return `release.changelog_summary` from `.agentic/config.yaml` ("combined" by default)."""
+    from pathlib import Path
+
+    import yaml
+
+    config_path = Path(root) / ".agentic" / "config.yaml"
+    config = yaml.safe_load(config_path.read_text(encoding="utf-8")) if config_path.exists() else {}
+    release = (config or {}).get("release") if isinstance(config, dict) else None
+    mode = release.get("changelog_summary", "combined") if isinstance(release, dict) else "combined"
+    if mode not in {"combined", "curated"}:
+        raise ValueError(f"release.changelog_summary must be 'combined' or 'curated', not {mode!r}")
+    return mode
+
+
+def add_unreleased_entry(text: str, entry: str) -> str:
+    """Add one one-line bullet to `## Unreleased` (K4); an identical bullet is never duplicated."""
+    line = " ".join(entry.strip().removeprefix("-").split())
+    if not line:
+        raise ValueError("empty Unreleased entry")
+    if line in unreleased_bullets(text):
+        return text
+    section = re.search(r"^##[ \t]+\[?Unreleased\]?[ \t]*\n", text, re.MULTILINE | re.IGNORECASE)
+    if section is None:
+        first = re.search(r"^##[ \t]", text, re.MULTILINE)
+        block = f"## Unreleased\n\n- {line}\n\n"
+        if first is None:
+            return text.rstrip("\n") + ("\n\n" if text.strip() else "") + block
+        return text[:first.start()] + block + text[first.start():]
+    body_start = section.end()
+    following = re.search(r"^##[ \t]", text[body_start:], re.MULTILINE)
+    body_end = body_start + following.start() if following else len(text)
+    bullets = [item for item in text[body_start:body_end].strip("\n").splitlines() if item.strip()]
+    body = "\n" + "\n".join([*bullets, f"- {line}"]) + "\n\n"
+    if following is None:
+        body = body.rstrip("\n") + "\n"
+    return text[:body_start] + body + text[body_end:]
+
+
+def unreleased_release_problems(text: str, *, mode: str) -> list[str]:
+    """G2/K3: release-gate problems of the Unreleased section that are decidable at the PR.
+
+    In curated mode the Unreleased bullets become the release section verbatim, so the
+    content checks of the release gate apply now: one-line layout and no generic placeholder
+    bullet. The keyword-category count no longer applies to curated sections (owner E2 b).
+    In combined mode the release section also contains generated PR titles, so only the
+    layout is decidable here.
+    """
+    from agentic_project_kit.checks import CHANGELOG_GENERIC_BULLET_PATTERNS
+
+    section = re.search(r"^##[ \t]+\[?Unreleased\]?[ \t]*\n(?P<body>.*?)(?=^##[ \t]|\Z)",
+                        text, re.MULTILINE | re.DOTALL | re.IGNORECASE)
+    if section is None:
+        return []
+    problems: list[str] = []
+    for line in section.group("body").splitlines():
+        if line.strip() and not line.startswith("- "):
+            problems.append(f"Unreleased: not a one-line bullet: {line.strip()[:120]}")
+    if mode == "curated":
+        for bullet in unreleased_bullets(text):
+            if any(pattern.match(f"- {bullet}") for pattern in CHANGELOG_GENERIC_BULLET_PATTERNS):
+                problems.append(f"Unreleased: generic placeholder bullet: {bullet[:120]}")
+    return problems

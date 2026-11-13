@@ -42,6 +42,20 @@ if importlib.util.find_spec('agentic_project_kit.external_projection_policy') is
 print(json.dumps({"python": sys.version, "projection_contract_version": contract, "packages": sorted((d.metadata["Name"], d.version) for d in m.distributions())}))"""
 
 
+CHANGELOG_PATH = "CHANGELOG.md"
+
+
+def adoption_changelog_entry(version: str, previous: str) -> str:
+    """The one Unreleased line that records a Kit adoption in a curated workspace (K4)."""
+    return f"Adopt Agentic Project Kit {version} (previously {previous})."
+
+
+def add_unreleased_entry(text: str, entry: str) -> str:
+    from agentic_project_kit.release_changelog import add_unreleased_entry as add
+
+    return add(text, entry)
+
+
 def signature(plan: dict) -> str:
     return hashlib.sha256(
         json.dumps(plan, sort_keys=True, separators=(",", ":")).encode()
@@ -132,6 +146,12 @@ def build_update_plan(
          INVENTORY.as_posix()}
         | allowed | set(projection_update_paths(root))
     )
+    # K4 (V6): in a curated workspace the adoption itself is a release line; the Kit writes it into
+    # the same PR so a release containing only this adoption needs no follow-up PR.
+    from agentic_project_kit.release_changelog import changelog_summary_mode
+    curated = not return_adoption and changelog_summary_mode(root) == "curated"
+    if curated:
+        paths = sorted({*paths, CHANGELOG_PATH})
     before = {path: _file_state(root, path) for path in paths}
     ws = load_workspace(root, suppress_legacy_profile_warning=True)
     if not ws.manifest_schema_version or is_agentic_project_kit_development_checkout(root):
@@ -218,6 +238,13 @@ def build_update_plan(
     )
     if return_proof is not None and changed:
         raise UpdateBlocked("return_requires_unchanged_workspace_plan")
+    changelog_entry = ""
+    if curated and pinned_version_before != version:
+        changelog_entry = adoption_changelog_entry(version, pinned_version_before)
+        changelog = root / CHANGELOG_PATH
+        text = changelog.read_text(encoding="utf-8") if changelog.exists() else ""
+        if add_unreleased_entry(text, changelog_entry) != text:
+            changed = sorted({*changed, CHANGELOG_PATH})
     artifacts = [
         {key: value for key, value in artifact.items() if key != "url"}
         for artifact in target.artifacts
@@ -274,6 +301,8 @@ def build_update_plan(
         ],
         "derived_paths": [INVENTORY.as_posix()] if refresh_inventory else [],
     }
+    if changelog_entry:
+        payload["changelog_entry"] = changelog_entry
     if return_proof is not None:
         payload["return_evidence"] = return_proof
     return UpdatePlan(payload, target, desired, before, desired_projection)
@@ -456,6 +485,16 @@ def run_kit_update(
                 temp.write_bytes(content)
                 temp.replace(target_path)
             record("ci_pins")
+            entry = plan.payload.get("changelog_entry")
+            if entry:
+                changelog = root / CHANGELOG_PATH
+                text = changelog.read_text(encoding="utf-8") if changelog.exists() else ""
+                updated = add_unreleased_entry(text, entry)
+                if updated != text:
+                    temp = changelog.with_suffix(".kit-update-writing")
+                    temp.write_text(updated, encoding="utf-8")
+                    temp.replace(changelog)
+                record("changelog")
             argv = [python, "-I", "-m", "agentic_project_kit.cli"]
             actual = _require_pass(
                 json_command(

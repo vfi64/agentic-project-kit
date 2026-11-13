@@ -7,6 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shlex
 import subprocess
 
 import typer
@@ -132,6 +133,14 @@ def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = Fal
         "steps": steps,
         "next_action": next_action,
     }
+    blocked = [step for step in steps if not step["ok"]]
+    if blocked:
+        # G3: every BLOCKED names the resolving Kit command and whether it may run again under the
+        # consent already given. Steps without their own route fall back to rerunning this action.
+        first = blocked[0]
+        payload["next_command"] = str(first.get("next_command") or "")
+        payload["next_command_autonomous"] = bool(first.get("next_command_autonomous", False))
+        payload["check_id"] = str(first.get("check_id") or "")
     if extra:
         payload.update(extra)
     return payload
@@ -145,6 +154,9 @@ def _emit(payload: dict[str, object], *, json_output: bool) -> None:
     typer.echo(f"RETURNCODE={payload['returncode']}")
     if payload["blockers"]:
         typer.echo("BLOCKERS=" + ",".join(str(item) for item in payload["blockers"]))
+    if payload.get("next_command"):
+        typer.echo(f"NEXT_COMMAND={payload['next_command']}")
+        typer.echo("NEXT_COMMAND_AUTONOMOUS=" + ("yes" if payload.get("next_command_autonomous") else "no"))
     typer.echo(f"NEXT={payload['next_action']}")
 
 
@@ -332,6 +344,75 @@ def _handoff_projection_status_step() -> dict[str, object]:
         "handoff-projection-status",
         ["git", "status", "--short", "--", *[str(path) for path in paths]],
     )
+
+
+def _finish_rerun_command(branch: str, title: str, *, paths: list[Path] | None = None, release_note_category: str = "") -> str:
+    argv = ["agentic-kit", "work", "finish", "--branch", branch, "--title", title, "--message", title]
+    argv += [arg for path in (paths or []) for arg in ("--path", str(path))]
+    if release_note_category:
+        argv += ["--release-note-category", release_note_category]
+    return shlex.join([*argv, "--execute", "--json"])
+
+
+def _existing_commits_step(branch: str, title: str) -> dict[str, object]:
+    """K1 (V8): without --path, publish the branch's existing commits instead of stopping.
+
+    Allowed only with a clean tracked worktree (rule-acknowledgement runtime state excepted)
+    and at least one commit on the branch that main does not have. Push, PR (or the open PR),
+    CI and merge then run unchanged.
+    """
+    from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH
+
+    status = subprocess.run(
+        ["git", "status", "--porcelain", "--untracked-files=no", "--", ".", f":(exclude){RULE_ACK_DIRECTORY_PATH}"],
+        text=True, capture_output=True,
+    )
+    ahead = subprocess.run(["git", "rev-list", "--count", "origin/main..HEAD"], text=True, capture_output=True)
+    count_text = (ahead.stdout or "").strip()
+    dirty = status.returncode != 0 or bool((status.stdout or "").strip())
+    if not dirty and ahead.returncode == 0 and count_text.isdigit() and int(count_text) > 0:
+        return _noop_step(
+            "publish-existing-commits",
+            f"No --path given; publishing {count_text} existing commit(s) of {branch} (K1).\n",
+        )
+    if dirty:
+        reason = "Uncommitted tracked changes need --path; name every path to include."
+    else:
+        reason = "No --path given and the branch has no commit beyond origin/main; nothing to publish."
+    step = _failed_local_step("path-selection", reason)
+    step.update(
+        check_id="KIT-CHK-WORK-FINISH-PATHS",
+        next_command=_finish_rerun_command(branch, title, paths=[Path("<path>")]) if dirty else "",
+        next_command_autonomous=False,
+    )
+    return step
+
+
+def _changelog_unreleased_step(branch: str, title: str) -> dict[str, object] | None:
+    """G2/K3: release-gate problems of the Unreleased section are reported at the PR, not in A2."""
+    from agentic_project_kit.release_changelog import changelog_summary_mode, unreleased_release_problems
+
+    changelog = Path("CHANGELOG.md")
+    if not changelog.exists():
+        return None
+    try:
+        problems = unreleased_release_problems(
+            changelog.read_text(encoding="utf-8"), mode=changelog_summary_mode(Path(".")),
+        )
+    except (OSError, UnicodeError, ValueError) as exc:
+        problems = [str(exc)]
+    if not problems:
+        return None
+    step = _failed_local_step(
+        "changelog-unreleased",
+        "The release gate would reject the Unreleased section: " + "; ".join(problems) + "\n",
+    )
+    step.update(
+        check_id="KIT-CHK-CHANGELOG-UNRELEASED",
+        next_command=_finish_rerun_command(branch, title),
+        next_command_autonomous=False,
+    )
+    return step
 
 
 def _noop_step(name: str, message: str) -> dict[str, object]:
@@ -722,10 +803,13 @@ def work_finish_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
     """Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."""
-    from agentic_project_kit.work_finish_metadata import prepare_work_finish_body
+    from agentic_project_kit.work_finish_metadata import default_release_note_category, prepare_work_finish_body
 
     try:
-        pr_body = prepare_work_finish_body(title, body=body, body_file=body_file, release_note_category=release_note_category)
+        pr_body = prepare_work_finish_body(
+            title, body=body, body_file=body_file, release_note_category=release_note_category,
+            default_category=default_release_note_category(branch),
+        )
     except (ValueError, OSError, UnicodeError) as exc:
         payload = _payload("work-finish", [_failed_local_step("pr-metadata", str(exc))])
         _emit(payload, json_output=json_output)
@@ -754,8 +838,16 @@ def work_finish_command(
         _run_step("repo-status", _agentic("transfer", "repo-status")),
         _run_step("protected-diff-plan", _agentic("transfer", "protected-diff-plan", "--label", branch.replace("/", "-"))),
     ]
-    if not selected_paths:
-        steps.append({"name": "path-selection", "argv": [], "returncode": 2, "ok": False, "allowed_returncodes": [0], "stdout": "", "stderr": "At least one --path is required for work finish."})
+    publish_existing = False
+    if not selected_paths and all(step["ok"] for step in steps):
+        existing = _existing_commits_step(branch, title)
+        publish_existing = bool(existing["ok"])
+        steps.append(existing)
+    elif not selected_paths:
+        steps.append(_failed_local_step("path-selection", "At least one --path is required for work finish."))
+    unreleased_step = _changelog_unreleased_step(branch, title)
+    if unreleased_step is not None:
+        steps.append(unreleased_step)
     if dry_run and all(step["ok"] for step in steps):
         steps.append(_remote_preflight_step())
     if not dry_run and all(step["ok"] for step in steps):
@@ -763,7 +855,10 @@ def work_finish_command(
         if all(step["ok"] for step in steps):
             steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
         if all(step["ok"] for step in steps):
-            steps.append(_run_step("commit", _agentic("transfer", "commit", "--branch", branch, "--message", message, *_path_args(selected_paths))))
+            if publish_existing:
+                steps.append(_noop_step("commit", "K1: existing commits are published; no new work commit.\n"))
+            else:
+                steps.append(_run_step("commit", _agentic("transfer", "commit", "--branch", branch, "--message", message, *_path_args(selected_paths))))
         if all(step["ok"] for step in steps):
             steps.append(_run_step("rules-acknowledge-post-work-commit", _agentic("rules", "acknowledge")))
         if all(step["ok"] for step in steps):
