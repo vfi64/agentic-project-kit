@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `400982980bc08d47935057d36d428f455445cd72` (`40098298`), after `Workflow friction slice 1: producer law, early changelog check, publish existing commits (#2774)`.
-Last substantive work state is `400982980bc08d47935057d36d428f455445cd72` (`40098298`), after `Workflow friction slice 1: producer law, early changelog check, publish existing commits (#2774)`.
+Current verified main/admin HEAD is `a8e6e09f2f04768a875f037baa8916765c77ed29` (`a8e6e09f`), after `Workflow friction slice 2a: site projection producer in work finish (G1) (#2776)`.
+Last substantive work state is `a8e6e09f2f04768a875f037baa8916765c77ed29` (`a8e6e09f`), after `Workflow friction slice 2a: site projection producer in work finish (G1) (#2776)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
