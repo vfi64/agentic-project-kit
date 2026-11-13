@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+# The pip cache is keyed by the managed source of this workflow, which every workspace with
+# injected CI has and which carries the Kit pin. Without a cache-dependency-path, setup-python
+# looks for requirements.txt or pyproject.toml and fails the job in a generic workspace that has
+# neither (G4 live-run preflight, 2026-11-13).
 
 def render_workspace_ci(version: str) -> str:
     return """name: Agentic Gate
@@ -28,6 +32,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: "pip"
+          cache-dependency-path: .agentic/ci/agentic-gate.yaml
       - uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright

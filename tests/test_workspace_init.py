@@ -207,7 +207,14 @@ def test_init_ci_template_yaml_matches_cli_inventory(tmp_path: Path) -> None:
                 "runs-on": "ubuntu-latest",
                 "steps": [
                     {"uses": "actions/checkout@v4"},
-                    {"uses": "actions/setup-python@v5", "with": {"python-version": "3.12", "cache": "pip"}},
+                    {
+                        "uses": "actions/setup-python@v5",
+                        "with": {
+                            "python-version": "3.12",
+                            "cache": "pip",
+                            "cache-dependency-path": ".agentic/ci/agentic-gate.yaml",
+                        },
+                    },
                     {
                         "uses": "actions/cache@v4",
                         "with": {
@@ -507,6 +514,32 @@ def test_workspace_ci_template_hash_registry_covers_the_current_template() -> No
     )
     assert is_kit_written_ci_template(older_pin)
     assert not is_kit_written_ci_template(managed_ci_template_text() + "      - run: pytest\n")
+    without_cache_path = managed_ci_template_text().replace(
+        "          cache-dependency-path: .agentic/ci/agentic-gate.yaml\n", ""
+    )
+    assert without_cache_path != managed_ci_template_text()
+    assert is_kit_written_ci_template(without_cache_path)
+
+
+def test_injected_ci_pip_cache_key_exists_in_a_generic_workspace(tmp_path: Path) -> None:
+    """G4 live-run preflight: setup-python fails when its pip cache key matches no file."""
+    result = CliRunner().invoke(
+        app, ["workspace", "init", "--root", str(tmp_path), "--execute", "--inject-ci"]
+    )
+    assert result.exit_code == 0, result.output
+    assert not list(tmp_path.rglob("requirements*.txt"))
+    assert not list(tmp_path.rglob("pyproject.toml"))
+    workflow = yaml.safe_load((tmp_path / ".github/workflows/agentic-gate.yaml").read_text(encoding="utf-8"))
+    cached = [
+        step["with"]
+        for step in workflow["jobs"]["agentic-gate"]["steps"]
+        if str(step.get("uses", "")).startswith("actions/setup-python@") and step.get("with", {}).get("cache")
+    ]
+    assert cached
+    for options in cached:
+        paths = str(options.get("cache-dependency-path", "")).split()
+        assert paths, "setup-python pip cache needs a key file that every workspace has"
+        assert all((tmp_path / path).is_file() for path in paths)
 
 
 def test_workspace_ci_update_refreshes_an_older_pinned_kit_template(tmp_path: Path) -> None:
