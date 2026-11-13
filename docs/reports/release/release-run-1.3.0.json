@@ -1,0 +1,163 @@
+{
+  "approvals": [
+    {
+      "approved_by": "vfi64",
+      "consent_source": "chat:release-1.3.0-all-gates-2026-11-12",
+      "result_status": "AUTHORIZED",
+      "signature": "c30ceff691edf2b9db254b2e",
+      "step_id": "B4",
+      "tag": "v1.3.0",
+      "target_commit": "5f78aaff4f369c49c0230a994f445edc914d3dbf",
+      "version": "1.3.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "chat:release-1.3.0-all-gates-2026-11-12",
+      "result_status": "AUTHORIZED",
+      "signature": "38699387e5403cd85cfc3530",
+      "step_id": "C2",
+      "tag": "v1.3.0",
+      "target_commit": "598dccb2e549e347a59c803b44adfc067bb0fc42",
+      "version": "1.3.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "chat:release-1.3.0-all-gates-2026-11-12",
+      "result_status": "AUTHORIZED",
+      "signature": "4fb1a755a9628df29ff2f478",
+      "step_id": "C3",
+      "tag": "v1.3.0",
+      "target_commit": "598dccb2e549e347a59c803b44adfc067bb0fc42",
+      "version": "1.3.0"
+    },
+    {
+      "approved_by": "vfi64",
+      "consent_source": "chat:release-1.3.0-all-gates-2026-11-12",
+      "result_status": "AUTHORIZED",
+      "signature": "0f7ecaa90a7943912b02af7e",
+      "step_id": "D4",
+      "tag": "v1.3.0",
+      "target_commit": "598dccb2e549e347a59c803b44adfc067bb0fc42",
+      "version": "1.3.0"
+    }
+  ],
+  "archive_boundary": "Snapshot of completed release steps; archive merge is verified from Git/PR evidence.",
+  "artifact_type": "evidence",
+  "finished_steps": [
+    "A1",
+    "A2",
+    "A3",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "D1",
+    "D2",
+    "D3",
+    "D4",
+    "D5"
+  ],
+  "kind": "release_run_evidence",
+  "package_index_dispatch": {
+    "dispatched": true,
+    "head_sha": "598dccb2e549e347a59c803b44adfc067bb0fc42",
+    "run_id": "43270414770"
+  },
+  "package_index_workflow": {
+    "file": "release.yml",
+    "publish_target_pypi": true
+  },
+  "publication_policy": "github+pypi+zenodo",
+  "publication_target": "598dccb2e549e347a59c803b44adfc067bb0fc42",
+  "review_policy": "historical_evidence",
+  "schema_version": 1,
+  "status": "active",
+  "steps": {
+    "A1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "A3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "B4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "C4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D1": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D2": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D3": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D4": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    },
+    "D5": {
+      "blockers": [],
+      "result_status": "PASS",
+      "returncode": 0
+    }
+  },
+  "tag": "v1.3.0",
+  "version": "1.3.0"
+}
