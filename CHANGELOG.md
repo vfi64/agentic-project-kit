@@ -2,7 +2,6 @@
 
 ## v1.3.0 - 2026-11-12
 
-- Zenodo DOI verification pending for v1.3.0.
 - Changed: External workspaces always use handoff projection v2; acceptance of external v1 projections is retired and an external v1 report enters the governed migration diagnosis. Workspaces below 1.2.0 adopt 1.1.11 first, then 1.2.0 (KIT-GF-096).
 - Fixed: PR readiness no longer fails on a transient UNSTABLE merge state (KIT-GF-102).
 - Fixed: External handoff projections keep a case-stable repository identity (KIT-GF-103).
@@ -11,6 +10,10 @@
 - Fixed: The known-bad pattern scan applies its `tmp`/`.venv` exclusions relative to the project root, so projects below a directory named `tmp` are scanned (KIT-GF-106).
 - Fixed: `transfer post-merge-check` reports unknown successor-package ancestry (e.g. in a shallow clone) as BLOCKED instead of requesting a package refresh (KIT-GF-107).
 - Fixed: The absolute-path portability and ns-legacy reference audits no longer pass a root nested in another repository that ignores it (KIT-GF-108).
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.3.0 DOI `10.5281/zenodo.24169348`.
+
+Zenodo v1.3.0 DOI: 10.5281/zenodo.24169348
 
 ## v1.2.0 - 2026-11-03
 
