@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `214cc3cc81c65c3bd38aa26cd21488990af620ef` (`214cc3cc`), after `Archive release 1.3.0 evidence (#2772)`.
-Last substantive work state is `214cc3cc81c65c3bd38aa26cd21488990af620ef` (`214cc3cc`), after `Archive release 1.3.0 evidence (#2772)`.
+Current verified main/admin HEAD is `400982980bc08d47935057d36d428f455445cd72` (`40098298`), after `Workflow friction slice 1: producer law, early changelog check, publish existing commits (#2774)`.
+Last substantive work state is `400982980bc08d47935057d36d428f455445cd72` (`40098298`), after `Workflow friction slice 1: producer law, early changelog check, publish existing commits (#2774)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
