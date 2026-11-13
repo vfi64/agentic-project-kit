@@ -14,10 +14,16 @@ import yaml
 
 
 def prepare_release_fixture(root: Path, variables: dict[str, str], env: dict[str, str],
-                            run: Callable[..., subprocess.CompletedProcess]) -> list[str]:
+                            run: Callable[..., subprocess.CompletedProcess], *,
+                            config_updates: dict | None = None, behavior_commit: bool = True) -> list[str]:
+    # config_updates and behavior_commit=False serve journey J2 (G4): a curated workspace whose
+    # next release contains only a Kit adoption.
     config = root / ".agentic/config.yaml"
     data = yaml.safe_load(config.read_text(encoding="utf-8"))
     data.update(publication="none", kit={"interpreter": variables["kit_python"]})
+    for key, value in (config_updates or {}).items():
+        current = data.get(key)
+        data[key] = {**current, **value} if isinstance(current, dict) and isinstance(value, dict) else value
     config.write_text(yaml.safe_dump(data), encoding="utf-8")
     (root / "pyproject.toml").write_text('[project]\nname="fixture"\nversion="0.1.0"\n', encoding="utf-8")
     (root / "CHANGELOG.md").write_text("## Unreleased\n\n## v0.1.0 - 2026-01-01\n\n- Initial fixture.\n", encoding="utf-8")
@@ -31,7 +37,7 @@ def prepare_release_fixture(root: Path, variables: dict[str, str], env: dict[str
     steps = [
         ["git", "add", "-A"], ["git", "commit", "-m", "Initial release fixture"],
         ["git", "tag", "v0.1.0"],
-        ["git", "commit", "--allow-empty", "-m", "Add fixture behavior (#1)"],
+        *([["git", "commit", "--allow-empty", "-m", "Add fixture behavior (#1)"]] if behavior_commit else []),
         seed_origin, ["git", "fetch", "origin"],
         ["agentic-kit", "commands", "sync-entrypoints", "--execute", "--json"],
         ["agentic-kit", "rules", "acknowledge"],
