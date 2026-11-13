@@ -13,13 +13,16 @@ import sys
 
 import pytest
 
-from agentic_project_kit.greenfield_retest import check_route
+from agentic_project_kit.greenfield_retest import check_route, validate_machine
+from agentic_project_kit.greenfield_retest_adoption import FIXTURE as ADOPTION, adoption_version, guard_adoption_index
 from agentic_project_kit.greenfield_retest_release_check import release_effects
-from agentic_project_kit.journey_contracts import JOURNEY_IDS, approvals, journey_effects, load, validate
+from agentic_project_kit.journey_contracts import (
+    JOURNEY_IDS, approvals, journey_effects, load, needs_consent, validate,
+)
 
 from test_external_rule_registry import installed_kit as installed_kit
 
-PENDING = {"J2", "J4", "J5"}  # ratchet: shrinks only when a journey becomes a contract
+PENDING = {"J4", "J5"}  # ratchet: shrinks only when a journey becomes a contract
 
 
 def _journeys():
@@ -52,8 +55,71 @@ def test_only_journeys_treat_a_dry_run_finish_as_local():
 def test_a_journey_step_that_may_block_is_rejected():
     journey = json.loads(json.dumps(_journeys()["J1"]))
     journey["machine"]["steps"][0]["expect"] = {"returncode": 0}
-    with pytest.raises(ValueError, match="PASS or PLANNED"):
+    with pytest.raises(ValueError, match="PASS, PLANNED or AWAITING_APPROVAL"):
         validate(journey)
+
+
+def test_a_step_without_result_status_must_expect_exactly_returncode_zero():
+    journey = json.loads(json.dumps(_journeys()["J2"]))
+    ack = next(step for step in journey["machine"]["steps"] if step["run"][1:3] == ["rules", "acknowledge"])
+    ack["expect"] = {"returncode_nonzero": True}
+    with pytest.raises(ValueError, match="exactly returncode 0"):
+        validate(journey)
+
+
+def test_consent_is_a_signed_execution_or_an_effect_beyond_local_and_network_read():
+    """Owner decision 2026-11-13: a read-only plan is no consent; a signed execution is one."""
+    plan = ["agentic-kit", "kit", "update", "--version", "1.3.0.post1", "--json"]
+    signed = [*plan[:-1], "--execute", "--expected-signature", "abc", "--json"]
+    finish = ["agentic-kit", "work", "finish", "--branch", "b", "--title", "t", "--message", "m", "--json"]
+    assert release_effects(plan, check_route(plan)) == ["network_read"]
+    assert not needs_consent(plan)
+    assert needs_consent(signed)
+    assert needs_consent(finish)  # dry run here, but it plans push, PR and merge
+    assert not needs_consent(["agentic-kit", "release", "ready", "--version", "0.1.1", "--json"])
+
+
+def test_approval_baselines_are_one_per_finish_plus_one_per_signed_adoption():
+    assert {jid: journey["approvals"] for jid, journey in _journeys().items()} == {"J1": 1, "J2": 2, "J3": 1}
+
+
+def test_only_the_adoption_fixture_treats_an_exact_kit_update_as_local():
+    update = ["agentic-kit", "kit", "update", "--version", "1.3.0.post1", "--execute",
+              "--expected-signature", "abc", "--json"]
+    entry = check_route(update)
+    assert journey_effects(update, entry, ADOPTION) == ["none"]
+    assert journey_effects(update, entry, "external_manifest") == ["network_read"]
+    assert journey_effects([*update[:3], "--latest", "--json"], entry, ADOPTION) == ["network_read"]
+    assert journey_effects([*update, "--root", "elsewhere"], entry, ADOPTION) == ["network_read"]
+    assert release_effects(update, entry, ADOPTION) == ["network_read"]  # catalog rule unchanged
+
+
+def test_the_catalog_rejects_a_kit_update_execute_outside_journeys():
+    journey = json.loads(json.dumps(_journeys()["J2"]))
+    retest = {"commands": [" ".join(s["run"]) for s in journey["machine"]["steps"] if s["run"][0] == "agentic-kit"],
+              "workspace_kind": "external", "execution_class": "local", "machine": journey["machine"]}
+    with pytest.raises(ValueError, match="needs a remote service"):
+        validate_machine("J2", retest)
+
+
+def test_adoption_version_is_the_next_post_release():
+    assert adoption_version("1.3.0") == "1.3.0.post1"
+    assert adoption_version("1.3.0.post1") == "1.3.0.post2"
+    with pytest.raises(ValueError):
+        adoption_version("1.4.0rc1")
+
+
+def test_the_adoption_guard_refuses_a_changed_index_binding_or_open_arguments(tmp_path):
+    (tmp_path / ".agentic").mkdir()
+    config = tmp_path / ".agentic/config.yaml"
+    variables = {"kit_python": "/w/.venv/bin/python", "adoption_index_url": "http://127.0.0.1:1/simple"}
+    config.write_text("kit:\n  interpreter: /w/.venv/bin/python\n  index_url: http://127.0.0.1:1/simple\n")
+    guard_adoption_index(tmp_path, variables, ["agentic-kit", "kit", "update", "--version", "1.0.0", "--json"])
+    with pytest.raises(ValueError, match="arguments_refused"):
+        guard_adoption_index(tmp_path, variables, ["agentic-kit", "kit", "update", "--latest", "--json"])
+    config.write_text("kit:\n  interpreter: /w/.venv/bin/python\n  index_url: https://pypi.org/simple\n")
+    with pytest.raises(ValueError, match="binding_changed"):
+        guard_adoption_index(tmp_path, variables, ["agentic-kit", "release", "ready", "--json"])
 
 
 @pytest.mark.parametrize("journey_id", sorted(_journeys()))

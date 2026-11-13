@@ -39,8 +39,10 @@ MANIFEST_FIXTURES = frozenset({
     "external_manifest", "external_owned_runtime", "external_owned_interpreter", "external_release", "external_release_check",
     "external_release_check_stale_editable",
     "external_projection_v2",
+    "external_adoption",
 })
-OWNED_FIXTURES = (MANIFEST_FIXTURES - {"external_manifest"}) | {"external_kit_return"}
+# external_adoption owns a pip-capable .venv with installed wheels instead of a copied runtime.
+OWNED_FIXTURES = (MANIFEST_FIXTURES - {"external_manifest", "external_adoption"}) | {"external_kit_return"}
 FIXTURES = ("git_repository", "external_kit_return", "external_projection_transition", *sorted(MANIFEST_FIXTURES))
 STEP_KINDS = ("run", "write", "append", "replace", "assert")
 EXPECT_KEYS = frozenset(
@@ -53,6 +55,9 @@ _PLACEHOLDER = re.compile(r"\{([a-z_][a-z0-9_]*)\}")
 # that runs the retest (kit.interpreter, version pins in CI templates) and, with ``origin: true``,
 # the local bare origin. fixture_head is the baseline commit (empty in an unborn Git fixture).
 BUILTIN_VARIABLES = ("kit_python", "kit_version", "fixture_head")
+# Variables a fixture binds for its steps: external_adoption offers the target release of the
+# adoption (journey J2).
+FIXTURE_VARIABLES = {"external_adoption": ("adoption_version",)}
 _PATH_TOKEN = re.compile(r"([^.\[\]]+)|\[(\d+)\]")
 
 
@@ -136,14 +141,15 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None, effec
         raise ValueError(f"{finding_id}: invalid machine contract keys")
     if machine.get("fixture") not in FIXTURES or not isinstance(machine.get("origin", False), bool):
         raise ValueError(f"{finding_id}: unknown fixture")
-    if machine["fixture"] == "external_release" and not machine.get("origin"):
-        raise ValueError(f"{finding_id}: external_release requires a local origin")
+    if machine["fixture"] in {"external_release", "external_adoption"} and not machine.get("origin"):
+        raise ValueError(f"{finding_id}: {machine['fixture']} requires a local origin")
     if not isinstance(machine.get("covers"), str) or not machine["covers"].strip():
         raise ValueError(f"{finding_id}: a machine contract states what it covers")
     steps = machine.get("steps")
     if not isinstance(steps, list) or not steps:
         raise ValueError(f"{finding_id}: a machine contract needs steps")
-    known = {*BUILTIN_VARIABLES, *(("origin",) if machine.get("origin") else ())}
+    known = {*BUILTIN_VARIABLES, *(("origin",) if machine.get("origin") else ()),
+             *FIXTURE_VARIABLES.get(machine["fixture"], ())}
     ran_retest_route = False
     for step in steps:
         if not isinstance(step, dict) or len(set(step) & set(STEP_KINDS)) != 1:
@@ -307,7 +313,8 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
     setup = [["git", "init", "-b", "main"]]
     if machine["fixture"] in MANIFEST_FIXTURES:
         setup += [
-            ["agentic-kit", "workspace", "init", "--root", ".", "--name", "external", "--execute", "--json"],
+            ["agentic-kit", "workspace", "init", "--root", ".", "--name", "external",
+             *(["--inject-ci"] if machine["fixture"] == "external_adoption" else []), "--execute", "--json"],
             ["agentic-kit", "commands", "sync-entrypoints", "--execute", "--json"],
             ["git", "add", "-A"],
             ["git", "commit", "-m", "baseline"],
@@ -347,6 +354,16 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
         variables["release_index_url"] = stack.enter_context(
             fake_index(root, variables["kit_python"], stale_editable=machine["fixture"] == STALE_EDITABLE_FIXTURE)
         )
+    if machine["fixture"] == "external_adoption":
+        from agentic_project_kit.greenfield_retest_adoption import prepare_adoption_fixture
+        if stack is None:
+            return root, variables, ["local index lifecycle unavailable"]
+        try:
+            failures = prepare_adoption_fixture(root, base, variables, env, _run, stack)
+        except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as exc:
+            failures = [f"adoption fixture failed: {exc}"]
+        if failures:
+            return root, variables, failures
     if machine["fixture"] == "external_release":
         from agentic_project_kit.greenfield_retest_release import prepare_release_fixture
 
@@ -418,6 +435,12 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
                     from agentic_project_kit.greenfield_retest_release_check import guard_index
                     try:
                         guard_index(root, variables["kit_python"], variables["release_index_url"], step["run"])
+                    except (ValueError, OSError) as exc:
+                        return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
+                if machine["fixture"] == "external_adoption" and step["run"][0] == "agentic-kit":
+                    from agentic_project_kit.greenfield_retest_adoption import guard_adoption_index
+                    try:
+                        guard_adoption_index(root, variables, step["run"])
                     except (ValueError, OSError) as exc:
                         return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
                 completed = _run(step["run"], root, env)

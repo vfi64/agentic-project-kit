@@ -36,35 +36,49 @@ def _write_wheel(path: Path, files: dict[str, bytes], info: str) -> Path:
     return path
 
 
-def build_fixture_wheels(directory: Path) -> dict[str, Path]:
+def build_kit_wheels(directory: Path, versions, overrides=None) -> dict[str, Path]:
+    """Wheels of the running Kit source, relabelled to each version (G4 J2, transition fixture).
+
+    ``overrides(version)`` returns replacement files (archive path to bytes) for one version.
+    """
     import agentic_project_kit
 
     package = Path(agentic_project_kit.__file__).resolve().parent
     dist = metadata.distribution("agentic-project-kit")
     result = {}
-    for version, active in (("1.1.11", False), ("1.1.12", True), ("1.1.11.post1", False)):
+    for version in versions:
         info = f"agentic_project_kit-{version}.dist-info"
         files = {"agentic_project_kit/" + p.relative_to(package).as_posix(): p.read_bytes()
                  for p in package.rglob("*") if p.is_file() and "__pycache__" not in p.parts and p.suffix != ".pyc"}
         files["agentic_project_kit/__init__.py"] = f'__version__ = "{version}"\n'.encode()
-        policy = "agentic_project_kit/external_projection_policy.py"
-        if not active:
-            files[policy] = (
-                b'"""Historical release A external projection policy (fixture only)."""\n'
-                b'from pathlib import Path\n'
-                b'from agentic_project_kit.workspace_detection import is_external_manifest_workspace\n'
-                b'EXTERNAL_PROJECTION_V2_ACTIVE = False\n'
-                b'def external_projection_contract_version() -> int:\n'
-                b'    return 2 if EXTERNAL_PROJECTION_V2_ACTIVE else 1\n'
-                b'def uses_external_projection_v2(root: Path) -> bool:\n'
-                b'    return external_projection_contract_version() == 2 and is_external_manifest_workspace(root)\n'
-            )
+        files.update((overrides or (lambda _version: {}))(version))
         text = dist.read_text("METADATA")
         files[info + "/METADATA"] = re.sub(r"(?m)^Version: .*$", "Version: " + version, text).encode()
         files[info + "/WHEEL"] = b"Wheel-Version: 1.0\nGenerator: agentic-kit-local-retest\nRoot-Is-Purelib: true\nTag: py3-none-any\n"
         files[info + "/entry_points.txt"] = dist.read_text("entry_points.txt").encode()
         result[version] = _write_wheel(directory / f"agentic_project_kit-{version}-py3-none-any.whl", files, info)
     return result
+
+
+_HISTORICAL_A_POLICY = (
+    b'"""Historical release A external projection policy (fixture only)."""\n'
+    b'from pathlib import Path\n'
+    b'from agentic_project_kit.workspace_detection import is_external_manifest_workspace\n'
+    b'EXTERNAL_PROJECTION_V2_ACTIVE = False\n'
+    b'def external_projection_contract_version() -> int:\n'
+    b'    return 2 if EXTERNAL_PROJECTION_V2_ACTIVE else 1\n'
+    b'def uses_external_projection_v2(root: Path) -> bool:\n'
+    b'    return external_projection_contract_version() == 2 and is_external_manifest_workspace(root)\n'
+)
+
+
+def build_fixture_wheels(directory: Path) -> dict[str, Path]:
+    active = {"1.1.12"}
+    return build_kit_wheels(
+        directory, ("1.1.11", "1.1.12", "1.1.11.post1"),
+        lambda version: {} if version in active else {
+            "agentic_project_kit/external_projection_policy.py": _HISTORICAL_A_POLICY},
+    )
 
 
 def dependency_wheels(directory: Path) -> list[Path]:
