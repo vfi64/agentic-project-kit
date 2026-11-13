@@ -123,7 +123,10 @@ def _relative(path: Any) -> str:
     return path
 
 
-def validate_machine(finding_id: str, retest: dict[str, Any], routes=None) -> None:
+def validate_machine(finding_id: str, retest: dict[str, Any], routes=None, effects=None) -> None:
+    # effects: the step-effect rule; the catalog keeps release_effects, journey contracts (G4) pass
+    # their own rule so a dry-run work finish counts as local without reclassifying catalog retests.
+    effects_of = effects or release_effects
     machine = retest.get("machine")
     if machine is None:
         return
@@ -160,7 +163,7 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None) -> No
                     "--all" in argv or finding_id in argv
                 ):
                     raise ValueError(f"{finding_id}: a contract may not retest itself or all findings")
-                if set(release_effects(argv, entry, machine["fixture"])) - LOCAL_EFFECTS:
+                if set(effects_of(argv, entry, machine["fixture"])) - LOCAL_EFFECTS:
                     raise ValueError(f"{finding_id}: a step needs a remote service: {' '.join(argv)}")
                 ran_retest_route |= any(
                     check_route(c, routes)["path"] == entry["path"] for c in retest["commands"]

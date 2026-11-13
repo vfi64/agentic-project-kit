@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "kind": "agentic_kit_journey_contracts",
+  "law": "G4 (owner plan 2026-11-13): fixed workflows run as machine contracts against the built wheel in a disposable workspace with a local bare origin. Measures per journey: approvals (owner consents, exact baseline) and blocked (every Kit step ends PASS or PLANNED; baseline 0). A worse measure fails CI. Offline the journeys stop at the GitHub boundary (work finish as dry run).",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Start work, change a file, finish",
+      "approvals": 1,
+      "machine": {
+        "fixture": "external_manifest",
+        "origin": true,
+        "covers": "J1: work start from main, one changed file, work finish plans commit, push, PR, merge and closeout without a BLOCKED step",
+        "steps": [
+          {"run": ["agentic-kit", "work", "start", "--branch", "feat/j1-journey", "--from-ref", "main", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PASS"}}},
+          {"expect": {"stdout_equals": "feat/j1-journey"}, "run": ["git", "branch", "--show-current"]},
+          {"write": {"path": "notes/j1.md", "text": "J1 journey change\n"}},
+          {"run": ["agentic-kit", "work", "finish", "--branch", "feat/j1-journey", "--title", "J1 journey", "--message", "J1 journey", "--path", "notes/j1.md", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PLANNED"}}},
+          {"assert": {"exists": ["notes/j1.md"]}}
+        ]
+      }
+    },
+    {
+      "id": "J3",
+      "title": "Change already committed, then finish",
+      "approvals": 1,
+      "machine": {
+        "fixture": "external_manifest",
+        "origin": true,
+        "covers": "J3 (V8): a change committed by hand on the work branch; work finish without --path plans to publish the existing commit (K1) without a BLOCKED step",
+        "steps": [
+          {"run": ["agentic-kit", "work", "start", "--branch", "feat/j3-journey", "--from-ref", "main", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PASS"}}},
+          {"write": {"path": "notes/j3.md", "text": "J3 journey change\n"}},
+          {"run": ["git", "add", "notes/j3.md"], "expect": {"returncode": 0}},
+          {"run": ["git", "commit", "-m", "J3 journey"], "expect": {"returncode": 0}},
+          {"run": ["agentic-kit", "work", "finish", "--branch", "feat/j3-journey", "--title", "J3 journey", "--message", "J3 journey", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PLANNED"}, "stdout_contains": "publish-existing-commits"}}
+        ]
+      }
+    }
+  ],
+  "pending": [
+    {"id": "J2", "reason": "Kit adoption then release with only that adoption: kit update --execute needs the fake package index of the external_release_check fixture; next slice."},
+    {"id": "J4", "reason": "Release interrupted after B4 and resumed: needs K7 (owner plan slice 4)."},
+    {"id": "J5", "reason": "Curated release with exactly one line: owner plan slice 4."}
+  ]
+}
