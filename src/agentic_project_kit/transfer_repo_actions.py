@@ -4,7 +4,9 @@ from agentic_project_kit.git_tag_sync import run_with_tag_sync
 
 import json
 import re
+import shlex
 import subprocess
+import time
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
@@ -41,6 +43,11 @@ class RepoActionResult:
     stdout: str
     stderr: str
     next_action: str
+    # G3: the Kit command that resolves a BLOCKED/FAIL, and whether it may run again under the
+    # consent already given (transient obstacles only; anything changing version, target commit
+    # or paths asks again).
+    next_command: str = ""
+    next_command_autonomous: bool = False
 
     def as_json_data(self) -> dict:
         return asdict(self)
@@ -416,6 +423,52 @@ def _run(command: list[str], *, cwd: Path | None = None) -> subprocess.Completed
     )
 
 
+# K5 (V3, release 1.3.0 B4): a concurrent git process (IDE, sync client, a finished hook) can hold
+# .git/index.lock for a moment; transfer commit then failed on the first try. Five attempts, 2 s
+# apart; every retry is logged in stderr. A lock that stays is BLOCKED with the rerun command.
+INDEX_LOCK_RETRY_DELAYS_SECONDS = (2.0, 2.0, 2.0, 2.0)
+
+
+def _is_index_lock_failure(completed: subprocess.CompletedProcess[str]) -> bool:
+    return completed.returncode != 0 and "index.lock" in (completed.stderr or "")
+
+
+def _run_index_retry(command: list[str]) -> subprocess.CompletedProcess[str]:
+    return _run_index_retry_with(command, time.sleep)
+
+
+def _run_index_retry_with(command: list[str], sleep) -> subprocess.CompletedProcess[str]:
+    """Run a git index command; retry a bounded number of times only on an index.lock failure."""
+    completed = _run(command)
+    notes: list[str] = []
+    for attempt, delay in enumerate(INDEX_LOCK_RETRY_DELAYS_SECONDS, start=2):
+        if not _is_index_lock_failure(completed):
+            break
+        notes.append(f"KIT_INDEX_LOCK_RETRY attempt={attempt} after={delay:g}s command={command[:2]}\n")
+        sleep(delay)
+        completed = _run(command)
+    if notes:
+        completed = subprocess.CompletedProcess(
+            completed.args, completed.returncode, completed.stdout, "".join(notes) + (completed.stderr or "")
+        )
+    return completed
+
+
+def _index_lock_blocked(action: str, command: list[str], completed: subprocess.CompletedProcess[str], rerun: str) -> RepoActionResult:
+    """The lock outlasted the bounded retry; nothing was committed."""
+    return RepoActionResult(
+        action=action,
+        result_status="BLOCKED",
+        returncode=completed.returncode,
+        command=command,
+        stdout=completed.stdout,
+        stderr=completed.stderr,
+        next_action="Another git process still holds .git/index.lock; let it finish, then rerun the same command.",
+        next_command=rerun,
+        next_command_autonomous=True,
+    )  # KIT-CHK-INDEX-LOCK
+
+
 def _result(action: str, command: list[str], completed: subprocess.CompletedProcess[str], next_action: str) -> RepoActionResult:
     status = "PASS" if completed.returncode == 0 else ("BLOCKED" if "TAG_SYNC_BLOCKED" in (completed.stderr or "") else "FAIL")
     return RepoActionResult(
@@ -690,6 +743,9 @@ def result_terminal(result: RepoActionResult) -> str:
         lines.extend(_summary_line("- LINE", item) for item in stderr_lines)
         lines.append("")
 
+    if result.next_command:
+        lines.append(_summary_line("NEXT_COMMAND", result.next_command))
+        lines.append(_summary_line("NEXT_COMMAND_AUTONOMOUS", "yes" if result.next_command_autonomous else "no"))
     lines.extend(
         [
             _summary_line("NEXT", result.next_action),
@@ -1166,7 +1222,12 @@ def _commit_paths_unlocked(
         )
 
     add_command = ["git", "add", *paths]
-    added = _run(add_command)
+    rerun = shlex.join(["agentic-kit", "transfer", "commit", "--message", message,
+                        *[arg for path in paths for arg in ("--path", path)],
+                        *(["--branch", required_branch] if required_branch else [])])
+    added = _run_index_retry(add_command)
+    if _is_index_lock_failure(added):
+        return _index_lock_blocked("commit", add_command, added, rerun)
     if added.returncode != 0:
         return _result("commit", add_command, added, "Inspect path list and worktree before continuing.")
 
@@ -1195,7 +1256,9 @@ def _commit_paths_unlocked(
         return _main_commit_refusal(message)
 
     commit_command = ["git", "commit", "-m", message]
-    committed = _run(commit_command)
+    committed = _run_index_retry(commit_command)
+    if _is_index_lock_failure(committed):
+        return _index_lock_blocked("commit", commit_command, committed, rerun)
     return _result("commit", commit_command, committed, "Push current branch or inspect status.")
 
 

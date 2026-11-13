@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "kind": "agentic_kit_check_producer_directory",
+  "law": "G1 (owner 2026-11-13): no blocking check without a producer. Every check id used in src/ has an entry naming the Kit command that produces the required state, whether that command runs before the check on the standard path, how an existing workspace migrates, and whether the resolving command may be repeated under consent already given.",
+  "fields": {
+    "id": "Check id; appears in the source as KIT-CHK-<NAME> at the blocking site.",
+    "scope": "kit: enforced by the Kit; workspace:<name>: a workspace rule the Kit's standard path must satisfy.",
+    "check": "Where and what is checked.",
+    "producer_command": "agentic-kit subcommand words that produce the required state.",
+    "producer_runs_before_check": "True when the standard path runs the producer before the check.",
+    "exception": "Required when producer_runs_before_check is false: why, and which correction closes it.",
+    "migration": "How an existing, previously green workspace reaches the required state.",
+    "autonomous_retry": "True when the resolving command may be rerun without new consent (transient obstacles only).",
+    "incidents": "Incidents from the 1.3.0 / 0.4.1 workflow-friction analysis that this entry answers."
+  },
+  "entries": [
+    {
+      "id": "KIT-CHK-CURATED-SUMMARY",
+      "scope": "kit",
+      "check": "release_changelog.curated_summary_lines: a curated release needs summary lines or Unreleased entries.",
+      "producer_command": ["kit", "update"],
+      "producer_runs_before_check": false,
+      "exception": "Workspaces: kit update writes the adoption line (K4) and work finish checks Unreleased at the PR (G2). The Kit's own release still uses the special make-new-kit-release path without summary lines (V1); closed by K8.",
+      "migration": "None: kit update writes the line from the next adoption on.",
+      "autonomous_retry": false,
+      "incidents": ["V1", "V6"]
+    },
+    {
+      "id": "KIT-CHK-CURATED-UNRELEASED-COVERED",
+      "scope": "kit",
+      "check": "release_changelog.curated_summary_lines: every Unreleased entry must be part of the curated summary.",
+      "producer_command": ["release", "run"],
+      "producer_runs_before_check": true,
+      "migration": "None: without explicit summary lines the Unreleased entries are the summary.",
+      "autonomous_retry": false,
+      "incidents": ["V1"]
+    },
+    {
+      "id": "KIT-CHK-RELEASE-NOTE-CATEGORY",
+      "scope": "kit",
+      "check": "release_notes._validate_release_notes: no product PR may be Unclassified in the release.",
+      "producer_command": ["work", "finish"],
+      "producer_runs_before_check": true,
+      "migration": "PRs merged before K2 keep their label route; every new work finish sets a category (K2).",
+      "autonomous_retry": false,
+      "incidents": ["V2"]
+    },
+    {
+      "id": "KIT-CHK-CHANGELOG-CATEGORIES",
+      "scope": "kit",
+      "check": "checks.check_changelog_quality_text: a combined release section names at least three substance categories; curated sections are exempt (owner E2 b).",
+      "producer_command": ["release", "run"],
+      "producer_runs_before_check": true,
+      "migration": "Curated workspaces: the count no longer applies; placeholder and substance checks stay.",
+      "autonomous_retry": false,
+      "incidents": ["V11"]
+    },
+    {
+      "id": "KIT-CHK-CHANGELOG-UNRELEASED",
+      "scope": "kit",
+      "check": "work finish (G2): Unreleased problems the release gate would reject, reported at the PR.",
+      "producer_command": ["work", "finish"],
+      "producer_runs_before_check": true,
+      "migration": "A workspace with a wrapped or placeholder Unreleased bullet is told at its next work finish and fixes the line.",
+      "autonomous_retry": false,
+      "incidents": ["V11"]
+    },
+    {
+      "id": "KIT-CHK-WORK-FINISH-PATHS",
+      "scope": "kit",
+      "check": "work finish: uncommitted tracked changes need --path; without --path existing commits are published (K1).",
+      "producer_command": ["work", "finish"],
+      "producer_runs_before_check": true,
+      "migration": "None: work finish without --path now publishes existing commits.",
+      "autonomous_retry": false,
+      "incidents": ["V8", "V9"]
+    },
+    {
+      "id": "KIT-CHK-INDEX-LOCK",
+      "scope": "kit",
+      "check": "transfer commit: .git/index.lock held by another git process after five attempts 2 s apart (K5).",
+      "producer_command": ["transfer", "commit"],
+      "producer_runs_before_check": true,
+      "migration": "None.",
+      "autonomous_retry": true,
+      "incidents": ["V3"]
+    },
+    {
+      "id": "WS-AGP-BUILD-REVISION",
+      "scope": "workspace:agp-cockpit",
+      "check": "agp-cockpit tests/test_hygiene.py: with Unreleased entries the build id must be release-<version>-r<N>.",
+      "producer_command": ["kit", "update"],
+      "producer_runs_before_check": false,
+      "exception": "kit update now writes the Unreleased line (K4); raising the build revision in the same PR is the Cockpit's C2.",
+      "migration": "Cockpit C2 after the next Kit release.",
+      "autonomous_retry": false,
+      "incidents": ["V7"]
+    }
+  ]
+}

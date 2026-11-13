@@ -741,3 +741,42 @@ def test_exact_update_preserves_unstable_installed_version_refusal(workspace, in
 def test_exact_update_accepts_an_installed_stable_post_release(workspace):
     workspace.version = "1.0.18.post1"
     assert workspace.update()["result_status"] == "AWAITING_APPROVAL"
+
+
+# K4 (V6): a curated workspace gets exactly one Unreleased line for the adoption, in the same PR.
+def _curate(workspace, changelog="# Changelog\n\n## Unreleased\n\n## v0.4.1 - 2026-11-13\n\n- Earlier.\n"):
+    config = workspace.root / ".agentic/config.yaml"
+    config.write_text(config.read_text() + "release: {changelog_summary: curated}\n")
+    (workspace.root / "CHANGELOG.md").write_text(changelog, encoding="utf-8")
+
+
+def test_k4_curated_update_writes_exactly_one_unreleased_adoption_entry(workspace):
+    from agentic_project_kit.release_changelog import unreleased_bullets
+
+    _curate(workspace)
+    plan = workspace.update()
+    assert plan["plan"]["changelog_entry"] == "Adopt Agentic Project Kit 1.0.19 (previously 1.0.18)."
+    assert "CHANGELOG.md" in plan["changed_paths"]
+    result = workspace.update(execute=True, expected_signature=plan["approval_signature"])
+    assert result["result_status"] == "PASS", result
+    assert "changelog" in result["completed_steps"]
+    text = (workspace.root / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert unreleased_bullets(text) == ["Adopt Agentic Project Kit 1.0.19 (previously 1.0.18)."]
+    assert "## v0.4.1 - 2026-11-13\n\n- Earlier.\n" in text
+
+
+def test_k4_existing_identical_entry_is_not_duplicated(workspace):
+    from agentic_project_kit.release_changelog import unreleased_bullets
+
+    _curate(workspace, "## Unreleased\n\n- Adopt Agentic Project Kit 1.0.19 (previously 1.0.18).\n")
+    plan = workspace.update()
+    assert "CHANGELOG.md" not in plan["changed_paths"]
+    result = workspace.update(execute=True, expected_signature=plan["approval_signature"])
+    assert result["result_status"] == "PASS", result
+    assert len(unreleased_bullets((workspace.root / "CHANGELOG.md").read_text())) == 1
+
+
+def test_k4_combined_workspace_changelog_is_untouched(workspace):
+    plan = workspace.update()
+    assert "changelog_entry" not in plan["plan"]
+    assert "CHANGELOG.md" not in plan["changed_paths"]

@@ -269,20 +269,15 @@ def release_notes_generate_command(
 def _effective_release_prep_summary_lines(project_root: Path, *, version: str, explicit_lines: list[str],
                                           summary_lines_from: Path | None) -> list[str]:
     """Curated mode keeps the release section to the curated lines; the default combines (KIT-GF-045)."""
-    import yaml
+    from agentic_project_kit.release_changelog import changelog_summary_mode
 
-    config_path = project_root / ".agentic" / "config.yaml"
-    config = yaml.safe_load(config_path.read_text(encoding="utf-8")) if config_path.exists() else {}
-    release = (config or {}).get("release") if isinstance(config, dict) else None
-    mode = release.get("changelog_summary", "combined") if isinstance(release, dict) else "combined"
+    mode = changelog_summary_mode(project_root)
     if mode == "curated":
         from agentic_project_kit.release_changelog import curated_summary_lines
 
         changelog = project_root / "CHANGELOG.md"
         text = changelog.read_text(encoding="utf-8") if changelog.exists() else ""
         return curated_summary_lines(text, version, explicit_lines)
-    if mode != "combined":
-        raise ValueError(f"release.changelog_summary must be 'combined' or 'curated', not {mode!r}")
     return _combine_release_prep_summary_lines(explicit_lines=explicit_lines, summary_lines_from=summary_lines_from)
 
 
