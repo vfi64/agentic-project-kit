@@ -57,9 +57,8 @@
   },
   "release": {
     "date": "2026-11-12",
-    "entry_count": 9,
+    "entry_count": 8,
     "notes": [
-      "Zenodo DOI verification pending for v1.3.0.",
       "Changed: External workspaces always use handoff projection v2; acceptance of external v1 projections is retired and an external v1 report enters the governed migration diagnosis. Workspaces below 1.2.0 adopt 1.1.11 first, then 1.2.0 (KIT-GF-096).",
       "Fixed: PR readiness no longer fails on a transient UNSTABLE merge state (KIT-GF-102).",
       "Fixed: External handoff projections keep a case-stable repository identity (KIT-GF-103).",
