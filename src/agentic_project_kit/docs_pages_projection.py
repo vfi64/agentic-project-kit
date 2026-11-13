@@ -3,6 +3,13 @@ from pathlib import Path
 
 DOCS_PAGES_BUILD_SCRIPT = "site/scripts/build.py"
 DOCS_PAGES_FALLBACK_EXPECTED_PATHS = ("docs/.nojekyll", "docs/index.html", "docs/site/")
+# Commit paths of the projection; `git add docs/site` also stages deleted files.
+DOCS_PAGES_COMMIT_PATHS = ("docs/.nojekyll", "docs/index.html", "docs/site")
+
+
+def docs_pages_status_argv() -> list[str]:
+    """Git query for projection changes after a refresh, untracked files included."""
+    return ["git", "status", "--porcelain", "--untracked-files=all", "--", *DOCS_PAGES_COMMIT_PATHS]
 
 
 def docs_pages_projection_paths(root: Path) -> tuple[str, ...]:

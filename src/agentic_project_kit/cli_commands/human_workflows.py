@@ -111,6 +111,41 @@ def _docs_pages_fallback_refresh_step() -> dict[str, object]:
     return _run_step("docs-pages-fallback-refresh", argv)
 
 
+def _docs_pages_projection_steps(branch: str, title: str) -> list[dict[str, object]]:
+    """G1 producer for KIT-CHK-SITE-PROJECTION-FRESH (PR #2774 lesson).
+
+    tests/test_site_fallback_staleness.py compares docs/site with a fresh build; the build pins
+    source hashes (human_workflows.py) and the command manifest. work finish therefore rebuilds
+    the projection after the handoff commit and commits any change before the PR is created.
+    """
+    from agentic_project_kit.docs_pages_projection import (
+        DOCS_PAGES_COMMIT_PATHS,
+        docs_pages_projection_paths,
+        docs_pages_status_argv,
+    )
+
+    if not docs_pages_projection_paths(Path(".")):
+        return [_noop_step("docs-pages-projection", f"Skipped: no {DOCS_PAGES_BUILD_SCRIPT} in this workspace.\n")]
+    refresh = _docs_pages_fallback_refresh_step()
+    if not refresh["ok"]:
+        refresh.update(
+            check_id="KIT-CHK-SITE-PROJECTION-FRESH",
+            next_command=_finish_rerun_command(branch, title),
+            next_command_autonomous=False,
+        )
+        return [refresh]
+    status = _run_step("docs-pages-projection-status", docs_pages_status_argv())
+    if not status["ok"]:
+        return [refresh, status]
+    if not str(status["stdout"] or "").strip():
+        return [refresh, _noop_step("docs-pages-projection-commit", "No docs-pages projection changes to commit.\n")]
+    commit = _agentic(
+        "transfer", "commit", "--branch", branch, "--message", f"Refresh docs-pages projection for {title}",
+        *_path_args([Path(path) for path in DOCS_PAGES_COMMIT_PATHS]),
+    )
+    return [refresh, _run_step("docs-pages-projection-commit", commit)]
+
+
 def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = False, extra: dict[str, object] | None = None) -> dict[str, object]:
     blockers = [str(step["name"]) for step in steps if not step["ok"]]
     if blockers:
@@ -892,6 +927,8 @@ def work_finish_command(
                     )
             elif handoff_status["ok"]:
                 steps.append(_noop_step("handoff-commit", "No handoff projection changes to commit.\n"))
+        if all(step["ok"] for step in steps):
+            steps.extend(_docs_pages_projection_steps(branch, title))
         if all(step["ok"] for step in steps):
             head_sha_step = _current_head_sha_step()
             expected_head_sha = str(head_sha_step["stdout"]).strip()
