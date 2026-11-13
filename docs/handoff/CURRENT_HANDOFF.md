@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `297a30f229de12f8ea6c0d2ffdc6341368579dc0` (`297a30f2`), after `Workflow friction slice 2c: journey contracts J1 and J3 (G4) (#2778)`.
-Last substantive work state is `297a30f229de12f8ea6c0d2ffdc6341368579dc0` (`297a30f2`), after `Workflow friction slice 2c: journey contracts J1 and J3 (G4) (#2778)`.
+Current verified main/admin HEAD is `46356ef4f1c706ab86e59e58bef9b83eafbcfbba` (`46356ef4`), after `Workflow friction slice 2c: journey J2 (G4) (#2780)`.
+Last substantive work state is `46356ef4f1c706ab86e59e58bef9b83eafbcfbba` (`46356ef4`), after `Workflow friction slice 2c: journey J2 (G4) (#2780)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
