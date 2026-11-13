@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c41fd4b12edcc3dad714dfcdff9c7290b9f350056c3875ef727e04406dcbf29f
 - docs/reference/agentic-kit-commands.json: 5c62112b875ac11cf6b48202b183140c8125f8f5de9570a850860fc9a1cd3803
-## Operational documentation refresh state after PR #2774
+## Operational documentation refresh state after PR #2776
 
-Current administrative handoff refresh state is `40098298` (`Workflow friction slice 1: producer law, early changelog check, publish existing commits (#2774)`). Continue next only after this post-PR2774 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `a8e6e09f` (`Workflow friction slice 2a: site projection producer in work finish (G1) (#2776)`). Continue next only after this post-PR2776 refresh is committed and merged; the next substantive slice must be created from fresh main.

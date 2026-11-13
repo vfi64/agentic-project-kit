@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 400982980bc08d47935057d36d428f455445cd72
-  short: 40098298
-  subject: 'Workflow friction slice 1: producer law, early changelog check, publish existing commits (#2774)'
+  full: a8e6e09f2f04768a875f037baa8916765c77ed29
+  short: a8e6e09f
+  subject: 'Workflow friction slice 2a: site projection producer in work finish (G1) (#2776)'
 last_substantive_work_state:
-  full: 400982980bc08d47935057d36d428f455445cd72
-  short: 40098298
-  subject: 'Workflow friction slice 1: producer law, early changelog check, publish existing commits (#2774)'
+  full: a8e6e09f2f04768a875f037baa8916765c77ed29
+  short: a8e6e09f
+  subject: 'Workflow friction slice 2a: site projection producer in work finish (G1) (#2776)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
