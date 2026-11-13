@@ -2065,3 +2065,6 @@ documents:
     class: evidence/log
     owner: maintainers
     summary: Machine-readable appendix for 2026-11-04 Kit strategy baseline
+  - path: docs/reports/release/release-run-1.3.0.json
+    class: evidence/log
+    owner: maintainers
