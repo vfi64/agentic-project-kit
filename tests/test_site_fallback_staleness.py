@@ -10,7 +10,10 @@ from agentic_project_kit.site_generator import (
 )
 
 
-REBUILD_HINT = "Run python site/scripts/build.py --docs-pages-fallback --json"
+REBUILD_HINT = (
+    "KIT-CHK-SITE-PROJECTION-FRESH: work finish rebuilds this projection; "
+    "manually: python site/scripts/build.py --docs-pages-fallback --json"
+)
 
 
 def test_docs_pages_fallback_projection_is_fresh(tmp_path: Path) -> None:

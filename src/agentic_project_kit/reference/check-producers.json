@@ -86,6 +86,16 @@
       "incidents": ["V3"]
     },
     {
+      "id": "KIT-CHK-SITE-PROJECTION-FRESH",
+      "scope": "kit",
+      "check": "tests/test_site_fallback_staleness.py (PR CI): docs/site, docs/index.html and docs/.nojekyll equal a fresh docs-pages fallback build; the build pins source hashes (cli_commands/human_workflows.py) and the command manifest.",
+      "producer_command": ["work", "finish"],
+      "producer_runs_before_check": true,
+      "migration": "None: the next work finish rebuilds and commits the projection before the PR; release prepare keeps its own refresh.",
+      "autonomous_retry": false,
+      "incidents": ["PR2774-test-shard-2"]
+    },
+    {
       "id": "WS-AGP-BUILD-REVISION",
       "scope": "workspace:agp-cockpit",
       "check": "agp-cockpit tests/test_hygiene.py: with Unreleased entries the build id must be release-<version>-r<N>.",

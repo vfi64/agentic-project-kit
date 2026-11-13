@@ -1,6 +1,7 @@
 ## Unreleased
 
 - Workflow friction (owner plan 2026-11-13, slice 1): check-producer directory with CI law (G1); `work finish` without `--path` publishes existing commits (K1), always sets a release-note category from the branch kind (K2) and reports Unreleased lines the release gate would reject at the PR (G2); curated release sections no longer need three keyword categories (K3, owner E2 b); `kit update` writes the adoption line into Unreleased in curated workspaces (K4); `transfer commit` retries a held index.lock five times (K5); BLOCKED results name the resolving command (G3).
+- Workflow friction slice 2a: `work finish` rebuilds the docs-pages projection after the handoff commit and commits any change before the PR, so the site staleness check has a producer on the standard path (G1, KIT-CHK-SITE-PROJECTION-FRESH).
 ## v1.3.0 - 2026-11-12
 
 - Changed: External workspaces always use handoff projection v2; acceptance of external v1 projections is retired and an external v1 report enters the governed migration diagnosis. Workspaces below 1.2.0 adopt 1.1.11 first, then 1.2.0 (KIT-GF-096).
