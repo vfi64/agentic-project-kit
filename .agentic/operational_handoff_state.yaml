@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 46356ef4f1c706ab86e59e58bef9b83eafbcfbba
-  short: 46356ef4
-  subject: 'Workflow friction slice 2c: journey J2 (G4) (#2780)'
+  full: 0bd0ad5d7e15f37f4f054b4b8e0af11b11382f69
+  short: 0bd0ad5d
+  subject: 'Workspace CI: key the pip cache on the managed source (G4 live-run preflight) (#2782)'
 last_substantive_work_state:
-  full: 46356ef4f1c706ab86e59e58bef9b83eafbcfbba
-  short: 46356ef4
-  subject: 'Workflow friction slice 2c: journey J2 (G4) (#2780)'
+  full: 0bd0ad5d7e15f37f4f054b4b8e0af11b11382f69
+  short: 0bd0ad5d
+  subject: 'Workspace CI: key the pip cache on the managed source (G4 live-run preflight) (#2782)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

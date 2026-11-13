@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 46356ef4
-  commit_subject: 'Workflow friction slice 2c: journey J2 (G4) (#2780)'
+  commit: 0bd0ad5d
+  commit_subject: 'Workspace CI: key the pip cache on the managed source (G4 live-run preflight) (#2782)'
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -433,7 +433,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr2780-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2782-successor-chat-handoff.md
   first_instruction: 'Review PR #1436 and the refreshed successor handoff package
     for the release command authority planning slice. After merge, start from fresh
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
@@ -444,6 +444,6 @@ next_step:
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
     before DOI, legacy-doc, absolute-path, or GUI work.'
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr2780-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2782-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
