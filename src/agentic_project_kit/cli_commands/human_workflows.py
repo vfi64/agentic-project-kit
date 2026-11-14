@@ -12,6 +12,7 @@ import subprocess
 
 import typer
 
+from agentic_project_kit.blocked_route import first_line, route_fields
 from agentic_project_kit.closeout_receipt import valid_completion_receipt
 from agentic_project_kit.cli_executable import default_agentic_kit, default_python
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
@@ -170,11 +171,17 @@ def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = Fal
     }
     blocked = [step for step in steps if not step["ok"]]
     if blocked:
-        # G3: every BLOCKED names the resolving Kit command and whether it may run again under the
-        # consent already given. Steps without their own route fall back to rerunning this action.
+        # G3: the first blocked step names the resolving Kit command and whether it may run again
+        # under the consent already given. A step without its own route gets the human marker;
+        # its reason is the step's own next_command_reason or, failing that, its output.
         first = blocked[0]
-        payload["next_command"] = str(first.get("next_command") or "")
-        payload["next_command_autonomous"] = bool(first.get("next_command_autonomous", False))
+        payload.update(
+            route_fields(
+                str(first.get("next_command") or ""),
+                autonomous=bool(first.get("next_command_autonomous", False)),
+                reason=str(first.get("next_command_reason") or "") or _unrouted_step_reason(first),
+            )
+        )
         payload["check_id"] = str(first.get("check_id") or "")
     if extra:
         payload.update(extra)
@@ -189,10 +196,37 @@ def _emit(payload: dict[str, object], *, json_output: bool) -> None:
     typer.echo(f"RETURNCODE={payload['returncode']}")
     if payload["blockers"]:
         typer.echo("BLOCKERS=" + ",".join(str(item) for item in payload["blockers"]))
+    if payload.get("next_command_kind"):
+        typer.echo(f"NEXT_COMMAND_KIND={payload['next_command_kind']}")
     if payload.get("next_command"):
         typer.echo(f"NEXT_COMMAND={payload['next_command']}")
         typer.echo("NEXT_COMMAND_AUTONOMOUS=" + ("yes" if payload.get("next_command_autonomous") else "no"))
+    elif payload.get("next_command_reason"):
+        typer.echo(f"NEXT_COMMAND_REASON={first_line(payload['next_command_reason'])}")
     typer.echo(f"NEXT={payload['next_action']}")
+
+
+def _unrouted_step_reason(step: dict[str, object]) -> str:
+    detail = _nested_result_detail(step.get("stdout")) or first_line(step.get("stderr")) or first_line(step.get("stdout"))
+    reason = f"No automatic Kit route for blocked step {step.get('name')}"
+    return f"{reason}: {detail}" if detail else f"{reason}; inspect its output."
+
+
+def _nested_result_detail(stdout: object) -> str:
+    """A step that ran a Kit command prints that command's JSON result; use its own words."""
+    try:
+        nested = json.loads(str(stdout or ""))
+    except ValueError:
+        return ""
+    if not isinstance(nested, dict):
+        return ""
+    for key in ("next_command_reason", "next_action"):
+        if first_line(nested.get(key)):
+            return first_line(nested.get(key))
+    blockers = nested.get("blockers")
+    if isinstance(blockers, list) and blockers:
+        return "blockers " + ", ".join(str(item) for item in blockers)
+    return ""
 
 
 def _exit_if_blocked(payload: dict[str, object]) -> None:
