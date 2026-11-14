@@ -112,6 +112,20 @@ def with_route(payload: Mapping[str, object]) -> dict[str, object]:
     return data
 
 
+def with_blocked_route(payload: Mapping[str, object]) -> dict[str, object]:
+    """G3 for a result that blocks under another status name (``BLOCK``, a domain status).
+
+    The status stays as it is; the route fields are the ones ``with_route`` gives the same payload
+    as BLOCKED, so a route the payload already carries is kept and validated the same way.
+    """
+    data = dict(payload)
+    if data.get("result_status") in ROUTE_STATUSES:
+        return with_route(data)
+    routed = with_route({**data, "result_status": "BLOCKED"})
+    data.update({name: routed[name] for name in ROUTE_FIELDS})
+    return data
+
+
 def nested_route(result: object) -> dict[str, object]:
     """The Kit route a nested Kit result already names (K6: a CI state seen in pr-complete).
 

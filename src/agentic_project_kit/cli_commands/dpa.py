@@ -5,6 +5,8 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason
+
 from agentic_project_kit.dpa_dp3_dp4_adjudication import (
     DEFAULT_DP3_DP4_ADJUDICATION_RECORD_PATH,
     evaluate_dp3_dp4_adjudication_record,
@@ -584,20 +586,37 @@ def dpa_final_closeout_check_command(
     payload = result.as_dict()
     if write_result is not None:
         payload["evidence_write"] = write_result
-    if output_json:
-        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
-    else:
-        typer.echo(render_dpa_final_closeout_check(result), nl=False)
-        if write_result is not None:
-            reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
-            typer.echo(
-                "EVIDENCE_WRITE="
-                f"{write_result['result_status']}|"
-                f"path={write_result['output_path']}|"
-                f"written={str(write_result.get('written', False)).lower()}"
-                f"{reason}"
-            )
-    if write_result is not None and write_result["result_status"] == "BLOCK":
+    evidence_blocked = write_result is not None and write_result["result_status"] == "BLOCK"
+    if evidence_blocked:
+        payload.update(human_reason(
+            f"Evidence path refused ({write_result.get('reason', 'blocked')}); choose an --output "
+            "under docs/architecture/evidence/dpa/assessment/."
+        ))
+    elif result.findings:
+        first = result.findings[0]
+        payload.update(human_reason(
+            f"The final closeout record has {len(result.findings)} finding(s), first {first.code}: {first.message}"
+        ))
+    elif require_valid and not result.ok:
+        payload.update(human_reason(f"The final closeout record is not valid ({result.result_status})."))
+
+    text = render_dpa_final_closeout_check(result)
+    if write_result is not None:
+        reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
+        text += (
+            "EVIDENCE_WRITE="
+            f"{write_result['result_status']}|"
+            f"path={write_result['output_path']}|"
+            f"written={str(write_result.get('written', False)).lower()}"
+            f"{reason}\n"
+        )
+    emit_routed(
+        payload,
+        json_output=output_json,
+        text=text,
+        blocked=evidence_blocked or bool(result.findings) or (require_valid and not result.ok),
+    )
+    if evidence_blocked:
         raise typer.Exit(2)
     if result.findings:
         raise typer.Exit(2)
