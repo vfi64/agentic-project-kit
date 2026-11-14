@@ -4716,6 +4716,24 @@
               "--visibility"
             ],
             "required": false
+          },
+          {
+            "default": false,
+            "help": "Print one JSON result; never ask.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Approve a public repository without the interactive question (required with --json).",
+            "name": "confirm_public",
+            "opts": [
+              "--confirm-public"
+            ],
+            "required": false
           }
         ],
         "qualified_name": "agentic-kit github-create",
@@ -5184,6 +5202,24 @@
             "name": "kit_source",
             "opts": [
               "--kit-source"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Print one JSON result; never ask.",
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "required": false
+          },
+          {
+            "default": false,
+            "help": "Approve a public GitHub repository without the interactive question (required with --json).",
+            "name": "confirm_public",
+            "opts": [
+              "--confirm-public"
             ],
             "required": false
           }
@@ -13498,6 +13534,34 @@
             "param_type": "TyperOption",
             "required": false,
             "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Print one JSON result; never ask.",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "json_output",
+            "opts": [
+              "--json"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
+          },
+          {
+            "default": false,
+            "help": "Approve a public GitHub repository without the interactive question (required with --json).",
+            "is_flag": true,
+            "metavar": null,
+            "multiple": false,
+            "name": "confirm_public",
+            "opts": [
+              "--confirm-public"
+            ],
+            "param_type": "TyperOption",
+            "required": false,
+            "secondary_opts": []
           }
         ],
         "routes": [],
@@ -14883,7 +14947,7 @@
     ],
     "execution_authorized": false,
     "kind": "command_detail_projection",
-    "manifest_sha": "c50035614231",
+    "manifest_sha": "a12dcbdf3406",
     "schema_version": 1
   },
   "explanation_projection": {
@@ -16091,7 +16155,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "24c40c94497c88315b532658b934c91918a67e55314e21f59e924d30685388d9",
-        "docs/reference/agentic-kit-commands.json": "5c62112b875ac11cf6b48202b183140c8125f8f5de9570a850860fc9a1cd3803",
+        "docs/reference/agentic-kit-commands.json": "d1d700b8f14b5f42087d86cfbbea3a60961d8158587172053c95e5f6eac11e6c",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -16127,7 +16191,7 @@
       "version": "0.2.0"
     },
     "kind": "bounded_history_projection",
-    "manifest_sha": "c50035614231",
+    "manifest_sha": "a12dcbdf3406",
     "overhead": {
       "admin_refresh_prs": 83,
       "evidence_class": "historical classification",
@@ -16183,14 +16247,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "c50035614231",
+    "manifest_sha": "a12dcbdf3406",
     "package_name": "agentic-project-kit",
     "package_version": "1.3.0",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.3.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "c50035614231",
+    "reproduced_manifest_sha": "a12dcbdf3406",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 178,
@@ -16257,7 +16321,7 @@
       ],
       "worktree_clean": "boolean"
     },
-    "manifest_sha": "c50035614231",
+    "manifest_sha": "a12dcbdf3406",
     "routes": [
       {
         "command": "agentic-kit check",

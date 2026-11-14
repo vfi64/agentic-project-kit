@@ -4421,6 +4421,24 @@
             "--visibility"
           ],
           "required": false
+        },
+        {
+          "default": false,
+          "help": "Print one JSON result; never ask.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Approve a public repository without the interactive question (required with --json).",
+          "name": "confirm_public",
+          "opts": [
+            "--confirm-public"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit github-create",
@@ -4889,6 +4907,24 @@
           "name": "kit_source",
           "opts": [
             "--kit-source"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Print one JSON result; never ask.",
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "required": false
+        },
+        {
+          "default": false,
+          "help": "Approve a public GitHub repository without the interactive question (required with --json).",
+          "name": "confirm_public",
+          "opts": [
+            "--confirm-public"
           ],
           "required": false
         }
