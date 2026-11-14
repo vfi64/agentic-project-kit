@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: d588541950826a59728b79079911a7bd4cc51963
-  short: d5885419
-  subject: 'Workflow friction: G3 routes for init and github-create (#2802)'
+  full: b3b3b1ff0525956d6bcb346f7eceefabf3abbd8c
+  short: b3b3b1ff
+  subject: 'Workflow friction K9: finding titles in the catalog and greenfield status (#2804)'
 last_substantive_work_state:
-  full: d588541950826a59728b79079911a7bd4cc51963
-  short: d5885419
-  subject: 'Workflow friction: G3 routes for init and github-create (#2802)'
+  full: b3b3b1ff0525956d6bcb346f7eceefabf3abbd8c
+  short: b3b3b1ff
+  subject: 'Workflow friction K9: finding titles in the catalog and greenfield status (#2804)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
