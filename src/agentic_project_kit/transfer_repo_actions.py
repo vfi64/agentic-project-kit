@@ -12,6 +12,7 @@ from pathlib import Path
 
 import yaml
 
+from agentic_project_kit.blocked_route import ROUTE_STATUSES, first_line, route_fields
 from agentic_project_kit.chat_entrypoint_contract import ensure_command_reference_in_prompt
 from agentic_project_kit.ci_readiness import TIMEOUT, WAITING
 from agentic_project_kit.cli_executable import default_agentic_kit
@@ -48,9 +49,19 @@ class RepoActionResult:
     # or paths asks again).
     next_command: str = ""
     next_command_autonomous: bool = False
+    # G3 human marker: why a person has to act when no Kit command resolves the result.
+    next_command_reason: str = ""
 
     def as_json_data(self) -> dict:
-        return asdict(self)
+        data = asdict(self)
+        if self.result_status in ROUTE_STATUSES:
+            data.update(route_fields(
+                self.next_command,
+                autonomous=self.next_command_autonomous,
+                reason=self.next_command_reason or self.next_action or first_line(self.stderr)
+                or f"{self.action} ended {self.result_status} without an automatic Kit route.",
+            ))
+        return data
 
 
 @dataclass(frozen=True)
@@ -743,9 +754,14 @@ def result_terminal(result: RepoActionResult) -> str:
         lines.extend(_summary_line("- LINE", item) for item in stderr_lines)
         lines.append("")
 
+    route = result.as_json_data()
+    if route.get("next_command_kind"):
+        lines.append(_summary_line("NEXT_COMMAND_KIND", str(route["next_command_kind"])))
     if result.next_command:
         lines.append(_summary_line("NEXT_COMMAND", result.next_command))
         lines.append(_summary_line("NEXT_COMMAND_AUTONOMOUS", "yes" if result.next_command_autonomous else "no"))
+    elif route.get("next_command_reason"):
+        lines.append(_summary_line("NEXT_COMMAND_REASON", first_line(route["next_command_reason"])))
     lines.extend(
         [
             _summary_line("NEXT", result.next_action),

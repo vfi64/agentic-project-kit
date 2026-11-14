@@ -29,3 +29,24 @@ def test_repo_action_result_carries_and_prints_the_command():
     data = result.as_json_data()
     assert data["next_command"] and data["next_command_autonomous"] is True
     assert "NEXT_COMMAND" in result_terminal(result)
+
+
+def test_blocked_payload_without_route_carries_the_human_marker():
+    payload = _payload("work-finish", [_failed_local_step("b", "x")])
+    assert payload["next_command"] == "" and payload["next_command_kind"] == "human"
+    assert payload["next_command_reason"]
+
+
+def test_repo_action_result_routes_kit_commands_and_marks_the_rest():
+    from agentic_project_kit.blocked_route import route_problems
+
+    routed = RepoActionResult("commit", "BLOCKED", 128, ["git", "add"], "", "lock", "wait",
+                              next_command="agentic-kit transfer commit --message m", next_command_autonomous=True)
+    assert route_problems(routed.as_json_data()) == [] and routed.as_json_data()["next_command_kind"] == "kit"
+    unrouted = RepoActionResult("push", "FAIL", 1, ["git", "push"], "", "rejected", "Fetch and rebase first.")
+    data = unrouted.as_json_data()
+    assert route_problems(data) == [] and data["next_command_kind"] == "human"
+    assert data["next_command_reason"] == "Fetch and rebase first."
+    assert "NEXT_COMMAND_KIND" in result_terminal(unrouted) and "NEXT_COMMAND_REASON" in result_terminal(unrouted)
+    passed = RepoActionResult("push", "PASS", 0, ["git", "push"], "", "", "Done.").as_json_data()
+    assert "next_command_kind" not in passed
