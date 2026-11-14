@@ -40,6 +40,7 @@ MANIFEST_FIXTURES = frozenset({
     "external_release_check_stale_editable",
     "external_projection_v2",
     "external_adoption",
+    "external_release_curated",
 })
 # external_adoption owns a pip-capable .venv with installed wheels instead of a copied runtime.
 OWNED_FIXTURES = (MANIFEST_FIXTURES - {"external_manifest", "external_adoption"}) | {"external_kit_return"}
@@ -56,8 +57,10 @@ _PLACEHOLDER = re.compile(r"\{([a-z_][a-z0-9_]*)\}")
 # the local bare origin. fixture_head is the baseline commit (empty in an unborn Git fixture).
 BUILTIN_VARIABLES = ("kit_python", "kit_version", "fixture_head")
 # Variables a fixture binds for its steps: external_adoption offers the target release of the
-# adoption (journey J2).
-FIXTURE_VARIABLES = {"external_adoption": ("adoption_version",)}
+# adoption (journey J2); external_release_curated its one Unreleased line (journey J5).
+FIXTURE_VARIABLES = {"external_adoption": ("adoption_version",), "external_release_curated": ("unreleased_line",)}
+# Release fixtures: a release run there is local (journeys) and every remote stays in the run root.
+RELEASE_FIXTURES = frozenset({"external_release", "external_release_curated"})
 _PATH_TOKEN = re.compile(r"([^.\[\]]+)|\[(\d+)\]")
 
 
@@ -141,7 +144,7 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None, effec
         raise ValueError(f"{finding_id}: invalid machine contract keys")
     if machine.get("fixture") not in FIXTURES or not isinstance(machine.get("origin", False), bool):
         raise ValueError(f"{finding_id}: unknown fixture")
-    if machine["fixture"] in {"external_release", "external_adoption"} and not machine.get("origin"):
+    if machine["fixture"] in {*RELEASE_FIXTURES, "external_adoption"} and not machine.get("origin"):
         raise ValueError(f"{finding_id}: {machine['fixture']} requires a local origin")
     if not isinstance(machine.get("covers"), str) or not machine["covers"].strip():
         raise ValueError(f"{finding_id}: a machine contract states what it covers")
@@ -188,11 +191,19 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None, effec
             known |= set(capture)
         elif "assert" in step:
             spec = step["assert"]
-            if not isinstance(spec, dict) or set(spec) - {"exists", "absent"} or not spec:
-                raise ValueError(f"{finding_id}: assert takes exists and absent path lists")
-            for paths in spec.values():
-                for path in paths:
+            if not isinstance(spec, dict) or set(spec) - {"exists", "absent", "section"} or not spec:
+                raise ValueError(f"{finding_id}: assert takes exists and absent path lists and a section")
+            for key in {"exists", "absent"} & set(spec):
+                for path in spec[key]:
                     _relative(path)
+            if "section" in spec:
+                section = spec["section"]
+                if (not isinstance(section, dict) or set(section) != {"path", "heading", "bullets"}
+                        or not isinstance(section["heading"], str) or not section["heading"].startswith("## ")
+                        or not isinstance(section["bullets"], list)
+                        or not all(isinstance(item, str) for item in section["bullets"])):
+                    raise ValueError(f"{finding_id}: a section assert names path, a '## ' heading and its bullets")
+                _relative(section["path"])
         else:
             kind = next(k for k in STEP_KINDS if k in step)
             spec = step[kind]
@@ -367,10 +378,17 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
             failures = [f"adoption fixture failed: {exc}"]
         if failures:
             return root, variables, failures
-    if machine["fixture"] == "external_release":
-        from agentic_project_kit.greenfield_retest_release import prepare_release_fixture
+    if machine["fixture"] in RELEASE_FIXTURES:
+        from agentic_project_kit.greenfield_retest_release import CURATED_UNRELEASED_LINE, prepare_release_fixture
 
-        failures = prepare_release_fixture(root, variables, env, _run)
+        curated = machine["fixture"] == "external_release_curated"
+        if curated:
+            variables["unreleased_line"] = CURATED_UNRELEASED_LINE
+        failures = prepare_release_fixture(
+            root, variables, env, _run,
+            **({"config_updates": {"release": {"changelog_summary": "curated"}},
+                "unreleased": (CURATED_UNRELEASED_LINE,)} if curated else {}),
+        )
         if failures:
             return root, variables, failures
     if machine["fixture"] == "external_kit_return":
@@ -420,6 +438,32 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
     return root, variables, []
 
 
+def section_bullets(text: str, heading: str) -> list[str] | None:
+    """One-line bullets of the first ``## `` section whose heading line starts with ``heading``."""
+    lines = text.splitlines()
+    for index, line in enumerate(lines):
+        if line == heading or line.startswith(heading + " "):
+            body = []
+            for item in lines[index + 1:]:
+                if item.startswith("## "):
+                    break
+                body.append(item)
+            return [item[2:] for item in body if item.startswith("- ")]
+    return None
+
+
+def section_failures(root: Path, spec: dict[str, Any]) -> list[str]:
+    target = root / spec["path"]
+    if not target.is_file():
+        return [f"{spec['path']} missing"]
+    bullets = section_bullets(target.read_text(encoding="utf-8"), spec["heading"])
+    if bullets is None:
+        return [f"{spec['path']}: no section {spec['heading']!r}"]
+    if bullets != spec["bullets"]:
+        return [f"{spec['path']} {spec['heading']!r}: bullets {bullets!r} != {spec['bullets']!r}"]
+    return []
+
+
 def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
     with tempfile.TemporaryDirectory(prefix="agentic-kit-retest-") as directory, ExitStack() as stack:
         base = Path(directory).resolve()
@@ -440,7 +484,7 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
                         guard_index(root, variables["kit_python"], variables["release_index_url"], step["run"])
                     except (ValueError, OSError) as exc:
                         return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
-                if machine["fixture"] == "external_release" and step["run"][0] == "agentic-kit":
+                if machine["fixture"] in RELEASE_FIXTURES and step["run"][0] == "agentic-kit":
                     from agentic_project_kit.greenfield_retest_release import guard_local_origin
                     try:
                         guard_local_origin(root, base, env, _run)
@@ -469,6 +513,8 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
                 record["assert"] = raw["assert"]
                 failed += [f"{p} missing" for p in step["assert"].get("exists", []) if not (root / p).exists()]
                 failed += [f"{p} present" for p in step["assert"].get("absent", []) if (root / p).exists()]
+                if "section" in step["assert"]:
+                    failed += section_failures(root, step["assert"]["section"])
             else:
                 kind = next(k for k in ("write", "append", "replace") if k in step)
                 spec = step[kind]

@@ -497,6 +497,52 @@ def _changelog_unreleased_step(branch: str, title: str) -> dict[str, object] | N
     return step
 
 
+def _curated_unreleased_line_step(
+    branch: str, title: str, *, pr_body: str, paths: list[Path], return_context: object,
+) -> dict[str, object] | None:
+    """K8: in a curated workspace a product PR adds its Unreleased line (KIT-CHK-CURATED-UNRELEASED-LINE)."""
+    from agentic_project_kit.curated_unreleased_line import (
+        CHECK_ID, category_of, is_commit_sha, missing_line_reason, release_run_owning,
+    )
+    from agentic_project_kit.release_changelog import changelog_summary_mode
+
+    changelog = Path("CHANGELOG.md")
+    try:
+        if return_context is not None or changelog_summary_mode(Path(".")) != "curated":
+            return None
+    except (OSError, UnicodeError, ValueError):
+        return None
+    category = category_of(pr_body)
+    if not category or release_run_owning(Path("."), branch):
+        return None
+    base = subprocess.run(["git", "merge-base", "HEAD", "origin/main"], text=True, capture_output=True)
+    base_sha = (base.stdout or "").strip()
+    if base.returncode != 0 or not is_commit_sha(base_sha):
+        return None
+
+    def committed(ref: str) -> str:
+        shown = subprocess.run(["git", "show", f"{ref}:CHANGELOG.md"], text=True, capture_output=True)
+        return shown.stdout if shown.returncode == 0 else ""
+
+    selected = {path.as_posix().removeprefix("./") for path in paths}
+    try:
+        head_text = (changelog.read_text(encoding="utf-8")
+                     if "CHANGELOG.md" in selected and changelog.exists() else committed("HEAD"))
+    except (OSError, UnicodeError):
+        head_text = ""
+    reason = missing_line_reason(category, committed(base_sha), head_text)
+    if not reason:
+        return None
+    step = _failed_local_step("curated-unreleased-line", reason + "\n")
+    rerun_paths = [*paths, *([] if "CHANGELOG.md" in selected else [Path("CHANGELOG.md")])]
+    step.update(
+        check_id=CHECK_ID,
+        next_command=_finish_rerun_command(branch, title, paths=rerun_paths),
+        next_command_autonomous=False,
+    )
+    return step
+
+
 def _kit_ci_pin_guard_step() -> dict[str, object]:
     """Read-only Kit CI pin guard; release prepare (A3) and work finish (G2) run the same step."""
     from .. import __version__ as installed_kit_version
@@ -1029,6 +1075,12 @@ def work_finish_command(
     unreleased_step = _changelog_unreleased_step(branch, title)
     if unreleased_step is not None:
         steps.append(unreleased_step)
+    if all(step["ok"] for step in steps):
+        line_step = _curated_unreleased_line_step(
+            branch, title, pr_body=pr_body, paths=selected_paths, return_context=return_context,
+        )
+        if line_step is not None:
+            steps.append(line_step)
     if all(step["ok"] for step in steps):
         steps.extend(_release_content_steps(branch, title, paths=selected_paths, return_context=return_context))
     if dry_run and all(step["ok"] for step in steps):

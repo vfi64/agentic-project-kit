@@ -12,12 +12,17 @@ import subprocess
 
 import yaml
 
+# Journey J5 (K8): the one line a merged PR left in Unreleased of a curated workspace.
+CURATED_UNRELEASED_LINE = "Fixed: The fixture reports its diagnostics on one line (J5)."
+
 
 def prepare_release_fixture(root: Path, variables: dict[str, str], env: dict[str, str],
                             run: Callable[..., subprocess.CompletedProcess], *,
-                            config_updates: dict | None = None, behavior_commit: bool = True) -> list[str]:
+                            config_updates: dict | None = None, behavior_commit: bool = True,
+                            unreleased: tuple[str, ...] = ()) -> list[str]:
     # config_updates and behavior_commit=False serve journey J2 (G4): a curated workspace whose
-    # next release contains only a Kit adoption.
+    # next release contains only a Kit adoption. config_updates and unreleased serve J5 (K8): a
+    # curated workspace whose merged PR left exactly one Unreleased line.
     config = root / ".agentic/config.yaml"
     data = yaml.safe_load(config.read_text(encoding="utf-8"))
     data.update(publication="none", kit={"interpreter": variables["kit_python"]})
@@ -34,10 +39,16 @@ def prepare_release_fixture(root: Path, variables: dict[str, str], env: dict[str
     # construction, with no push and no protected-branch override.
     seed_origin = ["git", "-C", str(origin), "fetch", "--quiet", "--no-tags",
                    str(root), "refs/heads/main:refs/heads/main"]
+    for argv in (["git", "add", "-A"], ["git", "commit", "-m", "Initial release fixture"], ["git", "tag", "v0.1.0"]):
+        completed = run(argv, root, env)
+        if completed.returncode:
+            return [f"release fixture step {' '.join(argv)} failed: {(completed.stderr or completed.stdout)[-800:]}"]
+    if unreleased:  # the merged PR #1 brought its line (K8)
+        pending = "".join(f"- {line}\n" for line in unreleased)
+        (root / "CHANGELOG.md").write_text(
+            f"## Unreleased\n\n{pending}\n## v0.1.0 - 2026-01-01\n\n- Initial fixture.\n", encoding="utf-8")
     steps = [
-        ["git", "add", "-A"], ["git", "commit", "-m", "Initial release fixture"],
-        ["git", "tag", "v0.1.0"],
-        *([["git", "commit", "--allow-empty", "-m", "Add fixture behavior (#1)"]] if behavior_commit else []),
+        *([["git", "commit", "-a", "--allow-empty", "-m", "Add fixture behavior (#1)"]] if behavior_commit else []),
         seed_origin, ["git", "fetch", "origin"],
         ["agentic-kit", "commands", "sync-entrypoints", "--execute", "--json"],
         ["agentic-kit", "rules", "acknowledge"],

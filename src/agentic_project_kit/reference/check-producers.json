@@ -27,12 +27,21 @@
       "id": "KIT-CHK-CURATED-SUMMARY",
       "scope": "kit",
       "check": "release_changelog.curated_summary_lines: a curated release needs summary lines or Unreleased entries.",
-      "producer_command": ["kit", "update"],
-      "producer_runs_before_check": false,
-      "exception": "Workspaces: kit update writes the adoption line (K4) and work finish checks Unreleased at the PR (G2). The Kit's own release still uses the special make-new-kit-release path without summary lines (V1); closed by K8.",
-      "migration": "None: kit update writes the line from the next adoption on.",
+      "producer_command": ["work", "finish"],
+      "producer_runs_before_check": true,
+      "migration": "None: a product PR adds its Unreleased line at work finish (KIT-CHK-CURATED-UNRELEASED-LINE, K8) and kit update writes the adoption line (K4); the Kit's own release takes the Unreleased lines like a workspace, without summary lines.",
       "autonomous_retry": false,
       "incidents": ["V1", "V6"]
+    },
+    {
+      "id": "KIT-CHK-CURATED-UNRELEASED-LINE",
+      "scope": "kit",
+      "check": "work finish (K8): in a curated workspace a PR with a product category (Added, Changed, Fixed, Breaking) adds or rewords an Unreleased bullet against its merge base with origin/main; release-run branches and an installation return are exempt.",
+      "producer_command": ["work", "finish"],
+      "producer_runs_before_check": true,
+      "migration": "Curated workspaces: a product PR without an Unreleased line is told at its next work finish; a change without user-facing effect takes a non-product category instead.",
+      "autonomous_retry": false,
+      "incidents": ["V1"]
     },
     {
       "id": "KIT-CHK-CURATED-UNRELEASED-COVERED",
