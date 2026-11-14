@@ -9,6 +9,7 @@ from uuid import uuid4
 
 import typer
 
+from agentic_project_kit.blocked_route import human_route
 from agentic_project_kit.cli_commands.transfer_shared import _emit_transfer
 from agentic_project_kit.cli_commands.transfer_context_helpers import (
     _known_volatile_transfer_paths,
@@ -74,6 +75,48 @@ class PreflightBlockedResult:
             "local_state": self.local_state.as_json_data(),
             "steps": [],
         }
+
+
+FINAL_CLEANUP_NEXT_ACTION = "Inspect known volatile transfer cleanup before continuing."
+
+
+@dataclass(frozen=True)
+class FinalCleanupBlockedResult:
+    """KIT-GF-112: the lifecycle passed, but the final known-volatile cleanup left the tree dirty.
+
+    The command exits 2 in that case, so the result must not say PASS: it is BLOCKED, keeps the
+    lifecycle fields of the inner result and names the dirty paths for the person who resolves it.
+    """
+
+    inner: object
+    result_status: str = "BLOCKED"
+    returncode: int = 2
+    next_action: str = FINAL_CLEANUP_NEXT_ACTION
+
+    @property
+    def lifecycle_state(self) -> str:
+        return str(getattr(self.inner, "lifecycle_state", ""))
+
+    def as_json_data(self) -> dict[str, object]:
+        data = dict(self.inner.as_json_data())
+        data["lifecycle_result_status"] = data.get("result_status")
+        data.update({
+            "result_status": self.result_status,
+            "returncode": self.returncode,
+            "next_action": self.next_action,
+            "blocker": "known_volatile_final_cleanup_failed",
+        })
+        return data
+
+
+def _final_cleanup_reason(final_cleanup: dict[str, object]) -> str:
+    after = final_cleanup.get("after")
+    dirty = after.get("dirty_paths") if isinstance(after, dict) else None
+    paths = ", ".join(str(path) for path in dirty or ()) or "unknown paths"
+    return (
+        f"The known volatile cleanup after post-merge-complete left {paths} changed; inspect and "
+        "restore them by hand, then run agentic-kit transfer post-merge-check."
+    )
 
 
 def _final_signal(result) -> str:
@@ -499,14 +542,15 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
 
         final_cleanup = restore_known_volatile_for_post_merge(Path("."))
         final_cleanup_ok = bool(final_cleanup.get("ok"))
+        if not final_cleanup_ok and result.result_status == "PASS":
+            # KIT-GF-112: exit 2 after a failed final cleanup must not report PASS.
+            result = FinalCleanupBlockedResult(result)
         final_chat_signal = _final_signal(result) if final_cleanup_ok else "f"
-        final_next_action = (
-            result.next_action
-            if final_cleanup_ok
-            else "Inspect known volatile transfer cleanup before continuing."
-        )
+        final_next_action = result.next_action if final_cleanup_ok else FINAL_CLEANUP_NEXT_ACTION
 
         payload = result.as_json_data()
+        if isinstance(result, FinalCleanupBlockedResult):
+            payload.update(human_route(_final_cleanup_reason(final_cleanup)))
         if json_output:
             payload["completion_receipt"] = (
                 make_completion_receipt(

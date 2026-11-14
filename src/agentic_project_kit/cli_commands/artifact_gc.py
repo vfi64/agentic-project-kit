@@ -22,6 +22,7 @@ from agentic_project_kit.workspace import load_workspace
 
 
 MUTUALLY_EXCLUSIVE_MODES = "FAIL_MUTUALLY_EXCLUSIVE_MODES"
+INVALID_OLDER_THAN = "FAIL_INVALID_OLDER_THAN"
 
 
 def _message_lines(message: str) -> list[str]:
@@ -65,6 +66,8 @@ def _gc_fail_reason(outcome: str, lines: list[str]) -> str:
     """G3: no Kit command resolves a refused collection; a person looks at the refused path."""
     if outcome == MUTUALLY_EXCLUSIVE_MODES:
         return "Choose only one GC mode: --tmp-logs, --local-tmp-contents, --transfer-runs or --report-retention."
+    if outcome == INVALID_OLDER_THAN:
+        return "Rerun with --older-than as an ISO date (YYYY-MM-DD) or datetime, or omit it to use --ttl-seconds."
     refused = lines[0] if lines else "a candidate"
     return f"{outcome}: the collector refused {refused}; inspect that path by hand, then rerun the dry run."
 
@@ -89,7 +92,7 @@ def _ttl_from_older_than(older_than: str, *, default_ttl_seconds: int) -> int:
             if cutoff.tzinfo is None:
                 cutoff = cutoff.replace(tzinfo=timezone.utc)
     except ValueError as exc:
-        raise typer.BadParameter("--older-than must be an ISO date or datetime") from exc
+        raise ValueError(f"--older-than must be an ISO date or datetime, got {older_than!r}") from exc
     now = datetime.now(timezone.utc)
     return max(0, int((now - cutoff.astimezone(timezone.utc)).total_seconds()))
 
@@ -136,7 +139,21 @@ def artifact_gc_command(
         emit_routed(payload, json_output=json_output, text=_gc_text(MUTUALLY_EXCLUSIVE_MODES, ""))
         raise typer.Exit(code=1)
 
-    effective_ttl_seconds = _ttl_from_older_than(older_than, default_ttl_seconds=ttl_seconds)
+    try:
+        effective_ttl_seconds = _ttl_from_older_than(older_than, default_ttl_seconds=ttl_seconds)
+    except ValueError as exc:
+        # KIT-GF-113: an unreadable cutoff is a routed result, not a Click usage error.
+        payload = _gc_payload(
+            mode="invalid",
+            outcome=INVALID_OLDER_THAN,
+            message="",
+            execute=execute,
+            ttl_seconds=ttl_seconds,
+            older_than=older_than,
+        )
+        payload["error"] = str(exc)
+        emit_routed(payload, json_output=json_output, text=_gc_text(INVALID_OLDER_THAN, str(exc)))
+        raise typer.Exit(code=2) from exc
 
     if local_tmp_contents:
         result = run_local_garbage_collector(

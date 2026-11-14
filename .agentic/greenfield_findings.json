@@ -8362,6 +8362,369 @@
         },
         "verification": "Native real-Git counterprobes failed before and passed after the fix; retest harness has no ignored-parent-repository fixture. Consumer verification and release remain separate."
       }
+    },
+    {
+      "id": "KIT-GF-109",
+      "title": "Injected workspace CI fails the setup-python pip cache in a workspace without requirements.txt or pyproject.toml",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [
+        2782
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-109-workspace-ci-pip-cache-key-2026-11-14.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Fresh disposable repository without requirements.txt or pyproject.toml; workspace init injects the managed CI."
+        ],
+        "commands": [
+          "agentic-kit workspace init --root . --name external --inject-ci --execute --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "The injected workflow keys the setup-python pip cache on .agentic/ci/agentic-gate.yaml, which the injection writes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "cache-dependency-path names .agentic/ci/agentic-gate.yaml and that file exists; no requirements.txt or pyproject.toml exists."
+          ]
+        },
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); the live GitHub Actions run of the G4 preflight and consumer VERIFIED_FIXED remain independent.",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "workspace init --inject-ci in a repository without requirements.txt or pyproject.toml keys the setup-python pip cache on the injected managed source .agentic/ci/agentic-gate.yaml",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                ".",
+                "--name",
+                "external",
+                "--inject-ci",
+                "--execute",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "assert": {
+                "exists": [
+                  ".github/workflows/agentic-gate.yaml",
+                  ".agentic/ci/agentic-gate.yaml"
+                ],
+                "absent": [
+                  "requirements.txt",
+                  "pyproject.toml"
+                ]
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-F",
+                "-e",
+                "cache-dependency-path: .agentic/ci/agentic-gate.yaml",
+                "--",
+                ".github/workflows/agentic-gate.yaml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "KIT-GF-110",
+      "title": "An origin added after workspace init blocks work start because the successor package still names the fallback repository identity",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [
+        2786
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-110-late-origin-identity-2026-11-14.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Workspace initialized and committed without origin; a GitHub origin is added afterwards and nothing else changes."
+        ],
+        "commands": [
+          "agentic-kit work start --branch f1-retest --from-ref main --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "work start passes and reports that the origin identity replaced the fallback name; any other projection change still blocks."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "result_status PASS; the post-merge-check step names the late identity binding; the work branch is checked out."
+          ]
+        },
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); the GitHub origin is redirected to the local bare origin with url.insteadOf. Consumer VERIFIED_FIXED remains independent.",
+        "machine": {
+          "fixture": "external_manifest",
+          "origin": true,
+          "covers": "An origin with a GitHub identity added after workspace init lets work start continue as a late identity binding instead of blocking on a successor-package refresh",
+          "steps": [
+            {
+              "run": [
+                "git",
+                "remote",
+                "set-url",
+                "origin",
+                "https://github.com/ExampleOwner/late-origin.git"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "config",
+                "url.{origin}.insteadOf",
+                "https://github.com/ExampleOwner/late-origin.git"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "work",
+                "start",
+                "--branch",
+                "f1-retest",
+                "--from-ref",
+                "main",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS"
+                },
+                "stdout_contains": "origin ExampleOwner/late-origin replaces external"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "branch",
+                "--show-current"
+              ],
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "f1-retest"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "KIT-GF-111",
+      "title": "Generated project CI keys the pip cache on no existing file for project types without pyproject.toml",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [
+        2786
+      ],
+      "report": "docs/reports/greenfield/KIT-GF-111-generator-ci-pip-cache-key-2026-11-14.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Disposable directory; agentic-kit init creates a governance-wrapper project, which has no pyproject.toml."
+        ],
+        "commands": [
+          "agentic-kit init demo --type governance-wrapper --no-pre-commit --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "The generated CI names a cache-dependency-path that includes .github/workflows/ci.yml, which every generated project has."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "init PASS; demo has no pyproject.toml; the generated ci.yml carries cache-dependency-path with .github/workflows/ci.yml."
+          ]
+        },
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); a live GitHub Actions run of a generated project and consumer VERIFIED_FIXED remain independent.",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "agentic-kit init for the governance-wrapper type, which has no pyproject.toml, writes CI whose pip cache key includes the existing .github/workflows/ci.yml",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "init",
+                "demo",
+                "--type",
+                "governance-wrapper",
+                "--no-pre-commit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "project_created": true
+                }
+              }
+            },
+            {
+              "assert": {
+                "exists": [
+                  "demo/.github/workflows/ci.yml"
+                ],
+                "absent": [
+                  "demo/pyproject.toml"
+                ]
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-F",
+                "-e",
+                "cache-dependency-path:",
+                "--",
+                "demo/.github/workflows/ci.yml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "git",
+                "grep",
+                "--no-index",
+                "-q",
+                "-F",
+                "-e",
+                ".github/workflows/ci.yml",
+                "--",
+                "demo/.github/workflows/ci.yml"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "KIT-GF-112",
+      "title": "transfer post-merge-complete reports PASS with exit 2 when the final known-volatile cleanup fails",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-112-post-merge-complete-final-cleanup-2026-11-14.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "A merged pull request whose post-merge lifecycle passes while the final restore of known volatile transfer paths leaves the tree dirty."
+        ],
+        "commands": [
+          "agentic-kit transfer post-merge-complete --after-pr {pr} --json"
+        ],
+        "bindings": {
+          "pr": "Exact merged pull request number"
+        },
+        "expected": [
+          "Exit 2 with result_status BLOCKED, lifecycle_result_status PASS, no completion receipt and a human route naming the dirty paths."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_post_merge_complete_cli_blocks_when_final_volatile_cleanup_fails covers JSON and text mode; live merge observation is separate."
+          ]
+        },
+        "verification": "Native regression test failed before the fix (PASS with exit 2) and passes after it. The route merges a pull request, so the local retest harness does not run it; consumer verification and release remain separate."
+      }
+    },
+    {
+      "id": "KIT-GF-113",
+      "title": "artifact-gc with an invalid --older-than value ends as a Click usage error without JSON or route",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-113-artifact-gc-invalid-older-than-2026-11-14.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "External fixture; artifact-gc runs in dry-run mode with an --older-than value that is not an ISO date or datetime."
+        ],
+        "commands": [
+          "agentic-kit artifact-gc --tmp-logs --older-than not-a-date --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "Exit 2 with one JSON document: FAIL_INVALID_OLDER_THAN, no candidates and a human route; a valid date still passes."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "result_status FAIL, outcome FAIL_INVALID_OLDER_THAN, next_command_kind human, candidate_count 0; control with 2026-01-01 PASS."
+          ]
+        },
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
+        "machine": {
+          "fixture": "external_manifest",
+          "covers": "artifact-gc with an unreadable --older-than returns a routed FAIL result in JSON instead of a Click usage error, collects nothing, and a valid ISO date still passes",
+          "steps": [
+            {
+              "run": [
+                "agentic-kit",
+                "artifact-gc",
+                "--tmp-logs",
+                "--older-than",
+                "not-a-date",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 2,
+                "json": {
+                  "result_status": "FAIL",
+                  "outcome": "FAIL_INVALID_OLDER_THAN",
+                  "next_command_kind": "human",
+                  "candidate_count": 0,
+                  "dry_run": true
+                }
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "artifact-gc",
+                "--tmp-logs",
+                "--older-than",
+                "2026-01-01",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "dry_run": true
+                }
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "kind": "external_findings_catalog",

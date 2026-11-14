@@ -2065,6 +2065,101 @@ Expected: Both audits BLOCK and report at least one reference; own Git root cont
 
 Expected result fields: `{"assertions": ["Native ignored-parent-repository and own-root control tests in both audit test modules pass."]}`.
 
+## KIT-GF-109
+
+Title: Injected workspace CI fails the setup-python pip cache in a workspace without requirements.txt or pyproject.toml
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-109-workspace-ci-pip-cache-key-2026-11-14.md
+
+Execution class: local (effects: none); machine contract: workspace init --inject-ci in a repository without requirements.txt or pyproject.toml keys the setup-python pip cache on the injected managed source .agentic/ci/agentic-gate.yaml
+
+Preconditions: Fresh disposable repository without requirements.txt or pyproject.toml; workspace init injects the managed CI.
+
+```text
+agentic-kit workspace init --root . --name external --inject-ci --execute --json
+```
+
+Expected: The injected workflow keys the setup-python pip cache on .agentic/ci/agentic-gate.yaml, which the injection writes.
+
+Expected result fields: `{"assertions": ["cache-dependency-path names .agentic/ci/agentic-gate.yaml and that file exists; no requirements.txt or pyproject.toml exists."]}`.
+
+## KIT-GF-110
+
+Title: An origin added after workspace init blocks work start because the successor package still names the fallback repository identity
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-110-late-origin-identity-2026-11-14.md
+
+Execution class: local (effects: fetch); machine contract: An origin with a GitHub identity added after workspace init lets work start continue as a late identity binding instead of blocking on a successor-package refresh
+
+Preconditions: Workspace initialized and committed without origin; a GitHub origin is added afterwards and nothing else changes.
+
+```text
+agentic-kit work start --branch f1-retest --from-ref main --json
+```
+
+Expected: work start passes and reports that the origin identity replaced the fallback name; any other projection change still blocks.
+
+Expected result fields: `{"assertions": ["result_status PASS; the post-merge-check step names the late identity binding; the work branch is checked out."]}`.
+
+## KIT-GF-111
+
+Title: Generated project CI keys the pip cache on no existing file for project types without pyproject.toml
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-111-generator-ci-pip-cache-key-2026-11-14.md
+
+Execution class: local (effects: none); machine contract: agentic-kit init for the governance-wrapper type, which has no pyproject.toml, writes CI whose pip cache key includes the existing .github/workflows/ci.yml
+
+Preconditions: Disposable directory; agentic-kit init creates a governance-wrapper project, which has no pyproject.toml.
+
+```text
+agentic-kit init demo --type governance-wrapper --no-pre-commit --json
+```
+
+Expected: The generated CI names a cache-dependency-path that includes .github/workflows/ci.yml, which every generated project has.
+
+Expected result fields: `{"assertions": ["init PASS; demo has no pyproject.toml; the generated ci.yml carries cache-dependency-path with .github/workflows/ci.yml."]}`.
+
+## KIT-GF-112
+
+Title: transfer post-merge-complete reports PASS with exit 2 when the final known-volatile cleanup fails
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-112-post-merge-complete-final-cleanup-2026-11-14.md
+
+Execution class: owner_remote (effects: merge); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: A merged pull request whose post-merge lifecycle passes while the final restore of known volatile transfer paths leaves the tree dirty.
+
+```text
+agentic-kit transfer post-merge-complete --after-pr {pr} --json
+```
+
+Expected: Exit 2 with result_status BLOCKED, lifecycle_result_status PASS, no completion receipt and a human route naming the dirty paths.
+
+Expected result fields: `{"assertions": ["Native test_post_merge_complete_cli_blocks_when_final_volatile_cleanup_fails covers JSON and text mode; live merge observation is separate."]}`.
+
+## KIT-GF-113
+
+Title: artifact-gc with an invalid --older-than value ends as a Click usage error without JSON or route
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-113-artifact-gc-invalid-older-than-2026-11-14.md
+
+Execution class: local (effects: none); machine contract: artifact-gc with an unreadable --older-than returns a routed FAIL result in JSON instead of a Click usage error, collects nothing, and a valid ISO date still passes
+
+Preconditions: External fixture; artifact-gc runs in dry-run mode with an --older-than value that is not an ISO date or datetime.
+
+```text
+agentic-kit artifact-gc --tmp-logs --older-than not-a-date --json
+```
+
+Expected: Exit 2 with one JSON document: FAIL_INVALID_OLDER_THAN, no candidates and a human route; a valid date still passes.
+
+Expected result fields: `{"assertions": ["result_status FAIL, outcome FAIL_INVALID_OLDER_THAN, next_command_kind human, candidate_count 0; control with 2026-01-01 PASS."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Title: rule-registry check hard-fails and report crashes in an external workspace without a mechanism inventory

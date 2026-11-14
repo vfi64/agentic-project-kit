@@ -49,6 +49,23 @@ def test_artifact_gc_mutually_exclusive_modes_carry_the_human_marker():
     assert text.startswith("FAIL_MUTUALLY_EXCLUSIVE_MODES\nNEXT_COMMAND_KIND=human\n")
 
 
+def test_artifact_gc_invalid_older_than_is_a_routed_result_without_collection(tmp_path: Path, monkeypatch):
+    """KIT-GF-113: an unreadable cutoff was a Click usage error (no JSON, no route)."""
+    monkeypatch.chdir(tmp_path)
+    collected: list[object] = []
+    monkeypatch.setattr(artifact_gc_module, "execute_tmp_log_gc", lambda *a, **k: collected.append(a) or ("PASS", ""))
+    for value in ("not-a-date", "2026-13-01"):
+        payload = json.loads(_invoke(["artifact-gc", "--tmp-logs", "--older-than", value, "--json"], 2).stdout)
+        assert payload["outcome"] == "FAIL_INVALID_OLDER_THAN" and payload["result_status"] == "FAIL"
+        assert payload["older_than"] == value and value in payload["error"]
+        assert payload["candidates"] == [] and payload["dry_run"] is True
+        _human(payload, "ISO date")
+    text = _invoke(["artifact-gc", "--tmp-logs", "--older-than", "not-a-date"], 2).stdout
+    assert text.startswith("FAIL_INVALID_OLDER_THAN\n--older-than must be an ISO date or datetime")
+    assert "NEXT_COMMAND_KIND=human\n" in text
+    assert collected == []
+
+
 def test_artifact_gc_refused_path_names_the_path(tmp_path: Path, monkeypatch):
     monkeypatch.chdir(tmp_path)
     monkeypatch.setattr(artifact_gc_module, "execute_gc", lambda root: ("FAIL_SYMLINK_ARTIFACT", "tmp/link.log"))

@@ -7,6 +7,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
+from agentic_project_kit.blocked_route import route_problems
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands import transfer_post_merge_complete as command_module
 from agentic_project_kit.cli_commands.transfer_post_merge_complete import (
@@ -466,6 +467,8 @@ def test_post_merge_complete_cli_blocks_when_final_volatile_cleanup_fails(tmp_pa
         ),
     ]
 
+    initial_states = list(states)
+
     def fake_inspect(*_args, **_kwargs):
         return states.pop(0)
 
@@ -486,9 +489,24 @@ def test_post_merge_complete_cli_blocks_when_final_volatile_cleanup_fails(tmp_pa
 
     assert result.exit_code == 2
     payload = json.loads(result.stdout)
-    assert payload["result_status"] == "PASS"
+    # KIT-GF-112: exit 2 after a failed final cleanup is BLOCKED with a human route, never PASS.
+    assert payload["result_status"] == "BLOCKED"
+    assert payload["returncode"] == 2
+    assert payload["lifecycle_result_status"] == "PASS"
+    assert payload["lifecycle_state"] == "COMPLETE"
+    assert payload["blocker"] == "known_volatile_final_cleanup_failed"
+    assert payload["completion_receipt"] is None
+    assert payload["next_command_kind"] == "human" and payload["next_command"] == ""
+    assert "latest-transfer-handoff-report.json" in payload["next_command_reason"]
+    assert route_problems(payload) == []
     assert payload["known_volatile_final_cleanup"]["ok"] is False
     assert payload["chat_reply"] == "f | NEXT=Inspect known volatile transfer cleanup before continuing."
+
+    states.extend(initial_states)
+    text = CliRunner().invoke(app, ["transfer", "post-merge-complete", "--after-pr", "1090"])
+    assert text.exit_code == 2
+    lines = [line.split() for line in text.stdout.splitlines()]
+    assert ["STATE:", "BLOCKED"] in lines and ["NEXT_COMMAND_KIND:", "human"] in lines
 
 
 def test_post_merge_complete_cli_reports_publish_blocker(tmp_path, monkeypatch):
