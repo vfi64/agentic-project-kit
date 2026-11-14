@@ -9,6 +9,8 @@ from pathlib import Path
 import typer
 from rich.console import Console
 
+from agentic_project_kit.blocked_route import first_line
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason, read_only_route
 from agentic_project_kit.post_release import build_post_release_report, post_release_report_as_dict, render_post_release_report
 from agentic_project_kit.release_prepare import prepare_release_state
 from agentic_project_kit.release_metadata_authority_gate import (
@@ -131,18 +133,10 @@ def release_prep_command(
     date_value = release_date or date_cls.today().isoformat()
     if not re.fullmatch(r"\d+\.\d+\.\d+", plain_version):
         message = f"Invalid release version: {version!r}; expected MAJOR.MINOR.PATCH"
-        if json_output:
-            _print_json(
-                {
-                    "ok": False,
-                    "version": plain_version,
-                    "date": date_value,
-                    "dry_run": dry_run,
-                    "error": message,
-                }
-            )
-        else:
-            console.print(f"ERROR: {message}", markup=False)
+        _emit_release_prep_error(
+            plain_version, date_value, dry_run, message,
+            reason=f"Pass --version as MAJOR.MINOR.PATCH (got {version!r}).", json_output=json_output,
+        )
         raise typer.Exit(code=2)
 
     try:
@@ -160,33 +154,35 @@ def release_prep_command(
             dry_run=dry_run,
         )
     except (FileNotFoundError, ValueError) as exc:
-        if json_output:
-            _print_json(
-                {
-                    "ok": False,
-                    "version": plain_version,
-                    "date": date_value,
-                    "dry_run": dry_run,
-                    "error": str(exc),
-                }
-            )
-        else:
-            console.print(f"ERROR: {exc}", markup=False)
+        _emit_release_prep_error(
+            plain_version, date_value, dry_run, str(exc),
+            reason=f"release-prep cannot prepare v{plain_version}: {first_line(str(exc))}", json_output=json_output,
+        )
         raise typer.Exit(code=2) from exc
 
-    if json_output:
-        _print_json(result.as_dict())
+    mode = "DRY-RUN" if dry_run else "WRITE"
+    if result.changed_paths:
+        text = f"{mode}: prepared release metadata for v{result.version} on {result.date}\n"
+        text += "".join(f"CHANGED: {changed_path}\n" for changed_path in result.changed_paths)
     else:
-        mode = "DRY-RUN" if dry_run else "WRITE"
-        if result.changed_paths:
-            console.print(
-                f"{mode}: prepared release metadata for v{result.version} on {result.date}",
-                markup=False,
-            )
-            for changed_path in result.changed_paths:
-                console.print(f"CHANGED: {changed_path}", markup=False)
-        else:
-            console.print(f"{mode}: release metadata already prepared for v{result.version}", markup=False)
+        text = f"{mode}: release metadata already prepared for v{result.version}\n"
+    emit_routed({**result.as_dict(), "result_status": "PASS"}, json_output=json_output, text=text)
+
+
+def _emit_release_prep_error(
+    version: str, date_value: str, dry_run: bool, message: str, *, reason: str, json_output: bool
+) -> None:
+    """G3: a release-prep error blocks with the human marker; JSON keeps its ``ok``/``error`` fields."""
+    payload = {
+        "ok": False,
+        "result_status": "BLOCKED",
+        "version": version,
+        "date": date_value,
+        "dry_run": dry_run,
+        "error": message,
+        **human_reason(reason),
+    }
+    emit_routed(payload, json_output=json_output, text=f"ERROR: {message}\n")
 
 
 def release_status_command(
@@ -408,9 +404,25 @@ def post_release_doi_closeout_command(
     json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
     result = post_release_doi_closeout(project_root.resolve(), version=version, write=write)
-    if json_output:
-        _print_json(result.as_dict())
-    else:
-        console.print(render_post_release_doi_closeout_result(result), markup=False)
+    payload = result.as_dict()
+    if not result.ok:
+        payload.update(_doi_closeout_route(result, version=version, project_root=project_root))
+    emit_routed(payload, json_output=json_output, text=render_post_release_doi_closeout_result(result),
+                blocked=not result.ok)
     if not result.ok:
         raise typer.Exit(code=result.returncode)
+
+
+# DOI closeout blockers that only a passing post-release-check clears (GitHub release, Zenodo DOIs).
+DOI_VERIFICATION_BLOCKERS = frozenset({
+    "github_release_not_verified", "zenodo_concept_doi_not_verified", "zenodo_version_doi_not_verified",
+})
+
+
+def _doi_closeout_route(result, *, version: str, project_root: Path) -> dict[str, object]:
+    """G3 route of a blocked DOI closeout: the read-only post-release-check when the release or its
+    DOIs are not verified yet, otherwise the human marker with the closeout's own next action."""
+    if result.blockers and set(result.blockers) <= DOI_VERIFICATION_BLOCKERS:
+        return read_only_route("post-release-check", "--version", version, root=project_root)
+    first = result.blockers[0] if result.blockers else f"returncode {result.returncode}"
+    return human_reason(f"{result.next_action} First blocker: {first}.")
