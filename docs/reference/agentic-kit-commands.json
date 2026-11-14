@@ -7174,6 +7174,34 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print one JSON result; never ask.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Approve a public repository without the interactive question (required with --json).",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "confirm_public",
+          "opts": [
+            "--confirm-public"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -7954,6 +7982,34 @@
           "name": "kit_source",
           "opts": [
             "--kit-source"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Print one JSON result; never ask.",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "json_output",
+          "opts": [
+            "--json"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Approve a public GitHub repository without the interactive question (required with --json).",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "confirm_public",
+          "opts": [
+            "--confirm-public"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -20988,7 +21044,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "c50035614231",
+    "manifest_sha": "a12dcbdf3406",
     "schema_version": 2
   },
   "schema_version": 3,

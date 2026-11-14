@@ -11,6 +11,7 @@ import json
 import shlex
 from collections.abc import Callable, Mapping
 from pathlib import Path
+from typing import NoReturn
 
 import typer
 
@@ -43,6 +44,28 @@ def emit_routed(
             typer.echo(rendered, nl=False, err=err)
     echo_route_lines(payload, err=err)
     return payload
+
+
+class RoutedRefusal(Exception):
+    """A run that ends the command early: its payload (with the reason a person has to act or a
+    Kit route) and the exit code. ``emit_refusal`` prints it."""
+
+    def __init__(self, payload: Mapping[str, object], exit_code: int) -> None:
+        super().__init__(str(payload.get("error") or ""))
+        self.payload = dict(payload)
+        self.exit_code = exit_code
+
+
+def emit_refusal(refusal: RoutedRefusal, *, json_output: bool, text: str = "") -> NoReturn:
+    """G3 for a refusal: the JSON on stdout, or ``text`` and ``Error: …`` plus the route lines on
+    stderr; then the refusal's exit code."""
+    emit_routed(
+        refusal.payload,
+        json_output=json_output,
+        text=f"{text}Error: {refusal.payload.get('error')}\n",
+        err=not json_output,
+    )
+    raise typer.Exit(code=refusal.exit_code)
 
 
 def echo_route_lines(payload: Mapping[str, object], *, err: bool = False) -> None:

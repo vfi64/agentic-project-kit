@@ -312,7 +312,8 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
         write_file(target / rel_path, content, overwrite=overwrite)
 
     try:
-        subprocess.run(["git", "init"], cwd=target, check=False)
+        # Captured: a JSON caller (agentic-kit init --json) keeps a clean stdout.
+        subprocess.run(["git", "init"], cwd=target, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     except FileNotFoundError as exc:
         raise RuntimeError(
             "git executable not found; install Git before creating an agentic project"

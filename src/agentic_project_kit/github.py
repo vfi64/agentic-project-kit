@@ -15,11 +15,26 @@ def check_gh_auth() -> None:
         raise RuntimeError("GitHub CLI is not authenticated. Run: gh auth login")
 
 
-def create_github_repo(project_dir: Path, owner: str | None, visibility: str, push: bool = True) -> None:
+def github_repo_name(project_dir: Path, owner: str | None) -> str:
+    return f"{owner}/{project_dir.name}" if owner else project_dir.name
+
+
+def create_github_repo(
+    project_dir: Path, owner: str | None, visibility: str, push: bool = True
+) -> subprocess.CompletedProcess[str]:
+    """Create (and push) the repository. gh's output is captured, so a JSON caller keeps a clean
+    stdout; the caller reads ``returncode`` and ``stdout`` (stderr merged)."""
     check_gh_auth()
-    repo_name = project_dir.name
-    repo = f"{owner}/{repo_name}" if owner else repo_name
-    cmd = ["gh", "repo", "create", repo, f"--{visibility}", "--source", str(project_dir), "--remote", "origin"]
+    cmd = [
+        "gh", "repo", "create", github_repo_name(project_dir, owner), f"--{visibility}",
+        "--source", str(project_dir), "--remote", "origin",
+    ]
     if push:
         cmd.append("--push")
-    subprocess.run(cmd, cwd=project_dir, check=True)
+    return subprocess.run(cmd, cwd=project_dir, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, check=False)
+
+
+def github_url(output: str) -> str:
+    """The repository URL gh prints on success (its last https:// word), or ""."""
+    words = [word for line in output.splitlines() for word in line.split() if word.startswith("https://")]
+    return words[-1] if words else ""

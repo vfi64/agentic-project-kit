@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: c50035614231
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a12dcbdf3406
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1511,6 +1511,8 @@ Create and push a GitHub repository for an initialized project.
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `owner` | `TyperOption` | --owner | `False` |  |  |
 | `visibility` | `TyperOption` | --visibility | `False` | `private` |  |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print one JSON result; never ask. |
+| `confirm_public` | `TyperOption` | --confirm-public | `False` | `False` | Approve a public repository without the interactive question (required with --json). |
 
 ### `agentic-kit governance check`
 
@@ -1687,6 +1689,8 @@ Create a governed project skeleton with selected profiles and policy packs.
 | `github_owner` | `TyperOption` | --owner | `False` |  |  |
 | `visibility` | `TyperOption` | --visibility | `False` | `private` | private or public |
 | `kit_source` | `TyperOption` | --kit-source | `False` | `pypi` | agentic-kit install source for generated CI: pypi, testpypi, or none |
+| `json_output` | `TyperOption` | --json | `False` | `False` | Print one JSON result; never ask. |
+| `confirm_public` | `TyperOption` | --confirm-public | `False` | `False` | Approve a public GitHub repository without the interactive question (required with --json). |
 
 ### `agentic-kit instruction lint`
 
