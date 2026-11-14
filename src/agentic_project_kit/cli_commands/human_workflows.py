@@ -505,6 +505,69 @@ def _changelog_unreleased_step(branch: str, title: str) -> dict[str, object] | N
     return step
 
 
+def _kit_ci_pin_guard_step() -> dict[str, object]:
+    """Read-only Kit CI pin guard; release prepare (A3) and work finish (G2) run the same step."""
+    from .. import __version__ as installed_kit_version
+    from ..kit_ci_pin_guard import check_kit_ci_pin
+
+    guard = check_kit_ci_pin(Path(".").resolve(), installed_kit_version)
+    blocked = guard["result_status"] == "BLOCKED"
+    step: dict[str, object] = {
+        "name": "kit-ci-pin-guard", "ok": not blocked, "returncode": 2 if blocked else 0,
+        "allowed_returncodes": [0], "stdout": json.dumps(guard, sort_keys=True),
+        "stderr": "", "argv": ["kit-ci-pin-guard"],
+    }
+    next_action = str(guard.get("next_action") or "")
+    if blocked and next_action.startswith("agentic-kit "):
+        step.update(next_command=next_action, next_command_autonomous=False)
+    return step
+
+
+def _release_content_steps(
+    branch: str, title: str, *, paths: list[Path], return_context: object,
+) -> list[dict[str, object]]:
+    """G2: the release checks that depend only on repository content, before the commit.
+
+    The scan is ``transfer standard-error-scan`` without ``--before-release``: the release (A2)
+    runs the same command with that flag, which adds only the steps listed as release-only in
+    reference/check-producers.json (release_path). KIT-CHK-RELEASE-CONTENT-AT-PR.
+    """
+    from agentic_project_kit.release_content_at_pr import (
+        CHECK_ID, SCAN_DETAIL_COMMAND, release_run_covering_branch, scan_summary,
+    )
+
+    if return_context is not None:
+        return [_noop_step("standard-error-scan", "Installation return closeout (GF095): the release scan is not applicable.\n")]
+    covered_by = release_run_covering_branch(Path("."), branch)
+    if covered_by:
+        return [_noop_step(
+            "standard-error-scan",
+            f"Release run {covered_by} owns this branch; its A2 ran the full release scan on main (G2).\n",
+        )]
+    steps = [_kit_ci_pin_guard_step()]
+    if not steps[0]["ok"]:
+        steps[0]["check_id"] = CHECK_ID
+        return steps
+    scan = _run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--json"))
+    status, blockers, warnings = scan_summary(str(scan.get("stdout") or ""))
+    lines = [f"RELEASE_CONTENT_SCAN={status}"]
+    lines += [f"WARNING={item}" for item in warnings]
+    lines += [f"BLOCKER={item}" for item in blockers]
+    scan["stdout"] = "\n".join(lines) + "\n"
+    if not scan["ok"]:
+        scan["stdout"] += (
+            "The release gate (release ready, A2) would reject this repository content. "
+            f"Details: {SCAN_DETAIL_COMMAND}\n"
+        )
+        scan.update(
+            check_id=CHECK_ID,
+            next_command=_finish_rerun_command(branch, title, paths=paths),
+            next_command_autonomous=False,
+        )
+    steps.append(scan)
+    return steps
+
+
 def _noop_step(name: str, message: str) -> dict[str, object]:
     return {
         "name": name,
@@ -759,7 +822,7 @@ def _doc_lifecycle_release_review_step(version: str) -> dict[str, object]:
     blockers = build_doc_lifecycle_release_blockers(root, version=version)
     workspace = load_workspace(root, suppress_legacy_profile_warning=True)
     external_warn_mode = is_external_manifest_workspace(root) and workspace.hygiene_doc_lifecycle != "strict"
-    blocked = bool(blockers) and not external_warn_mode
+    blocked = bool(blockers) and not external_warn_mode  # KIT-CHK-DOC-LIFECYCLE-RELEASE-REVIEW
     status = "BLOCKED" if blocked else "WARN" if blockers else "PASS"
     lines = [
         "DOC_LIFECYCLE_RELEASE_REVIEW",
@@ -974,6 +1037,8 @@ def work_finish_command(
     unreleased_step = _changelog_unreleased_step(branch, title)
     if unreleased_step is not None:
         steps.append(unreleased_step)
+    if all(step["ok"] for step in steps):
+        steps.extend(_release_content_steps(branch, title, paths=selected_paths, return_context=return_context))
     if dry_run and all(step["ok"] for step in steps):
         steps.append(_remote_preflight_step())
     if not dry_run and all(step["ok"] for step in steps):
@@ -1305,15 +1370,8 @@ def release_prepare_command(
 ) -> None:
     """Generate release summary evidence and run release-prep safely."""
     _require_release_deadline(version, action="release-prepare", json_output=json_output, dry_run=dry_run)
-    from .. import __version__ as installed_kit_version
-    from ..kit_ci_pin_guard import check_kit_ci_pin
-    kit_pin_guard = check_kit_ci_pin(Path(".").resolve(), installed_kit_version)
-    steps = [{"name": "kit-ci-pin-guard",
-              "ok": kit_pin_guard["result_status"] != "BLOCKED",
-              "returncode": 2 if kit_pin_guard["result_status"] == "BLOCKED" else 0,
-              "stdout": json.dumps(kit_pin_guard, sort_keys=True),
-              "stderr": "", "argv": ["kit-ci-pin-guard"]}]
-    if kit_pin_guard["result_status"] == "BLOCKED":
+    steps = [_kit_ci_pin_guard_step()]
+    if not steps[0]["ok"]:
         payload = _payload("release-prepare", steps, dry_run=dry_run, extra={"version": version})
         _emit(payload, json_output=json_output)
         _exit_if_blocked(payload)
