@@ -459,9 +459,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "feat/workflow-friction-g3-workspace-routes",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "2c9a8337a17223d487b569dde88f7753f9baadec",
+    "head": "d6d2e363cf80d66592c98d0a17ccdb9b6cee4b3f",
     "head_matches_origin_main": false,
-    "head_short": "2c9a8337",
+    "head_short": "d6d2e363",
     "local_path": "cd /path/to/",
     "origin_main": "44e5249c4a5252bbccedbd8ae7dd2b302d56f4ae",
     "origin_main_short": "44e5249c",
