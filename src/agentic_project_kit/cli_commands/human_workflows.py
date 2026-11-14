@@ -12,7 +12,7 @@ import subprocess
 
 import typer
 
-from agentic_project_kit.blocked_route import first_line, route_fields
+from agentic_project_kit.blocked_route import first_line, route_fields, with_route
 from agentic_project_kit.closeout_receipt import valid_completion_receipt
 from agentic_project_kit.cli_executable import default_agentic_kit, default_python
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
@@ -189,6 +189,7 @@ def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = Fal
 
 
 def _emit(payload: dict[str, object], *, json_output: bool) -> None:
+    payload = with_route(payload)  # G3 emitter guard; the ratchet test checks this line
     if json_output:
         typer.echo(json.dumps(payload, indent=2, sort_keys=True))
         return
@@ -207,7 +208,10 @@ def _emit(payload: dict[str, object], *, json_output: bool) -> None:
 
 
 def _unrouted_step_reason(step: dict[str, object]) -> str:
-    detail = _nested_result_detail(step.get("stdout")) or first_line(step.get("stderr")) or first_line(step.get("stdout"))
+    detail = (
+        _nested_result_detail(step.get("stdout")) or _summary_state_next(step.get("stdout"))
+        or first_line(step.get("stderr")) or first_line(step.get("stdout"))
+    )
     reason = f"No automatic Kit route for blocked step {step.get('name')}"
     return f"{reason}: {detail}" if detail else f"{reason}; inspect its output."
 
@@ -227,6 +231,16 @@ def _nested_result_detail(stdout: object) -> str:
     if isinstance(blockers, list) and blockers:
         return "blockers " + ", ".join(str(item) for item in blockers)
     return ""
+
+
+def _summary_state_next(stdout: object) -> str:
+    """A Kit command without --json prints a summary; its STATE= and NEXT= tokens are its own words."""
+    text = str(stdout or "")
+    following = re.findall(r"^\s*NEXT=([A-Za-z0-9_.-]+)\s*$", text, flags=re.MULTILINE)
+    if not following:
+        return ""
+    state = re.search(r"\bSTATE=([A-Z][A-Z0-9_]*)\b", text)
+    return (f"STATE={state.group(1)}, " if state else "") + f"NEXT={following[-1]}"
 
 
 def _exit_if_blocked(payload: dict[str, object]) -> None:
@@ -515,6 +529,42 @@ def _external_first_cycle_without_successor_package(root: Path = Path(".")) -> b
         return False
 
 
+def _start_post_merge_check_step() -> dict[str, object]:
+    """post-merge-check for work start; an origin added after workspace init does not block (F1).
+
+    In that case the successor package differs from a fresh projection only by the repository
+    identity, which moved from the fallback name to the origin. work finish regenerates the
+    package (handoff-refresh) in the same work cycle, so the stale name never reaches main again.
+    """
+    step = _run_step("post-merge-check", _agentic("transfer", "post-merge-check", "--main-branch", "main"))
+    if step["ok"]:
+        return step
+    binding = _identity_bound_after_init(Path("."))
+    if binding is None:
+        return step
+    return _noop_step(
+        "post-merge-check",
+        (
+            f"Repository identity bound after workspace init: origin {binding.get('origin')} replaces "
+            f"{binding.get('stored')}. Nothing else changed; work finish regenerates the successor "
+            "package (handoff-refresh) in this work cycle.\n"
+        ),
+    )
+
+
+def _identity_bound_after_init(root: Path) -> dict[str, object] | None:
+    from agentic_project_kit.external_handoff_projection import IDENTITY_BOUND_AFTER_INIT, check_projection
+
+    try:
+        result = check_projection(root)
+    except (OSError, ValueError, RuntimeError):
+        return None
+    if result.get("code") != IDENTITY_BOUND_AFTER_INIT:
+        return None
+    binding = result.get("identity_binding")
+    return binding if isinstance(binding, dict) else None
+
+
 def _open_pr_closeout_body(title: str) -> str:
     return (
         f"Human workflow finish: {title}\n\n"
@@ -753,7 +803,7 @@ def work_start_command(
                     )
                 )
             else:
-                steps.append(_run_step("post-merge-check", _agentic("transfer", "post-merge-check", "--main-branch", "main")))
+                steps.append(_start_post_merge_check_step())
     else:
         steps = [_run_step("fetch-start-ref", ["git", "fetch", "--all", "--prune", "--tags"], runner=run_with_tag_sync)]
         if _workflow_steps_ok(steps):

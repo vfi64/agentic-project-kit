@@ -7,6 +7,7 @@ from pathlib import Path
 
 import typer
 
+from agentic_project_kit.blocked_route import with_route
 from agentic_project_kit.kit_installation import installation_status
 from agentic_project_kit.kit_update import run_kit_update
 
@@ -15,6 +16,7 @@ kit_app = typer.Typer(help="Inspect and update the Kit installed in an external 
 
 
 def _emit(payload: dict, json_output: bool) -> None:
+    payload = with_route(payload)  # G3 emitter guard; the ratchet test checks this line
     if json_output:
         typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
     else:
@@ -27,6 +29,12 @@ def _emit(payload: dict, json_output: bool) -> None:
             typer.echo("BLOCKER=" + payload["blocker"])
         if payload.get("release_check"):
             typer.echo("RELEASE_CHECK=" + json.dumps(payload["release_check"], ensure_ascii=False))
+        if payload.get("next_command_kind"):
+            typer.echo(f"NEXT_COMMAND_KIND={payload['next_command_kind']}")
+            if payload.get("next_command"):
+                typer.echo(f"NEXT_COMMAND={payload['next_command']}")
+            else:
+                typer.echo(f"NEXT_COMMAND_REASON={payload['next_command_reason']}")
         typer.echo("NEXT_ACTION=" + payload["next_action"])
     if payload["result_status"] == "BLOCKED":
         raise typer.Exit(2)

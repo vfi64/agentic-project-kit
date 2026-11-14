@@ -14,7 +14,7 @@ from pathlib import Path
 import pytest
 import typer.main
 
-from agentic_project_kit.blocked_route import KIND_HUMAN, KIND_KIT, route_problems
+from agentic_project_kit.blocked_route import KIND_HUMAN, KIND_KIT, route_problems, with_route
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands.human_workflows import _failed_local_step, _noop_step, _payload
 
@@ -40,27 +40,28 @@ BASELINE = frozenset({
     "agentic-kit workspace remove", "agentic-kit workspace upgrade",
 })
 
-# Orchestrators whose command callback builds every result with human_workflows._payload and
-# prints it only through _emit.
-PAYLOAD_BUILDER = frozenset({
-    "agentic-kit work start", "agentic-kit work finish", "agentic-kit work recover",
-    "agentic-kit release ready", "agentic-kit release prepare",
+# Orchestrators whose command callback prints only through its module's _emit, and that _emit
+# routes every payload through blocked_route.with_route before printing (checked by AST below).
+EMITTER_GUARDED = frozenset({
+    "agentic-kit work start", "agentic-kit work finish", "agentic-kit work recover", "agentic-kit work rescue",
+    "agentic-kit release ready", "agentic-kit release prepare", "agentic-kit release run",
+    "agentic-kit release abandon", "agentic-kit kit update", "agentic-kit kit return-install",
+    "agentic-kit kit return-revert",
 })
 
-# Not yet conformant. May only shrink.
+# Not yet conformant. May only shrink: lower DEBT_CEILING whenever an entry leaves.
+DEBT_CEILING = 26
 DEBT = frozenset({
     "agentic-kit artifact-gc", "agentic-kit chat session-start", "agentic-kit docs lifecycle sweep",
     "agentic-kit dpa final-closeout-check", "agentic-kit github-create", "agentic-kit init",
-    "agentic-kit kit return-install", "agentic-kit kit return-revert", "agentic-kit kit update",
-    "agentic-kit post-release-doi-closeout", "agentic-kit release abandon", "agentic-kit release run",
-    "agentic-kit release-prep", "agentic-kit release-publish", "agentic-kit transfer admin-refresh-pr",
-    "agentic-kit transfer chat-switch-complete", "agentic-kit transfer evidence-pr-complete",
-    "agentic-kit transfer post-merge-complete", "agentic-kit transfer post-merge-settle",
-    "agentic-kit transfer pr-closeout-complete", "agentic-kit transfer pr-complete",
-    "agentic-kit transfer pr-create-complete", "agentic-kit transfer remote-next",
-    "agentic-kit transfer remote-work-start", "agentic-kit transfer sync-main", "agentic-kit work rescue",
-    "agentic-kit workflow go", "agentic-kit workspace adopt", "agentic-kit workspace dpa-intake",
-    "agentic-kit workspace init", "agentic-kit workspace remove", "agentic-kit workspace upgrade",
+    "agentic-kit post-release-doi-closeout", "agentic-kit release-prep", "agentic-kit release-publish",
+    "agentic-kit transfer admin-refresh-pr", "agentic-kit transfer chat-switch-complete",
+    "agentic-kit transfer evidence-pr-complete", "agentic-kit transfer post-merge-complete",
+    "agentic-kit transfer post-merge-settle", "agentic-kit transfer pr-closeout-complete",
+    "agentic-kit transfer pr-complete", "agentic-kit transfer pr-create-complete", "agentic-kit transfer remote-next",
+    "agentic-kit transfer remote-work-start", "agentic-kit transfer sync-main", "agentic-kit workflow go",
+    "agentic-kit workspace adopt", "agentic-kit workspace dpa-intake", "agentic-kit workspace init",
+    "agentic-kit workspace remove", "agentic-kit workspace upgrade",
 })
 
 
@@ -82,34 +83,32 @@ def test_baseline_is_pinned():
 
 def test_every_orchestrator_is_conformant_or_on_the_debt_list():
     orchestrators = set(_orchestrators())
-    assert not PAYLOAD_BUILDER & DEBT
-    assert orchestrators - DEBT - PAYLOAD_BUILDER == set(), "unclassified orchestrator: make it conformant"
+    assert not EMITTER_GUARDED & DEBT
+    assert orchestrators - DEBT - EMITTER_GUARDED == set(), "unclassified orchestrator: make it conformant"
     assert DEBT - orchestrators == set(), "stale debt entry: remove it"
-    assert PAYLOAD_BUILDER <= orchestrators
+    assert EMITTER_GUARDED <= orchestrators
 
 
 def test_debt_only_shrinks():
     assert DEBT <= BASELINE, "new orchestrators cannot go on the debt list"
-    assert len(DEBT) < len(BASELINE)
+    assert len(DEBT) <= DEBT_CEILING, "the debt list grew"
 
 
-@pytest.mark.parametrize("name", sorted(PAYLOAD_BUILDER))
-def test_payload_builder_orchestrators_emit_only_payload_results(name):
+@pytest.mark.parametrize("name", sorted(EMITTER_GUARDED))
+def test_guarded_orchestrators_print_only_through_a_routing_emitter(name):
     callback = _callback(_orchestrators()[name])
     tree = ast.parse(textwrap.dedent(inspect.getsource(callback)))
-    sources, emitted = [], []
+    printers = set()
     for node in ast.walk(tree):
-        if isinstance(node, (ast.Assign, ast.AnnAssign)):
-            targets = node.targets if isinstance(node, ast.Assign) else [node.target]
-            if any(isinstance(t, ast.Name) and t.id == "payload" for t in targets):
-                sources.append(ast.unparse(node.value.func) if isinstance(node.value, ast.Call) else "<not a call>")
         if isinstance(node, ast.Call):
             func = ast.unparse(node.func)
-            assert func not in {"typer.echo", "print"}, f"{name} prints outside _emit"
-            if func == "_emit":
-                emitted.append(ast.unparse(node.args[0]))
-    assert sources and set(sources) == {"_payload"}, f"{name} builds results with {sources}"
-    assert emitted and set(emitted) == {"payload"}, f"{name} emits {emitted}"
+            if func in {"typer.echo", "print", "console.print"} or ("emit" in func or "echo" in func or "print" in func):
+                printers.add(func)
+    assert printers == {"_emit"}, f"{name} prints through {sorted(printers)}"
+    emitter = getattr(inspect.getmodule(callback), "_emit")
+    body = ast.parse(textwrap.dedent(inspect.getsource(emitter))).body[0].body
+    first = body[1] if isinstance(body[0], ast.Expr) and isinstance(body[0].value, ast.Constant) else body[0]
+    assert ast.unparse(first) == "payload = with_route(payload)", f"{emitter.__module__}._emit does not route first"
 
 
 def test_payload_builder_routes_kit_commands():
@@ -154,3 +153,21 @@ def test_unrouted_reason_reads_a_nested_kit_result():
     assert reason.endswith("pr-create-complete: Inspect the PR lookup: gh_pr_list_failed")
     step["stdout"] = json.dumps({"blockers": ["gh_pr_list_failed"]})
     assert _payload("work-finish", [step])["next_command_reason"].endswith("blockers gh_pr_list_failed")
+
+
+def test_with_route_marks_unrouted_payloads_in_their_own_words():
+    kit_update = with_route({"result_status": "BLOCKED", "blocker": "wheel download failed", "next_action": "x"})
+    assert route_problems(kit_update) == [] and kit_update["next_command_reason"] == "wheel download failed"
+    release_run = with_route({"result_status": "BLOCKED", "blockers": ["post-release-check-not-run"],
+                              "next_action": "Continue release run."})
+    assert release_run["next_command_reason"] == "blockers post-release-check-not-run"
+    routed = with_route({"result_status": "FAIL", "next_command": "agentic-kit kit update --latest"})
+    assert routed["next_command_kind"] == KIND_KIT and routed["next_command_autonomous"] is False
+    assert with_route({"result_status": "PASS"}) == {"result_status": "PASS"}
+
+
+def test_unrouted_reason_reads_state_and_next_from_a_summary():
+    step = _failed_local_step("post-merge-check", "")
+    step["stdout"] = "*** START SUMMARY ***\nSTATE:  FAIL\nNEXT_COMMAND_REASON:  STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH\nNEXT=refresh_successor_package\n"
+    reason = _payload("work-start", [step])["next_command_reason"]
+    assert reason.endswith("post-merge-check: STATE=NEEDS_SUCCESSOR_PACKAGE_REFRESH, NEXT=refresh_successor_package")

@@ -146,7 +146,10 @@ def test_unavailable_index_changes_only_optional_block(root, monkeypatch, base):
     )
     payload = json.loads(result.stdout)
     block = payload.pop("release_check")
-    assert payload == old
+    from agentic_project_kit.blocked_route import ROUTE_FIELDS, route_problems
+
+    assert route_problems(payload) == []  # G3: the emitter adds the route to a BLOCKED payload
+    assert {key: value for key, value in payload.items() if key not in ROUTE_FIELDS} == old
     assert result.exit_code == (0 if base == "PASS" else 2)
     assert block["result"] == "UNKNOWN"
     assert "private" not in block["reason"]

@@ -197,6 +197,9 @@ jobs:
         with:
           python-version: "3.12"
           cache: "pip"
+          cache-dependency-path: |
+            .github/workflows/ci.yml
+            **/pyproject.toml
       - uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
