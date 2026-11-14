@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4ec4b855b463b747474ead99fd3602f967eb1113
-  short: 4ec4b855
-  subject: 'Workflow friction: G3 routes for the transfer orchestrators (#2788)'
+  full: ffa9c93e1f6952558f1cf82ffa4898a733ee19f5
+  short: ffa9c93e
+  subject: 'Workflow friction K6: CI never started is its own state with a route (#2790)'
 last_substantive_work_state:
-  full: 4ec4b855b463b747474ead99fd3602f967eb1113
-  short: 4ec4b855
-  subject: 'Workflow friction: G3 routes for the transfer orchestrators (#2788)'
+  full: ffa9c93e1f6952558f1cf82ffa4898a733ee19f5
+  short: ffa9c93e
+  subject: 'Workflow friction K6: CI never started is its own state with a route (#2790)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

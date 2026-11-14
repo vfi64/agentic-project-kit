@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `4ec4b855b463b747474ead99fd3602f967eb1113` (`4ec4b855`), after `Workflow friction: G3 routes for the transfer orchestrators (#2788)`.
-Last substantive work state is `4ec4b855b463b747474ead99fd3602f967eb1113` (`4ec4b855`), after `Workflow friction: G3 routes for the transfer orchestrators (#2788)`.
+Current verified main/admin HEAD is `ffa9c93e1f6952558f1cf82ffa4898a733ee19f5` (`ffa9c93e`), after `Workflow friction K6: CI never started is its own state with a route (#2790)`.
+Last substantive work state is `ffa9c93e1f6952558f1cf82ffa4898a733ee19f5` (`ffa9c93e`), after `Workflow friction K6: CI never started is its own state with a route (#2790)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
