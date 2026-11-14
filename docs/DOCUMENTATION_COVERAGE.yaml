@@ -92,6 +92,26 @@ rules:
   documents:
   - path: docs/TEST_GATES.md
     terms: [KIT-GF-108, tests/test_absolute_path_portability_audit.py, tests/test_ns_legacy_reference_audit.py]
+- id: greenfield-ci-pip-cache-key
+  description: Injected and generated CI key the pip cache on a file that exists.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-109, KIT-GF-111, tests/test_workspace_init.py, tests/test_generator.py]
+- id: greenfield-late-origin-identity
+  description: An origin added after workspace init does not block work start.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-110, tests/test_f1_identity_bound_after_init.py, work start]
+- id: greenfield-post-merge-complete-final-cleanup
+  description: A failed final cleanup after post-merge-complete is BLOCKED, never PASS.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-112, tests/test_transfer_post_merge_complete_command.py, BLOCKED]
+- id: greenfield-artifact-gc-older-than
+  description: An unreadable artifact-gc cutoff is a routed JSON result.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-113, tests/test_g3_command_routes.py, FAIL_INVALID_OLDER_THAN]
 - id: external-handoff-v2-and-bound-return
   description: External deterministic projections and evidence-bound installation returns remain visible and independently verified.
   documents:

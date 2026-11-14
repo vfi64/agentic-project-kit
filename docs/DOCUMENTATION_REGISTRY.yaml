@@ -2050,6 +2050,31 @@ documents:
     owner: maintainers
     status: active
     summary: Parent-Git-root audit counterprobes and shared root check.
+  - path: docs/reports/greenfield/KIT-GF-109-workspace-ci-pip-cache-key-2026-11-14.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Workspace CI pip cache key regression and installed-runtime contract.
+  - path: docs/reports/greenfield/KIT-GF-110-late-origin-identity-2026-11-14.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Late origin identity binding regression and installed-runtime contract.
+  - path: docs/reports/greenfield/KIT-GF-111-generator-ci-pip-cache-key-2026-11-14.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Generated CI pip cache key regression and installed-runtime contract.
+  - path: docs/reports/greenfield/KIT-GF-112-post-merge-complete-final-cleanup-2026-11-14.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Post-merge-complete final cleanup counterprobe and BLOCKED result.
+  - path: docs/reports/greenfield/KIT-GF-113-artifact-gc-invalid-older-than-2026-11-14.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Invalid artifact-gc cutoff counterprobe and routed result.
   - path: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
     class: evidence/log
     owner: maintainers

@@ -24,6 +24,25 @@ KIT-GF-108: `tests/test_absolute_path_portability_audit.py` and
 inside an ignored child of a parent Git repository. Own-root ignore controls
 remain. Both positive tests falsely passed before the fix.
 
+KIT-GF-109 and KIT-GF-111: `tests/test_workspace_init.py` and
+`tests/test_generator.py` require every setup-python pip cache key of the
+injected workspace CI and of generated project CI to name an existing file.
+Their machine contracts check the same with the installed wheel; with the
+template change reverted, the cache-dependency-path step fails.
+
+KIT-GF-110: `tests/test_f1_identity_bound_after_init.py` covers an origin bound
+after workspace init. The machine contract redirects a GitHub origin to the
+local bare origin; `work start` passes there and was BLOCKED before PR #2786.
+
+KIT-GF-112: `tests/test_transfer_post_merge_complete_command.py` requires
+BLOCKED with a human route when the final known-volatile cleanup fails after a
+passing lifecycle. The test failed before the fix with PASS and exit 2.
+
+KIT-GF-113: `tests/test_g3_command_routes.py` requires a routed
+`FAIL_INVALID_OLDER_THAN` JSON result for an unreadable `artifact-gc
+--older-than` and no collection. The test failed before the fix with a Click
+usage error and no JSON.
+
 `tests/test_greenfield_retest.py` names GF-104/105/106/108 as the only local
 retests without machine contracts. Their catalog entries must state a native
 regression and the unsupported fixture topology; other new local findings
