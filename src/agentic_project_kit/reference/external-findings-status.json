@@ -111,7 +111,8 @@
         2293,
         2489
       ],
-      "report": "docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md",
+      "title": "Workspace lifecycle bootstrap is not closed after successful external workspace init"
     },
     {
       "external_retest": {
@@ -177,7 +178,8 @@
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json",
+      "title": "Planning-document slice gate leaks Kit self-hosting assumptions into external workspaces"
     },
     {
       "external_retest": {
@@ -223,7 +225,8 @@
         2293,
         2489
       ],
-      "report": "docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md",
+      "title": "Handoff-state paths and fresh bootstrap state are inconsistent"
     },
     {
       "external_retest": {
@@ -287,7 +290,8 @@
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json",
+      "title": "governance check is not external-workspace aware"
     },
     {
       "external_retest": {
@@ -391,7 +395,8 @@
         2293,
         2489
       ],
-      "report": "docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md",
+      "title": "Fresh external workspace work start is blocked by predecessor/post-merge state"
     },
     {
       "external_retest": {
@@ -473,7 +478,8 @@
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json",
+      "title": "transfer status treats an empty inbox as a file error"
     },
     {
       "external_retest": {
@@ -533,7 +539,8 @@
       "prs": [
         2323
       ],
-      "report": "docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json"
+      "report": "docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json",
+      "title": "workspace adopt reclassifies Kit-generated init files as new manual/adjudication surfaces"
     },
     {
       "external_retest": {
@@ -661,7 +668,8 @@
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json",
+      "title": "Bootstrap-generated external-workspace CI uses a self-hosting/internal gate"
     },
     {
       "external_retest": {
@@ -703,7 +711,8 @@
       "prs": [
         2335
       ],
-      "report": "docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json"
+      "report": "docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json",
+      "title": "work finish first-push lifecycle can generate its own blocking dirty state"
     },
     {
       "external_retest": {
@@ -823,7 +832,8 @@
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json",
+      "title": "Rule acknowledgement is self-invalidating across the Kit-owned commit it authorizes"
     },
     {
       "external_retest": {
@@ -860,7 +870,8 @@
       "prs": [
         2372
       ],
-      "report": "docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md",
+      "title": "Tracked successor handoff projections are self-stale after their own commit"
     },
     {
       "external_retest": {
@@ -903,7 +914,8 @@
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json",
+      "title": "work finish dry-run may pass while execute blocks in the same bounded closeout"
     },
     {
       "external_retest": {
@@ -1013,7 +1025,8 @@
         2293,
         2489
       ],
-      "report": "docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md",
+      "title": "No automatic escalation from repeated local repair to systemic/root-cause review"
     },
     {
       "external_retest": {
@@ -1128,7 +1141,8 @@
       "prs": [
         2325
       ],
-      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
+      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json",
+      "title": "External-workspace governance does not detect stale or ambiguous continuation authority"
     },
     {
       "external_retest": {
@@ -1250,7 +1264,8 @@
       "prs": [
         2325
       ],
-      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json"
+      "report": "docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json",
+      "title": "Canonical document facts are not propagated across registered documents"
     },
     {
       "external_retest": {
@@ -1390,7 +1405,8 @@
         2325,
         2489
       ],
-      "report": "docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md",
+      "title": "High-level external-workspace workflows should support contract-first guided execution"
     },
     {
       "external_retest": {
@@ -1429,7 +1445,8 @@
       "prs": [
         2469
       ],
-      "report": "docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md"
+      "report": "docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md",
+      "title": "pr-merge-safe requires Kit-owned fresh LLM context artifacts that may not exist in a valid external workspace"
     },
     {
       "external_retest": {
@@ -1468,7 +1485,8 @@
       "prs": [
         2293
       ],
-      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json"
+      "report": "docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json",
+      "title": "Merged-work-branch cleanup is not idempotent when the authoritative remote ref is already absent"
     },
     {
       "external_retest": {
@@ -1531,7 +1549,8 @@
       "prs": [
         2465
       ],
-      "report": "docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md"
+      "report": "docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md",
+      "title": "External-workspace Kit CLI discovery can misdiagnose an intact project-local installation as missing"
     },
     {
       "external_retest": {
@@ -1608,7 +1627,8 @@
       "prs": [
         2415
       ],
-      "report": "docs/reports/greenfield/KIT-GF-022-packaged-command-reference-refresh-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-022-packaged-command-reference-refresh-2026-10-07.md",
+      "title": "command-reference-refresh is not closed for packaged Kit use in an external workspace"
     },
     {
       "external_retest": {
@@ -1710,7 +1730,8 @@
       "prs": [
         2448
       ],
-      "report": "docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md",
+      "title": "--json output is not pure JSON"
     },
     {
       "external_retest": {
@@ -1750,7 +1771,8 @@
       "prs": [
         2407
       ],
-      "report": "docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md",
+      "title": "No read command for the CI of a commit or branch without a pull request"
     },
     {
       "external_retest": {
@@ -1808,7 +1830,8 @@
       "prs": [
         2407
       ],
-      "report": "docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md",
+      "title": "Command manifest does not classify remote effects"
     },
     {
       "external_retest": {
@@ -1980,7 +2003,8 @@
       "prs": [
         2366
       ],
-      "report": "docs/reports/greenfield/KIT-GF-026-managed-ci-template-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-026-managed-ci-template-2026-10-04.md",
+      "title": "Managed CI template: unpinned Kit, duplicate runs, no browser cache, no update path"
     },
     {
       "external_retest": {
@@ -2019,7 +2043,8 @@
       "prs": [
         2463
       ],
-      "report": "docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md",
+      "title": "Orchestrator output size and non-zero return code for a red CI finding"
     },
     {
       "external_retest": {
@@ -2078,7 +2103,8 @@
       "prs": [
         2403
       ],
-      "report": "docs/reports/greenfield/KIT-GF-028-tempdir-artifacts-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-028-tempdir-artifacts-2026-10-05.md",
+      "title": "Kit writes to fixed /tmp paths"
     },
     {
       "external_retest": {
@@ -2117,7 +2143,8 @@
       "prs": [
         2342
       ],
-      "report": "docs/reports/greenfield/KIT-GF-029-publication-none-2026-10-03.md"
+      "report": "docs/reports/greenfield/KIT-GF-029-publication-none-2026-10-03.md",
+      "title": "Release lifecycle assumes public publication; no private-release policy"
     },
     {
       "external_retest": {
@@ -2157,7 +2184,8 @@
       "prs": [
         2385
       ],
-      "report": "docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md",
+      "title": "pr-create-complete opens a second pull request for an already squash-merged branch"
     },
     {
       "external_retest": {
@@ -2197,7 +2225,8 @@
       "prs": [
         2385
       ],
-      "report": "docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md",
+      "title": "pr-complete: no --post-merge-complete and a fresh-context blocker in the middle of the lifecycle"
     },
     {
       "external_retest": {
@@ -2285,7 +2314,8 @@
       "prs": [
         2358
       ],
-      "report": "docs/reports/greenfield/KIT-GF-032-external-release-ready-2026-10-03.md"
+      "report": "docs/reports/greenfield/KIT-GF-032-external-release-ready-2026-10-03.md",
+      "title": "Release preparation is self-hosting only: hard-coded Kit package path and Kit documentation set"
     },
     {
       "external_retest": {
@@ -2431,7 +2461,8 @@
       "prs": [
         2340
       ],
-      "report": "docs/reports/greenfield/KIT-GF-033-work-rescue-2026-10-02.md"
+      "report": "docs/reports/greenfield/KIT-GF-033-work-rescue-2026-10-02.md",
+      "title": "No recovery route for main with local changes or local commits"
     },
     {
       "external_retest": {
@@ -2470,7 +2501,8 @@
       "prs": [
         2370
       ],
-      "report": "docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md",
+      "title": "post-release-doi-closeout --write leaves the committed docs-pages fallback site stale"
     },
     {
       "external_retest": {
@@ -2552,7 +2584,8 @@
       "prs": [
         2446
       ],
-      "report": "docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md",
+      "title": "docs-audit checks the Kit's own document set in an external workspace"
     },
     {
       "external_retest": {
@@ -2695,7 +2728,8 @@
       "prs": [
         2370
       ],
-      "report": "docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md",
+      "title": "release prepare writes summary lines that fail the Kit's own CHANGELOG quality gate"
     },
     {
       "external_retest": {
@@ -2839,7 +2873,8 @@
       "prs": [
         2368
       ],
-      "report": "docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md",
+      "title": "Workspaces cannot declare further release version anchors"
     },
     {
       "external_retest": {
@@ -2878,7 +2913,8 @@
       "prs": [
         2368
       ],
-      "report": "docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md",
+      "title": "Live release-publish requires a committed marker file instead of a signed approval"
     },
     {
       "external_retest": {
@@ -2922,7 +2958,8 @@
       "prs": [
         2383
       ],
-      "report": "docs/reports/greenfield/KIT-GF-039-communication-refresh-branch-publish-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-039-communication-refresh-branch-publish-2026-10-04.md",
+      "title": "Communication refresh on a work branch blocks the lifecycle that would publish it"
     },
     {
       "external_retest": {
@@ -2963,7 +3000,8 @@
       "prs": [
         2379
       ],
-      "report": "docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md",
+      "title": "No orchestrator publishes an already-committed branch to its existing pull request"
     },
     {
       "external_retest": {
@@ -3004,7 +3042,8 @@
       "prs": [
         2379
       ],
-      "report": "docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md"
+      "report": "docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md",
+      "title": "work finish without --execute reports a successful completed workflow"
     },
     {
       "external_retest": {
@@ -3158,7 +3197,8 @@
       "prs": [
         2395
       ],
-      "report": "docs/reports/greenfield/KIT-GF-042-ci-update-customized-source-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-042-ci-update-customized-source-2026-10-05.md",
+      "title": "workspace ci-update replaces a customized managed workflow without notice"
     },
     {
       "external_retest": {
@@ -3197,7 +3237,8 @@
       "prs": [
         2387
       ],
-      "report": "docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md",
+      "title": "release-publish creates a lightweight tag and a tag-titled GitHub Release when publication uses GitHub"
     },
     {
       "external_retest": {
@@ -3311,7 +3352,8 @@
       "prs": [
         2387
       ],
-      "report": "docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md",
+      "title": "Documentation lifecycle sweep accepts lifecycle header labels anywhere in the file"
     },
     {
       "external_retest": {
@@ -3418,7 +3460,8 @@
       "prs": [
         2389
       ],
-      "report": "docs/reports/greenfield/KIT-GF-045-release-summary-line-passthrough-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-045-release-summary-line-passthrough-2026-10-05.md",
+      "title": "Release orchestrators cannot pass explicit changelog summary lines"
     },
     {
       "external_retest": {
@@ -3460,7 +3503,8 @@
       "prs": [
         2397
       ],
-      "report": "docs/reports/greenfield/KIT-GF-046-work-finish-handoff-rule-ack-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-046-work-finish-handoff-rule-ack-2026-10-05.md",
+      "title": "work finish blocks its own handoff commit after the handoff refresh changes rule sources"
     },
     {
       "external_retest": {
@@ -3504,7 +3548,8 @@
       "prs": [
         2405
       ],
-      "report": "docs/reports/greenfield/KIT-GF-047-release-run-orchestrator-2026-10-05.md"
+      "report": "docs/reports/greenfield/KIT-GF-047-release-run-orchestrator-2026-10-05.md",
+      "title": "No orchestrator runs the release lifecycle end to end"
     },
     {
       "external_retest": {
@@ -3549,7 +3594,8 @@
       "prs": [
         2428
       ],
-      "report": "docs/reports/greenfield/KIT-GF-048-work-finish-pr-metadata-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-048-work-finish-pr-metadata-2026-10-07.md",
+      "title": "work finish cannot give its pull request a release-note category"
     },
     {
       "external_retest": {
@@ -3588,7 +3634,8 @@
       "prs": [
         2438
       ],
-      "report": "docs/reports/greenfield/KIT-GF-049-generated-reference-followup-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-049-generated-reference-followup-2026-10-09.md",
+      "title": "release-publish GitHub route requires Kit-repository checks in external workspaces"
     },
     {
       "external_retest": {
@@ -3627,7 +3674,8 @@
       "prs": [
         2411
       ],
-      "report": "docs/reports/greenfield/KIT-GF-050-B-fallback-handoff-path-2026-10-06.md"
+      "report": "docs/reports/greenfield/KIT-GF-050-B-fallback-handoff-path-2026-10-06.md",
+      "title": "post-merge-complete: fixed 300 s follow-up CI wait and a fallback that crashes in external workspaces"
     },
     {
       "external_retest": {
@@ -3668,7 +3716,8 @@
       "prs": [
         2465
       ],
-      "report": "docs/reports/greenfield/KIT-GF-051-signed-workspace-kit-update-2026-10-10.md"
+      "report": "docs/reports/greenfield/KIT-GF-051-signed-workspace-kit-update-2026-10-10.md",
+      "title": "No Kit route updates the Kit in an external workspace"
     },
     {
       "external_retest": {
@@ -3707,7 +3756,8 @@
       "prs": [
         2440
       ],
-      "report": "docs/reports/greenfield/KIT-GF-052-changelog-layout-diagnostics-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-052-changelog-layout-diagnostics-2026-10-09.md",
+      "title": "release-publish rejects a changelog section with wrapped bullets without naming the cause"
     },
     {
       "external_retest": {
@@ -3811,7 +3861,8 @@
       "prs": [
         2428
       ],
-      "report": "docs/reports/greenfield/KIT-GF-053-recover-rule-ack-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-053-recover-rule-ack-2026-10-07.md",
+      "title": "work recover deletes the rule acknowledgement that transfer commit requires"
     },
     {
       "external_retest": {
@@ -3914,7 +3965,8 @@
       "prs": [
         2415
       ],
-      "report": "docs/reports/greenfield/KIT-GF-054-gitignored-audit-scan-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-054-gitignored-audit-scan-2026-10-07.md",
+      "title": "Release audits walk git-ignored folders; one exhausts memory"
     },
     {
       "external_retest": {
@@ -3965,7 +4017,8 @@
       "prs": [
         2438
       ],
-      "report": "docs/reports/greenfield/KIT-GF-055-dispatch-resume-followup-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-055-dispatch-resume-followup-2026-10-09.md",
+      "title": "release run C3 dispatches the package-index workflow without its publish input"
     },
     {
       "external_retest": {
@@ -4011,7 +4064,8 @@
       "prs": [
         2417
       ],
-      "report": "docs/reports/greenfield/KIT-GF-055-056-release-run-c3-c4-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-055-056-release-run-c3-c4-2026-10-07.md",
+      "title": "release run C4 calls post-release-check with an option it does not have"
     },
     {
       "external_retest": {
@@ -4098,7 +4152,8 @@
       "prs": [
         2426
       ],
-      "report": "docs/reports/greenfield/KIT-GF-057-manifest-remote-effects-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-057-manifest-remote-effects-2026-10-07.md",
+      "title": "Command manifest understates remote effects of five commands"
     },
     {
       "external_retest": {
@@ -4144,7 +4199,8 @@
       "prs": [
         2422
       ],
-      "report": "docs/reports/greenfield/KIT-GF-058-doi-changelog-section-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-058-doi-changelog-section-2026-10-07.md",
+      "title": "post-release-doi-closeout writes the DOI facts into Unreleased instead of the release section"
     },
     {
       "external_retest": {
@@ -4194,7 +4250,8 @@
       "prs": [
         2424
       ],
-      "report": "docs/reports/greenfield/KIT-GF-059-doi-closeout-recovery-2026-10-07.md"
+      "report": "docs/reports/greenfield/KIT-GF-059-doi-closeout-recovery-2026-10-07.md",
+      "title": "A blocked DOI closeout (D4) of the release run has no supported recovery"
     },
     {
       "external_retest": {
@@ -4342,7 +4399,8 @@
       "prs": [
         2438
       ],
-      "report": "docs/reports/greenfield/KIT-GF-060-consume-unreleased-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-060-consume-unreleased-2026-10-09.md",
+      "title": "release-prep copies the Unreleased entries into the version section but leaves them under Unreleased"
     },
     {
       "external_retest": {
@@ -4386,7 +4444,8 @@
       "prs": [
         2438
       ],
-      "report": "docs/reports/greenfield/KIT-GF-061-release-consent-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-061-release-consent-2026-10-09.md",
+      "title": "release run has no declared approval policy and does not record who approved a gate"
     },
     {
       "external_retest": {
@@ -4428,7 +4487,8 @@
       "prs": [
         2463
       ],
-      "report": "docs/reports/greenfield/KIT-GF-062-signed-ci-rerun-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-062-signed-ci-rerun-2026-10-09.md",
+      "title": "No Kit route to re-run failed CI checks of a pull request"
     },
     {
       "external_retest": {
@@ -4644,7 +4704,8 @@
         2467,
         2491
       ],
-      "report": "docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md",
+      "title": "CI light mode for refresh pull requests only knows the Kit-repo layout"
     },
     {
       "external_retest": {
@@ -4682,7 +4743,8 @@
       "prs": [
         2452
       ],
-      "report": "docs/reports/greenfield/KIT-GF-064-kit-changelog-consumption-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-064-kit-changelog-consumption-2026-10-09.md",
+      "title": "The Kit's own release keeps released entries under Unreleased"
     },
     {
       "external_retest": {
@@ -4724,7 +4786,8 @@
       "prs": [
         2450
       ],
-      "report": "docs/reports/greenfield/KIT-GF-065-release-publication-policy-2026-10-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-065-release-publication-policy-2026-10-09.md",
+      "title": "release run treats publication: github like a package and DOI publication"
     },
     {
       "external_retest": {
@@ -4800,7 +4863,8 @@
       "prs": [
         2487
       ],
-      "report": "docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md",
+      "title": "The Kit's adjudication of external findings is not machine-readable"
     },
     {
       "external_retest": {
@@ -4939,7 +5003,8 @@
       "prs": [
         2493
       ],
-      "report": "docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md",
+      "title": "Release and transfer diagnostics run ./.venv/bin/agentic-kit literally"
     },
     {
       "external_retest": {
@@ -5043,7 +5108,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md",
+      "title": "The ./ns legacy-reference audit blocks a release on an external workspace's findings ledger"
     },
     {
       "external_retest": {
@@ -5083,7 +5149,8 @@
       "prs": [
         2495
       ],
-      "report": "docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md",
+      "title": "release run blocks at C1 when release-publish skips checks outside the Kit repository"
     },
     {
       "external_retest": {
@@ -5175,7 +5242,8 @@
       "prs": [
         2607
       ],
-      "report": "docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md"
+      "report": "docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md",
+      "title": "The external retest catalog is not executable"
     },
     {
       "external_retest": {
@@ -5209,7 +5277,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md"
+      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md",
+      "title": "kit update allows exactly one Kit pin per managed CI file, so a separate classify job cannot be kept current"
     },
     {
       "external_retest": {
@@ -5333,7 +5402,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md"
+      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md",
+      "title": "The rule-mechanism inventory pins whole surface files, so any unrelated edit blocks rule-registry check"
     },
     {
       "external_retest": {
@@ -5367,7 +5437,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md"
+      "report": "docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md",
+      "title": "The Kit's CI policy blocks a consumer's light path because skipped checks count as not green"
     },
     {
       "external_retest": {
@@ -5476,7 +5547,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md"
+      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md",
+      "title": "transfer order-create cannot generate command orders"
     },
     {
       "external_retest": {
@@ -5670,7 +5742,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md"
+      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md",
+      "title": "transfer remote-next leaves the order's products untracked on the transfer branch"
     },
     {
       "external_retest": {
@@ -5815,7 +5888,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md"
+      "report": "docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md",
+      "title": "transfer .gitkeep carriers block remote-next in a freshly initialized workspace"
     },
     {
       "external_retest": {
@@ -5875,7 +5949,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md"
+      "report": "docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md",
+      "title": "The command manifest understates the push of transfer remote-next"
     },
     {
       "external_retest": {
@@ -5913,7 +5988,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-078-release-ci-wait-2026-10-20.md"
+      "report": "docs/reports/greenfield/KIT-GF-078-release-ci-wait-2026-10-20.md",
+      "title": "release run waits only 300 s for CI and stops at D4 and E1"
     },
     {
       "external_retest": {
@@ -5948,7 +6024,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md"
+      "report": "docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md",
+      "title": "pr wait-ci reports READY before a late required check exists"
     },
     {
       "external_retest": {
@@ -5986,7 +6063,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md"
+      "report": "docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md",
+      "title": "A blocked B4 cannot finish its own open release PR"
     },
     {
       "external_retest": {
@@ -6022,7 +6100,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md"
+      "report": "docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md",
+      "title": "No Kit route abandons a stopped release run"
     },
     {
       "external_retest": {
@@ -6057,7 +6136,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md"
+      "report": "docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md",
+      "title": "kit update names no cause when a release wheel download fails"
     },
     {
       "external_retest": {
@@ -6163,7 +6243,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md"
+      "report": "docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md",
+      "title": "transfer command-reference-check always fails in an external workspace"
     },
     {
       "external_retest": {
@@ -6250,7 +6331,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md"
+      "report": "docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md",
+      "title": "docs-audit fails in a freshly initialized external workspace"
     },
     {
       "external_retest": {
@@ -6332,7 +6414,8 @@
       "kit_state": "CLOSED",
       "pr_reference_note": "Current slice PR is recorded in final task evidence; no unassigned PR number is invented.",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md"
+      "report": "docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md",
+      "title": "The finding catalog blocked the Kit's release audit, which no PR check ran"
     },
     {
       "external_retest": {
@@ -6408,7 +6491,8 @@
       "id": "KIT-GF-086",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-086-ci-pin-guard-2026-10-25.md"
+      "report": "docs/reports/greenfield/KIT-GF-086-ci-pin-guard-2026-10-25.md",
+      "title": "Entrypoint synchronization rewrote the command reference with an installed Kit older than the CI pin"
     },
     {
       "external_retest": {
@@ -6536,7 +6620,8 @@
       "prs": [
         2652
       ],
-      "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md"
+      "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md",
+      "title": "A partially generated external workspace has no controlled completion path"
     },
     {
       "external_retest": {
@@ -6704,7 +6789,8 @@
       "prs": [
         2652
       ],
-      "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md"
+      "report": "docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md",
+      "title": "Kit-internal gates and rule sources were applied to a partial external workspace"
     },
     {
       "external_retest": {
@@ -6758,7 +6844,8 @@
       "prs": [
         2658
       ],
-      "report": "docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md"
+      "report": "docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md",
+      "title": "Four machine contracts of the retest catalog cannot run from the installed wheel"
     },
     {
       "external_retest": {
@@ -6867,7 +6954,8 @@
       "prs": [
         2673
       ],
-      "report": "docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md"
+      "report": "docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md",
+      "title": "transfer sync-main does not restore missing local release tags, so release-status reports a published release as prepared"
     },
     {
       "external_retest": {
@@ -6940,7 +7028,7 @@
             {
               "write": {
                 "path": ".agentic/greenfield_findings.json",
-                "text": "{\"schema_version\":1,\"findings\":[{\"id\":\"KIT-GF-001\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-002\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-003\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-004\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-005\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-006\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-007\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-008\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-009\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-010\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-011\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-012\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-013\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-014\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-015\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-016\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-017\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-018\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-021\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-022\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-023\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-024\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-025\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-026\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-027\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-028\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-029\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-030\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-031\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-032\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-033\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-034\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-035\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-036\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-037\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-038\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-039\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-040\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-041\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-042\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-043\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-044\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-045\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-046\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-047\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-048\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-049\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-050\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-051\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-052\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-053\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-054\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-055\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-056\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-057\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-058\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-059\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-060\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-061\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-062\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-063\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-064\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-065\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-066\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-067\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-068\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-069\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-070\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-071\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-072\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-073\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-074\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-075\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-076\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-077\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-RULE-REGISTRY-BOOTSTRAP\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-091\",\"kit_state\":\"CLOSED\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}}]}\n"
+                "text": "{\"schema_version\":1,\"findings\":[{\"id\":\"KIT-GF-001\",\"title\":\"Fixture finding KIT-GF-001\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-002\",\"title\":\"Fixture finding KIT-GF-002\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-003\",\"title\":\"Fixture finding KIT-GF-003\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-004\",\"title\":\"Fixture finding KIT-GF-004\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-005\",\"title\":\"Fixture finding KIT-GF-005\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-006\",\"title\":\"Fixture finding KIT-GF-006\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-007\",\"title\":\"Fixture finding KIT-GF-007\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-008\",\"title\":\"Fixture finding KIT-GF-008\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-009\",\"title\":\"Fixture finding KIT-GF-009\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-010\",\"title\":\"Fixture finding KIT-GF-010\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-011\",\"title\":\"Fixture finding KIT-GF-011\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-012\",\"title\":\"Fixture finding KIT-GF-012\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-013\",\"title\":\"Fixture finding KIT-GF-013\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-014\",\"title\":\"Fixture finding KIT-GF-014\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-015\",\"title\":\"Fixture finding KIT-GF-015\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-016\",\"title\":\"Fixture finding KIT-GF-016\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-017\",\"title\":\"Fixture finding KIT-GF-017\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-018\",\"title\":\"Fixture finding KIT-GF-018\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-021\",\"title\":\"Fixture finding KIT-GF-021\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-022\",\"title\":\"Fixture finding KIT-GF-022\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-023\",\"title\":\"Fixture finding KIT-GF-023\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-024\",\"title\":\"Fixture finding KIT-GF-024\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-025\",\"title\":\"Fixture finding KIT-GF-025\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-026\",\"title\":\"Fixture finding KIT-GF-026\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-027\",\"title\":\"Fixture finding KIT-GF-027\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-028\",\"title\":\"Fixture finding KIT-GF-028\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-029\",\"title\":\"Fixture finding KIT-GF-029\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-030\",\"title\":\"Fixture finding KIT-GF-030\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-031\",\"title\":\"Fixture finding KIT-GF-031\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-032\",\"title\":\"Fixture finding KIT-GF-032\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-033\",\"title\":\"Fixture finding KIT-GF-033\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-034\",\"title\":\"Fixture finding KIT-GF-034\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-035\",\"title\":\"Fixture finding KIT-GF-035\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-036\",\"title\":\"Fixture finding KIT-GF-036\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-037\",\"title\":\"Fixture finding KIT-GF-037\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-038\",\"title\":\"Fixture finding KIT-GF-038\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-039\",\"title\":\"Fixture finding KIT-GF-039\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-040\",\"title\":\"Fixture finding KIT-GF-040\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-041\",\"title\":\"Fixture finding KIT-GF-041\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-042\",\"title\":\"Fixture finding KIT-GF-042\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-043\",\"title\":\"Fixture finding KIT-GF-043\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-044\",\"title\":\"Fixture finding KIT-GF-044\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-045\",\"title\":\"Fixture finding KIT-GF-045\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-046\",\"title\":\"Fixture finding KIT-GF-046\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-047\",\"title\":\"Fixture finding KIT-GF-047\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-048\",\"title\":\"Fixture finding KIT-GF-048\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-049\",\"title\":\"Fixture finding KIT-GF-049\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-050\",\"title\":\"Fixture finding KIT-GF-050\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-051\",\"title\":\"Fixture finding KIT-GF-051\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-052\",\"title\":\"Fixture finding KIT-GF-052\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-053\",\"title\":\"Fixture finding KIT-GF-053\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-054\",\"title\":\"Fixture finding KIT-GF-054\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-055\",\"title\":\"Fixture finding KIT-GF-055\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-056\",\"title\":\"Fixture finding KIT-GF-056\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-057\",\"title\":\"Fixture finding KIT-GF-057\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-058\",\"title\":\"Fixture finding KIT-GF-058\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-059\",\"title\":\"Fixture finding KIT-GF-059\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}},\"kit_release_evidence\":{\"path\":\"docs/reports/release/release-run-1.0.25.json\"}},{\"id\":\"KIT-GF-060\",\"title\":\"Fixture finding KIT-GF-060\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-061\",\"title\":\"Fixture finding KIT-GF-061\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-062\",\"title\":\"Fixture finding KIT-GF-062\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-063\",\"title\":\"Fixture finding KIT-GF-063\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-064\",\"title\":\"Fixture finding KIT-GF-064\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-065\",\"title\":\"Fixture finding KIT-GF-065\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-066\",\"title\":\"Fixture finding KIT-GF-066\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-067\",\"title\":\"Fixture finding KIT-GF-067\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-068\",\"title\":\"Fixture finding KIT-GF-068\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-069\",\"title\":\"Fixture finding KIT-GF-069\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-070\",\"title\":\"Fixture finding KIT-GF-070\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-071\",\"title\":\"Fixture finding KIT-GF-071\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-072\",\"title\":\"Fixture finding KIT-GF-072\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-073\",\"title\":\"Fixture finding KIT-GF-073\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-074\",\"title\":\"Fixture finding KIT-GF-074\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-075\",\"title\":\"Fixture finding KIT-GF-075\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-076\",\"title\":\"Fixture finding KIT-GF-076\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-077\",\"title\":\"Fixture finding KIT-GF-077\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-RULE-REGISTRY-BOOTSTRAP\",\"title\":\"Fixture finding KIT-GF-RULE-REGISTRY-BOOTSTRAP\",\"kit_state\":\"OPEN\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}},{\"id\":\"KIT-GF-091\",\"title\":\"Fixture finding KIT-GF-091\",\"kit_state\":\"CLOSED\",\"fixed_in\":\"unreleased\",\"prs\":[],\"report\":\"docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md\",\"external_retest\":{\"workspace_kind\":\"external_manifest\",\"preconditions\":[\"Disposable fixture.\"],\"commands\":[\"agentic-kit doctor\"],\"bindings\":{},\"expected\":[\"Fixture only.\"],\"expected_result_fields\":{\"assertions\":[\"Fixture only.\"]}}}]}\n"
               }
             },
             {
@@ -7049,7 +7137,8 @@
       "id": "KIT-GF-091",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md"
+      "report": "docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md",
+      "title": "A release left fixed_in of its closed findings at \"unreleased\""
     },
     {
       "external_retest": {
@@ -7193,7 +7282,8 @@
       "id": "KIT-GF-092",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md"
+      "report": "docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md",
+      "title": "No Kit route reports whether a newer stable Kit release exists"
     },
     {
       "external_retest": {
@@ -7265,7 +7355,8 @@
       "id": "KIT-GF-093",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md"
+      "report": "docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md",
+      "title": "The release check of an editable install compares stale package metadata"
     },
     {
       "external_retest": {
@@ -7595,7 +7686,8 @@
       "id": "KIT-GF-094",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md"
+      "report": "docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md",
+      "title": "Post-merge refresh PRs only restate git state in external workspaces"
     },
     {
       "external_retest": {
@@ -7655,7 +7747,8 @@
       "id": "KIT-GF-095",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md"
+      "report": "docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md",
+      "title": "No governed return after kit update"
     },
     {
       "external_retest": {
@@ -7691,7 +7784,8 @@
       "prs": [
         2759
       ],
-      "report": "docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md"
+      "report": "docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md",
+      "title": "The current Kit still accepted external projection v1 after every known workspace had moved to v2"
     },
     {
       "external_retest": {
@@ -7748,7 +7842,8 @@
       "id": "KIT-GF-097",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md"
+      "report": "docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md",
+      "title": "The first projection-v2 migration was planned by the new Kit instead of the installed predecessor"
     },
     {
       "external_retest": {
@@ -7805,7 +7900,8 @@
       "id": "KIT-GF-098",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md"
+      "report": "docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md",
+      "title": "The governed return targeted a fixed Kit version instead of the previously pinned one"
     },
     {
       "external_retest": {
@@ -7862,7 +7958,8 @@
       "id": "KIT-GF-099",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.md"
+      "report": "docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.md",
+      "title": "The target projection preview loses the repository identity (quoted origin URL)"
     },
     {
       "external_retest": {
@@ -8161,7 +8258,8 @@
       "id": "KIT-GF-100",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md"
+      "report": "docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md",
+      "title": "The conflict resolver rejects a normal rebase because HEAD is detached"
     },
     {
       "external_retest": {
@@ -8302,7 +8400,8 @@
       "id": "KIT-GF-101",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md"
+      "report": "docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md",
+      "title": "workspace ci-update cannot create a missing CI workflow in an initialized workspace"
     },
     {
       "external_retest": {
@@ -8335,7 +8434,8 @@
       "id": "KIT-GF-102",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md"
+      "report": "docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md",
+      "title": "PR readiness treats a transient UNSTABLE merge state as terminal BLOCKED"
     },
     {
       "external_retest": {
@@ -8450,7 +8550,8 @@
       "id": "KIT-GF-103",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md"
+      "report": "docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md",
+      "title": "The external projection identity depends on the letter case of the origin URL"
     },
     {
       "external_retest": {
@@ -8486,7 +8587,8 @@
       "prs": [
         2755
       ],
-      "report": "docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md"
+      "report": "docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md",
+      "title": "workspace init --recover-partial rejects every generator type except generic"
     },
     {
       "external_retest": {
@@ -8518,7 +8620,8 @@
       "prs": [
         2753
       ],
-      "report": "docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md"
+      "report": "docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md",
+      "title": "The git-aware scan trusts git ls-files from an unrelated parent repository and reports PASS"
     },
     {
       "external_retest": {
@@ -8548,7 +8651,8 @@
       "id": "KIT-GF-106",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md"
+      "report": "docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md",
+      "title": "The known-bad scan finds nothing when the project lies below a directory named tmp"
     },
     {
       "external_retest": {
@@ -8578,7 +8682,8 @@
       "id": "KIT-GF-107",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md"
+      "report": "docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md",
+      "title": "transfer post-merge-check treats unknown ancestry in a shallow clone as a stale successor package"
     },
     {
       "external_retest": {
@@ -8609,7 +8714,8 @@
       "id": "KIT-GF-108",
       "kit_state": "CLOSED",
       "prs": [],
-      "report": "docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md"
+      "report": "docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md",
+      "title": "Two audits trust git ls-files from an unrelated parent repository and report PASS"
     },
     {
       "external_retest": {
@@ -8745,11 +8851,12 @@
       "prs": [
         2485
       ],
-      "report": "docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md"
+      "report": "docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md",
+      "title": "rule-registry check hard-fails and report crashes in an external workspace without a mechanism inventory"
     }
   ],
   "kind": "external_findings_status",
   "machine_contracts": 60,
   "schema_version": 1,
-  "source_sha256": "41d7f18d08f86c359253944b18e4310a34c7c76970208c6ea7f6f40040ff5b74"
+  "source_sha256": "640b1966952b1853fb8555e8963b3fb5543c6aa8c5ab99d9aca30fbd66461cdb"
 }

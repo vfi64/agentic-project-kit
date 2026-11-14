@@ -14,6 +14,7 @@ EXPORT = PUBLIC_REPORTS / "greenfield" / "external-findings-status.json"
 PACKAGED = Path("src/agentic_project_kit/reference/external-findings-status.json")
 RETEST_REPORT = PUBLIC_REPORTS / "greenfield" / "EXTERNAL_FINDINGS_RETESTS.md"
 STATES = {"OPEN", "PARTIAL", "CLOSED", "NOT_APPLICABLE"}
+TITLE_MAX = 160
 FAMILIES = {f"KIT-GF-{n:03}" for n in (*range(1, 19), *range(21, 78))} | {
     "KIT-GF-RULE-REGISTRY-BOOTSTRAP"
 }
@@ -32,6 +33,15 @@ def validate(data: dict, root: Path | None = None) -> None:
     for f in data["findings"]:
         if f["kit_state"] not in STATES or not isinstance(f["fixed_in"], str):
             raise ValueError("invalid Kit adjudication")
+        # K9: every finding names its defect in one line, so a workspace can read the catalog.
+        title = f.get("title")
+        if (
+            not isinstance(title, str)
+            or not title
+            or title.splitlines() != [title.strip()]
+            or len(title) > TITLE_MAX
+        ):
+            raise ValueError(f"{f['id']}: title must be one non-empty line of at most {TITLE_MAX} characters")
         if not isinstance(f["prs"], list) or any(not isinstance(p, int) or p < 1 for p in f["prs"]):
             raise ValueError("invalid PR references")
         report = Path(f["report"])
@@ -114,6 +124,19 @@ def read_status(finding_id: str = "") -> dict:
     return result
 
 
+def render_status(result: dict) -> str:
+    """Text projection of read_status: one line per finding (id, Kit state, fixed in, title)."""
+    findings = result["findings"]
+    counts = " ".join(f"{state}={count}" for state, count in sorted(result["counts"].items()))
+    rows = [("ID", "KIT_STATE", "FIXED_IN", "TITLE")] + [
+        (f["id"], f["kit_state"], f["fixed_in"] or "-", f["title"]) for f in findings
+    ]
+    widths = [max(len(row[column]) for row in rows) for column in range(3)]
+    lines = [f"greenfield status: {len(findings)} finding(s); {counts}"]
+    lines += ["  ".join(row[column].ljust(widths[column]) for column in range(3)) + "  " + row[3] for row in rows]
+    return "\n".join(lines)
+
+
 def export(root: Path, *, execute: bool = False, expected_signature: str = "") -> dict:
     root = root.resolve()
     data = build(root)
@@ -191,6 +214,8 @@ def render_retests(data: dict) -> str:
         r = f["external_retest"]
         lines += [
             f"## {f['id']}",
+            "",
+            f"Title: {f['title']}",
             "",
             f"Kit state: {f['kit_state']}; fixed_in: {f['fixed_in'] or 'not established'}.",
             f"Evidence: {f['report']}",

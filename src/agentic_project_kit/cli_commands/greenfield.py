@@ -3,20 +3,20 @@
 import json
 from pathlib import Path
 import typer
-from agentic_project_kit.greenfield_status import export, read_status
+from agentic_project_kit.greenfield_status import export, read_status, render_status
 
 greenfield_app = typer.Typer(
     help="Read Kit adjudications and executable external retest contracts."
 )
 
 
-def emit(call, json_output):
+def emit(call, json_output, render=str):
     try:
         result = call()
     except (ValueError, OSError, KeyError, TypeError, RuntimeError) as exc:
         typer.echo(json.dumps({"result_status": "BLOCKED", "error": str(exc)}, sort_keys=True))
         raise typer.Exit(2)
-    typer.echo(json.dumps(result, indent=2, sort_keys=True) if json_output else str(result))
+    typer.echo(json.dumps(result, indent=2, sort_keys=True) if json_output else render(result))
 
 
 @greenfield_app.command("status")
@@ -24,7 +24,7 @@ def status(
     finding_id: str = typer.Option("", "--id"), json_output: bool = typer.Option(False, "--json")
 ):
     """Read the installed Kit's public adjudications; never change a consumer ledger."""
-    emit(lambda: read_status(finding_id), json_output)
+    emit(lambda: read_status(finding_id), json_output, render_status)
 
 
 @greenfield_app.command("export")

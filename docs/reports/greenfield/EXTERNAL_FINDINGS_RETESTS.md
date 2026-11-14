@@ -14,6 +14,8 @@ Consumer VERIFIED_FIXED requires its own retained results. Publishing evidence c
 
 ## KIT-GF-001
 
+Title: Workspace lifecycle bootstrap is not closed after successful external workspace init
+
 Kit state: CLOSED; fixed_in: 1.0.24.
 Evidence: docs/reports/greenfield/KIT-GF-001-lifecycle-bootstrap-retest-2026-10-13.md
 
@@ -33,6 +35,8 @@ Expected result fields: `{"assertions": ["process.returncode=0", "check.status=P
 
 ## KIT-GF-002
 
+Title: Planning-document slice gate leaks Kit self-hosting assumptions into external workspaces
+
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
 
@@ -49,6 +53,8 @@ Expected: PASS; no Kit self-hosting paths required.
 Expected result fields: `{"assertions": ["PASS; no Kit self-hosting paths required."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
 
 ## KIT-GF-003
+
+Title: Handoff-state paths and fresh bootstrap state are inconsistent
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-003-canonical-handoff-applicability-2026-10-13.md
@@ -71,6 +77,8 @@ Expected result fields: `{"assertions": ["process.returncode=0 for virgin handof
 
 ## KIT-GF-004
 
+Title: governance check is not external-workspace aware
+
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
 
@@ -87,6 +95,8 @@ Expected: PASS without full-contract Kit constitution requirements.
 Expected result fields: `{"assertions": ["PASS without full-contract Kit constitution requirements."], "process.returncode": 0, "stdout.json_document_count": "text/JSON according to command manifest"}`.
 
 ## KIT-GF-005
+
+Title: Fresh external workspace work start is blocked by predecessor/post-merge state
 
 Kit state: CLOSED; fixed_in: 1.0.24.
 Evidence: docs/reports/greenfield/KIT-GF-005-first-work-start-retest-2026-10-13.md
@@ -105,6 +115,8 @@ Expected result fields: `{"assertions": ["result_status=PASS", "post-merge-check
 
 ## KIT-GF-006
 
+Title: transfer status treats an empty inbox as a file error
+
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
 
@@ -122,6 +134,8 @@ Expected result fields: `{"assertions": ["No file exception; deterministic empty
 
 ## KIT-GF-007
 
+Title: workspace adopt reclassifies Kit-generated init files as new manual/adjudication surfaces
+
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_PROVENANCE_RETEST_20260915.json
 
@@ -138,6 +152,8 @@ Expected: Generated Kit files are recognized, not reclassified as new manual sur
 Expected result fields: `{"assertions": ["Generated Kit files are recognized, not reclassified as new manual surfaces."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-008
+
+Title: Bootstrap-generated external-workspace CI uses a self-hosting/internal gate
 
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
@@ -157,6 +173,8 @@ Expected result fields: `{"assertions": ["Injected workflow calls installed Kit 
 
 ## KIT-GF-009
 
+Title: work finish first-push lifecycle can generate its own blocking dirty state
+
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_13_GF009_PRIVATE_RELEASED_PACKAGE_RETEST_20260916.json
 
@@ -173,6 +191,8 @@ Expected: One PR, green merge and handoff; no self-generated dirt blocker.
 Expected result fields: `{"assertions": ["One PR, green merge and handoff; no self-generated dirt blocker."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-010
+
+Title: Rule acknowledgement is self-invalidating across the Kit-owned commit it authorizes
 
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
@@ -192,6 +212,8 @@ Expected result fields: `{"assertions": ["Acknowledgement remains valid for the 
 
 ## KIT-GF-011
 
+Title: Tracked successor handoff projections are self-stale after their own commit
+
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-011-successor-final-head-identity-2026-10-04.md
 
@@ -208,6 +230,8 @@ Expected: successor_package_head_status=refresh_only_descendant; current final H
 Expected result fields: `{"assertions": ["successor_package_head_status=refresh_only_descendant; current final HEAD is reported without another refresh loop."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-012
+
+Title: work finish dry-run may pass while execute blocks in the same bounded closeout
 
 Kit state: CLOSED; fixed_in: 1.0.9.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
@@ -227,6 +251,8 @@ Expected result fields: `{"assertions": ["Plan=PLANNED; execution completes with
 
 ## KIT-GF-013
 
+Title: No automatic escalation from repeated local repair to systemic/root-cause review
+
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-013-workspace-repair-escalation-2026-10-13.md
 
@@ -243,6 +269,8 @@ Expected: one failure: next_mutation_allowed=true two failures: status=FAIL, nex
 Expected result fields: `{"assertions": ["one failure: next_mutation_allowed=true", "two failures: status=FAIL, next_mutation_allowed=false, process.returncode=1", "later diagnosis: status=PASS, next_mutation_allowed=true"]}`.
 
 ## KIT-GF-014
+
+Title: External-workspace governance does not detect stale or ambiguous continuation authority
 
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
@@ -261,6 +289,8 @@ Expected result fields: `{"machine_steps": "Every exact returncode, JSON asserti
 
 ## KIT-GF-015
 
+Title: Canonical document facts are not propagated across registered documents
+
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/POST_V1_0_12_GREENFIELD_REMAINING_CLOSEOUT_20260915.json
 
@@ -277,6 +307,8 @@ Expected: Registry-owned canonical fact: aligned managed projection passes, revi
 Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-016
+
+Title: High-level external-workspace workflows should support contract-first guided execution
 
 Kit state: CLOSED; fixed_in: 1.0.13.
 Evidence: docs/reports/greenfield/KIT-GF-016-contract-first-executor-retest-2026-10-13.md
@@ -297,6 +329,8 @@ Expected result fields: `{"assertions": ["plan.result_status=PASS", "dry-run.exe
 
 ## KIT-GF-017
 
+Title: pr-merge-safe requires Kit-owned fresh LLM context artifacts that may not exist in a valid external workspace
+
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-017-released-external-merge-retest-2026-10-10.md
 
@@ -313,6 +347,8 @@ Expected: Safe merge recovers canonical external context carrier without Kit-onl
 Expected result fields: `{"assertions": ["Safe merge recovers canonical external context carrier without Kit-only files."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-018
+
+Title: Merged-work-branch cleanup is not idempotent when the authoritative remote ref is already absent
 
 Kit state: CLOSED; fixed_in: 1.0.10.
 Evidence: docs/reports/POST_V1_0_10_GREENFIELD_REMAINING_FINDINGS_20260908.json
@@ -331,6 +367,8 @@ Expected result fields: `{"assertions": ["PASS/idempotent no-op; both requested 
 
 ## KIT-GF-021
 
+Title: External-workspace Kit CLI discovery can misdiagnose an intact project-local installation as missing
+
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-021-workspace-kit-discovery-2026-10-10.md
 
@@ -347,6 +385,8 @@ Expected: An explicitly owned interpreter outside .venv contains the running Kit
 Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-022
+
+Title: command-reference-refresh is not closed for packaged Kit use in an external workspace
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-022-packaged-command-reference-refresh-2026-10-07.md
@@ -366,6 +406,8 @@ Expected result fields: `{"assertions": ["Refresh and check PASS; packaged refer
 
 ## KIT-GF-023
 
+Title: --json output is not pure JSON
+
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-023-pure-json-stdout-2026-10-09.md
 
@@ -384,6 +426,8 @@ Expected result fields: `{"assertions": ["Each stdout parses as exactly one JSON
 
 ## KIT-GF-024
 
+Title: No read command for the CI of a commit or branch without a pull request
+
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md
 
@@ -400,6 +444,8 @@ Expected: JSON verdict and bounded run/check details without requiring a PR.
 Expected result fields: `{"assertions": ["JSON verdict and bounded run/check details without requiring a PR."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-025
+
+Title: Command manifest does not classify remote effects
 
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-024-025-ci-status-manifest-effects-2026-10-05.md
@@ -418,6 +464,8 @@ Expected result fields: `{"assertions": ["PASS; every command declares valid rem
 
 ## KIT-GF-026
 
+Title: Managed CI template: unpinned Kit, duplicate runs, no browser cache, no update path
+
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-026-managed-ci-template-2026-10-04.md
 
@@ -434,6 +482,8 @@ Expected: Plan names update paths; template pins Kit, limits push to main, has c
 Expected result fields: `{"assertions": ["Plan names update paths; template pins Kit, limits push to main, has concurrency/browser cache."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-027
+
+Title: Orchestrator output size and non-zero return code for a red CI finding
 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-027-bounded-pr-ci-findings-2026-10-09.md
@@ -452,6 +502,8 @@ Expected result fields: `{"assertions": ["Execution succeeds with a failed CI ve
 
 ## KIT-GF-028
 
+Title: Kit writes to fixed /tmp paths
+
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-028-tempdir-artifacts-2026-10-05.md
 
@@ -468,6 +520,8 @@ Expected: Artifacts resolve via OS/workspace temp policy; no fixed shared temp p
 Expected result fields: `{"assertions": ["Artifacts resolve via OS/workspace temp policy; no fixed shared temp paths."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-029
+
+Title: Release lifecycle assumes public publication; no private-release policy
 
 Kit state: CLOSED; fixed_in: 1.0.14.
 Evidence: docs/reports/greenfield/KIT-GF-029-publication-none-2026-10-03.md
@@ -486,6 +540,8 @@ Expected result fields: `{"assertions": ["Private tag plan; no GitHub/PyPI/Zenod
 
 ## KIT-GF-030
 
+Title: pr-create-complete opens a second pull request for an already squash-merged branch
+
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md
 
@@ -502,6 +558,8 @@ Expected: Reuses merged PR evidence; does not create a second PR.
 Expected result fields: `{"assertions": ["Reuses merged PR evidence; does not create a second PR."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-031
+
+Title: pr-complete: no --post-merge-complete and a fresh-context blocker in the middle of the lifecycle
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-030-031-pr-lifecycle-2026-10-05.md
@@ -520,6 +578,8 @@ Expected result fields: `{"assertions": ["Merge and post-merge closeout complete
 
 ## KIT-GF-032
 
+Title: Release preparation is self-hosting only: hard-coded Kit package path and Kit documentation set
+
 Kit state: CLOSED; fixed_in: 1.0.15.
 Evidence: docs/reports/greenfield/KIT-GF-032-external-release-ready-2026-10-03.md
 
@@ -536,6 +596,8 @@ Expected: Real external release readiness with publication disabled, local origi
 Expected result fields: `{"machine_steps": "Every exact returncode, JSON assertion and negative control in external_retest.machine must pass."}`.
 
 ## KIT-GF-033
+
+Title: No recovery route for main with local changes or local commits
 
 Kit state: CLOSED; fixed_in: 1.0.14.
 Evidence: docs/reports/greenfield/KIT-GF-033-work-rescue-2026-10-02.md
@@ -555,6 +617,8 @@ Expected result fields: `{"assertions": ["Signed rescue preserves work on rescue
 
 ## KIT-GF-034
 
+Title: post-release-doi-closeout --write leaves the committed docs-pages fallback site stale
+
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md
 
@@ -571,6 +635,8 @@ Expected: DOI update and applicable site projection consistent; no stale fallbac
 Expected result fields: `{"assertions": ["DOI update and applicable site projection consistent; no stale fallback."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-035
+
+Title: docs-audit checks the Kit's own document set in an external workspace
 
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-035-external-documentation-audit-2026-10-09.md
@@ -589,6 +655,8 @@ Expected result fields: `{"assertions": ["No Kit-required document-set blockers;
 
 ## KIT-GF-036
 
+Title: release prepare writes summary lines that fail the Kit's own CHANGELOG quality gate
+
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-034-036-release-closeout-quality-2026-10-04.md
 
@@ -605,6 +673,8 @@ Expected: Quality rejection occurs before writes; sufficient-category control pa
 Expected result fields: `{"assertions": ["Quality rejection occurs before writes; sufficient-category control passes."], "process.returncode": 2, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-037
+
+Title: Workspaces cannot declare further release version anchors
 
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md
@@ -623,6 +693,8 @@ Expected result fields: `{"assertions": ["Declared extra anchor included in dete
 
 ## KIT-GF-038
 
+Title: Live release-publish requires a committed marker file instead of a signed approval
+
 Kit state: CLOSED; fixed_in: 1.0.16.
 Evidence: docs/reports/greenfield/KIT-GF-037-038-release-button-foundation-2026-10-04.md
 
@@ -639,6 +711,8 @@ Expected: Returns signature-bound plan; no marker needed; no effects before appr
 Expected result fields: `{"assertions": ["Returns signature-bound plan; no marker needed; no effects before approval."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-039
+
+Title: Communication refresh on a work branch blocks the lifecycle that would publish it
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-039-communication-refresh-branch-publish-2026-10-04.md
@@ -658,6 +732,8 @@ Expected result fields: `{"assertions": ["Work branch can publish its own carrie
 
 ## KIT-GF-040
 
+Title: No orchestrator publishes an already-committed branch to its existing pull request
+
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md
 
@@ -674,6 +750,8 @@ Expected: Uses existing PR, publishes missing head when safe, completes lifecycl
 Expected result fields: `{"assertions": ["Uses existing PR, publishes missing head when safe, completes lifecycle."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-041
+
+Title: work finish without --execute reports a successful completed workflow
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-040-041-work-finish-pr-flow-2026-10-04.md
@@ -692,6 +770,8 @@ Expected result fields: `{"assertions": ["result_status=PLANNED, not completed P
 
 ## KIT-GF-042
 
+Title: workspace ci-update replaces a customized managed workflow without notice
+
 Kit state: CLOSED; fixed_in: 1.0.18.
 Evidence: docs/reports/greenfield/KIT-GF-042-ci-update-customized-source-2026-10-05.md
 
@@ -708,6 +788,8 @@ Expected: BLOCKED modified_managed_ci_template/workflow; bytes unchanged.
 Expected result fields: `{"assertions": ["BLOCKED modified_managed_ci_template/workflow; bytes unchanged."], "process.returncode": 2, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-043
+
+Title: release-publish creates a lightweight tag and a tag-titled GitHub Release when publication uses GitHub
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md
@@ -726,6 +808,8 @@ Expected result fields: `{"assertions": ["Plan uses annotated tag and configured
 
 ## KIT-GF-044
 
+Title: Documentation lifecycle sweep accepts lifecycle header labels anywhere in the file
+
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-043-044-release-publish-doc-lifecycle-2026-10-05.md
 
@@ -742,6 +826,8 @@ Expected: Header violation detected; valid lifecycle header control passes.
 Expected result fields: `{"assertions": ["Header violation detected; valid lifecycle header control passes."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-045
+
+Title: Release orchestrators cannot pass explicit changelog summary lines
 
 Kit state: CLOSED; fixed_in: 1.0.17.
 Evidence: docs/reports/greenfield/KIT-GF-045-release-summary-line-passthrough-2026-10-05.md
@@ -760,6 +846,8 @@ Expected result fields: `{"machine_steps": "Every exact returncode, JSON asserti
 
 ## KIT-GF-046
 
+Title: work finish blocks its own handoff commit after the handoff refresh changes rule sources
+
 Kit state: CLOSED; fixed_in: 1.0.18.
 Evidence: docs/reports/greenfield/KIT-GF-046-work-finish-handoff-rule-ack-2026-10-05.md
 
@@ -777,6 +865,8 @@ Expected result fields: `{"assertions": ["Kit refreshes acknowledgement immediat
 
 ## KIT-GF-047
 
+Title: No orchestrator runs the release lifecycle end to end
+
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-047-release-run-orchestrator-2026-10-05.md
 
@@ -793,6 +883,8 @@ Expected: Stops at the first signable gate; state is resumable and no publicatio
 Expected result fields: `{"assertions": ["Stops at the first signable gate; state is resumable and no publication occurs."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-048
+
+Title: work finish cannot give its pull request a release-note category
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-048-work-finish-pr-metadata-2026-10-07.md
@@ -812,6 +904,8 @@ Expected result fields: `{"assertions": ["Category is preserved in PR body and g
 
 ## KIT-GF-049
 
+Title: release-publish GitHub route requires Kit-repository checks in external workspaces
+
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-049-generated-reference-followup-2026-10-09.md
 
@@ -829,6 +923,8 @@ Expected result fields: `{"assertions": ["Kit self-host documentation checks ski
 
 ## KIT-GF-050
 
+Title: post-merge-complete: fixed 300 s follow-up CI wait and a fallback that crashes in external workspaces
+
 Kit state: CLOSED; fixed_in: 1.0.19.
 Evidence: docs/reports/greenfield/KIT-GF-050-B-fallback-handoff-path-2026-10-06.md
 
@@ -845,6 +941,8 @@ Expected: Configured bounded wait respected; fallback uses external state path w
 Expected result fields: `{"assertions": ["Configured bounded wait respected; fallback uses external state path without exception."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-051
+
+Title: No Kit route updates the Kit in an external workspace
 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-051-signed-workspace-kit-update-2026-10-10.md
@@ -864,6 +962,8 @@ Expected result fields: `{"assertions": ["Signed update synchronizes installed v
 
 ## KIT-GF-052
 
+Title: release-publish rejects a changelog section with wrapped bullets without naming the cause
+
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-052-changelog-layout-diagnostics-2026-10-09.md
 
@@ -880,6 +980,8 @@ Expected: BLOCKED with exact layout diagnosis and remediation; correctly formatt
 Expected result fields: `{"assertions": ["BLOCKED with exact layout diagnosis and remediation; correctly formatted control passes."], "process.returncode": 2, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-053
+
+Title: work recover deletes the rule acknowledgement that transfer commit requires
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-053-recover-rule-ack-2026-10-07.md
@@ -899,6 +1001,8 @@ Expected result fields: `{"assertions": ["Read/recovery route preserves acknowle
 
 ## KIT-GF-054
 
+Title: Release audits walk git-ignored folders; one exhausts memory
+
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-054-gitignored-audit-scan-2026-10-07.md
 
@@ -917,6 +1021,8 @@ Expected result fields: `{"assertions": ["Ignored trees excluded; active tracked
 
 ## KIT-GF-055
 
+Title: release run C3 dispatches the package-index workflow without its publish input
+
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-055-dispatch-resume-followup-2026-10-09.md
 
@@ -933,6 +1039,8 @@ Expected: C3 PASS with explicit publish_target=pypi and exact dispatched run att
 Expected result fields: `{"assertions": ["C3 PASS with explicit publish_target=pypi and exact dispatched run attribution."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-056
+
+Title: release run C4 calls post-release-check with an option it does not have
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-055-056-release-run-c3-c4-2026-10-07.md
@@ -951,6 +1059,8 @@ Expected result fields: `{"assertions": ["C4 PASS; command accepts JSON and retu
 
 ## KIT-GF-057
 
+Title: Command manifest understates remote effects of five commands
+
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-057-manifest-remote-effects-2026-10-07.md
 
@@ -967,6 +1077,8 @@ Expected: Remote effects match declared side effects including network reads and
 Expected result fields: `{"assertions": ["Remote effects match declared side effects including network reads and merges."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-058
+
+Title: post-release-doi-closeout writes the DOI facts into Unreleased instead of the release section
 
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-058-doi-changelog-section-2026-10-07.md
@@ -985,6 +1097,8 @@ Expected result fields: `{"assertions": ["D2 PASS; DOI facts occur inside the ta
 
 ## KIT-GF-059
 
+Title: A blocked DOI closeout (D4) of the release run has no supported recovery
+
 Kit state: CLOSED; fixed_in: 1.0.20.
 Evidence: docs/reports/greenfield/KIT-GF-059-doi-closeout-recovery-2026-10-07.md
 
@@ -1001,6 +1115,8 @@ Expected: D4/D5 PASS proves ordinary closeout; D2R recovery is claimed only if o
 Expected result fields: `{"assertions": ["D4/D5 PASS proves ordinary closeout; D2R recovery is claimed only if observed in the evidence."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-060
+
+Title: release-prep copies the Unreleased entries into the version section but leaves them under Unreleased
 
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-060-consume-unreleased-2026-10-09.md
@@ -1019,6 +1135,8 @@ Expected result fields: `{"assertions": ["Plan consumes selected entries once; u
 
 ## KIT-GF-061
 
+Title: release run has no declared approval policy and does not record who approved a gate
+
 Kit state: CLOSED; fixed_in: 1.0.21.
 Evidence: docs/reports/greenfield/KIT-GF-061-release-consent-2026-10-09.md
 
@@ -1035,6 +1153,8 @@ Expected: Gate binds version/tag/target; approved execution must retain attribut
 Expected result fields: `{"assertions": ["Gate binds version/tag/target; approved execution must retain attribution and reject drift."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-062
+
+Title: No Kit route to re-run failed CI checks of a pull request
 
 Kit state: CLOSED; fixed_in: 1.0.23.
 Evidence: docs/reports/greenfield/KIT-GF-062-signed-ci-rerun-2026-10-09.md
@@ -1054,6 +1174,8 @@ Expected result fields: `{"assertions": ["Only eligible failed checks rerun; sig
 
 ## KIT-GF-063
 
+Title: CI light mode for refresh pull requests only knows the Kit-repo layout
+
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-063-custom-ci-runtime-plan-2026-10-13.md
 
@@ -1070,6 +1192,8 @@ Expected: mode=light only for manifest-derived refresh paths; non-refresh or unk
 Expected result fields: `{"assertions": ["mode=light only for manifest-derived refresh paths; non-refresh or unknown input mode=full; check always runs."], "mode": ["light", "full"], "mutation": "none"}`.
 
 ## KIT-GF-064
+
+Title: The Kit's own release keeps released entries under Unreleased
 
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-064-kit-changelog-consumption-2026-10-09.md
@@ -1088,6 +1212,8 @@ Expected result fields: `{"assertions": ["Released entries consumed; historical 
 
 ## KIT-GF-065
 
+Title: release run treats publication: github like a package and DOI publication
+
 Kit state: CLOSED; fixed_in: 1.0.22.
 Evidence: docs/reports/greenfield/KIT-GF-065-release-publication-policy-2026-10-09.md
 
@@ -1104,6 +1230,8 @@ Expected: Plan omits C3 and DOI D steps, preserving GitHub-only boundary.
 Expected result fields: `{"assertions": ["Plan omits C3 and DOI D steps, preserving GitHub-only boundary."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-066
+
+Title: The Kit's adjudication of external findings is not machine-readable
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-066-machine-readable-evidence-2026-10-13.md
@@ -1122,6 +1250,8 @@ Expected: schema_version=1; all families with retests; release evidence link exp
 Expected result fields: `{"assertions": ["schema_version=1; all families with retests; release evidence link explicitly may await later publication."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-067
+
+Title: Release and transfer diagnostics run ./.venv/bin/agentic-kit literally
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-067-owned-kit-subprocess-resolution-2026-10-13.md
@@ -1142,6 +1272,8 @@ Expected result fields: `{"machine_steps": "Every exact returncode, JSON asserti
 
 ## KIT-GF-068
 
+Title: The ./ns legacy-reference audit blocks a release on an external workspace's findings ledger
+
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-068-declared-external-evidence-2026-10-13.md
 
@@ -1158,6 +1290,8 @@ Expected: Declared ledger quotes PASS independently of wording; active script ou
 Expected result fields: `{"blocker_count": 0, "references[].classification": "declared_evidence for matching ledger references", "status": "PASS"}`.
 
 ## KIT-GF-069
+
+Title: release run blocks at C1 when release-publish skips checks outside the Kit repository
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-069-release-publish-verdict-2026-10-13.md
@@ -1177,6 +1311,8 @@ Expected result fields: `{"blocker_count": 0, "status": "PASS"}`.
 
 ## KIT-GF-070
 
+Title: The external retest catalog is not executable
+
 Kit state: CLOSED; fixed_in: 1.1.6.
 Evidence: docs/reports/greenfield/KIT-GF-070-machine-contracts-c1c-2026-10-22.md
 
@@ -1195,6 +1331,8 @@ Expected result fields: `{"result_status": "PASS", "results[0].result": "PASS"}`
 
 ## KIT-GF-071
 
+Title: kit update allows exactly one Kit pin per managed CI file, so a separate classify job cannot be kept current
+
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
 
@@ -1211,6 +1349,8 @@ Expected: A managed CI file with identical exact Kit pins in a classify and a ch
 Expected result fields: `{"plan.actions": "contains update_ci_pins", "result_status": "AWAITING_APPROVAL"}`.
 
 ## KIT-GF-072
+
+Title: The rule-mechanism inventory pins whole surface files, so any unrelated edit blocks rule-registry check
 
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
@@ -1230,6 +1370,8 @@ Expected result fields: `{"result_status": "PASS"}`.
 
 ## KIT-GF-073
 
+Title: The Kit's CI policy blocks a consumer's light path because skipped checks count as not green
+
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-071-073-consumer-ci-and-inventory-2026-10-19.md
 
@@ -1246,6 +1388,8 @@ Expected: With gates.light_path_skipped_checks declared, a light refresh PR whos
 Expected result fields: `{"PR readiness outcome": "READY_TO_MERGE"}`.
 
 ## KIT-GF-074
+
+Title: transfer order-create cannot generate command orders
 
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
@@ -1264,6 +1408,8 @@ Expected result fields: `{"command_authority[0].requires_allow_unlisted": false,
 
 ## KIT-GF-075
 
+Title: transfer remote-next leaves the order's products untracked on the transfer branch
+
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
 
@@ -1280,6 +1426,8 @@ Expected: After PASS the checkout is clean on the transfer branch and the writte
 Expected result fields: `{"git status --porcelain": "", "result_status": "PASS"}`.
 
 ## KIT-GF-076
+
+Title: transfer .gitkeep carriers block remote-next in a freshly initialized workspace
 
 Kit state: CLOSED; fixed_in: 1.1.2.
 Evidence: docs/reports/greenfield/KIT-GF-074-076-transfer-orders-and-results-2026-10-19.md
@@ -1298,6 +1446,8 @@ Expected result fields: `{"result_status": "PASS"}`.
 
 ## KIT-GF-077
 
+Title: The command manifest understates the push of transfer remote-next
+
 Kit state: CLOSED; fixed_in: 1.1.3.
 Evidence: docs/reports/greenfield/KIT-GF-070-077-executable-retests-2026-10-20.md
 
@@ -1314,6 +1464,8 @@ Expected: The manifest declares fetch and push for transfer remote-next (and tra
 Expected result fields: `{"findings[0].external_retest.remote_effects": ["fetch", "push"]}`.
 
 ## KIT-GF-078
+
+Title: release run waits only 300 s for CI and stops at D4 and E1
 
 Kit state: CLOSED; fixed_in: 1.1.4.
 Evidence: docs/reports/greenfield/KIT-GF-078-release-ci-wait-2026-10-20.md
@@ -1332,6 +1484,8 @@ Expected result fields: `{"assertions": ["release run PASS with finished_steps c
 
 ## KIT-GF-079
 
+Title: pr wait-ci reports READY before a late required check exists
+
 Kit state: CLOSED; fixed_in: 1.1.4.
 Evidence: docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md
 
@@ -1348,6 +1502,8 @@ Expected: While a declared required check does not exist yet, readiness is WAITI
 Expected result fields: `{"assertions": ["PR readiness outcome stays WAITING until the declared check exists and passed"]}`.
 
 ## KIT-GF-080
+
+Title: A blocked B4 cannot finish its own open release PR
 
 Kit state: CLOSED; fixed_in: 1.1.4.
 Evidence: docs/reports/greenfield/KIT-GF-079-080-required-checks-and-b4-resume-2026-10-20.md
@@ -1366,6 +1522,8 @@ Expected result fields: `{"assertions": ["B4 gate mode resume-existing-release-p
 
 ## KIT-GF-081
 
+Title: No Kit route abandons a stopped release run
+
 Kit state: CLOSED; fixed_in: 1.1.5.
 Evidence: docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md
 
@@ -1383,6 +1541,8 @@ Expected result fields: `{"gate.kind": "release_run_abandon_gate", "result_statu
 
 ## KIT-GF-082
 
+Title: kit update names no cause when a release wheel download fails
+
 Kit state: CLOSED; fixed_in: 1.1.5.
 Evidence: docs/reports/greenfield/KIT-GF-081-082-release-abandon-and-download-cause-2026-10-20.md
 
@@ -1399,6 +1559,8 @@ Expected: Every wheel download is logged as a DOWNLOAD event with file name, att
 Expected result fields: `{"assertions": ["update log holds one DOWNLOAD event per wheel; a download blocker names file and error"]}`.
 
 ## KIT-GF-083
+
+Title: transfer command-reference-check always fails in an external workspace
 
 Kit state: CLOSED; fixed_in: 1.1.5.
 Evidence: docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md
@@ -1418,6 +1580,8 @@ Expected result fields: `{"result.stale_files": "names the stale reference file"
 
 ## KIT-GF-084
 
+Title: docs-audit fails in a freshly initialized external workspace
+
 Kit state: CLOSED; fixed_in: 1.1.5.
 Evidence: docs/reports/greenfield/KIT-GF-070-083-084-machine-contracts-c1a-2026-10-21.md
 
@@ -1434,6 +1598,8 @@ Expected: A freshly initialized external workspace passes docs-audit although it
 Expected result fields: `{"ok": [true, false], "stdout": "Incomplete successor package for a partial package"}`.
 
 ## KIT-GF-085
+
+Title: The finding catalog blocked the Kit's release audit, which no PR check ran
 
 Kit state: CLOSED; fixed_in: 1.1.5.
 Evidence: docs/reports/greenfield/KIT-GF-085-finding-catalog-release-audit-2026-10-22.md
@@ -1452,6 +1618,8 @@ Expected result fields: `{"status": ["PASS", "BLOCK"], "stdout": ".agentic/notes
 
 ## KIT-GF-086
 
+Title: Entrypoint synchronization rewrote the command reference with an installed Kit older than the CI pin
+
 Kit state: CLOSED; fixed_in: 1.1.6.
 Evidence: docs/reports/greenfield/KIT-GF-086-ci-pin-guard-2026-10-25.md
 
@@ -1468,6 +1636,8 @@ Expected: Pin 99.0.0 returns BLOCKED with installed_kit_older_than_ci_pin; pin 0
 Expected result fields: `{"assertions": ["High CI pin blocks before any entrypoint write; lower pin passes."], "process.returncode": 0, "stdout.json_document_count": 1}`.
 
 ## KIT-GF-087
+
+Title: A partially generated external workspace has no controlled completion path
 
 Kit state: CLOSED; fixed_in: 1.1.7.
 Evidence: docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md
@@ -1486,6 +1656,8 @@ Expected result fields: `{"assertions": ["AWAITING_APPROVAL then PASS; rule sour
 
 ## KIT-GF-088
 
+Title: Kit-internal gates and rule sources were applied to a partial external workspace
+
 Kit state: CLOSED; fixed_in: 1.1.7.
 Evidence: docs/reports/greenfield/KIT-GF-087-088-external-bootstrap-isolation-2026-10-26.md
 
@@ -1503,6 +1675,8 @@ Expected result fields: `{"assertions": ["partial work-check BLOCKED, recovery P
 
 ## KIT-GF-089
 
+Title: Four machine contracts of the retest catalog cannot run from the installed wheel
+
 Kit state: CLOSED; fixed_in: 1.1.7.
 Evidence: docs/reports/greenfield/KIT-GF-089-owned-runtime-dependencies-2026-10-27.md
 
@@ -1519,6 +1693,8 @@ Expected: The owned-runtime contract KIT-GF-021 runs to PASS from the installed 
 Expected result fields: `{"assertions": ["nested greenfield retest KIT-GF-021 PASS under the installed wheel"]}`.
 
 ## KIT-GF-090
+
+Title: transfer sync-main does not restore missing local release tags, so release-status reports a published release as prepared
 
 Kit state: CLOSED; fixed_in: 1.1.8.
 Evidence: docs/reports/greenfield/KIT-GF-090-release-tag-sync-2026-10-29.md
@@ -1538,6 +1714,8 @@ Expected result fields: `{"assertions": ["release tag restored", "external docto
 
 ## KIT-GF-091
 
+Title: A release left fixed_in of its closed findings at "unreleased"
+
 Kit state: CLOSED; fixed_in: 1.1.9.
 Evidence: docs/reports/greenfield/KIT-GF-091-release-fixed-in-stamp-2026-10-30.md
 
@@ -1555,6 +1733,8 @@ Expected: Dry-run names KIT-GF-091 without writing; preparation assigns its vers
 Expected result fields: `{"assertions": ["greenfield_release.finding_ids contains KIT-GF-091 before assignment and is empty after assignment; export changed_paths is empty."]}`.
 
 ## KIT-GF-092
+
+Title: No Kit route reports whether a newer stable Kit release exists
 
 Kit state: CLOSED; fixed_in: 1.1.9.
 Evidence: docs/reports/greenfield/KIT-GF-092-release-check-2026-10-30.md
@@ -1574,6 +1754,8 @@ Expected result fields: `{"assertions": ["release_check result is explicit; late
 
 ## KIT-GF-093
 
+Title: The release check of an editable install compares stale package metadata
+
 Kit state: CLOSED; fixed_in: 1.1.10.
 Evidence: docs/reports/greenfield/KIT-GF-093-editable-release-check-2026-10-31.md
 
@@ -1591,6 +1773,8 @@ Expected: An editable install is judged by its running package version; the stal
 Expected result fields: `{"assertions": ["release_check.installed equals the running Kit version, release_check.metadata_version names the stale metadata, release_check.result is CURRENT; kit update --latest gives the checkout hint without a plan."]}`.
 
 ## KIT-GF-094
+
+Title: Post-merge refresh PRs only restate git state in external workspaces
 
 Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-094-release-b-activation-2026-11-01.md
@@ -1611,6 +1795,8 @@ Expected result fields: `{"assertions": ["READY with refresh_required=False; pro
 
 ## KIT-GF-095
 
+Title: No governed return after kit update
+
 Kit state: CLOSED; fixed_in: 1.1.11.
 Evidence: docs/reports/greenfield/KIT-GF-095-governed-return-2026-11-01.md
 
@@ -1627,6 +1813,8 @@ Expected: Verified v1 backup, v2 migration, unrelated product commit, exact obse
 Expected result fields: `{"assertions": ["The fixture compares all return assertions to true; current Kit still reports NEEDS_PROJECTION_MIGRATION after restoring v1."]}`.
 
 ## KIT-GF-096
+
+Title: The current Kit still accepted external projection v1 after every known workspace had moved to v2
 
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-096-external-v1-removal-2026-11-09.md
@@ -1646,6 +1834,8 @@ Expected result fields: `{"assertions": ["Migration evidence complete for all kn
 
 ## KIT-GF-097
 
+Title: The first projection-v2 migration was planned by the new Kit instead of the installed predecessor
+
 Kit state: CLOSED; fixed_in: 1.1.11.
 Evidence: docs/reports/greenfield/KIT-GF-097-two-release-adoption-2026-11-01.md
 
@@ -1662,6 +1852,8 @@ Expected: Installed A plans and executes B, writes migration and adoption eviden
 Expected result fields: `{"assertions": ["Real wheels and installation; only PR observation is doubled; exact restored bytes, preserved unrelated product work and fresh check/doctor PASS."]}`.
 
 ## KIT-GF-098
+
+Title: The governed return targeted a fixed Kit version instead of the previously pinned one
 
 Kit state: CLOSED; fixed_in: 1.1.11.
 Evidence: docs/reports/greenfield/KIT-GF-098-evidence-bound-previous-pin-return-2026-11-01.md
@@ -1680,6 +1872,8 @@ Expected result fields: `{"assertions": ["Real wheels and installation; only PR 
 
 ## KIT-GF-099
 
+Title: The target projection preview loses the repository identity (quoted origin URL)
+
 Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-099-target-preview-origin-2026-11-02.md
 
@@ -1696,6 +1890,8 @@ Expected: Target preview preserves repository_name and execution_contract for le
 Expected result fields: `{"assertions": ["repository_name and execution_contract.repo.full_name equal example/transition-fixture, never the workspace project name; old-parser counterprobe must fail with projection_inputs_changed."]}`.
 
 ## KIT-GF-100
+
+Title: The conflict resolver rejects a normal rebase because HEAD is detached
 
 Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-100-rebase-detached-head-resolver-2026-11-02.md
@@ -1715,6 +1911,8 @@ Expected result fields: `{"assertions": ["valid rebase resolver PASS", "wrong ex
 
 ## KIT-GF-101
 
+Title: workspace ci-update cannot create a missing CI workflow in an initialized workspace
+
 Kit state: CLOSED; fixed_in: 1.2.0.
 Evidence: docs/reports/greenfield/KIT-GF-101-missing-ci-injection-2026-11-02.md
 
@@ -1731,6 +1929,8 @@ Expected: Dry-run preserves absence; explicit execution creates the managed pair
 Expected result fields: `{"assertions": ["preview PASS", "execution PASS", "repeat changed_paths=[]", "foreign workflow BLOCKED"]}`.
 
 ## KIT-GF-102
+
+Title: PR readiness treats a transient UNSTABLE merge state as terminal BLOCKED
 
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-102-pr-readiness-unstable-2026-11-03.md
@@ -1749,6 +1949,8 @@ Expected result fields: `{"assertions": ["Local deterministic readiness regressi
 
 ## KIT-GF-103
 
+Title: The external projection identity depends on the letter case of the origin URL
+
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
 
@@ -1766,6 +1968,8 @@ Expected: Case-variant origin preserves the stored matching repository spelling,
 Expected result fields: `{"assertions": ["Two-clone native regression produces identical projection bytes and check PASS in both clones; a different repository does not reuse stored identity."]}`.
 
 ## KIT-GF-104
+
+Title: workspace init --recover-partial rejects every generator type except generic
 
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-104-generator-type-recovery.md
@@ -1786,6 +1990,8 @@ Expected result fields: `{"assertions": ["Native test_generated_type_mapping_rec
 
 ## KIT-GF-105
 
+Title: The git-aware scan trusts git ls-files from an unrelated parent repository and reports PASS
+
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-105-git-aware-scan-root.md
 
@@ -1802,6 +2008,8 @@ Expected: Static meta-preference drift in the child is reported BLOCKED; a real 
 Expected result fields: `{"assertions": ["Native test_parent_repo_ignored_child_is_scanned and test_own_repository_still_respects_ignore cover both sides."]}`.
 
 ## KIT-GF-106
+
+Title: The known-bad scan finds nothing when the project lies below a directory named tmp
 
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-106-known-bad-scan-absolute-tmp-2026-11-11.md
@@ -1820,6 +2028,8 @@ Expected result fields: `{"assertions": ["Native test_known_bad_scan_finds_sourc
 
 ## KIT-GF-107
 
+Title: transfer post-merge-check treats unknown ancestry in a shallow clone as a stale successor package
+
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-107-post-merge-check-shallow-ancestry-2026-11-11.md
 
@@ -1836,6 +2046,8 @@ Expected: BLOCKED with ancestry_unknown and no successor-package refresh request
 Expected result fields: `{"assertions": ["Native test_post_merge_check_shallow_ancestry_blocks_without_refresh covers shallow and full clones and no refresh plan."]}`.
 
 ## KIT-GF-108
+
+Title: Two audits trust git ls-files from an unrelated parent repository and report PASS
 
 Kit state: CLOSED; fixed_in: 1.3.0.
 Evidence: docs/reports/greenfield/KIT-GF-108-git-scan-parent-repo-audits-2026-11-11.md
@@ -1854,6 +2066,8 @@ Expected: Both audits BLOCK and report at least one reference; own Git root cont
 Expected result fields: `{"assertions": ["Native ignored-parent-repository and own-root control tests in both audit test modules pass."]}`.
 
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
+
+Title: rule-registry check hard-fails and report crashes in an external workspace without a mechanism inventory
 
 Kit state: CLOSED; fixed_in: 1.0.25.
 Evidence: docs/reports/greenfield/KIT-GF-RULE-REGISTRY-BOOTSTRAP-external-inventory-2026-10-13.md
