@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 25a275606e3c177ef351645f9af222a96c64cdd7
-  short: 25a27560
-  subject: 'Workflow friction: late origin identity (F1), generator CI cache (F2), G3 emitter guard (#2786)'
+  full: 4ec4b855b463b747474ead99fd3602f967eb1113
+  short: 4ec4b855
+  subject: 'Workflow friction: G3 routes for the transfer orchestrators (#2788)'
 last_substantive_work_state:
-  full: 25a275606e3c177ef351645f9af222a96c64cdd7
-  short: 25a27560
-  subject: 'Workflow friction: late origin identity (F1), generator CI cache (F2), G3 emitter guard (#2786)'
+  full: 4ec4b855b463b747474ead99fd3602f967eb1113
+  short: 4ec4b855
+  subject: 'Workflow friction: G3 routes for the transfer orchestrators (#2788)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
