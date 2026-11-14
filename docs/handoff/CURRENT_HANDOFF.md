@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `e7cff98e5ac0bbfdd146cb43a642219db607ce6e` (`e7cff98e`), after `Workflow friction: G3 routes for six single commands (#2800)`.
-Last substantive work state is `e7cff98e5ac0bbfdd146cb43a642219db607ce6e` (`e7cff98e`), after `Workflow friction: G3 routes for six single commands (#2800)`.
+Current verified main/admin HEAD is `d588541950826a59728b79079911a7bd4cc51963` (`d5885419`), after `Workflow friction: G3 routes for init and github-create (#2802)`.
+Last substantive work state is `d588541950826a59728b79079911a7bd4cc51963` (`d5885419`), after `Workflow friction: G3 routes for init and github-create (#2802)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: cb81f563ebf9dc6f2cd72d5723b55b0bc6e9c2208a4085e65af90e642c0e10cf
 - docs/reference/agentic-kit-commands.json: d1d700b8f14b5f42087d86cfbbea3a60961d8158587172053c95e5f6eac11e6c
-## Operational documentation refresh state after PR #2800
+## Operational documentation refresh state after PR #2802
 
-Current administrative handoff refresh state is `e7cff98e` (`Workflow friction: G3 routes for six single commands (#2800)`). Continue next only after this post-PR2800 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d5885419` (`Workflow friction: G3 routes for init and github-create (#2802)`). Continue next only after this post-PR2802 refresh is committed and merged; the next substantive slice must be created from fresh main.
