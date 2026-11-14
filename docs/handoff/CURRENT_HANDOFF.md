@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `23c2d4825cf5d9ae1163eedbf72c0695b4d2c70e` (`23c2d482`), after `Workflow friction K8 + J5: the Kit's own release takes the workspace route (#2796)`.
-Last substantive work state is `23c2d4825cf5d9ae1163eedbf72c0695b4d2c70e` (`23c2d482`), after `Workflow friction K8 + J5: the Kit's own release takes the workspace route (#2796)`.
+Current verified main/admin HEAD is `9ff83cbb5a9adfb3f8217a5ce909e2b62de1200e` (`9ff83cbb`), after `Workflow friction: G3 routes for the workspace orchestrators (#2798)`.
+Last substantive work state is `9ff83cbb5a9adfb3f8217a5ce909e2b62de1200e` (`9ff83cbb`), after `Workflow friction: G3 routes for the workspace orchestrators (#2798)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

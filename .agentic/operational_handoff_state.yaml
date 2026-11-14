@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 23c2d4825cf5d9ae1163eedbf72c0695b4d2c70e
-  short: 23c2d482
-  subject: 'Workflow friction K8 + J5: the Kit''s own release takes the workspace route (#2796)'
+  full: 9ff83cbb5a9adfb3f8217a5ce909e2b62de1200e
+  short: 9ff83cbb
+  subject: 'Workflow friction: G3 routes for the workspace orchestrators (#2798)'
 last_substantive_work_state:
-  full: 23c2d4825cf5d9ae1163eedbf72c0695b4d2c70e
-  short: 23c2d482
-  subject: 'Workflow friction K8 + J5: the Kit''s own release takes the workspace route (#2796)'
+  full: 9ff83cbb5a9adfb3f8217a5ce909e2b62de1200e
+  short: 9ff83cbb
+  subject: 'Workflow friction: G3 routes for the workspace orchestrators (#2798)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
