@@ -43,7 +43,7 @@ BASELINE = frozenset({
 
 # Orchestrators whose command callback prints only through routing emitters (checked by AST
 # below): a routing emitter's first statement is ``payload = with_route(payload)`` (work/release/kit
-# ``_emit``, transfer ``_emit_transfer``); a delegate such as ``_echo_repo_result`` qualifies when it
+# ``_emit``, transfer ``_emit_transfer``, the other orchestrators ``emit_routed``); a delegate such as ``_echo_repo_result`` qualifies when it
 # prints only through routing emitters itself.
 EMITTER_GUARDED = frozenset({
     "agentic-kit work start", "agentic-kit work finish", "agentic-kit work recover", "agentic-kit work rescue",
@@ -55,16 +55,17 @@ EMITTER_GUARDED = frozenset({
     "agentic-kit transfer post-merge-settle", "agentic-kit transfer pr-closeout-complete",
     "agentic-kit transfer pr-complete", "agentic-kit transfer pr-create-complete", "agentic-kit transfer remote-next",
     "agentic-kit transfer remote-work-start", "agentic-kit transfer sync-main",
+    "agentic-kit workspace adopt", "agentic-kit workspace dpa-intake", "agentic-kit workspace init",
+    "agentic-kit workspace remove", "agentic-kit workspace upgrade", "agentic-kit docs lifecycle sweep",
+    "agentic-kit dpa final-closeout-check",
 })
 
 # Not yet conformant. May only shrink: lower DEBT_CEILING whenever an entry leaves.
-DEBT_CEILING = 15
+DEBT_CEILING = 8
 DEBT = frozenset({
-    "agentic-kit artifact-gc", "agentic-kit chat session-start", "agentic-kit docs lifecycle sweep",
-    "agentic-kit dpa final-closeout-check", "agentic-kit github-create", "agentic-kit init",
+    "agentic-kit artifact-gc", "agentic-kit chat session-start", "agentic-kit github-create", "agentic-kit init",
     "agentic-kit post-release-doi-closeout", "agentic-kit release-prep", "agentic-kit release-publish",
-    "agentic-kit workflow go", "agentic-kit workspace adopt", "agentic-kit workspace dpa-intake",
-    "agentic-kit workspace init", "agentic-kit workspace remove", "agentic-kit workspace upgrade",
+    "agentic-kit workflow go",
 })
 ROUTING_FIRST_STATEMENT = "payload = with_route(payload)"
 

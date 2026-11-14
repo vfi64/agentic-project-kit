@@ -6,6 +6,8 @@ from typing import Annotated
 
 import typer
 
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason
+
 from agentic_project_kit.doc_lifecycle import (
     build_doc_lifecycle_apply_payload,
     build_doc_lifecycle_evidence_report_payload,
@@ -71,6 +73,15 @@ def docs_lifecycle_propose_delete_command(
         typer.echo(render_doc_lifecycle_propose_delete(payload), nl=False)
 
 
+# G3: why a sweep blocks and what a person does about it (the sweep has no resolving Kit command).
+SWEEP_BLOCK_REASONS = {
+    "missing_only": "--execute needs --only with finding ids from the dry-run plan (agentic-kit docs lifecycle sweep).",
+    "unknown_finding_id": "--only names ids that are not in the current dry-run plan; pick ids from that plan.",
+    "missing_until_for_defer": "A selected defer action needs --until YYYY-MM-DD.",
+    "invalid_until_date": "--until must be a date in the form YYYY-MM-DD.",
+}
+
+
 @lifecycle_app.command("sweep")
 def docs_lifecycle_sweep_command(
     root: Annotated[Path, typer.Option("--root", help="Repository root.")] = Path("."),
@@ -100,10 +111,11 @@ def docs_lifecycle_sweep_command(
         until=until,
         review_after=review_after,
     )
-    if json_output:
-        typer.echo(json_dumps(payload))
-    else:
-        typer.echo(render_doc_lifecycle_sweep(payload), nl=False)
+    if payload["result_status"] == "BLOCK":
+        payload = {**payload, **human_reason(SWEEP_BLOCK_REASONS.get(
+            str(payload.get("reason")), f"Sweep blocked: {payload.get('reason')}."
+        ))}
+    emit_routed(payload, json_output=json_output, text=lambda routed: render_doc_lifecycle_sweep(payload))
     if payload["result_status"] == "BLOCK":
         raise typer.Exit(code=2)
 

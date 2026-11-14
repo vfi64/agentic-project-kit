@@ -39,11 +39,36 @@ from agentic_project_kit.workspace_adopt import (
     render_workspace_adopt_report,
 )
 from agentic_project_kit.workspace_dpa_intake import (
+    READY_STATUS as DPA_INTAKE_READY_STATUS,
     build_workspace_dpa_intake_report,
     render_workspace_dpa_intake_report,
 )
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason, read_only_route
 
 workspace_app = typer.Typer(help="Inspect and manage operating-layer workspaces.")
+
+# G3 (owner plan 2026-11-13): the five workspace orchestrators print only through emit_routed, so a
+# BLOCKED or FAIL result names the resolving Kit command or carries the human marker with a reason.
+# Kit routes go to planning runs only (no --execute), which a session may start on its own.
+INIT_ERROR_ROUTES = {"ALREADY_INITIALIZED": ("workspace", "upgrade")}
+UPGRADE_ERROR_ROUTES = {"NO_MANIFEST": ("workspace", "init"), "MANIFEST_CHANGED": ("workspace", "upgrade")}
+REMOVE_ERROR_ROUTES = {"PLAN_CHANGED": ("workspace", "remove")}
+
+
+def _error_payload(kind: str, exc: Exception, routes: dict[str, tuple[str, ...]], root: Path) -> dict[str, object]:
+    code = getattr(exc, "code", "FAIL")
+    payload: dict[str, object] = {
+        "schema_version": 1,
+        "kind": kind,
+        "result_status": "FAIL",
+        "code": code,
+        "error": str(exc),
+    }
+    if code in routes:
+        payload.update(read_only_route(*routes[code], root=root))
+    else:
+        payload.update(human_reason(f"{code}: {exc}"))
+    return payload
 
 
 @workspace_app.command("adopt")
@@ -54,10 +79,7 @@ def workspace_adopt_command(
     """Analyze an existing repository without writing workspace files."""
 
     report = analyze_workspace_adoption(root.resolve())
-    if json_output:
-        typer.echo(json.dumps(report.as_json_data(), indent=2, sort_keys=True))
-    else:
-        typer.echo(render_workspace_adopt_report(report), nl=False)
+    emit_routed(report.as_json_data(), json_output=json_output, text=lambda routed: render_workspace_adopt_report(report))
 
 
 @workspace_app.command("dpa-intake")
@@ -106,11 +128,25 @@ def workspace_dpa_intake_command(
         write_evidence=write_evidence,
         execute=execute,
     )
-    if json_output:
-        typer.echo(json.dumps(report.as_json_data(), indent=2, sort_keys=True))
-    else:
-        typer.echo(render_workspace_dpa_intake_report(report), nl=False)
-    if report.evidence_write is not None and report.evidence_write["result_status"] == "BLOCK":
+    evidence_blocked = report.evidence_write is not None and report.evidence_write["result_status"] == "BLOCK"
+    payload = report.as_json_data()
+    if evidence_blocked:
+        payload.update(human_reason(
+            f"Evidence path refused ({report.evidence_write.get('reason', 'blocked')}); choose an --output "
+            "under docs/architecture/evidence/dpa/assessment/."
+        ))
+    elif report.dpa_assessment.blocker_count:
+        payload.update(human_reason(
+            f"The DPA repository adoption assessment has {report.dpa_assessment.blocker_count} blocker(s); "
+            "a maintainer adjudicates them before intake."
+        ))
+    emit_routed(
+        payload,
+        json_output=json_output,
+        text=lambda routed: render_workspace_dpa_intake_report(report),
+        blocked=report.result_status != DPA_INTAKE_READY_STATUS,
+    )
+    if evidence_blocked:
         raise typer.Exit(2)
     if require_ready and not report.ok:
         raise typer.Exit(1)
@@ -143,7 +179,10 @@ def workspace_init_command(
                 approved_by=approved_by, consent_source=consent_source,
                 name=name, project_type=project_type, profile=profile,
             )
-        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+        if payload["result_status"] == "BLOCKED":
+            payload.update(human_reason(str(payload.get("reason") or payload.get("next_action") or "Recovery blocked.")))
+        # Recovery always answers in JSON (unchanged).
+        payload = emit_routed(payload, json_output=True)
         if payload["result_status"] == "BLOCKED":
             raise typer.Exit(2)
         return
@@ -160,27 +199,17 @@ def workspace_init_command(
         )
         if execute:
             execute_workspace_init(plan)
-        if json_output:
-            typer.echo(json.dumps(plan.as_json_data(written=execute), indent=2, sort_keys=True))
-        else:
-            typer.echo(render_workspace_init_plan(plan, written=execute), nl=False)
+        emit_routed(
+            plan.as_json_data(written=execute),
+            json_output=json_output,
+            text=lambda routed: render_workspace_init_plan(plan, written=execute),
+        )
     except WorkspaceInitError as exc:
-        if json_output:
-            typer.echo(
-                json.dumps(
-                    {
-                        "schema_version": 1,
-                        "kind": "workspace_init_result",
-                        "result_status": "FAIL",
-                        "code": exc.code,
-                        "error": str(exc),
-                    },
-                    indent=2,
-                    sort_keys=True,
-                )
-            )
-        else:
-            typer.echo(render_workspace_init_error(exc), nl=False)
+        emit_routed(
+            _error_payload("workspace_init_result", exc, INIT_ERROR_ROUTES, root),
+            json_output=json_output,
+            text=lambda routed, error=exc: render_workspace_init_error(error),
+        )
         raise typer.Exit(code=1) from exc
 
 
@@ -200,29 +229,19 @@ def workspace_remove_command(
         if execute and plan.result_status == "PASS":
             execute_workspace_remove(plan)
         written = execute and plan.result_status == "PASS"
-        if json_output:
-            typer.echo(json.dumps(plan.as_json_data(written=written), indent=2, sort_keys=True))
-        else:
-            typer.echo(render_workspace_remove_plan(plan, written=written), nl=False)
+        payload = plan.as_json_data(written=written)
+        if plan.result_status == "BLOCKED":
+            found = "; ".join(f"{item.path}: {item.reason}" for item in plan.blockers[:3])
+            payload.update(human_reason(f"{plan.message}" + (f" ({found})" if found else "")))
+        emit_routed(payload, json_output=json_output, text=lambda routed: render_workspace_remove_plan(plan, written=written))
         if plan.result_status == "BLOCKED":
             raise typer.Exit(2)
     except WorkspaceRemoveError as exc:
-        if json_output:
-            typer.echo(
-                json.dumps(
-                    {
-                        "schema_version": 1,
-                        "kind": "workspace_remove_result",
-                        "result_status": "FAIL",
-                        "code": exc.code,
-                        "error": str(exc),
-                    },
-                    indent=2,
-                    sort_keys=True,
-                )
-            )
-        else:
-            typer.echo(render_workspace_remove_error(exc), nl=False)
+        emit_routed(
+            _error_payload("workspace_remove_result", exc, REMOVE_ERROR_ROUTES, root),
+            json_output=json_output,
+            text=lambda routed, error=exc: render_workspace_remove_error(error),
+        )
         raise typer.Exit(code=1) from exc
 
 
@@ -287,37 +306,16 @@ def workspace_upgrade_command(
         plan = build_workspace_upgrade_plan(root.resolve(), execute=execute)
         if execute:
             execute_workspace_upgrade(plan)
-        if json_output:
-            typer.echo(
-                json.dumps(
-                    plan.as_json_data(written=execute and plan.requires_upgrade),
-                    indent=2,
-                    sort_keys=True,
-                )
-            )
-        else:
-            typer.echo(
-                render_workspace_upgrade_plan(
-                    plan,
-                    written=execute and plan.requires_upgrade,
-                ),
-                nl=False,
-            )
+        written = execute and plan.requires_upgrade
+        emit_routed(
+            plan.as_json_data(written=written),
+            json_output=json_output,
+            text=lambda routed: render_workspace_upgrade_plan(plan, written=written),
+        )
     except WorkspaceUpgradeError as exc:
-        if json_output:
-            typer.echo(
-                json.dumps(
-                    {
-                        "schema_version": 1,
-                        "kind": "workspace_upgrade_result",
-                        "result_status": "FAIL",
-                        "code": exc.code,
-                        "error": str(exc),
-                    },
-                    indent=2,
-                    sort_keys=True,
-                )
-            )
-        else:
-            typer.echo(render_workspace_upgrade_error(exc), nl=False)
+        emit_routed(
+            _error_payload("workspace_upgrade_result", exc, UPGRADE_ERROR_ROUTES, root),
+            json_output=json_output,
+            text=lambda routed, error=exc: render_workspace_upgrade_error(error),
+        )
         raise typer.Exit(code=1) from exc
