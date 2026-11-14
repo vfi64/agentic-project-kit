@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `b3b3b1ff0525956d6bcb346f7eceefabf3abbd8c` (`b3b3b1ff`), after `Workflow friction K9: finding titles in the catalog and greenfield status (#2804)`.
-Last substantive work state is `b3b3b1ff0525956d6bcb346f7eceefabf3abbd8c` (`b3b3b1ff`), after `Workflow friction K9: finding titles in the catalog and greenfield status (#2804)`.
+Current verified main/admin HEAD is `d2a085d0aa3d934051e90ab855601386a7ca22af` (`d2a085d0`), after `Finding catalog KIT-GF-109 to 113: post-merge-complete and artifact-gc routes (#2806)`.
+Last substantive work state is `d2a085d0aa3d934051e90ab855601386a7ca22af` (`d2a085d0`), after `Finding catalog KIT-GF-109 to 113: post-merge-complete and artifact-gc routes (#2806)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

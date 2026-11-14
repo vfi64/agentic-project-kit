@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: b3b3b1ff0525956d6bcb346f7eceefabf3abbd8c
-  short: b3b3b1ff
-  subject: 'Workflow friction K9: finding titles in the catalog and greenfield status (#2804)'
+  full: d2a085d0aa3d934051e90ab855601386a7ca22af
+  short: d2a085d0
+  subject: 'Finding catalog KIT-GF-109 to 113: post-merge-complete and artifact-gc routes (#2806)'
 last_substantive_work_state:
-  full: b3b3b1ff0525956d6bcb346f7eceefabf3abbd8c
-  short: b3b3b1ff
-  subject: 'Workflow friction K9: finding titles in the catalog and greenfield status (#2804)'
+  full: d2a085d0aa3d934051e90ab855601386a7ca22af
+  short: d2a085d0
+  subject: 'Finding catalog KIT-GF-109 to 113: post-merge-complete and artifact-gc routes (#2806)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

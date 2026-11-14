@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: cb81f563ebf9dc6f2cd72d5723b55b0bc6e9c2208a4085e65af90e642c0e10cf
 - docs/reference/agentic-kit-commands.json: d1d700b8f14b5f42087d86cfbbea3a60961d8158587172053c95e5f6eac11e6c
-## Operational documentation refresh state after PR #2804
+## Operational documentation refresh state after PR #2806
 
-Current administrative handoff refresh state is `b3b3b1ff` (`Workflow friction K9: finding titles in the catalog and greenfield status (#2804)`). Continue next only after this post-PR2804 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `d2a085d0` (`Finding catalog KIT-GF-109 to 113: post-merge-complete and artifact-gc routes (#2806)`). Continue next only after this post-PR2806 refresh is committed and merged; the next substantive slice must be created from fresh main.
