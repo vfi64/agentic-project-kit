@@ -269,6 +269,15 @@ with `check_id` `KIT-CHK-RELEASE-CONTENT-AT-PR` and lists the failing scan steps
 branches of a release run whose A2 passed, the step is a no-op. The release-only steps
 and their reasons are listed under `release_path` in `reference/check-producers.json`.
 
+With `release.changelog_summary: curated` the Unreleased bullets are the release summary,
+for the Kit's own release as for a workspace (K8). A PR whose release-note category is
+Added, Changed, Fixed or Breaking must therefore add or reword at least one Unreleased
+bullet against its merge base with `origin/main`; otherwise `work finish` stops before the
+commit with `check_id` `KIT-CHK-CURATED-UNRELEASED-LINE` and names the rerun with
+`--path CHANGELOG.md`. A line counts only when it is committed or among the selected paths.
+Other categories, the branches of a release run and an installation return are exempt;
+without a readable merge base the check does not block.
+
 ## agentic-kit transfer chat-switch-complete
 
 Generate and validate the deterministic successor package before changing chats:
@@ -401,6 +410,10 @@ Typical use:
 
     agentic-kit release run --version <version> --json
     agentic-kit release run --version <version> --execute --expected-signature <signature> --json
+
+In a curated workspace, and in the Kit's own checkout, run it without `--summary-line`:
+the Unreleased bullets become the release section (K8). Explicit lines are accepted only
+when they include every Unreleased bullet (`KIT-CHK-CURATED-UNRELEASED-COVERED`).
 
 The command records state and subprocess logs under the workspace temp root, for
 example `.agentic/tmp/release-run-<version>.json` and `.agentic/tmp/release-run-<version>.log`.

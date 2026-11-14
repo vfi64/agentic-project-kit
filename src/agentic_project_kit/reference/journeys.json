@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "agentic_kit_journey_contracts",
-  "law": "G4 (owner plan 2026-11-13): fixed workflows run as machine contracts against the built wheel in a disposable workspace with a local bare origin. Measures per journey: approvals (owner consents, exact baseline) and blocked (every Kit step ends PASS, PLANNED or AWAITING_APPROVAL; baseline 0). A worse measure fails CI. Offline the journeys stop at the GitHub boundary (work finish as dry run); J2 emulates merge and post-merge closeout with git and handoff steps. Approvals count signed executions and steps with effects beyond none/fetch/push/network_read (owner decision 2026-11-13); a release run asks for consent only through a signed execution. J4 runs a release run in the release fixture, whose remotes the runner confines to the run's temporary root; it declares one interruption (the origin refuses B4's push), the only step that may end BLOCKED, and stops at the signed resume gate, whose execution is the GitHub part.",
+  "law": "G4 (owner plan 2026-11-13): fixed workflows run as machine contracts against the built wheel in a disposable workspace with a local bare origin. Measures per journey: approvals (owner consents, exact baseline) and blocked (every Kit step ends PASS, PLANNED or AWAITING_APPROVAL; baseline 0). A worse measure fails CI. Offline the journeys stop at the GitHub boundary (work finish as dry run); J2 emulates merge and post-merge closeout with git and handoff steps. Approvals count signed executions and steps with effects beyond none/fetch/push/network_read (owner decision 2026-11-13); a release run asks for consent only through a signed execution. J4 runs a release run in the release fixture, whose remotes the runner confines to the run's temporary root; it declares one interruption (the origin refuses B4's push), the only step that may end BLOCKED, and stops at the signed resume gate, whose execution is the GitHub part. J5 runs release run without summary lines in the curated variant of the release fixture and checks the prepared release section line by line (assert section).",
   "journeys": [
     {
       "id": "J1",
@@ -84,9 +84,22 @@
           {"run": ["git", "status", "--short", "--untracked-files=no"], "expect": {"returncode": 0, "stdout_equals": ""}}
         ]
       }
+    },
+    {
+      "id": "J5",
+      "title": "Curated release with exactly one line",
+      "approvals": 0,
+      "machine": {
+        "fixture": "external_release_curated",
+        "origin": true,
+        "covers": "J5 (K8, V1): a curated workspace whose merged PR left exactly one Unreleased line runs release run without summary lines, as the Kit's own release now does. It reaches the B4 gate without a BLOCKED step; the prepared release section carries exactly that line and Unreleased is empty. Offline the run stops at the B4 gate, whose signed execution is the GitHub part.",
+        "steps": [
+          {"run": ["agentic-kit", "release", "run", "--version", "0.1.1", "--json"], "expect": {"returncode": 0, "json": {"result_status": "AWAITING_APPROVAL", "current_step": "B4"}}},
+          {"assert": {"section": {"path": "CHANGELOG.md", "heading": "## v0.1.1", "bullets": ["{unreleased_line}"]}}},
+          {"assert": {"section": {"path": "CHANGELOG.md", "heading": "## Unreleased", "bullets": []}}}
+        ]
+      }
     }
   ],
-  "pending": [
-    {"id": "J5", "reason": "Curated release with exactly one line: owner plan slice 4."}
-  ]
+  "pending": []
 }

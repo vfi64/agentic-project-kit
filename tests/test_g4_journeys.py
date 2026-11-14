@@ -22,7 +22,7 @@ from agentic_project_kit.journey_contracts import (
 
 from test_external_rule_registry import installed_kit as installed_kit
 
-PENDING = {"J5"}  # ratchet: shrinks only when a journey becomes a contract
+PENDING: set[str] = set()  # ratchet: shrinks only when a journey becomes a contract (J5 last, K8)
 
 
 def _journeys():
@@ -80,7 +80,8 @@ def test_consent_is_a_signed_execution_or_an_effect_beyond_local_and_network_rea
 
 
 def test_approval_baselines_are_one_per_finish_plus_one_per_signed_adoption():
-    assert {jid: journey["approvals"] for jid, journey in _journeys().items()} == {"J1": 1, "J2": 2, "J3": 1, "J4": 1}
+    assert {jid: journey["approvals"] for jid, journey in _journeys().items()} == {
+        "J1": 1, "J2": 2, "J3": 1, "J4": 1, "J5": 0}
 
 
 def test_only_the_adoption_fixture_treats_an_exact_kit_update_as_local():
@@ -136,6 +137,43 @@ def test_a_release_run_is_local_only_in_the_release_fixture_of_a_journey():
               "machine": _journeys()["J4"]["machine"]}
     with pytest.raises(ValueError, match="needs a remote service"):
         validate_machine("J4", retest)
+
+
+def test_the_curated_release_fixture_is_a_release_fixture_with_its_line():
+    """J5 (K8): the curated variant confines its remotes like J4 and binds its one Unreleased line."""
+    from agentic_project_kit.greenfield_retest import FIXTURE_VARIABLES, RELEASE_FIXTURES
+
+    plan = ["agentic-kit", "release", "run", "--version", "0.1.1", "--json"]
+    assert RELEASE_FIXTURES == {"external_release", "external_release_curated"}
+    assert journey_effects(plan, check_route(plan), "external_release_curated") == ["push"]
+    assert FIXTURE_VARIABLES["external_release_curated"] == ("unreleased_line",)
+    steps = _journeys()["J5"]["machine"]["steps"]
+    assert all("--summary-line" not in step.get("run", []) for step in steps)
+    assert [step["assert"]["section"]["heading"] for step in steps if "assert" in step] == ["## v0.1.1", "## Unreleased"]
+
+
+@pytest.mark.parametrize("section,message", [
+    ({"path": "CHANGELOG.md", "heading": "v0.1.1", "bullets": []}, "'## ' heading"),
+    ({"path": "CHANGELOG.md", "heading": "## v0.1.1"}, "'## ' heading"),
+    ({"path": "/abs/CHANGELOG.md", "heading": "## v0.1.1", "bullets": []}, "relative and confined"),
+])
+def test_a_section_assert_is_validated(section, message):
+    journey = json.loads(json.dumps(_journeys()["J5"]))
+    journey["machine"]["steps"][1] = {"assert": {"section": section}}
+    with pytest.raises(ValueError, match=message):
+        validate(journey)
+
+
+def test_section_bullets_compare_one_section_line_by_line(tmp_path):
+    from agentic_project_kit.greenfield_retest import section_bullets, section_failures
+
+    text = "## Unreleased\n\n## v0.1.1 - 2026-11-20\n\n- One.\n\n## v0.1.0 - 2026-01-01\n\n- Old.\n"
+    assert section_bullets(text, "## Unreleased") == []
+    assert section_bullets(text, "## v0.1.1") == ["One."]
+    assert section_bullets(text, "## v0.1") is None
+    (tmp_path / "CHANGELOG.md").write_text(text)
+    assert section_failures(tmp_path, {"path": "CHANGELOG.md", "heading": "## v0.1.1", "bullets": ["One."]}) == []
+    assert section_failures(tmp_path, {"path": "CHANGELOG.md", "heading": "## v0.1.1", "bullets": []})
 
 
 def test_a_release_run_asks_for_consent_only_through_a_signed_execution():

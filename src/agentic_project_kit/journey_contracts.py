@@ -14,7 +14,7 @@ per journey:
 Offline the journeys stop at the GitHub boundary: ``work finish`` runs as dry run (PLANNED). The
 catalog rule (``release_effects``) is unchanged; only journeys treat a dry-run work finish, an
 exact ``kit update`` against the adoption fixture's loopback index (J2) and a ``release run`` in the
-release fixture (J4) as local. In that fixture publication is ``none`` and the retest runner checks
+release fixtures (J4, J5) as local. In those fixtures publication is ``none`` and the retest runner checks
 before every Kit step that each remote URL is a path inside the run's temporary root
 (``guard_local_origin``) and strips ``GH_REPO``/``GH_HOST``, so a push reaches only the disposable bare
 origin and a GitHub step finds no GitHub remote. ``release run`` asks for consent only through a
@@ -23,6 +23,10 @@ signed ``--execute``; its plan runs execute no gate.
 J4 (K7) needs a stop inside B4. A journey may declare one ``interruption``: the step that the
 environment interrupts (here: the origin refuses the push), with its cause. Only that step may
 expect BLOCKED, and only for the declared release step; every other Kit step keeps the rule above.
+
+J5 (K8) runs in the curated variant of the release fixture, whose merged PR left exactly one
+Unreleased line: ``release run`` without summary lines reaches the B4 gate, and the release section
+carries exactly that line while Unreleased is empty (``assert`` with ``section``).
 """
 from __future__ import annotations
 
@@ -31,7 +35,9 @@ import shlex
 from importlib.resources import files
 from typing import Any
 
-from agentic_project_kit.greenfield_retest import LOCAL_EFFECTS, check_route, run_machine, validate_machine
+from agentic_project_kit.greenfield_retest import (
+    LOCAL_EFFECTS, RELEASE_FIXTURES, check_route, run_machine, validate_machine,
+)
 from agentic_project_kit.greenfield_retest_adoption import adoption_effects
 from agentic_project_kit.greenfield_retest_release_check import release_effects
 
@@ -46,14 +52,11 @@ def load() -> dict[str, Any]:
     return json.loads(files("agentic_project_kit.reference").joinpath("journeys.json").read_text("utf-8"))
 
 
-RELEASE_FIXTURE = "external_release"
-
-
 def journey_effects(command, entry, fixture=None) -> list[str]:
     argv = shlex.split(command) if isinstance(command, str) else list(command)
     if tuple(entry["path"]) == ("work", "finish") and "--execute" not in argv:
         return ["fetch"]  # dry run: plan plus `git ls-remote origin HEAD`
-    if fixture == RELEASE_FIXTURE and tuple(entry["path"]) == ("release", "run") and "--root" not in argv:
+    if fixture in RELEASE_FIXTURES and tuple(entry["path"]) == ("release", "run") and "--root" not in argv:
         return ["push"]  # local bare origin only (guard_local_origin); no GitHub remote, publication none
     local = adoption_effects(argv, entry, fixture)
     return local if local is not None else release_effects(argv, entry, fixture)
