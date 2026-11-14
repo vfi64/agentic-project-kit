@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c41fd4b12edcc3dad714dfcdff9c7290b9f350056c3875ef727e04406dcbf29f
 - docs/reference/agentic-kit-commands.json: 5c62112b875ac11cf6b48202b183140c8125f8f5de9570a850860fc9a1cd3803
-## Operational documentation refresh state after PR #2796
+## Operational documentation refresh state after PR #2798
 
-Current administrative handoff refresh state is `23c2d482` (`Workflow friction K8 + J5: the Kit's own release takes the workspace route (#2796)`). Continue next only after this post-PR2796 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `9ff83cbb` (`Workflow friction: G3 routes for the workspace orchestrators (#2798)`). Continue next only after this post-PR2798 refresh is committed and merged; the next substantive slice must be created from fresh main.
