@@ -433,6 +433,17 @@ the next gate or blocker. A stale signature blocks without running the gated
 remote effect. If the workspace publication policy is `none`, package-index
 publication, Zenodo wait, and DOI closeout are skipped.
 
+After a failed B4, stay on the release branch and run
+`agentic-kit release run --version <version> --json` again. Without a release
+commit the ordinary B4 gate returns. With an open release PR, B4 offers
+`resume-existing-release-pr` (KIT-GF-080): `transfer pr-complete` with the exact
+head. Without a PR (nothing pushed, or pushed without a PR), B4 offers
+`resume-unpublished-release-commits` (K7): projection files B4 left uncommitted are
+committed with B4's own subject, then `work finish` publishes the existing commits.
+Both resumes require a linear history on the approved base: the release commit with
+exactly the approved paths, then only handoff or docs-pages projection commits; main
+must not have moved. Each resume needs its own signature over base, head and commits.
+
 After a failed D4, return to clean main through `transfer sync-main`, then run
 `agentic-kit release run --version <version> --json`. This offers D2R, binding the
 source PR and head, base, version and current commit. Approve using the exact

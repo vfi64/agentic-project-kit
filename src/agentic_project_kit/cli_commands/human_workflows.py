@@ -330,17 +330,9 @@ def _paths_with_pending_communication_refresh(paths: list[Path], *, root: Path =
 
 
 def _handoff_closeout_paths() -> list[Path]:
-    workspace = load_workspace(Path("."), suppress_legacy_profile_warning=True)
-    return [
-        workspace.handoff_file("START_NEW_CHAT_PROMPT.md"),
-        workspace.handoff_file("CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"),
-        workspace.handoff_file("NEXT_CHAT_BOOTSTRAP.md"),
-        workspace.package_file("execution_contract.json"),
-        workspace.package_file("source_manifest.json"),
-        workspace.package_file("successor_context.yaml"),
-        workspace.package_file("successor_prompt.md"),
-        workspace.package_file("validation_report.json"),
-    ]
+    from agentic_project_kit.handoff_closeout import handoff_closeout_paths
+
+    return handoff_closeout_paths(load_workspace(Path("."), suppress_legacy_profile_warning=True))
 
 
 def _extract_pr_number(text: str) -> int | None:

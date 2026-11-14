@@ -142,10 +142,10 @@ class ReleaseRun:
         return self._work_finish("B3", branch=self.branch, paths=paths, execute=False, expected_status="PLANNED")
 
     def _step_b4(self) -> dict[str, Any]:
-        from agentic_project_kit.release_run_b4_resume import RESUME_MODE, complete
+        from agentic_project_kit.release_run_b4_resume import RESUME_MODE, UNPUBLISHED_MODE, complete
 
         gate = (self.state.get("gates") or {}).get("B4") or {}
-        if gate.get("mode") == RESUME_MODE:
+        if gate.get("mode") in {RESUME_MODE, UNPUBLISHED_MODE}:   # KIT-GF-080, K7
             return complete(self, gate)
         expected = tuple(self.state.get("b_paths") or [])
         current = tuple(self._changed_paths())
@@ -376,7 +376,7 @@ class ReleaseRun:
             finding_gate = gate_findings(self.root, self.version)
             if finding_gate:
                 gate["greenfield_release"] = finding_gate
-            gate.update(resume_plan(self))   # KIT-GF-080: the release's own open release PR
+            gate.update(resume_plan(self))   # KIT-GF-080 (open release PR), K7 (stopped before the PR)
             return gate
         if gate_id == "C2":
             return {

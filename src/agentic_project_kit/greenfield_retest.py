@@ -242,7 +242,10 @@ def _environment(home: Path) -> dict[str, str]:
         "[init]\n\tdefaultBranch = main\n[commit]\n\tgpgsign = false\n[tag]\n\tgpgsign = false\n",
         encoding="utf-8",
     )
-    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_") and k != "AGENTIC_KIT_RETEST_PYTHON"}
+    # GH_REPO/GH_HOST would let gh address a real repository regardless of the fixture's local
+    # origin (journey J4 runs a release run whose GitHub steps must stay unreachable).
+    env = {k: v for k, v in os.environ.items()
+           if not k.startswith("GIT_") and k not in {"AGENTIC_KIT_RETEST_PYTHON", "GH_REPO", "GH_HOST"}}
     env.update({"GIT_CONFIG_GLOBAL": str(config), "GIT_CONFIG_NOSYSTEM": "1", "GIT_TERMINAL_PROMPT": "0"})
     # The OS temp root is the run's own directory, so a contract never sees or touches other
     # programs' temporary files (KIT-GF-028).
@@ -436,6 +439,12 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
                     try:
                         guard_index(root, variables["kit_python"], variables["release_index_url"], step["run"])
                     except (ValueError, OSError) as exc:
+                        return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
+                if machine["fixture"] == "external_release" and step["run"][0] == "agentic-kit":
+                    from agentic_project_kit.greenfield_retest_release import guard_local_origin
+                    try:
+                        guard_local_origin(root, base, env, _run)
+                    except ValueError as exc:
                         return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
                 if machine["fixture"] == "external_adoption" and step["run"][0] == "agentic-kit":
                     from agentic_project_kit.greenfield_retest_adoption import guard_adoption_index

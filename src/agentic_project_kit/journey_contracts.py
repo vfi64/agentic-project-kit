@@ -12,8 +12,17 @@ per journey:
   effects runs here as its dry run; the declared baseline must match exactly.
 
 Offline the journeys stop at the GitHub boundary: ``work finish`` runs as dry run (PLANNED). The
-catalog rule (``release_effects``) is unchanged; only journeys treat a dry-run work finish, and an
-exact ``kit update`` against the adoption fixture's loopback index (J2), as local.
+catalog rule (``release_effects``) is unchanged; only journeys treat a dry-run work finish, an
+exact ``kit update`` against the adoption fixture's loopback index (J2) and a ``release run`` in the
+release fixture (J4) as local. In that fixture publication is ``none`` and the retest runner checks
+before every Kit step that each remote URL is a path inside the run's temporary root
+(``guard_local_origin``) and strips ``GH_REPO``/``GH_HOST``, so a push reaches only the disposable bare
+origin and a GitHub step finds no GitHub remote. ``release run`` asks for consent only through a
+signed ``--execute``; its plan runs execute no gate.
+
+J4 (K7) needs a stop inside B4. A journey may declare one ``interruption``: the step that the
+environment interrupts (here: the origin refuses the push), with its cause. Only that step may
+expect BLOCKED, and only for the declared release step; every other Kit step keeps the rule above.
 """
 from __future__ import annotations
 
@@ -37,10 +46,15 @@ def load() -> dict[str, Any]:
     return json.loads(files("agentic_project_kit.reference").joinpath("journeys.json").read_text("utf-8"))
 
 
+RELEASE_FIXTURE = "external_release"
+
+
 def journey_effects(command, entry, fixture=None) -> list[str]:
     argv = shlex.split(command) if isinstance(command, str) else list(command)
     if tuple(entry["path"]) == ("work", "finish") and "--execute" not in argv:
         return ["fetch"]  # dry run: plan plus `git ls-remote origin HEAD`
+    if fixture == RELEASE_FIXTURE and tuple(entry["path"]) == ("release", "run") and "--root" not in argv:
+        return ["push"]  # local bare origin only (guard_local_origin); no GitHub remote, publication none
     local = adoption_effects(argv, entry, fixture)
     return local if local is not None else release_effects(argv, entry, fixture)
 
@@ -49,14 +63,35 @@ def _kit_steps(journey: dict[str, Any]) -> list[list[str]]:
     return [step["run"] for step in journey["machine"]["steps"] if step.get("run", [""])[0] == "agentic-kit"]
 
 
+def _interruption_index(journey: dict[str, Any]) -> int | None:
+    spec = journey.get("interruption")
+    if spec is None:
+        return None
+    steps = journey["machine"]["steps"]
+    if (not isinstance(spec, dict) or set(spec) != {"step", "blocked_step", "cause"}
+            or not isinstance(spec["step"], int) or not 0 <= spec["step"] < len(steps)
+            or not isinstance(spec["cause"], str) or not spec["cause"].strip()):
+        raise ValueError(f"{journey['id']}: an interruption names step, blocked_step and cause")
+    step = steps[spec["step"]]
+    argv = step.get("run") or []
+    if argv[:3] != ["agentic-kit", "release", "run"] or "--execute" not in argv:
+        raise ValueError(f"{journey['id']}: only a signed release run step may be interrupted")
+    if step.get("expect") != {"returncode": 2, "json": {"result_status": "BLOCKED", "current_step": spec["blocked_step"]}}:
+        raise ValueError(f"{journey['id']}: the interrupted step expects exactly BLOCKED at the declared release step")
+    return spec["step"]
+
+
 def validate(journey: dict[str, Any], routes=None) -> None:
+    interrupted = _interruption_index(journey)
     commands = [shlex.join(argv) for argv in _kit_steps(journey)]
     if not commands:
         raise ValueError(f"{journey['id']}: a journey runs Kit routes")
     retest = {"commands": commands, "workspace_kind": "external", "execution_class": "local",
               "machine": journey["machine"]}
     validate_machine(journey["id"], retest, routes, effects=journey_effects)
-    for step in journey["machine"]["steps"]:
+    for index, step in enumerate(journey["machine"]["steps"]):
+        if index == interrupted:
+            continue
         if step.get("run", [""])[0] == "agentic-kit":
             if tuple(check_route(step["run"], routes)["path"]) in NO_STATUS_ROUTES:
                 if step.get("expect") != {"returncode": 0}:
@@ -70,8 +105,13 @@ def validate(journey: dict[str, Any], routes=None) -> None:
 
 
 def needs_consent(argv: list[str], routes=None, fixture=None) -> bool:
-    if "--execute" in argv and "--expected-signature" in argv:
+    signed = "--execute" in argv and "--expected-signature" in argv
+    if signed:
         return True
+    if tuple(check_route(argv, routes)["path"]) == ("release", "run"):
+        # A gate runs only on a signed execution (per gate, or once at B4 with upfront consent);
+        # that execution is the consent, the plan runs around it are not.
+        return False
     return bool(set(release_effects(argv, check_route(argv, routes), fixture)) - CONSENT_FREE_EFFECTS)
 
 
