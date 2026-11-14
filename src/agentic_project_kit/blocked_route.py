@@ -9,6 +9,7 @@ marker).
 """
 from __future__ import annotations
 
+import json
 from collections.abc import Mapping
 
 KIND_KIT = "kit"
@@ -109,3 +110,24 @@ def with_route(payload: Mapping[str, object]) -> dict[str, object]:
         reason=reason,
     ))
     return data
+
+
+def nested_route(result: object) -> dict[str, object]:
+    """The Kit route a nested Kit result already names (K6: a CI state seen in pr-complete).
+
+    ``result`` is that command's parsed JSON or its stdout. Only a complete kit route is inherited,
+    with the nested ``ci_state`` if there is one; a human marker or an incomplete route is not.
+    """
+    if isinstance(result, str):
+        try:
+            result = json.loads(result)
+        except ValueError:
+            return {}
+    if not isinstance(result, Mapping) or result.get("next_command_kind") != KIND_KIT:
+        return {}
+    if route_problems({**result, "result_status": "BLOCKED"}):
+        return {}
+    inherited = {name: result[name] for name in ROUTE_FIELDS}
+    if result.get("ci_state"):
+        inherited["ci_state"] = result["ci_state"]
+    return inherited

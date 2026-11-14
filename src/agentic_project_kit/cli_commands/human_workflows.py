@@ -12,7 +12,7 @@ import subprocess
 
 import typer
 
-from agentic_project_kit.blocked_route import first_line, route_fields, with_route
+from agentic_project_kit.blocked_route import first_line, nested_route, route_fields, with_route
 from agentic_project_kit.closeout_receipt import valid_completion_receipt
 from agentic_project_kit.cli_executable import default_agentic_kit, default_python
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
@@ -175,8 +175,10 @@ def _payload(action: str, steps: list[dict[str, object]], *, dry_run: bool = Fal
         # under the consent already given. A step without its own route gets the human marker;
         # its reason is the step's own next_command_reason or, failing that, its output.
         first = blocked[0]
+        # K6: a step without its own route inherits the Kit route its nested result names.
+        inherited = {} if first.get("next_command") else nested_route(first.get("stdout"))
         payload.update(
-            route_fields(
+            inherited or route_fields(
                 str(first.get("next_command") or ""),
                 autonomous=bool(first.get("next_command_autonomous", False)),
                 reason=str(first.get("next_command_reason") or "") or _unrouted_step_reason(first),
@@ -237,10 +239,15 @@ def _summary_state_next(stdout: object) -> str:
     """A Kit command without --json prints a summary; its STATE= and NEXT= tokens are its own words."""
     text = str(stdout or "")
     following = re.findall(r"^\s*NEXT=([A-Za-z0-9_.-]+)\s*$", text, flags=re.MULTILINE)
-    if not following:
+    if following:
+        state = re.search(r"\bSTATE=([A-Z][A-Z0-9_]*)\b", text)
+        return (f"STATE={state.group(1)}, " if state else "") + f"NEXT={following[-1]}"
+    # The transfer summary block writes "STATE:  FAIL" and "NEXT:  <sentence>" instead.
+    sentences = re.findall(r"^NEXT:\s+(\S.*?)\s*$", text, flags=re.MULTILINE)
+    if not sentences:
         return ""
-    state = re.search(r"\bSTATE=([A-Z][A-Z0-9_]*)\b", text)
-    return (f"STATE={state.group(1)}, " if state else "") + f"NEXT={following[-1]}"
+    state = re.search(r"^STATE:\s+([A-Z][A-Z0-9_]*)\s*$", text, flags=re.MULTILINE)
+    return (f"STATE={state.group(1)}, " if state else "") + f"NEXT={sentences[-1]}"
 
 
 def _exit_if_blocked(payload: dict[str, object]) -> None:

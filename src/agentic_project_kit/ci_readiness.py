@@ -24,6 +24,10 @@ TIMEOUT = "TIMEOUT"
 GH_ERROR = "GH_ERROR"
 
 SUCCESS_OUTCOMES = {READY_TO_MERGE, ALREADY_MERGED}
+TIMEOUT_REASON = "timeout reached while waiting for CI"
+# K6: a timeout whose last snapshot shows no started check is "CI never started", not slow CI.
+CI_NOT_STARTED_PREFIX = "ci not started: "
+STARTED_CHECK_STATUSES = frozenset({"IN_PROGRESS", "COMPLETED", "SUCCESS", "FAILURE", "ERROR"})
 
 
 @dataclass(frozen=True)
@@ -208,6 +212,17 @@ def classify_pr_readiness(
     )
 
 
+def ci_not_started_reasons(snapshot: dict[str, Any] | None) -> tuple[str, ...]:
+    """The K6 marker for a timeout: no check of the last snapshot left the queue."""
+    if snapshot is None:
+        return ()  # nothing was read; the timeout says nothing about the queue
+    checks = normalize_status_checks(snapshot)
+    if any(check["status"] in STARTED_CHECK_STATUSES or check["conclusion"] for check in checks):
+        return ()
+    detail = "no check reported" if not checks else f"{len(checks)} check(s) still queued"
+    return (CI_NOT_STARTED_PREFIX + detail,)
+
+
 def wait_for_pr_readiness(
     snapshot_provider: SnapshotProvider,
     *,
@@ -221,10 +236,13 @@ def wait_for_pr_readiness(
     start = clock()
     read_retries = 0
     failures: list[str] = []
+    last_snapshot: dict[str, Any] | None = None
     while True:
         elapsed = int(clock() - start)
         if elapsed >= timeout_seconds:
-            return ReadinessDecision(TIMEOUT, ("timeout reached while waiting for CI",), True, tuple(failures))
+            return ReadinessDecision(
+                TIMEOUT, (TIMEOUT_REASON, *ci_not_started_reasons(last_snapshot)), True, tuple(failures)
+            )
         try:
             snapshot = snapshot_provider()
         except Exception as exc:
@@ -237,6 +255,7 @@ def wait_for_pr_readiness(
                 continue
             failures.append(f"read attempt {read_retries + 1}: {exc}; stopped")
             return ReadinessDecision(GH_ERROR, (str(exc),), True, tuple(failures))
+        last_snapshot = snapshot
         decision = classify_pr_readiness(
             snapshot,
             expected_head_sha=expected_head_sha,
@@ -248,7 +267,7 @@ def wait_for_pr_readiness(
             return replace(decision, read_failures=tuple(failures))
         remaining = timeout_seconds - elapsed
         if remaining <= 0:
-            return ReadinessDecision(TIMEOUT, ("timeout reached while waiting for CI",), True)
+            return ReadinessDecision(TIMEOUT, (TIMEOUT_REASON, *ci_not_started_reasons(last_snapshot)), True)
         sleep(min(interval_seconds, remaining))
 
 
