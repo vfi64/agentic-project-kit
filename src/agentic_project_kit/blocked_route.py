@@ -83,3 +83,29 @@ def route_problems(result: Mapping[str, object]) -> list[str]:
     else:
         problems.append(f"next_command_kind must be one of {sorted(ROUTE_KINDS)}, got {kind!r}")
     return problems
+
+
+def with_route(payload: Mapping[str, object]) -> dict[str, object]:
+    """Emitter-level G3: a BLOCKED/FAIL payload without a valid route gets one before printing.
+
+    A named ``next_command`` becomes a kit route; otherwise the human marker, whose reason is the
+    payload's own words: ``next_command_reason``, ``blocker``, ``blockers`` or ``next_action``.
+    """
+    data = dict(payload)
+    if data.get("result_status") not in ROUTE_STATUSES or not route_problems(data):
+        return data
+    blockers = data.get("blockers")
+    blocker_text = ", ".join(str(item) for item in blockers) if isinstance(blockers, list) and blockers else ""
+    reason = (
+        first_line(data.get("next_command_reason"))
+        or first_line(data.get("blocker"))
+        or (f"blockers {blocker_text}" if blocker_text else "")
+        or first_line(data.get("next_action"))
+        or f"{data.get('kind') or data.get('action') or 'result'} ended {data['result_status']} without a Kit route."
+    )
+    data.update(route_fields(
+        str(data.get("next_command") or ""),
+        autonomous=data.get("next_command_autonomous") is True,
+        reason=reason,
+    ))
+    return data

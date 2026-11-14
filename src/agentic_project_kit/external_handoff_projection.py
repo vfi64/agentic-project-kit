@@ -48,8 +48,13 @@ def _stored_repository_spelling(ws, origin_name: str | None) -> str | None:
     return None
 
 
-def collect_projection_inputs(root, *, config_bytes: bytes | None = None) -> ProjectionInputs:
-    """Capture content and stable identity inputs at the filesystem boundary."""
+def collect_projection_inputs(
+    root, *, config_bytes: bytes | None = None, ignore_origin: bool = False
+) -> ProjectionInputs:
+    """Capture content and stable identity inputs at the filesystem boundary.
+
+    ``ignore_origin`` reproduces the inputs of a workspace that had no origin yet (F1).
+    """
     from pathlib import Path
 
     from agentic_project_kit import __version__
@@ -86,7 +91,7 @@ def collect_projection_inputs(root, *, config_bytes: bytes | None = None) -> Pro
                 except yaml.YAMLError as exc:
                     raise ValueError(f"invalid_handoff_source_yaml: {relative}") from exc
         captured.append((relative, content))
-    origin = _origin_url_from_git_config(root)
+    origin = None if ignore_origin else _origin_url_from_git_config(root)
     from agentic_project_kit.command_manifest import _read_packaged_manifest_text
     packaged_text = _read_packaged_manifest_text()
     packaged_manifest = json.loads(packaged_text)
@@ -340,13 +345,46 @@ def check_projection(root) -> dict[str, Any]:
                 stored[relative] = (root / relative).read_bytes()
             except FileNotFoundError:
                 continue
-        return compare_projection(inputs, stored, minimum=ws.handoff_projection_contract_min)
+        result = compare_projection(inputs, stored, minimum=ws.handoff_projection_contract_min)
+        if result.get("code") == "projection_inputs_changed":
+            result = _classify_identity_bound_after_init(root, inputs, stored, result)
+        return result
     except (OSError, ValueError, RuntimeError) as exc:
         return {
             "status": "FAIL", "code": "projection_input_unreadable",
             "freshness": "FAIL", "integrity": "FAIL", "message": str(exc),
             "migration_route": MIGRATION_ROUTE,
         }
+
+
+IDENTITY_BOUND_AFTER_INIT = "projection_identity_bound_after_init"
+
+
+def _classify_identity_bound_after_init(root, inputs, stored, result):
+    """F1: origin was added after workspace init and nothing else changed.
+
+    The stored projection then equals the projection of the same workspace without an origin:
+    only the repository identity moved from the fallback name to the origin. The next handoff
+    refresh (work finish) regenerates the package; work start need not block on it.
+    """
+    from agentic_project_kit.repo_identity import _origin_url_from_git_config
+
+    if not _origin_url_from_git_config(root):
+        return result
+    try:
+        report = json.loads(stored[f"{inputs.package_root}/validation_report.json"])
+        unbound = collect_projection_inputs(root, ignore_origin=True)
+    except (KeyError, ValueError, UnicodeError, OSError, RuntimeError):
+        return result
+    if not isinstance(report, dict) or report.get("input_digest") != input_digest(unbound):
+        return result
+    if render_projection(unbound) != {path: stored.get(path) for path in render_projection(unbound)}:
+        return result
+    return {
+        **result, "code": IDENTITY_BOUND_AFTER_INIT,
+        "identity_binding": {"stored": unbound.repository_name, "origin": inputs.repository_name},
+        "message": "Repository identity bound after workspace init; the next handoff refresh regenerates the package",
+    }
 
 
 def external_post_merge_check(root, *, main_branch="main"):

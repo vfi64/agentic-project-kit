@@ -244,3 +244,29 @@ def test_governance_wrapper_generates_output_contract_skeleton(tmp_path: Path):
     assert "Use agentic-kit validate-sections as a lower-level check" in validation
     assert "Both commands only check required literal sections" in validation
     assert "Repair attempts must be bounded" in validation
+
+
+def test_generated_ci_pip_cache_key_exists_for_every_project_type(tmp_path):
+    """F2: setup-python with cache: pip fails when its key matches no file (generic, governance-wrapper)."""
+    import yaml
+
+    for project_type in ("python-cli", "python-lib", "generic", "governance-wrapper"):
+        target = tmp_path / project_type
+        create_project(
+            ProjectOptions(
+                name=f"demo-{project_type}", description="Demo", project_type=project_type,
+                license_name="MIT", github_actions=True, pre_commit=False, agent_docs=True,
+                logging_evidence=True, target_dir=target,
+            )
+        )
+        workflow = yaml.safe_load((target / ".github/workflows/ci.yml").read_text(encoding="utf-8"))
+        cached = [
+            step["with"]
+            for job in workflow["jobs"].values()
+            for step in job["steps"]
+            if str(step.get("uses", "")).startswith("actions/setup-python@") and step.get("with", {}).get("cache")
+        ]
+        assert cached, project_type
+        for options in cached:
+            literal = [p for p in str(options.get("cache-dependency-path", "")).split() if "*" not in p]
+            assert any((target / p).is_file() for p in literal), (project_type, options)
