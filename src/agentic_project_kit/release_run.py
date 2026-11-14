@@ -13,6 +13,7 @@ from typing import Any
 
 import yaml
 
+from agentic_project_kit.blocked_route import ROUTE_FIELDS, nested_route
 from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.publication_policy import publication_policy_for
 from agentic_project_kit.release_run_policy import release_branch_plan, release_step_sequence
@@ -323,6 +324,11 @@ class ReleaseRun:
         step_payload["blockers"] = blockers
         if result_status != "PASS":
             step_payload["next_action"] = f"Inspect {self.log_path.as_posix()} and fix step {step_id}."
+            # K6/G3: a step whose Kit result names its own route (e.g. CI never started) keeps it.
+            inherited = nested_route(parsed)
+            if inherited:
+                step_payload.update(inherited)
+                step_payload["next_action"] = f"Run {inherited['next_command']}, then continue the release run."
         return step_payload
 
     def _changed_paths(self) -> list[str]:
@@ -492,6 +498,7 @@ class ReleaseRun:
             "state_path": self.state_path.as_posix(),
             "log_path": self.log_path.as_posix(),
             "next_action": current.get("next_action", "Continue release run."),
+            **{key: current[key] for key in (*ROUTE_FIELDS, "ci_state") if key in current},
         }
 
     def _load_state(self) -> dict[str, Any]:

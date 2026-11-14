@@ -5,9 +5,13 @@ import json
 import uuid
 from pathlib import Path
 
+from agentic_project_kit.blocked_route import human_route, kit_route
+from agentic_project_kit.ci_readiness import CI_NOT_STARTED_PREFIX
 from agentic_project_kit.workspace import load_workspace
 
-CI_STATES = {"FAILED", "NOT_RUN", "PENDING"}
+CI_STATES = {"FAILED", "NOT_RUN", "NOT_STARTED", "PENDING"}
+# Precedence when several failed steps report a CI state: the most specific cause wins.
+CI_STATE_ORDER = ("FAILED", "NOT_RUN", "NOT_STARTED", "PENDING")
 
 
 def _clip(value: object, limit: int) -> str:
@@ -27,8 +31,28 @@ def _step_ci_state(step: dict) -> str:
     if "PR readiness outcome: BLOCKED" in output and "- check failed:" in output:
         return "NOT_RUN" if "CI state: NOT_RUN" in output else "FAILED"
     if any(f"PR readiness outcome: {state}" in output for state in ("TIMEOUT", "WAITING")):
-        return "PENDING"
+        return "NOT_STARTED" if f"- {CI_NOT_STARTED_PREFIX}" in output else "PENDING"
     return ""
+
+
+def ci_state_route(state: str, pr: object) -> dict[str, object]:
+    """G3 route and next action of a terminal CI finding (K6, owner decision E3 c / variant A)."""
+    if state == "NOT_RUN":
+        command = f"agentic-kit pr rerun-checks --pr {pr} --json"
+        return {"next_action": command, **kit_route(command, autonomous=False)}
+    if state == "FAILED":
+        action = f"Repair the failed CI for PR #{pr}, then resume its Kit closeout."
+        return {"next_action": action, **human_route(action)}
+    command = f"agentic-kit pr wait-ci {pr}"
+    route = {"next_action": command, **kit_route(command, autonomous=True)}
+    if state == "NOT_STARTED":
+        # Waiting again is a transient retry within the consent given; if the queue stays stuck,
+        # only a person can see why (Actions queue, minutes, disabled workflows).
+        route["next_command_reason"] = (
+            f"CI for PR #{pr} never started: no check left the queue before the timeout. Wait again; "
+            "if it stays queued, check GitHub Actions (queue, minutes, disabled workflows)."
+        )
+    return route
 
 
 def prepare_pr_output(payload: dict, *, root: Path, summary: bool) -> tuple[dict, int]:
@@ -48,12 +72,10 @@ def prepare_pr_output(payload: dict, *, root: Path, summary: bool) -> tuple[dict
     states = [_step_ci_state(step) for step in failures]
     finding = data.get("result_status") in {"BLOCKED", "PENDING"} and bool(states) and all(states)
     if finding:
-        state = "FAILED" if "FAILED" in states else ("NOT_RUN" if "NOT_RUN" in states else "PENDING")
+        state = next(candidate for candidate in CI_STATE_ORDER if candidate in states)
         pr = data.get("pr_number", data.get("after_pr"))
         data.update(ci_state=state, execution_status="COMPLETED", returncode=0)
-        data["next_action"] = (f"agentic-kit pr rerun-checks --pr {pr} --json" if state == "NOT_RUN" else
-                               f"Repair the failed CI for PR #{pr}, then resume its Kit closeout." if state == "FAILED" else
-                               f"agentic-kit pr wait-ci {pr}")
+        data.update(ci_state_route(state, pr))
     else:
         data["execution_status"] = "COMPLETED" if data.get("result_status") == "PASS" else "BLOCKED"
     rc = 0 if finding or data.get("result_status") in {"PASS", "PENDING"} else int(data.get("returncode") or 2)
