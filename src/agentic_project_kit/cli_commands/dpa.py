@@ -600,19 +600,16 @@ def dpa_final_closeout_check_command(
     elif require_valid and not result.ok:
         payload.update(human_reason(f"The final closeout record is not valid ({result.result_status})."))
 
-    def text(routed: dict) -> str:
-        lines = render_dpa_final_closeout_check(result)
-        if write_result is not None:
-            reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
-            lines += (
-                "EVIDENCE_WRITE="
-                f"{write_result['result_status']}|"
-                f"path={write_result['output_path']}|"
-                f"written={str(write_result.get('written', False)).lower()}"
-                f"{reason}\n"
-            )
-        return lines
-
+    text = render_dpa_final_closeout_check(result)
+    if write_result is not None:
+        reason = f"|reason={write_result['reason']}" if "reason" in write_result else ""
+        text += (
+            "EVIDENCE_WRITE="
+            f"{write_result['result_status']}|"
+            f"path={write_result['output_path']}|"
+            f"written={str(write_result.get('written', False)).lower()}"
+            f"{reason}\n"
+        )
     emit_routed(
         payload,
         json_output=output_json,

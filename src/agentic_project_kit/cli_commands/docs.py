@@ -115,7 +115,7 @@ def docs_lifecycle_sweep_command(
         payload = {**payload, **human_reason(SWEEP_BLOCK_REASONS.get(
             str(payload.get("reason")), f"Sweep blocked: {payload.get('reason')}."
         ))}
-    emit_routed(payload, json_output=json_output, text=lambda routed: render_doc_lifecycle_sweep(payload))
+    emit_routed(payload, json_output=json_output, text=render_doc_lifecycle_sweep(payload))
     if payload["result_status"] == "BLOCK":
         raise typer.Exit(code=2)
 

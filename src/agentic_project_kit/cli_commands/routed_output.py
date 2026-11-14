@@ -23,7 +23,7 @@ def emit_routed(
     payload: Mapping[str, object],
     *,
     json_output: bool,
-    text: Callable[[dict[str, object]], str | None] | None = None,
+    text: str | Callable[[dict[str, object]], str | None] | None = None,
     blocked: bool = False,
     err: bool = False,
 ) -> dict[str, object]:
@@ -34,7 +34,10 @@ def emit_routed(
     if json_output:
         typer.echo(json.dumps(payload, indent=2, sort_keys=True), err=err)
         return payload
-    if text is not None:
+    if isinstance(text, str):
+        # A rendered projection is printed as given; the source-flow audit follows this path.
+        typer.echo(text, nl=False, err=err)
+    elif text is not None:
         rendered = text(payload)
         if rendered is not None:
             typer.echo(rendered, nl=False, err=err)

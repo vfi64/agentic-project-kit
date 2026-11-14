@@ -79,7 +79,7 @@ def workspace_adopt_command(
     """Analyze an existing repository without writing workspace files."""
 
     report = analyze_workspace_adoption(root.resolve())
-    emit_routed(report.as_json_data(), json_output=json_output, text=lambda routed: render_workspace_adopt_report(report))
+    emit_routed(report.as_json_data(), json_output=json_output, text=render_workspace_adopt_report(report))
 
 
 @workspace_app.command("dpa-intake")
@@ -143,7 +143,7 @@ def workspace_dpa_intake_command(
     emit_routed(
         payload,
         json_output=json_output,
-        text=lambda routed: render_workspace_dpa_intake_report(report),
+        text=render_workspace_dpa_intake_report(report),
         blocked=report.result_status != DPA_INTAKE_READY_STATUS,
     )
     if evidence_blocked:
@@ -202,13 +202,13 @@ def workspace_init_command(
         emit_routed(
             plan.as_json_data(written=execute),
             json_output=json_output,
-            text=lambda routed: render_workspace_init_plan(plan, written=execute),
+            text=render_workspace_init_plan(plan, written=execute),
         )
     except WorkspaceInitError as exc:
         emit_routed(
             _error_payload("workspace_init_result", exc, INIT_ERROR_ROUTES, root),
             json_output=json_output,
-            text=lambda routed, error=exc: render_workspace_init_error(error),
+            text=render_workspace_init_error(exc),
         )
         raise typer.Exit(code=1) from exc
 
@@ -233,14 +233,14 @@ def workspace_remove_command(
         if plan.result_status == "BLOCKED":
             found = "; ".join(f"{item.path}: {item.reason}" for item in plan.blockers[:3])
             payload.update(human_reason(f"{plan.message}" + (f" ({found})" if found else "")))
-        emit_routed(payload, json_output=json_output, text=lambda routed: render_workspace_remove_plan(plan, written=written))
+        emit_routed(payload, json_output=json_output, text=render_workspace_remove_plan(plan, written=written))
         if plan.result_status == "BLOCKED":
             raise typer.Exit(2)
     except WorkspaceRemoveError as exc:
         emit_routed(
             _error_payload("workspace_remove_result", exc, REMOVE_ERROR_ROUTES, root),
             json_output=json_output,
-            text=lambda routed, error=exc: render_workspace_remove_error(error),
+            text=render_workspace_remove_error(exc),
         )
         raise typer.Exit(code=1) from exc
 
@@ -310,12 +310,12 @@ def workspace_upgrade_command(
         emit_routed(
             plan.as_json_data(written=written),
             json_output=json_output,
-            text=lambda routed: render_workspace_upgrade_plan(plan, written=written),
+            text=render_workspace_upgrade_plan(plan, written=written),
         )
     except WorkspaceUpgradeError as exc:
         emit_routed(
             _error_payload("workspace_upgrade_result", exc, UPGRADE_ERROR_ROUTES, root),
             json_output=json_output,
-            text=lambda routed, error=exc: render_workspace_upgrade_error(error),
+            text=render_workspace_upgrade_error(exc),
         )
         raise typer.Exit(code=1) from exc
