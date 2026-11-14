@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `5662dd38765095d33946c045db864acbf00cdbd7` (`5662dd38`), after `Workflow friction slice 2b: blocked-route ratchet and human marker (G3) (#2784)`.
-Last substantive work state is `5662dd38765095d33946c045db864acbf00cdbd7` (`5662dd38`), after `Workflow friction slice 2b: blocked-route ratchet and human marker (G3) (#2784)`.
+Current verified main/admin HEAD is `25a275606e3c177ef351645f9af222a96c64cdd7` (`25a27560`), after `Workflow friction: late origin identity (F1), generator CI cache (F2), G3 emitter guard (#2786)`.
+Last substantive work state is `25a275606e3c177ef351645f9af222a96c64cdd7` (`25a27560`), after `Workflow friction: late origin identity (F1), generator CI cache (F2), G3 emitter guard (#2786)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
