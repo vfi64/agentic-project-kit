@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: c41fd4b12edcc3dad714dfcdff9c7290b9f350056c3875ef727e04406dcbf29f
 - docs/reference/agentic-kit-commands.json: 5c62112b875ac11cf6b48202b183140c8125f8f5de9570a850860fc9a1cd3803
-## Operational documentation refresh state after PR #2784
+## Operational documentation refresh state after PR #2786
 
-Current administrative handoff refresh state is `5662dd38` (`Workflow friction slice 2b: blocked-route ratchet and human marker (G3) (#2784)`). Continue next only after this post-PR2784 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `25a27560` (`Workflow friction: late origin identity (F1), generator CI cache (F2), G3 emitter guard (#2786)`). Continue next only after this post-PR2786 refresh is committed and merged; the next substantive slice must be created from fresh main.
