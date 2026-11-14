@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: ffa9c93e1f6952558f1cf82ffa4898a733ee19f5
-  short: ffa9c93e
-  subject: 'Workflow friction K6: CI never started is its own state with a route (#2790)'
+  full: 8ee686950019039f48113816c20014d6ba76a62d
+  short: 8ee68695
+  subject: 'Workflow friction G2: release checks that depend only on repository content run at the PR (#2792)'
 last_substantive_work_state:
-  full: ffa9c93e1f6952558f1cf82ffa4898a733ee19f5
-  short: ffa9c93e
-  subject: 'Workflow friction K6: CI never started is its own state with a route (#2790)'
+  full: 8ee686950019039f48113816c20014d6ba76a62d
+  short: 8ee68695
+  subject: 'Workflow friction G2: release checks that depend only on repository content run at the PR (#2792)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
