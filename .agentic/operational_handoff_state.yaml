@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: e7cff98e5ac0bbfdd146cb43a642219db607ce6e
-  short: e7cff98e
-  subject: 'Workflow friction: G3 routes for six single commands (#2800)'
+  full: d588541950826a59728b79079911a7bd4cc51963
+  short: d5885419
+  subject: 'Workflow friction: G3 routes for init and github-create (#2802)'
 last_substantive_work_state:
-  full: e7cff98e5ac0bbfdd146cb43a642219db607ce6e
-  short: e7cff98e
-  subject: 'Workflow friction: G3 routes for six single commands (#2800)'
+  full: d588541950826a59728b79079911a7bd4cc51963
+  short: d5885419
+  subject: 'Workflow friction: G3 routes for init and github-create (#2802)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
