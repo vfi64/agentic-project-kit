@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import json
 from dataclasses import replace
 from pathlib import Path
 
 import typer
 
+from agentic_project_kit.cli_commands.transfer_shared import _emit_transfer
 from agentic_project_kit.pr_closeout_complete import PrCloseoutCompleteResult
 from agentic_project_kit.pr_closeout_complete import pr_closeout_complete
 
@@ -122,11 +122,13 @@ def register_transfer_pr_closeout_complete_command(transfer_app: typer.Typer) ->
         from agentic_project_kit.pr_orchestration_output import prepare_pr_output
         payload, rc = prepare_pr_output(result.as_json_data(), root=Path("."), summary=summary)
         result = replace(result, returncode=rc, result_status=str(payload["result_status"]), next_action=str(payload["next_action"]))
-        if json_output:
-            typer.echo(json.dumps(payload, separators=(",", ":"), ensure_ascii=False, sort_keys=True))
-        else:
-            typer.echo(render_pr_closeout_complete_result(result))
-            if summary and payload.get("evidence_path"):
-                typer.echo(f"Evidence: {payload['evidence_path']}")
+        def text(routed: dict[str, object]) -> str:
+            rendered = render_pr_closeout_complete_result(result)
+            if summary and routed.get("evidence_path"):
+                rendered += f"\nEvidence: {routed['evidence_path']}"
+            return rendered
+
+        _emit_transfer(payload, json_output=json_output, separators=(",", ":"), ensure_ascii=False, sort_keys=True,
+                       text=text)
         if result.returncode != 0:
             raise typer.Exit(code=result.returncode)

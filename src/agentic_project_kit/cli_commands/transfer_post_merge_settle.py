@@ -1,11 +1,11 @@
 from __future__ import annotations
 
-import json
 from dataclasses import asdict, dataclass
 from pathlib import Path
 
 import typer
 
+from agentic_project_kit.cli_commands.transfer_shared import _emit_transfer
 from agentic_project_kit.cli_commands.transfer_post_merge_complete import (
     _cleanup_state_from_payload,
     inspect_local_state,
@@ -171,11 +171,9 @@ def register_transfer_post_merge_settle_command(transfer_app: typer.Typer) -> No
                 refresh_limit=refresh_limit,
             )
 
-        if json_output:
-            payload = result.as_json_data()
-            payload["known_volatile_preflight_cleanup"] = preflight_cleanup
-            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
-        else:
-            typer.echo(render_post_merge_settle_result(result))
+        payload = result.as_json_data()
+        payload["known_volatile_preflight_cleanup"] = preflight_cleanup
+        _emit_transfer(payload, json_output=json_output, indent=2, sort_keys=True,
+                       text=lambda _payload: render_post_merge_settle_result(result))
         if result.returncode != 0:
             raise typer.Exit(code=result.returncode)

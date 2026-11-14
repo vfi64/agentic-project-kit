@@ -112,16 +112,16 @@ def remote_next(
     try:
         result = run_remote_next_transfer(Path("."), branch, allow_unlisted=allow_unlisted)
     except (RuntimeError, ValueError, FileNotFoundError) as exc:
-        if json_output:
-            _echo_command_error("remote-next", exc, returncode=1)
-        else:
-            typer.echo(str(exc))
+        _emit_transfer(command_error_payload("remote-next", exc, returncode=1), json_output=json_output,
+                       indent=2, sort_keys=True, text=lambda _payload, error=exc: str(error))
         raise typer.Exit(code=1) from exc
 
-    if json_output:
-        typer.echo(json.dumps(result.as_json_data(), indent=2, sort_keys=True))
-    else:
-        _echo_remote_next_user_summary(result)
+    payload = result.as_json_data()
+    if payload["result_status"] in ROUTE_STATUSES:
+        reasons = ", ".join(str(reason) for reason in payload["reasons"])
+        payload["next_command_reason"] = first_line(payload["blocked_message"]) or (f"reasons {reasons}" if reasons else "")
+    _emit_transfer(payload, json_output=json_output, indent=2, sort_keys=True,
+                   text=lambda _payload: _echo_remote_next_user_summary(result))
 
     if result.local_run.returncode != 0:
         raise typer.Exit(code=result.local_run.returncode)

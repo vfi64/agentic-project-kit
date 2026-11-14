@@ -54,20 +54,20 @@ def _done_payload_for_no_content_diff(
 
 
 def _emit_done_payload(payload: dict[str, object], *, json_output: bool, title: str) -> None:
-    if json_output:
-        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
-        return
-    _echo_transfer_payload_summary(
-        title=title,
-        result_status=str(payload["result_status"]),
-        final_signal=str(payload["final_signal"]),
-        next_action=str(payload["next_action"]),
-        fields={
-            "PR": payload.get("pr_number") or "none",
-            "HEAD": payload.get("head"),
-            "BASE": payload.get("base"),
-            "ALREADY_DONE": payload.get("already_done"),
-        },
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, ensure_ascii=False, sort_keys=True,
+        text=lambda routed: _echo_transfer_payload_summary(
+            title=title,
+            result_status=str(routed["result_status"]),
+            final_signal=str(routed["final_signal"]),
+            next_action=str(routed["next_action"]),
+            fields={
+                "PR": routed.get("pr_number") or "none",
+                "HEAD": routed.get("head"),
+                "BASE": routed.get("base"),
+                "ALREADY_DONE": routed.get("already_done"),
+            },
+        ),
     )
 
 def _auto_preflight_pr_create_complete(*, root: Path) -> None:
@@ -370,10 +370,9 @@ def pr_existing_for_branch_command(
         "steps": steps,
     }
 
-    if json_output:
-        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    else:
-        _echo_transfer_payload_summary(
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, ensure_ascii=False,
+        text=lambda _payload: _echo_transfer_payload_summary(
             title="TRANSFER_PR_EXISTING_FOR_BRANCH",
             result_status=result_status,
             final_signal=final_signal,
@@ -386,7 +385,8 @@ def pr_existing_for_branch_command(
                 "MATCHES": len(prs),
                 "BLOCKERS": len(blockers),
             },
-        )
+        ),
+    )
 
     if returncode != 0:
         raise typer.Exit(code=returncode)
@@ -441,7 +441,12 @@ def pr_create_complete_command(
         try:
             body = prepare_work_finish_body(title, body=body, release_note_category=release_note_category)
         except ValueError as exc:
-            typer.echo(f"BLOCKED: {exc}", err=True)
+            _emit_transfer(
+                {"action": "pr-create-complete", "result_status": "BLOCKED", "returncode": 2,
+                 "blocker": str(exc), "next_action": "Correct the PR title, body or release-note category and retry."},
+                json_output=json_output, indent=2, ensure_ascii=False, sort_keys=True,
+                text=lambda _payload, error=exc: f"BLOCKED: {error}", err=True,
+            )
             raise typer.Exit(code=2) from exc
     if not skip_llm_context_gate:
         _auto_preflight_pr_create_complete(root=Path("."))
@@ -644,15 +649,14 @@ def pr_create_complete_command(
             if summary:
                 from agentic_project_kit.pr_orchestration_output import prepare_pr_output
                 payload, rc = prepare_pr_output(payload, root=Path("."), summary=True)
-                typer.echo(json.dumps(payload, ensure_ascii=False) if json_output else
-                           f"{payload['result_status']}: {payload['next_action']}\nEvidence: {payload.get('evidence_path', '')}")
+                _emit_transfer(
+                    payload, json_output=json_output, ensure_ascii=False,
+                    text=lambda routed: f"{routed['result_status']}: {routed['next_action']}\nEvidence: {routed.get('evidence_path', '')}",
+                )
                 if rc:
                     raise typer.Exit(rc)
                 return
-            if json_output:
-                typer.echo(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
-            else:
-                _emit_done_payload(payload, json_output=False, title="TRANSFER_PR_CREATE_COMPLETE")
+            _emit_done_payload(payload, json_output=json_output, title="TRANSFER_PR_CREATE_COMPLETE")
             return
         steps.extend(diff_status.as_payload().get("steps", []))
 
@@ -842,9 +846,7 @@ def pr_create_complete_command(
     result_status = str(payload["result_status"])
     final_signal = "d" if result_status == "PASS" else "f"
 
-    if json_output:
-        typer.echo(json.dumps(payload, indent=None if summary else 2, ensure_ascii=False))
-    else:
+    def text(routed: dict[str, object]) -> str | None:
         _echo_transfer_payload_summary(
             title="TRANSFER_PR_CREATE_COMPLETE",
             result_status=result_status,
@@ -858,9 +860,9 @@ def pr_create_complete_command(
                 "BLOCKERS": len(blockers),
             },
         )
+        return f"Evidence: {routed['evidence_path']}" if summary and routed.get("evidence_path") else None
 
-    if summary and not json_output and payload.get("evidence_path"):
-        typer.echo(f"Evidence: {payload['evidence_path']}")
+    _emit_transfer(payload, json_output=json_output, indent=None if summary else 2, ensure_ascii=False, text=text)
 
     if output_returncode:
         raise typer.Exit(code=output_returncode)

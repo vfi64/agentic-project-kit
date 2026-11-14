@@ -9,6 +9,7 @@ from uuid import uuid4
 
 import typer
 
+from agentic_project_kit.cli_commands.transfer_shared import _emit_transfer
 from agentic_project_kit.cli_commands.transfer_context_helpers import (
     _known_volatile_transfer_paths,
     _restore_known_volatile_paths,
@@ -444,12 +445,12 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             pending_return = prepare_pending_return_closeout(Path.cwd(), after_pr)
         except (OSError, ValueError, RuntimeError) as exc:
             payload = {"result_status": "BLOCKED", "returncode": 2, "after_pr": after_pr, "blocker": str(exc)}
-            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+            _emit_transfer(payload, json_output=True, indent=2, sort_keys=True)
             raise typer.Exit(2) from exc
         if pending_return is not None:
             payload = {"result_status": "PENDING", "returncode": 2, "after_pr": after_pr,
                        "completion_receipt": None, **pending_return}
-            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
+            _emit_transfer(payload, json_output=True, indent=2, sort_keys=True)
             raise typer.Exit(2)
         preflight_cleanup = restore_known_volatile_for_post_merge(Path("."))
         local_state = _cleanup_state_from_payload(preflight_cleanup)
@@ -470,21 +471,17 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
         try:
             published_report = publish_latest_transfer_report(Path("."), label=str(local_report["label"]))
         except (FileNotFoundError, ValueError, OSError) as exc:
-            if json_output:
-                payload = result.as_json_data()
-                payload["transfer_report"] = local_report
-                payload["transfer_upload"] = "blocked"
-                payload["transfer_upload_error"] = str(exc)
-                payload["chat_reply"] = _chat_reply("f", f"Inspect upload blocker: {exc}")
-                typer.echo(json.dumps(payload, indent=2, sort_keys=True))
-            else:
-                typer.echo(
-                    render_post_merge_complete_result(
-                        result,
-                        local_report=local_report,
-                        publish_error=str(exc),
-                    )
-                )
+            payload = result.as_json_data()
+            payload["transfer_report"] = local_report
+            payload["transfer_upload"] = "blocked"
+            payload["transfer_upload_error"] = str(exc)
+            payload["chat_reply"] = _chat_reply("f", f"Inspect upload blocker: {exc}")
+            _emit_transfer(
+                payload, json_output=json_output, indent=2, sort_keys=True,
+                text=lambda _payload, error=str(exc): render_post_merge_complete_result(
+                    result, local_report=local_report, publish_error=error,
+                ),
+            )
             raise typer.Exit(code=2) from exc
 
         try:
@@ -509,8 +506,8 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             else "Inspect known volatile transfer cleanup before continuing."
         )
 
+        payload = result.as_json_data()
         if json_output:
-            payload = result.as_json_data()
             payload["completion_receipt"] = (
                 make_completion_receipt(
                     Path("."), after_pr=after_pr, main_branch=main_branch,
@@ -526,20 +523,19 @@ def register_transfer_post_merge_complete_command(transfer_app: typer.Typer) -> 
             payload["known_volatile_preflight_cleanup"] = preflight_cleanup
             payload["known_volatile_final_cleanup"] = final_cleanup
             payload["chat_reply"] = _chat_reply(final_chat_signal, final_next_action)
-            typer.echo(json.dumps(payload, indent=2, sort_keys=True))
-        else:
-            typer.echo(
-                render_post_merge_complete_result(
-                    result,
-                    local_report=local_report,
-                    published_report=published_report,
-                )
+
+        def text(_routed: dict[str, object]) -> str:
+            rendered = render_post_merge_complete_result(
+                result,
+                local_report=local_report,
+                published_report=published_report,
             )
             if not final_cleanup_ok:
-                typer.echo("")
-                typer.echo("LOCAL_CLEANUP")
-                typer.echo(_summary_bullet("KNOWN_VOLATILE", "blocked"))
-                typer.echo(_summary_bullet("NEXT", final_next_action))
+                rendered += "\n\nLOCAL_CLEANUP\n" + _summary_bullet("KNOWN_VOLATILE", "blocked")
+                rendered += "\n" + _summary_bullet("NEXT", final_next_action)
+            return rendered
+
+        _emit_transfer(payload, json_output=json_output, indent=2, sort_keys=True, text=text)
         if not final_cleanup_ok:
             raise typer.Exit(code=2)
         if result.returncode != 0:

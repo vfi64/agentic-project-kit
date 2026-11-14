@@ -240,10 +240,9 @@ def evidence_pr_complete_command(
         "steps": steps,
     }
 
-    if json_output:
-        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    else:
-        _echo_transfer_payload_summary(
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, ensure_ascii=False,
+        text=lambda _payload: _echo_transfer_payload_summary(
             title="TRANSFER_EVIDENCE_PR_COMPLETE",
             result_status=result_status,
             final_signal=final_signal,
@@ -254,7 +253,8 @@ def evidence_pr_complete_command(
                 "SOURCE_PR": source_pr,
                 "BLOCKERS": len(blockers),
             },
-        )
+        ),
+    )
 
     if blockers:
         raise typer.Exit(code=2)

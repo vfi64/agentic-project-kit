@@ -11,6 +11,7 @@ import sys
 from pathlib import Path
 
 import typer
+from agentic_project_kit.blocked_route import ROUTE_STATUSES, first_line, with_route
 from agentic_project_kit.cli_error_payload import command_error_payload
 from agentic_project_kit.transfer_safety_context import render_local_to_llm_log_header, render_local_to_llm_log_upload_hint, build_transfer_safety_header
 import yaml
@@ -102,8 +103,43 @@ def _load_or_exit(path: Path, *, json_output: bool = False):
 
 def _echo_command_error(action: str, error: Exception, *, returncode: int,
                         next_action: str = "Inspect the error and retry the command.") -> None:
-    typer.echo(json.dumps(command_error_payload(action, error, returncode=returncode,
-                                                next_action=next_action), indent=2, sort_keys=True))
+    _emit_transfer(command_error_payload(action, error, returncode=returncode, next_action=next_action),
+                   json_output=True, indent=2, sort_keys=True)
+
+
+def _echo_route_lines(payload, *, err: bool = False) -> None:
+    """Text projection of a G3 route (same labels as the repo-action summary)."""
+    if payload.get("result_status") not in ROUTE_STATUSES:
+        return
+    typer.echo(_summary_line("NEXT_COMMAND_KIND", payload.get("next_command_kind", "")), err=err)
+    if payload.get("next_command"):
+        typer.echo(_summary_line("NEXT_COMMAND", payload["next_command"]), err=err)
+        typer.echo(_summary_line("NEXT_COMMAND_AUTONOMOUS", "yes" if payload.get("next_command_autonomous") else "no"),
+                   err=err)
+    else:
+        typer.echo(_summary_line("NEXT_COMMAND_REASON", first_line(payload.get("next_command_reason"))), err=err)
+
+
+def _emit_transfer(payload, *, json_output: bool, text=None, route_lines: bool = True, err: bool = False,
+                   **dumps):
+    """G3 emitter of the transfer orchestrators: route a BLOCKED/FAIL payload first, then print.
+
+    JSON mode prints the routed payload (``dumps`` are json.dumps keyword arguments). Text mode
+    calls ``text`` with the routed payload; it prints itself or returns the text (to stderr with
+    ``err``). The route lines follow unless the text projection already carries them
+    (``route_lines=False``).
+    """
+    payload = with_route(payload)
+    if json_output:
+        typer.echo(json.dumps(payload, **dumps))
+        return payload
+    if text is not None:
+        rendered = text(payload)
+        if rendered is not None:
+            typer.echo(rendered, err=err)
+    if route_lines:
+        _echo_route_lines(payload, err=err)
+    return payload
 
 def _emit_result(result, json_output: bool) -> None:
     if json_output:
@@ -116,7 +152,9 @@ def _emit_result(result, json_output: bool) -> None:
         typer.echo(f"message={result.message}")
 
 def _echo_repo_result(result, json_output: bool) -> None:
-    typer.echo(result_json(result) if json_output else result_terminal(result))
+    # RepoActionResult.as_json_data carries the route; result_terminal renders its lines.
+    _emit_transfer(result.as_json_data(), json_output=json_output, text=lambda _payload: result_terminal(result),
+                   route_lines=False, indent=2, sort_keys=True)
 
 
 def _public_transfer_attr(name: str, fallback):
@@ -264,29 +302,29 @@ def _require_transfer_capability(capability: str, *, json_output: bool = False) 
     if snapshot.capabilities.get(capability, False):
         return
     next_action = snapshot.next_action
-    if capability == "rules_confirmed" and not snapshot.rule_snapshot.get("fail_closed"):
+    acknowledge = capability == "rules_confirmed" and not snapshot.rule_snapshot.get("fail_closed")
+    if acknowledge:
         next_action = "agentic-kit rules acknowledge; then retry the transfer action."
-    typer.echo(
-        json.dumps(
-            {
-                "chat_reply": "f",
-                "next_safe_action": next_action,
-                "result_status": "BLOCKED",
-                "returncode": 2,
-                "required_capability": capability,
-                "primary_state": snapshot.primary_state,
-                "reasons": snapshot.reasons,
-                "next_action": next_action,
-                "rule_acknowledgement": snapshot.rule_acknowledgement,
-            },
-            indent=2,
-            sort_keys=True,
-        )
+    payload = {
+        "chat_reply": "f",
+        "next_safe_action": next_action,
+        "result_status": "BLOCKED",
+        "returncode": 2,
+        "required_capability": capability,
+        "primary_state": snapshot.primary_state,
+        "reasons": snapshot.reasons,
+        "next_action": next_action,
+        "rule_acknowledgement": snapshot.rule_acknowledgement,
+    }
+    if acknowledge:
+        # Reading and confirming the rules is the agent's own act, never an automatic retry.
+        payload.update(next_command="agentic-kit rules acknowledge", next_command_autonomous=False)
+    # Text mode keeps the JSON block and appends the chat signal lines (JSON first, as before).
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, sort_keys=True, route_lines=False,
+        text=lambda routed: json.dumps(routed, indent=2, sort_keys=True)
+        + f"\nFINAL_SIGNAL=f\nFINAL_NEXT={next_action}\nCHAT_REPLY=f | NEXT={next_action}",
     )
-    if not json_output:
-        typer.echo("FINAL_SIGNAL=f")
-        typer.echo(f"FINAL_NEXT={next_action}")
-        typer.echo(f"CHAT_REPLY=f | NEXT={next_action}")
     raise typer.Exit(code=2)
 
 
