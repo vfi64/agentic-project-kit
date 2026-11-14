@@ -497,26 +497,28 @@ def pr_complete_command(
     result_status = str(payload["result_status"])
     final_signal = "d" if result_status == "PASS" else ("p" if result_status == "PENDING" else "f")
 
-    if json_output:
-        typer.echo(json.dumps(payload, indent=None if summary else 2, ensure_ascii=False))
-    else:
-        typer.echo("*" * 36 + " START SUMMARY " + "*" * 36)
-        typer.echo("TRANSFER_PR_COMPLETE")
-        typer.echo("")
-        typer.echo(_summary_line("STATE", result_status))
-        typer.echo(_summary_line("RETURNCODE", returncode))
-        typer.echo("")
-        typer.echo("LIFECYCLE")
-        typer.echo(_summary_line("- PR", pr_number))
-        typer.echo(_summary_line("- FAILED_STEP", failed_step or "none"))
-        typer.echo(_summary_line("- STEPS", len(steps)))
-        typer.echo("")
-        typer.echo(_summary_line("NEXT", next_action))
-        typer.echo(_summary_line("CHAT_REPLY", f"{final_signal} | NEXT={next_action}"))
-        typer.echo("*" * 35 + " END SUMMARY " + "*" * 36)
+    def text(routed: dict[str, object]) -> str:
+        lines = [
+            "*" * 36 + " START SUMMARY " + "*" * 36,
+            "TRANSFER_PR_COMPLETE",
+            "",
+            _summary_line("STATE", result_status),
+            _summary_line("RETURNCODE", returncode),
+            "",
+            "LIFECYCLE",
+            _summary_line("- PR", pr_number),
+            _summary_line("- FAILED_STEP", failed_step or "none"),
+            _summary_line("- STEPS", len(steps)),
+            "",
+            _summary_line("NEXT", next_action),
+            _summary_line("CHAT_REPLY", f"{final_signal} | NEXT={next_action}"),
+            "*" * 35 + " END SUMMARY " + "*" * 36,
+        ]
+        if summary and routed.get("evidence_path"):
+            lines.append(f"Evidence: {routed['evidence_path']}")
+        return "\n".join(lines)
 
-    if summary and not json_output and payload.get("evidence_path"):
-        typer.echo(f"Evidence: {payload['evidence_path']}")
+    _emit_transfer(payload, json_output=json_output, indent=None if summary else 2, ensure_ascii=False, text=text)
 
     if output_returncode != 0:
         raise typer.Exit(code=output_returncode)

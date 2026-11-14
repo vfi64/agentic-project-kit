@@ -246,21 +246,32 @@ def _emit_successor_package(
             input_digest=runtime["input_digest"], run_id=runtime["run_id"],
             result_status=validate_runtime_identity(runtime, expected_head=runtime["head"]),
         )
+    findings = payload["findings"]
+    if payload["result_status"] in ROUTE_STATUSES and findings:
+        payload["next_command_reason"] = "Successor package validation: " + first_line(
+            findings[0] if isinstance(findings[0], str) else json.dumps(findings[0], sort_keys=True))
     if json_output:
-        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False, sort_keys=True))
+        _emit_transfer(payload, json_output=True, indent=2, ensure_ascii=False, sort_keys=True)
         if payload["result_status"] != "PASS":
             raise typer.Exit(code=1)
         return
     if render_prompt:
-        typer.echo(result.successor_prompt)
-        if runtime is not None:
-            typer.echo("\n## Runtime identity for this handoff\n```json\n" + json.dumps(runtime, indent=2, sort_keys=True) + "\n```")
-            if payload["result_status"] != "PASS":
-                raise typer.Exit(code=1)
+        def prompt(_payload) -> str:
+            if runtime is None:
+                return result.successor_prompt
+            return (result.successor_prompt + "\n\n## Runtime identity for this handoff\n```json\n"
+                    + json.dumps(runtime, indent=2, sort_keys=True) + "\n```")
+
+        _emit_transfer(payload, json_output=False, text=prompt)
+        if runtime is not None and payload["result_status"] != "PASS":
+            raise typer.Exit(code=1)
         return
-    typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    typer.echo(f"FINAL_SIGNAL={'d' if result.validation_report['status'] == 'PASS' else 'f'}")
-    typer.echo("FINAL_NEXT=Use successor_prompt.md in the next chat after validating the package.")
+    _emit_transfer(
+        payload, json_output=False, route_lines=False,  # the JSON block carries the route
+        text=lambda routed: json.dumps(routed, indent=2, ensure_ascii=False)
+        + f"\nFINAL_SIGNAL={'d' if result.validation_report['status'] == 'PASS' else 'f'}"
+        + "\nFINAL_NEXT=Use successor_prompt.md in the next chat after validating the package.",
+    )
 
 @transfer_app.command("chat-switch-complete")
 def chat_switch_complete(
@@ -331,7 +342,6 @@ def remote_work_start(
     main_branch: str = typer.Option("main", "--main-branch", help="Base branch for new work branches."),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON only."),
 ) -> None:
-    import json
     import re
     import subprocess
     from datetime import datetime, timezone
@@ -428,10 +438,9 @@ def remote_work_start(
         "next_action": next_action,
     }
 
-    if json_output:
-        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    else:
-        _echo_transfer_payload_summary(
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, ensure_ascii=False,
+        text=lambda _payload: _echo_transfer_payload_summary(
             title="TRANSFER_REMOTE_WORK_START",
             result_status=result_status,
             final_signal=final_signal,
@@ -442,7 +451,8 @@ def remote_work_start(
                 "BLOCKERS": len(blockers),
                 "STEPS": len(steps),
             },
-        )
+        ),
+    )
 
 def _render_latest_transfer_report_summary(report_text: str) -> str:
     try:

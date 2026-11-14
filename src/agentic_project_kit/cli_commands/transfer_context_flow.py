@@ -123,10 +123,9 @@ def verify_llm_context_refresh(
         "checked": checked,
     }
 
-    if json_output:
-        typer.echo(json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False))
-    else:
-        _echo_transfer_payload_summary(
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, sort_keys=True, ensure_ascii=False,
+        text=lambda _payload: _echo_transfer_payload_summary(
             title="TRANSFER_VERIFY_LLM_CONTEXT_REFRESH",
             result_status=result_status,
             final_signal=final_signal,
@@ -136,7 +135,8 @@ def verify_llm_context_refresh(
                 "LATEST_CONTEXT": checked.get("latest_handoff_report", {}).get("llm_execution_context_present", False),
                 "BLOCKERS": len(blockers),
             },
-        )
+        ),
+    )
 
     if blockers:
         raise typer.Exit(code=2)
@@ -162,10 +162,9 @@ def refresh_llm_context_carriers_command(
         typer.echo(json.dumps(payload, indent=2, sort_keys=True) if json_output else f"REFRESH_LLM_CONTEXT_CARRIERS_BLOCKED\nerror={exc}")
         raise typer.Exit(code=2) from exc
 
-    if json_output:
-        typer.echo(json.dumps(payload, indent=2, sort_keys=True))
-    else:
-        _echo_transfer_payload_summary(
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, sort_keys=True,
+        text=lambda _payload: _echo_transfer_payload_summary(
             title="TRANSFER_REFRESH_LLM_CONTEXT_CARRIERS",
             result_status=str(payload["result_status"]),
             final_signal=str(payload["final_signal"]),
@@ -174,7 +173,8 @@ def refresh_llm_context_carriers_command(
                 "OUTBOX": payload["outbox_path"],
                 "LATEST": payload["latest_handoff_report_path"],
             },
-        )
+        ),
+    )
 
 @transfer_app.command("restore-known-volatile")
 def restore_known_volatile(
@@ -335,10 +335,9 @@ def sync_main(
         "blockers": blockers,
         "steps": steps,
     }
-    if json_output:
-        typer.echo(json.dumps(payload, indent=2, ensure_ascii=False))
-    else:
-        _echo_transfer_payload_summary(
+    _emit_transfer(
+        payload, json_output=json_output, indent=2, ensure_ascii=False,
+        text=lambda _payload: _echo_transfer_payload_summary(
             title="TRANSFER_SYNC_MAIN",
             result_status=status,
             final_signal=final_signal,
@@ -348,7 +347,8 @@ def sync_main(
                 "BLOCKERS": len(blockers),
                 "STEPS": len(steps),
             },
-        )
+        ),
+    )
     if blockers:
         raise typer.Exit(code=1)
 
