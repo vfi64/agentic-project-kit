@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import typer
 
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason
 from agentic_project_kit.chat_entrypoint_contract import (
     render_chat_refresher,
     render_chat_session_start,
@@ -28,7 +29,10 @@ def chat_session_start_command(
 ) -> None:
     """Render the session-start refresher and full inline command list."""
     try:
-        typer.echo(render_chat_session_start(mode), nl=False)
+        text = render_chat_session_start(mode)
     except ValueError as exc:
-        typer.echo(str(exc), err=True)
+        payload = {"kind": "chat_session_start", "result_status": "BLOCKED", "mode": mode, "error": str(exc),
+                   **human_reason(f"{exc}; pick one of the --mode values copy-paste, remote or file-transfer.")}
+        emit_routed(payload, json_output=False, text=f"{exc}\n", err=True)
         raise typer.Exit(2) from exc
+    emit_routed({"kind": "chat_session_start", "result_status": "PASS", "mode": mode}, json_output=False, text=text)

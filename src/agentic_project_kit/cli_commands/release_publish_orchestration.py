@@ -1,11 +1,12 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 
 import typer
 
 from agentic_project_kit import __version__ as PACKAGE_VERSION
+from agentic_project_kit.blocked_route import first_line
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason
 from agentic_project_kit.release_publish_orchestration import (
     evaluate_release_publish_plan,
     render_release_publish_plan,
@@ -30,9 +31,13 @@ def release_publish_command(
         allow_execute=allow_execute,
         expected_signature=expected_signature,
     )
-    if json_output:
-        typer.echo(json.dumps(plan.as_dict(), indent=2, sort_keys=True))
-    else:
-        typer.echo(render_release_publish_plan(plan), nl=False)
+    payload = {**plan.as_dict(), "result_status": plan.status}
+    if not plan.ok:
+        first = plan.blockers[0]
+        payload.update(human_reason(
+            f"release-publish has {len(plan.blockers)} blocker(s), first {first.name}: "
+            f"{first_line(first.detail) or 'no detail'}"
+        ))
+    emit_routed(payload, json_output=json_output, text=render_release_publish_plan(plan))
     if not plan.ok:
         raise typer.Exit(code=plan.returncode)

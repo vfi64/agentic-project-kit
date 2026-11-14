@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
-import json
 from pathlib import Path
 
 import typer
+
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason
 
 from agentic_project_kit.communication_artifact_gc import (
     DEFAULT_TMP_LOG_TTL_SECONDS,
@@ -20,11 +21,14 @@ from agentic_project_kit.local_garbage_collector import run_local_garbage_collec
 from agentic_project_kit.workspace import load_workspace
 
 
+MUTUALLY_EXCLUSIVE_MODES = "FAIL_MUTUALLY_EXCLUSIVE_MODES"
+
+
 def _message_lines(message: str) -> list[str]:
     return [line for line in message.splitlines() if line.strip()]
 
 
-def _emit_json(
+def _gc_payload(
     *,
     mode: str,
     outcome: str,
@@ -32,38 +36,41 @@ def _emit_json(
     execute: bool,
     ttl_seconds: int | None = None,
     older_than: str = "",
-) -> None:
+) -> dict[str, object]:
     lines = _message_lines(message)
-    typer.echo(
-        json.dumps(
-            {
-                "schema_version": 1,
-                "kind": "artifact_gc_result",
-                "mode": mode,
-                "result_status": "PASS" if _ok(outcome) else "FAIL",
-                "outcome": outcome,
-                "execute": execute,
-                "dry_run": not execute,
-                "ttl_seconds": ttl_seconds,
-                "older_than": older_than or None,
-                "candidate_count": len(lines),
-                "candidates": lines,
-                "remote_execution_policy": {
-                    "status": "not_automatic",
-                    "allowed_path": "dry-run report -> explicit confirm -> normal commit/PR lifecycle",
-                    "forbidden_path": "ad-hoc remote deletion or a new transfer gc-logs command",
-                },
-            },
-            indent=2,
-            sort_keys=True,
-        )
-    )
+    payload: dict[str, object] = {
+        "schema_version": 1,
+        "kind": "artifact_gc_result",
+        "mode": mode,
+        "result_status": "PASS" if _ok(outcome) else "FAIL",
+        "outcome": outcome,
+        "execute": execute,
+        "dry_run": not execute,
+        "ttl_seconds": ttl_seconds,
+        "older_than": older_than or None,
+        "candidate_count": len(lines),
+        "candidates": lines,
+        "remote_execution_policy": {
+            "status": "not_automatic",
+            "allowed_path": "dry-run report -> explicit confirm -> normal commit/PR lifecycle",
+            "forbidden_path": "ad-hoc remote deletion or a new transfer gc-logs command",
+        },
+    }
+    if not _ok(outcome):
+        payload.update(human_reason(_gc_fail_reason(outcome, lines)))
+    return payload
 
 
-def _emit(outcome: str, message: str) -> None:
-    typer.echo(outcome)
-    if message:
-        typer.echo(message)
+def _gc_fail_reason(outcome: str, lines: list[str]) -> str:
+    """G3: no Kit command resolves a refused collection; a person looks at the refused path."""
+    if outcome == MUTUALLY_EXCLUSIVE_MODES:
+        return "Choose only one GC mode: --tmp-logs, --local-tmp-contents, --transfer-runs or --report-retention."
+    refused = lines[0] if lines else "a candidate"
+    return f"{outcome}: the collector refused {refused}; inspect that path by hand, then rerun the dry run."
+
+
+def _gc_text(outcome: str, message: str) -> str:
+    return f"{outcome}\n{message}\n" if message else f"{outcome}\n"
 
 
 def _ok(outcome: str) -> bool:
@@ -118,17 +125,15 @@ def artifact_gc_command(
     """Dry-run by default garbage collector for transient communication artifacts."""
     selected_modes = sum(1 for enabled in (tmp_logs, local_tmp_contents, transfer_runs, report_retention) if enabled)
     if selected_modes > 1:
-        if json_output:
-            _emit_json(
-                mode="invalid",
-                outcome="FAIL_MUTUALLY_EXCLUSIVE_MODES",
-                message="Choose only one GC mode.",
-                execute=execute,
-                ttl_seconds=ttl_seconds,
-                older_than=older_than,
-            )
-        else:
-            typer.echo("FAIL_MUTUALLY_EXCLUSIVE_MODES")
+        payload = _gc_payload(
+            mode="invalid",
+            outcome=MUTUALLY_EXCLUSIVE_MODES,
+            message="Choose only one GC mode.",
+            execute=execute,
+            ttl_seconds=ttl_seconds,
+            older_than=older_than,
+        )
+        emit_routed(payload, json_output=json_output, text=_gc_text(MUTUALLY_EXCLUSIVE_MODES, ""))
         raise typer.Exit(code=1)
 
     effective_ttl_seconds = _ttl_from_older_than(older_than, default_ttl_seconds=ttl_seconds)
@@ -151,91 +156,52 @@ def artifact_gc_command(
                 "forbidden_path": "remote tmp cleanup, report retention, or git push from this mode",
             },
         }
-        if json_output:
-            typer.echo(json.dumps(result, indent=2, sort_keys=True))
-        else:
-            typer.echo("PASS_LOCAL_TMP_CONTENTS" if result["result_status"] == "PASS" else "FAIL_LOCAL_TMP_CONTENTS")
-            for path in [*result.get("deleted", []), *result.get("deleted_directories", [])]:
-                typer.echo(path)
-        if result["result_status"] != "PASS":
+        passed = result["result_status"] == "PASS"
+        if not passed:
+            errors = result.get("errors") or []
+            first = errors[0] if errors and isinstance(errors[0], dict) else {}
+            detail = f" First error: {first.get('path')}: {first.get('error')}" if first else ""
+            result.update(human_reason(f"{result.get('next_action') or 'Local tmp/ cleanup failed.'}{detail}"))
+        text = "PASS_LOCAL_TMP_CONTENTS\n" if passed else "FAIL_LOCAL_TMP_CONTENTS\n"
+        text += "".join(f"{path}\n" for path in [*result.get("deleted", []), *result.get("deleted_directories", [])])
+        emit_routed(result, json_output=json_output, text=text)
+        if not passed:
             raise typer.Exit(code=1)
         return
 
-    if tmp_logs:
-        tmp_root = load_workspace(Path(".")).tmp() if local_tmp else default_os_tmp_root()
-        outcome, message = execute_tmp_log_gc(tmp_root, execute=execute, ttl_seconds=effective_ttl_seconds)
-        if json_output:
-            _emit_json(
-                mode="tmp-logs-local" if local_tmp else "tmp-logs",
-                outcome=outcome,
-                message=message,
-                execute=execute,
-                ttl_seconds=effective_ttl_seconds,
-                older_than=older_than,
-            )
+    if tmp_logs or transfer_runs or report_retention:
+        if tmp_logs:
+            tmp_root = load_workspace(Path(".")).tmp() if local_tmp else default_os_tmp_root()
+            outcome, message = execute_tmp_log_gc(tmp_root, execute=execute, ttl_seconds=effective_ttl_seconds)
+            mode = "tmp-logs-local" if local_tmp else "tmp-logs"
+        elif transfer_runs:
+            outcome, message = execute_transfer_run_report_gc(Path("."), execute=execute, ttl_seconds=effective_ttl_seconds)
+            mode = "transfer-runs"
         else:
-            _emit(outcome, message)
-        if not _ok(outcome):
-            raise typer.Exit(code=1)
-        return
-
-    if transfer_runs:
-        outcome, message = execute_transfer_run_report_gc(Path("."), execute=execute, ttl_seconds=effective_ttl_seconds)
-        if json_output:
-            _emit_json(
-                mode="transfer-runs",
-                outcome=outcome,
-                message=message,
-                execute=execute,
-                ttl_seconds=effective_ttl_seconds,
-                older_than=older_than,
-            )
-        else:
-            _emit(outcome, message)
-        if not _ok(outcome):
-            raise typer.Exit(code=1)
-        return
-
-    if report_retention:
-        outcome, message = execute_report_retention_gc(Path("."), execute=execute, ttl_seconds=effective_ttl_seconds)
-        if json_output:
-            _emit_json(
-                mode="report-retention",
-                outcome=outcome,
-                message=message,
-                execute=execute,
-                ttl_seconds=effective_ttl_seconds,
-                older_than=older_than,
-            )
-        else:
-            _emit(outcome, message)
+            outcome, message = execute_report_retention_gc(Path("."), execute=execute, ttl_seconds=effective_ttl_seconds)
+            mode = "report-retention"
+        payload = _gc_payload(
+            mode=mode,
+            outcome=outcome,
+            message=message,
+            execute=execute,
+            ttl_seconds=effective_ttl_seconds,
+            older_than=older_than,
+        )
+        emit_routed(payload, json_output=json_output, text=_gc_text(outcome, message))
         if not _ok(outcome):
             raise typer.Exit(code=1)
         return
 
     if execute:
         outcome, message = execute_gc(Path("."))
-        if json_output:
-            _emit_json(
-                mode="communication-artifacts",
-                outcome=outcome,
-                message=message,
-                execute=execute,
-            )
-        else:
-            _emit(outcome, message)
+        payload = _gc_payload(mode="communication-artifacts", outcome=outcome, message=message, execute=execute)
+        emit_routed(payload, json_output=json_output, text=_gc_text(outcome, message))
         if not outcome.startswith("PASS"):
             raise typer.Exit(code=1)
         return
 
-    message = render_plan(collect_candidates(Path(".")))
-    if json_output:
-        outcome, *rest = message.splitlines()
-        _emit_json(
-            mode="communication-artifacts",
-            outcome=outcome,
-            message="\n".join(rest),
-            execute=False,
-        )
-    else:
-        typer.echo(message)
+    plan = render_plan(collect_candidates(Path(".")))
+    outcome, *rest = plan.splitlines()
+    payload = _gc_payload(mode="communication-artifacts", outcome=outcome, message="\n".join(rest), execute=False)
+    emit_routed(payload, json_output=json_output, text=f"{plan}\n")

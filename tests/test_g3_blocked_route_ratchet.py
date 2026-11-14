@@ -57,16 +57,14 @@ EMITTER_GUARDED = frozenset({
     "agentic-kit transfer remote-work-start", "agentic-kit transfer sync-main",
     "agentic-kit workspace adopt", "agentic-kit workspace dpa-intake", "agentic-kit workspace init",
     "agentic-kit workspace remove", "agentic-kit workspace upgrade", "agentic-kit docs lifecycle sweep",
-    "agentic-kit dpa final-closeout-check",
+    "agentic-kit dpa final-closeout-check", "agentic-kit artifact-gc", "agentic-kit chat session-start",
+    "agentic-kit workflow go", "agentic-kit release-prep", "agentic-kit release-publish",
+    "agentic-kit post-release-doi-closeout",
 })
 
 # Not yet conformant. May only shrink: lower DEBT_CEILING whenever an entry leaves.
-DEBT_CEILING = 8
-DEBT = frozenset({
-    "agentic-kit artifact-gc", "agentic-kit chat session-start", "agentic-kit github-create", "agentic-kit init",
-    "agentic-kit post-release-doi-closeout", "agentic-kit release-prep", "agentic-kit release-publish",
-    "agentic-kit workflow go",
-})
+DEBT_CEILING = 2
+DEBT = frozenset({"agentic-kit github-create", "agentic-kit init"})
 ROUTING_FIRST_STATEMENT = "payload = with_route(payload)"
 
 

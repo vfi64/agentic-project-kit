@@ -6,10 +6,12 @@ import sys
 from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
+from typing import NoReturn
 
 
 import typer
 
+from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason, read_only_route
 from agentic_project_kit.transfer_repo_actions import RepoActionResult, branch_delete
 from agentic_project_kit.workspace import LEGACY_DEFAULTS, load_workspace
 
@@ -423,18 +425,51 @@ def workflow_go(
 ) -> None:
     """Request the configured workflow and run one bounded step."""
     root = project_root.resolve()
-    state = _read_state(root)
-    if state != "IDLE":
-        raise typer.BadParameter(f"refusing to start workflow from state: {state}")
-    guard_reason = _workflow_go_guard_reason(root)
-    if guard_reason is not None:
-        raise typer.BadParameter(guard_reason)
-    _workflow_request_state(root)
+    status_route = read_only_route("workflow", "status", "--explain", root=project_root)
+    try:
+        state = _read_state(root)
+        if state != "IDLE":
+            _emit_go_refusal(f"refusing to start workflow from state: {state}", status_route)
+        guard_reason = _workflow_go_guard_reason(root)
+        if guard_reason is not None:
+            _emit_go_refusal(guard_reason, human_reason(
+                f"{guard_reason}; commit or stash the changes, or switch to main, then rerun workflow go."
+            ))
+        _workflow_request_state(root)
+    except typer.BadParameter as exc:
+        _emit_go_refusal(str(exc.message), human_reason(f"{exc.message}; restore it before workflow go."))
     _set_workflow_request_state(root, "REQUESTED")
-    typer.echo(f"Current workflow request file: {WORK_FILE}")
-    typer.echo("Workflow request state: REQUESTED")
-    typer.echo("Running one bounded workflow step.")
-    raise typer.Exit(code=_run_next_step(root))
+    emit_routed(
+        {"kind": "workflow_go", "result_status": "PASS", "workflow_request_state": "REQUESTED"},
+        json_output=False,
+        text=(
+            f"Current workflow request file: {WORK_FILE}\n"
+            "Workflow request state: REQUESTED\n"
+            "Running one bounded workflow step.\n"
+        ),
+    )
+    try:
+        returncode = _run_next_step(root)
+    except typer.BadParameter as exc:
+        _emit_go_refusal(str(exc.message), human_reason(f"{exc.message}; restore it, then rerun workflow go."))
+    if returncode != 0:
+        emit_routed(
+            {"kind": "workflow_go", "result_status": "FAIL", "step_returncode": returncode, **status_route},
+            json_output=False,
+            text=f"Workflow step ended with exit code {returncode}.\n",
+        )
+    raise typer.Exit(code=returncode)
+
+
+def _emit_go_refusal(message: str, route: dict[str, object]) -> NoReturn:
+    """G3: workflow go refuses with a route; exit 2 as for the former usage error."""
+    emit_routed(
+        {"kind": "workflow_go", "result_status": "BLOCKED", "error": message, **route},
+        json_output=False,
+        text=f"Error: {message}\n",
+        err=True,
+    )
+    raise typer.Exit(code=2)
 
 
 @workflow_app.command("status")
