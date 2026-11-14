@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "agentic_kit_journey_contracts",
-  "law": "G4 (owner plan 2026-11-13): fixed workflows run as machine contracts against the built wheel in a disposable workspace with a local bare origin. Measures per journey: approvals (owner consents, exact baseline) and blocked (every Kit step ends PASS, PLANNED or AWAITING_APPROVAL; baseline 0). A worse measure fails CI. Offline the journeys stop at the GitHub boundary (work finish as dry run); J2 emulates merge and post-merge closeout with git and handoff steps. Approvals count signed executions and steps with effects beyond none/fetch/push/network_read (owner decision 2026-11-13).",
+  "law": "G4 (owner plan 2026-11-13): fixed workflows run as machine contracts against the built wheel in a disposable workspace with a local bare origin. Measures per journey: approvals (owner consents, exact baseline) and blocked (every Kit step ends PASS, PLANNED or AWAITING_APPROVAL; baseline 0). A worse measure fails CI. Offline the journeys stop at the GitHub boundary (work finish as dry run); J2 emulates merge and post-merge closeout with git and handoff steps. Approvals count signed executions and steps with effects beyond none/fetch/push/network_read (owner decision 2026-11-13); a release run asks for consent only through a signed execution. J4 runs a release run in the release fixture, whose remotes the runner confines to the run's temporary root; it declares one interruption (the origin refuses B4's push), the only step that may end BLOCKED, and stops at the signed resume gate, whose execution is the GitHub part.",
   "journeys": [
     {
       "id": "J1",
@@ -63,10 +63,30 @@
           {"run": ["agentic-kit", "work", "finish", "--branch", "feat/j3-journey", "--title", "J3 journey", "--message", "J3 journey", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PLANNED"}, "stdout_contains": "publish-existing-commits"}}
         ]
       }
+    },
+    {
+      "id": "J4",
+      "title": "Release interrupted inside B4, then resumed",
+      "approvals": 1,
+      "interruption": {"step": 2, "blocked_step": "B4", "cause": "the origin refuses the push of the release branch (push URL set to a missing path), so B4 stops after its release commit"},
+      "machine": {
+        "fixture": "external_release",
+        "origin": true,
+        "covers": "J4 (K7): a release run plans B4 and executes it signed; the origin refuses the push, so B4 stops after the release commit with nothing on the origin. The next plan run offers the signed K7 resume gate (publish the existing commits with work finish) instead of blocking with changed-paths-drift, without a GitHub call and without changing the worktree.",
+        "steps": [
+          {"run": ["agentic-kit", "release", "run", "--version", "1.0.1", "--summary-line", "Add diagnostics with regression tests, verified release metadata and successor handoff evidence", "--json"], "expect": {"returncode": 0, "json": {"result_status": "AWAITING_APPROVAL", "current_step": "B4"}}, "capture": {"signature": "gate.approval_signature"}},
+          {"run": ["git", "remote", "set-url", "--push", "origin", "{origin}.unreachable"], "expect": {"returncode": 0}},
+          {"run": ["agentic-kit", "release", "run", "--version", "1.0.1", "--execute", "--expected-signature", "{signature}", "--approved-by", "J4 journey", "--consent-source", "journey contract J4", "--json"], "expect": {"returncode": 2, "json": {"result_status": "BLOCKED", "current_step": "B4"}}},
+          {"run": ["git", "remote", "set-url", "--push", "origin", "{origin}"], "expect": {"returncode": 0}},
+          {"run": ["git", "ls-remote", "origin", "refs/heads/codex/release-1.0.1"], "expect": {"returncode": 0, "stdout_equals": ""}},
+          {"run": ["git", "log", "-1", "--format=%s"], "expect": {"returncode": 0, "stdout_equals": "Prepare release 1.0.1"}},
+          {"run": ["agentic-kit", "release", "run", "--version", "1.0.1", "--json"], "expect": {"returncode": 0, "json": {"result_status": "AWAITING_APPROVAL", "current_step": "B4", "gate.mode": "resume-unpublished-release-commits", "gate.remote_head": "", "gate.commits[0].subject": "Prepare release 1.0.1"}}},
+          {"run": ["git", "status", "--short", "--untracked-files=no"], "expect": {"returncode": 0, "stdout_equals": ""}}
+        ]
+      }
     }
   ],
   "pending": [
-    {"id": "J4", "reason": "Release interrupted after B4 and resumed: needs K7 (owner plan slice 4)."},
     {"id": "J5", "reason": "Curated release with exactly one line: owner plan slice 4."}
   ]
 }

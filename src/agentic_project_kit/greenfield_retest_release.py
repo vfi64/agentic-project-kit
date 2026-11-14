@@ -51,3 +51,24 @@ def prepare_release_fixture(root: Path, variables: dict[str, str], env: dict[str
         if completed.returncode:
             return [f"release fixture step {' '.join(argv)} failed: {(completed.stderr or completed.stdout)[-800:]}"]
     return []
+
+
+def guard_local_origin(root: Path, base: Path, env: dict[str, str],
+                       run: Callable[..., subprocess.CompletedProcess]) -> None:
+    """Before every Kit step: every remote URL is a local path inside the run's temporary root.
+
+    Journey J4 (G4) executes a signed release run here; its push reaches only the disposable bare
+    origin and its GitHub steps find no GitHub remote. A contract that points a remote elsewhere fails.
+    """
+    listed = run(["git", "remote", "-v"], root, env)
+    if listed.returncode != 0:
+        raise ValueError("local_origin_unreadable")
+    for line in listed.stdout.splitlines():
+        fields = line.split()
+        if len(fields) < 2:
+            continue
+        url = fields[1]
+        if "://" in url or (":" in url.split("/", 1)[0]) or not Path(url).is_absolute():
+            raise ValueError(f"local_origin_refused: {url}")
+        if not Path(url).resolve().is_relative_to(base.resolve()):
+            raise ValueError(f"local_origin_escapes_run_root: {url}")
