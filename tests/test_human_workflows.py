@@ -388,6 +388,8 @@ def test_work_finish_dry_run_surfaces_remote_preflight(monkeypatch):
     assert [step["name"] for step in payload["steps"]] == [
         "repo-status",
         "protected-diff-plan",
+        "kit-ci-pin-guard",
+        "standard-error-scan",
         "remote-preflight",
     ]
     assert ["git", "ls-remote", "--exit-code", "origin", "HEAD"] in calls

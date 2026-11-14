@@ -262,6 +262,13 @@ body options return `BLOCKED` before any subprocess or write.
 Use --no-merge only when the intended result is an open review PR with pending
 post-merge handoff markers.
 
+Before the commit, in plan and execute mode, `work finish` runs the release checks
+that depend only on repository content (G2): `transfer standard-error-scan` without
+`--before-release` and the Kit CI pin guard of `release prepare`. A blocked scan stops
+with `check_id` `KIT-CHK-RELEASE-CONTENT-AT-PR` and lists the failing scan steps; on the
+branches of a release run whose A2 passed, the step is a no-op. The release-only steps
+and their reasons are listed under `release_path` in `reference/check-producers.json`.
+
 ## agentic-kit transfer chat-switch-complete
 
 Generate and validate the deterministic successor package before changing chats:

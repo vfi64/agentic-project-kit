@@ -722,7 +722,7 @@ def standard_error_scan_command(
             "--allow-clean-post-merge-carrier-staleness",
             "--json",
         ],
-        allowed_returncodes={0} if before_release else {0, 2},
+        allowed_returncodes={0} if before_release else {0, 2},  # KIT-CHK-FRESH-CONTEXT-POST-MERGE
     )
     self_hosting_step("docs-audit", [kit_executable, "docs-audit"])
     self_hosting_step("audit-doc-currency", [kit_executable, "audit-doc-currency"])

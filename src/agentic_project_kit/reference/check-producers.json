@@ -13,6 +13,15 @@
     "autonomous_retry": "True when the resolving command may be rerun without new consent (transient obstacles only).",
     "incidents": "Incidents from the 1.3.0 / 0.4.1 workflow-friction analysis that this entry answers."
   },
+  "release_path_law": "G2 (owner 2026-11-13): a blocking check of the release path that depends only on repository content runs at the PR. work finish runs transfer standard-error-scan without --before-release (the release runs it with the flag) and the Kit CI pin guard (KIT-CHK-RELEASE-CONTENT-AT-PR). Every step of release ready, release prepare and the --before-release part of the scan is listed under release_path with its stage; tests/test_g2_release_checks_at_pr.py derives the steps from the source.",
+  "release_path_stages": {
+    "pr": "work finish runs this step (same name) before the commit.",
+    "work-start": "work start runs this step on main before any change.",
+    "release-only": "Needs release inputs (target version, date, previous tag, GitHub metadata, post-merge main); reason says why, check_id names the directory entry whose producer makes the content part pass at the PR.",
+    "release-input": "Validates the arguments of the release command, not repository content.",
+    "advisory": "Never blocks the release (accepted return codes 0 and 2, or warnings only).",
+    "action": "Produces state (sync, refresh, write); checks no repository content."
+  },
   "entries": [
     {
       "id": "KIT-CHK-CURATED-SUMMARY",
@@ -105,6 +114,62 @@
       "migration": "Cockpit C2 after the next Kit release.",
       "autonomous_retry": false,
       "incidents": ["V7"]
+    },
+    {
+      "id": "KIT-CHK-RELEASE-CONTENT-AT-PR",
+      "scope": "kit",
+      "check": "work finish (G2): the repository-content part of the release scan (transfer standard-error-scan without --before-release) and the Kit CI pin guard of release prepare, before the commit; on the branches of a release run whose A2 passed the step is a no-op.",
+      "producer_command": ["work", "finish"],
+      "producer_runs_before_check": true,
+      "migration": "None: the PR scan is the release scan without its release-only steps, so a workspace that passed release ready passes it; one whose release ready would fail learns it at its next work finish instead of in A2.",
+      "autonomous_retry": false,
+      "incidents": ["V5", "V11"]
+    },
+    {
+      "id": "KIT-CHK-FRESH-CONTEXT-POST-MERGE",
+      "scope": "kit",
+      "check": "transfer standard-error-scan --before-release: the LLM context carriers are fresh, or stale only in the clean post-merge state on main.",
+      "producer_command": ["transfer", "refresh-llm-context-carriers"],
+      "producer_runs_before_check": true,
+      "migration": "None: unchanged; release ready runs the refresh before the scan in external workspaces, the Kit accepts clean post-merge carrier staleness.",
+      "autonomous_retry": false,
+      "incidents": []
+    },
+    {
+      "id": "KIT-CHK-DOC-LIFECYCLE-RELEASE-REVIEW",
+      "scope": "kit",
+      "check": "release ready: no document is due for review at the target release (REVIEW_DUE_RELEASE); warn-only in external workspaces unless hygiene.doc_lifecycle is strict.",
+      "producer_command": ["docs", "lifecycle", "sweep"],
+      "producer_runs_before_check": false,
+      "exception": "Review due at a release depends on the target version and the date, so the PR cannot decide it (G2 release-only). release ready names docs lifecycle sweep as the resolving step. No correction planned: when a document is reviewed stays an owner decision at release time.",
+      "migration": "None: unchanged behaviour.",
+      "autonomous_retry": false,
+      "incidents": []
     }
+  ],
+  "release_path": [
+    {"command": "release ready", "step": "sync-main", "stage": "action", "reason": "Brings main up to date before the checks."},
+    {"command": "release ready", "step": "refresh-llm-context-carriers", "stage": "action", "reason": "Regenerates the LLM context carriers in external workspaces (producer of KIT-CHK-FRESH-CONTEXT-POST-MERGE)."},
+    {"command": "release ready", "step": "standard-error-scan", "stage": "pr", "reason": "work finish runs the same scan without --before-release; the release-only additions are listed under standard-error-scan --before-release."},
+    {"command": "release ready", "step": "release-notes-generate", "stage": "release-only", "check_id": "KIT-CHK-RELEASE-NOTE-CATEGORY", "reason": "Needs the previous release tag and the GitHub metadata of every merged PR; its content rule (no Unclassified PR) is set at the PR by work finish (K2)."},
+    {"command": "release ready", "step": "release-prep-dry-run", "stage": "release-only", "check_id": "KIT-CHK-CHANGELOG-UNRELEASED", "reason": "Needs the target version and the release date; the Unreleased rules it applies are checked at the PR by work finish."},
+    {"command": "release ready", "step": "doc-lifecycle-release-review", "stage": "release-only", "check_id": "KIT-CHK-DOC-LIFECYCLE-RELEASE-REVIEW", "reason": "Review due at a release depends on the target version and the date."},
+    {"command": "release ready", "step": "release-status", "stage": "advisory", "reason": "Accepts return codes 0 and 2; reports the release state."},
+    {"command": "release prepare", "step": "kit-ci-pin-guard", "stage": "pr", "reason": "Workflow pins against the installed Kit; work finish runs the same guard."},
+    {"command": "release prepare", "step": "release-notes-generate", "stage": "release-only", "check_id": "KIT-CHK-RELEASE-NOTE-CATEGORY", "reason": "Needs the previous release tag and GitHub PR metadata; the category is set at the PR (K2)."},
+    {"command": "release prepare", "step": "release-prep", "stage": "release-only", "check_id": "KIT-CHK-CHANGELOG-UNRELEASED", "reason": "Writes or previews the release section for the target version and date; the Unreleased rules are checked at the PR."},
+    {"command": "release prepare", "step": "commands-sync-entrypoints", "stage": "action", "reason": "--write only: regenerates command entrypoints."},
+    {"command": "release prepare", "step": "task-selection-review-refresh", "stage": "action", "reason": "--write only: regenerates the task-selection review projection."},
+    {"command": "release prepare", "step": "dpa-readiness-ack-refresh", "stage": "action", "reason": "--write only: refreshes the DPA readiness acknowledgement."},
+    {"command": "release prepare", "step": "successor-handoff-refresh", "stage": "action", "reason": "--write only: regenerates the successor handoff package."},
+    {"command": "release prepare", "step": "docs-pages-fallback-refresh", "stage": "action", "reason": "--write only: regenerates the docs-pages projection."},
+    {"command": "release prepare", "step": "release-prepare-report", "stage": "action", "reason": "--write only: writes the release evidence report."},
+    {"command": "standard-error-scan --before-release", "step": "post-merge-check", "stage": "work-start", "reason": "work start runs it on main before the branch exists."},
+    {"command": "standard-error-scan --before-release", "step": "release-version", "stage": "release-input", "reason": "--version is required with --before-release."},
+    {"command": "standard-error-scan --before-release", "step": "release-from-tag", "stage": "release-input", "reason": "A previous release tag must be given or derivable."},
+    {"command": "standard-error-scan --before-release", "step": "release-status", "stage": "advisory", "reason": "Accepts return codes 0 and 2."},
+    {"command": "standard-error-scan --before-release", "step": "release-notes-generate", "stage": "release-only", "check_id": "KIT-CHK-RELEASE-NOTE-CATEGORY", "reason": "Needs the previous release tag and GitHub PR metadata; the category is set at the PR (K2)."},
+    {"command": "standard-error-scan --before-release", "step": "release-prep-dry-run", "stage": "release-only", "check_id": "KIT-CHK-CHANGELOG-UNRELEASED", "reason": "Needs the target version and the release date; the Unreleased rules are checked at the PR."},
+    {"command": "standard-error-scan --before-release", "step": "fresh-context-clean-post-merge-allowance", "stage": "release-only", "check_id": "KIT-CHK-FRESH-CONTEXT-POST-MERGE", "reason": "Blocks only before a release, on main after the merge; on a feature branch the carriers are stale until the handoff refresh of work finish, so the PR scan runs it without blocking."}
   ]
 }
