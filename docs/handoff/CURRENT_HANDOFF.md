@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `8ee686950019039f48113816c20014d6ba76a62d` (`8ee68695`), after `Workflow friction G2: release checks that depend only on repository content run at the PR (#2792)`.
-Last substantive work state is `8ee686950019039f48113816c20014d6ba76a62d` (`8ee68695`), after `Workflow friction G2: release checks that depend only on repository content run at the PR (#2792)`.
+Current verified main/admin HEAD is `6f1daf1d41f634f90215fb2e1198b8f7b8523625` (`6f1daf1d`), after `Workflow friction K7 + J4: release run resumes a B4 that stopped before its release PR (#2794)`.
+Last substantive work state is `6f1daf1d41f634f90215fb2e1198b8f7b8523625` (`6f1daf1d`), after `Workflow friction K7 + J4: release run resumes a B4 that stopped before its release PR (#2794)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

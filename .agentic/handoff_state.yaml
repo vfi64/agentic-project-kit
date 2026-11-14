@@ -10,8 +10,8 @@ repo:
   default_branch: main
 safe_state:
   branch: main
-  commit: 8ee68695
-  commit_subject: 'Workflow friction G2: release checks that depend only on repository content run at the PR (#2792)'
+  commit: 6f1daf1d
+  commit_subject: 'Workflow friction K7 + J4: release run resumes a B4 that stopped before its release PR (#2794)'
   semantics: last_substantive_work_state
   working_tree_expected_clean: true
   administrative_refresh_prs:
@@ -433,7 +433,7 @@ handoff_maintenance:
   no_redundant_rules: true
   no_contradictory_rules: true
   remove_obsolete_rules_when_system_changes: true
-  latest_successor_prompt: docs/reports/terminal/post-pr2792-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2794-successor-chat-handoff.md
   first_instruction: 'Review PR #1436 and the refreshed successor handoff package
     for the release command authority planning slice. After merge, start from fresh
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
@@ -444,6 +444,6 @@ next_step:
     main and use centralized historical record docs/planning/PROJECT_DIRECTION.yaml#release-command-authority-slice
     before DOI, legacy-doc, absolute-path, or GUI work.'
 evidence:
-  latest_successor_prompt: docs/reports/terminal/post-pr2792-successor-chat-handoff.md
+  latest_successor_prompt: docs/reports/terminal/post-pr2794-successor-chat-handoff.md
 # preservation-anchor: use d for log-backed PASS and f for log-backed FAIL
 # preservation-anchor: nested shell/Python quote layers
