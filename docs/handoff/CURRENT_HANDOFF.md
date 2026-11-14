@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `0bd0ad5d7e15f37f4f054b4b8e0af11b11382f69` (`0bd0ad5d`), after `Workspace CI: key the pip cache on the managed source (G4 live-run preflight) (#2782)`.
-Last substantive work state is `0bd0ad5d7e15f37f4f054b4b8e0af11b11382f69` (`0bd0ad5d`), after `Workspace CI: key the pip cache on the managed source (G4 live-run preflight) (#2782)`.
+Current verified main/admin HEAD is `5662dd38765095d33946c045db864acbf00cdbd7` (`5662dd38`), after `Workflow friction slice 2b: blocked-route ratchet and human marker (G3) (#2784)`.
+Last substantive work state is `5662dd38765095d33946c045db864acbf00cdbd7` (`5662dd38`), after `Workflow friction slice 2b: blocked-route ratchet and human marker (G3) (#2784)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
