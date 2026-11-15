@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: a5f1d58866e5b0bb9b30c9fcd66e8e78ff6286fc
-  short: a5f1d588
-  subject: 'G3 remedy table: routes for KIT-GF-114 to 117 from the live run (#2808)'
+  full: 6ae4bf75e80a1c279d1ee6f4a63c4b7520cdd1be
+  short: 6ae4bf75
+  subject: 'workspace init --publication: choose the publication policy through the Kit (#2810)'
 last_substantive_work_state:
-  full: a5f1d58866e5b0bb9b30c9fcd66e8e78ff6286fc
-  short: a5f1d588
-  subject: 'G3 remedy table: routes for KIT-GF-114 to 117 from the live run (#2808)'
+  full: 6ae4bf75e80a1c279d1ee6f4a63c4b7520cdd1be
+  short: 6ae4bf75
+  subject: 'workspace init --publication: choose the publication policy through the Kit (#2810)'
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
