@@ -326,11 +326,11 @@
       "branch": "fix/kit-gf-118-first-release",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "7143c1e4075fd1d3afab1d5ceef0f90466ff676f",
-      "head_matches_origin_main": true,
+      "head": "9ae55aa197622de5b706be6564dbbb67bb32310b",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "7143c1e4075fd1d3afab1d5ceef0f90466ff676f",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -513,11 +513,11 @@
     "branch": "fix/kit-gf-118-first-release",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "7143c1e4075fd1d3afab1d5ceef0f90466ff676f",
-    "head_matches_origin_main": true,
+    "head": "9ae55aa197622de5b706be6564dbbb67bb32310b",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "7143c1e4075fd1d3afab1d5ceef0f90466ff676f",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
