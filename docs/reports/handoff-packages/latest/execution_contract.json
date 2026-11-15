@@ -323,14 +323,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "main",
+      "branch": "fix/g3-remedy-table-gf114-117",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "a4cc87b439589f86790e2d10b54254b234b4ae28",
-      "head_matches_origin_main": true,
+      "head": "2067910830a07a3305308dbb391af609837593fd",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
       "origin_main": "a4cc87b439589f86790e2d10b54254b234b4ae28",
-      "worktree_clean": false
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -510,14 +510,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "main",
+    "branch": "fix/g3-remedy-table-gf114-117",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "a4cc87b439589f86790e2d10b54254b234b4ae28",
-    "head_matches_origin_main": true,
+    "head": "2067910830a07a3305308dbb391af609837593fd",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
     "origin_main": "a4cc87b439589f86790e2d10b54254b234b4ae28",
-    "worktree_clean": false
+    "worktree_clean": true
   },
   "rules": [
     {
