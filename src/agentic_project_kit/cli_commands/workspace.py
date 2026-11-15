@@ -170,8 +170,15 @@ def workspace_init_command(
     expected_signature: Annotated[str, typer.Option("--expected-signature", help="Reviewed recovery plan signature.")] = "",
     approved_by: Annotated[str, typer.Option("--approved-by", help="Maintainer approving recovery.")] = "",
     consent_source: Annotated[str, typer.Option("--consent-source", help="Source of explicit recovery consent.")] = "",
+    publication: Annotated[str | None, typer.Option(
+        "--publication",
+        help="Publication policy for the manifest: none, github, github+pypi, or github+pypi+zenodo (default).",
+    )] = None,
 ) -> None:
     """Plan or create a bounded operating-layer workspace."""
+
+    # The routes keep the chosen policy, so the recovery they name writes the same manifest.
+    policy_words = ("--publication", publication) if publication else ()
 
     if recover_partial:
         from agentic_project_kit.workspace_recovery import recover_workspace
@@ -180,12 +187,12 @@ def workspace_init_command(
             payload = {"result_status": "BLOCKED", "written": False, "code": "RECOVERY_NO_INJECTION",
                        "reason": "Recovery does not inject CI or pre-commit files.",
                        "next_action": "Plan the recovery without --inject-ci/--inject-pre-commit. " + AFTER_RECOVERY,
-                       **read_only_route(*INIT_ERROR_ROUTES["RECOVERY_NO_INJECTION"], root=root)}
+                       **read_only_route(*INIT_ERROR_ROUTES["RECOVERY_NO_INJECTION"], *policy_words, root=root)}
         else:
             payload = recover_workspace(
                 root, execute=execute, expected_signature=expected_signature,
                 approved_by=approved_by, consent_source=consent_source,
-                name=name, project_type=project_type, profile=profile,
+                name=name, project_type=project_type, profile=profile, publication=publication,
             )
         if payload["result_status"] == "BLOCKED" and not payload.get("next_command"):
             payload.update(human_reason(str(payload.get("reason") or payload.get("next_action") or "Recovery blocked.")))
@@ -204,6 +211,7 @@ def workspace_init_command(
             execute=execute,
             inject_ci=inject_ci,
             inject_pre_commit=inject_pre_commit,
+            publication=publication,
         )
         if execute:
             execute_workspace_init(plan)
@@ -220,6 +228,7 @@ def workspace_init_command(
         payload = _error_payload("workspace_init_result", exc, routes, root)
         if exc.code == "FOREIGN_AGENTIC" and "FOREIGN_AGENTIC" in routes:
             # KIT-GF-114: an init project is recovered, not initialized.
+            payload.update(read_only_route(*routes["FOREIGN_AGENTIC"], *policy_words, root=root))
             payload["next_action"] = "This is a generated project: plan its signed recovery." + (
                 " " + AFTER_RECOVERY if inject_ci else "")
         emit_routed(
