@@ -28,6 +28,8 @@ def release_effects(command, entry, fixture=None):
             return ["none"]
     if path == ("kit", "status") and "--check-release" not in argv:
         return ["none"]
+    if path == ("init",) and "--github" not in argv:
+        return ["none"]  # KIT-GF-117: only --github creates and pushes the repository
     if fixture in FIXTURES and path in {("kit", "status"), ("kit", "update")}:
         rest = argv[3:]
         # No execute, exact install, alternate root, or other effectful options.

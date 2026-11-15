@@ -1,15 +1,15 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 112,
+    "CLOSED": 116,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 8,
-    "local": 68,
-    "owner_remote": 36
+    "local": 70,
+    "owner_remote": 38
   },
   "findings": [
     {
@@ -9102,6 +9102,286 @@
     },
     {
       "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace init --root demo --name demo --inject-ci --json",
+          "agentic-kit workspace init --root demo --recover-partial --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Exit 1 with FAIL FOREIGN_AGENTIC and next_command naming the recovery plan, which then offers its signature; a foreign .agentic/ without a generated contract keeps the human route."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "code FOREIGN_AGENTIC, next_command_kind kit, next_command 'agentic-kit workspace init --recover-partial --root demo', next_command_autonomous true; recovery plan AWAITING_APPROVAL; foreign control next_command_kind human."
+          ]
+        },
+        "machine": {
+          "covers": "workspace init over an init project names the signed recovery plan as next_command, the plan offers its signature, and a foreign .agentic/ keeps the human marker",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "project_created": true,
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "init",
+                "demo",
+                "--type",
+                "python-lib",
+                "--no-pre-commit",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "code": "FOREIGN_AGENTIC",
+                  "next_command": "agentic-kit workspace init --recover-partial --root demo",
+                  "next_command_autonomous": true,
+                  "next_command_kind": "kit",
+                  "result_status": "FAIL"
+                },
+                "returncode": 1
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                "demo",
+                "--name",
+                "demo",
+                "--inject-ci",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "result_status": "AWAITING_APPROVAL",
+                  "written": false
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                "demo",
+                "--recover-partial",
+                "--json"
+              ]
+            },
+            {
+              "write": {
+                "path": "foreign/.agentic/notes.txt",
+                "text": "not a generated project\n"
+              }
+            },
+            {
+              "expect": {
+                "json": {
+                  "code": "FOREIGN_AGENTIC",
+                  "next_command_kind": "human",
+                  "result_status": "FAIL"
+                },
+                "returncode": 1
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                "foreign",
+                "--json"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable directory; agentic-kit init created a python-lib project, whose .agentic/ holds project.yaml but no workspace manifest."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); live run 0107 observed the defect; consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-114",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-114-workspace-init-over-init-project-2026-11-15.md",
+      "title": "workspace init over an init project fails FOREIGN_AGENTIC without naming the recovery route"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit workspace init --root demo --recover-partial --inject-ci --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "Exit 2 with BLOCKED RECOVERY_NO_INJECTION, nothing written, next_command naming the recovery plan without the flag and next_action naming workspace ci-update --inject-ci --execute."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "code RECOVERY_NO_INJECTION, written false, next_command_kind kit, next_command 'agentic-kit workspace init --recover-partial --root demo'; no workspace manifest written."
+          ]
+        },
+        "machine": {
+          "covers": "a recovery with --inject-ci blocks without writing and names the recovery plan as next_command and ci-update as the step after it",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "json": {
+                  "project_created": true,
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "init",
+                "demo",
+                "--type",
+                "python-lib",
+                "--no-pre-commit",
+                "--json"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "code": "RECOVERY_NO_INJECTION",
+                  "next_command": "agentic-kit workspace init --recover-partial --root demo",
+                  "next_command_kind": "kit",
+                  "result_status": "BLOCKED",
+                  "written": false
+                },
+                "returncode": 2
+              },
+              "run": [
+                "agentic-kit",
+                "workspace",
+                "init",
+                "--root",
+                "demo",
+                "--recover-partial",
+                "--inject-ci",
+                "--json"
+              ]
+            },
+            {
+              "assert": {
+                "absent": [
+                  "demo/.agentic/config.yaml",
+                  "demo/.github/workflows/agentic-gate.yaml"
+                ]
+              }
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable directory; agentic-kit init created a python-lib project without a workspace manifest."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); live run 0107 observed the defect; consumer VERIFIED_FIXED remains independent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-115",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-115-recovery-with-injection-flags-2026-11-15.md",
+      "title": "workspace init --recover-partial with --inject-ci blocks without naming the recovery and ci-update route"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "owner": "Approving owner",
+          "signature": "B4 gate signature",
+          "source": "Consent source",
+          "version": "Release version"
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --execute --expected-signature {signature} --approved-by {owner} --consent-source {source} --json"
+        ],
+        "execution_class": "owner_remote",
+        "expected": [
+          "Exit 2 with BLOCKED at B4 and next_command 'agentic-kit release run --version {version}' (kit, autonomous); the plan run then offers the K7 resume."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_a_b4_stop_without_its_own_route_names_the_plan_run and the G3 remedy table case release run/B4; journey J4 runs the interruption itself."
+          ]
+        },
+        "preconditions": [
+          "A release run whose signed B4 committed the release commit and stopped because the origin refused the push."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
+        ],
+        "verification": "Native regression tests fail on the previous code (human marker with 'Inspect … and fix step B4'). The route pushes, opens a pull request and merges, so the local retest harness does not run it; journey J4 covers the interruption offline, the live run before 1.4.0 covers it on GitHub.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-116",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-116-release-b4-stop-route-2026-11-15.md",
+      "title": "release run B4 stop after a refused push routes only to the log, not to the plan run that offers the resume"
+    },
+    {
+      "external_retest": {
+        "bindings": {
+          "name": "Disposable repository name",
+          "owner": "GitHub owner"
+        },
+        "commands": [
+          "agentic-kit init {name} --type python-lib --no-pre-commit --github --owner {owner} --visibility private --json"
+        ],
+        "execution_class": "owner_remote",
+        "expected": [
+          "The manifest lists push and release_publish for init and github-create; init without --github stays without remote effects; a journey counts init --github as an owner consent."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native test_init_remote_effects_follow_the_github_flag: manifest effects, release_effects narrowing and needs_consent for both forms."
+          ]
+        },
+        "preconditions": [
+          "A disposable GitHub account or organization where a new private repository may be created and deleted."
+        ],
+        "remote_effects": [
+          "push",
+          "release_publish"
+        ],
+        "verification": "Native regression test fails on the previous manifest (needs_consent False for init --github). The route creates a GitHub repository, so the local retest harness does not run it; the live run before 1.4.0 counts its consent.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-117",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-117-init-github-remote-effects-2026-11-15.md",
+      "title": "Command manifest lists init with remote effects none although init --github creates the repository and pushes"
+    },
+    {
+      "external_retest": {
         "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
@@ -9239,7 +9519,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 64,
+  "machine_contracts": 66,
   "schema_version": 1,
-  "source_sha256": "778fe6b2eba0cd0e90fd6392251b60d58faa21c0ef35d31ea32e30d93682ddd5"
+  "source_sha256": "ff1f487c86e7fc76ebe473e61ad1b1eb59f28ced907d7e0bee054dddc917e054"
 }

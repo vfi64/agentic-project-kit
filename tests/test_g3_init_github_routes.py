@@ -264,3 +264,19 @@ def test_text_questions_without_an_answer_block_instead_of_aborting(tmp_path: Pa
     result = _invoke(["github-create", "--root", str(tmp_path), "--visibility", "public"], 1, input="")
     assert "Error: public repository creation declined\n" in result.stderr
     assert list(tmp_path.iterdir()) == []
+
+
+def test_init_remote_effects_follow_the_github_flag():
+    # KIT-GF-117: init --github creates the repository and pushes (github-create's effects), so a
+    # journey counts it as an owner consent; init without --github stays without remote effects.
+    from agentic_project_kit.greenfield_retest import check_route
+    from agentic_project_kit.greenfield_retest_release_check import release_effects
+    from agentic_project_kit.journey_contracts import needs_consent
+
+    github = ["agentic-kit", "init", "demo", "--github", "--owner", "o", "--visibility", "private", "--json"]
+    local = ["agentic-kit", "init", "demo", "--no-pre-commit", "--json"]
+    for argv in (github, ["agentic-kit", "github-create", "--json"]):
+        assert check_route(argv)["remote_effects"] == ["push", "release_publish"]
+    assert release_effects(github, check_route(github)) == ["push", "release_publish"]
+    assert release_effects(local, check_route(local)) == ["none"]
+    assert needs_consent(github) is True and needs_consent(local) is False

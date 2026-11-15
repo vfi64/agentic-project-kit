@@ -2075,6 +2075,26 @@ documents:
     owner: maintainers
     status: active
     summary: Invalid artifact-gc cutoff counterprobe and routed result.
+  - path: docs/reports/greenfield/KIT-GF-114-workspace-init-over-init-project-2026-11-15.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: workspace init over an init project names the recovery route.
+  - path: docs/reports/greenfield/KIT-GF-115-recovery-with-injection-flags-2026-11-15.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Recovery with injection flags names recovery and ci-update.
+  - path: docs/reports/greenfield/KIT-GF-116-release-b4-stop-route-2026-11-15.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Release run B4 stop names the plan run that offers the resume.
+  - path: docs/reports/greenfield/KIT-GF-117-init-github-remote-effects-2026-11-15.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: Remote effects of init --github and needs_consent.
   - path: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
     class: evidence/log
     owner: maintainers

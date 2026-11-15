@@ -7209,6 +7209,7 @@
       ],
       "qualified_name": "agentic-kit github-create",
       "remote_effects": [
+        "push",
         "release_publish"
       ],
       "replaces_raw": [],
@@ -8021,7 +8022,8 @@
       ],
       "qualified_name": "agentic-kit init",
       "remote_effects": [
-        "none"
+        "push",
+        "release_publish"
       ],
       "replaces_raw": [],
       "safety": "BOUNDED",
@@ -21044,7 +21046,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "a12dcbdf3406",
+    "manifest_sha": "59e0d7f172f2",
     "schema_version": 2
   },
   "schema_version": 3,
