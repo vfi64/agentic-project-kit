@@ -458,6 +458,10 @@ def infer_remote_effects(command: dict[str, Any]) -> list[str]:
         "agentic-kit remote-branch-hygiene": ["network_read"],
         "agentic-kit remote-branch-hygiene-report": ["network_read"],
         "agentic-kit work start": ["fetch"],
+        # KIT-GF-117: gh repo create --source --push creates the repository and pushes the first commit;
+        # init does so with --github only (release_effects narrows init without it to none).
+        "agentic-kit github-create": ["push", "release_publish"],
+        "agentic-kit init": ["push", "release_publish"],
         "agentic-kit dpa wrt-ch001-evidence": ["network_read"],
         "agentic-kit evidence finalize-log": ["push"],
         "agentic-kit evidence commit-paths": ["push"],

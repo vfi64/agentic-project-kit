@@ -44,15 +44,19 @@ from agentic_project_kit.workspace_dpa_intake import (
     render_workspace_dpa_intake_report,
 )
 from agentic_project_kit.cli_commands.routed_output import emit_routed, human_reason, read_only_route
+from agentic_project_kit.g3_remedies import routes_for
 
 workspace_app = typer.Typer(help="Inspect and manage operating-layer workspaces.")
 
 # G3 (owner plan 2026-11-13): the five workspace orchestrators print only through emit_routed, so a
 # BLOCKED or FAIL result names the resolving Kit command or carries the human marker with a reason.
 # Kit routes go to planning runs only (no --execute), which a session may start on its own.
-INIT_ERROR_ROUTES = {"ALREADY_INITIALIZED": ("workspace", "upgrade")}
-UPGRADE_ERROR_ROUTES = {"NO_MANIFEST": ("workspace", "init"), "MANIFEST_CHANGED": ("workspace", "upgrade")}
-REMOVE_ERROR_ROUTES = {"PLAN_CHANGED": ("workspace", "remove")}
+# G3 remedy table (g3_remedies): the Kit command that resolves each error code.
+INIT_ERROR_ROUTES = routes_for("workspace init")
+UPGRADE_ERROR_ROUTES = routes_for("workspace upgrade")
+REMOVE_ERROR_ROUTES = routes_for("workspace remove")
+# KIT-GF-114: CI and pre-commit come after the recovery, through their own Kit route.
+AFTER_RECOVERY = "After the signed recovery, inject CI with agentic-kit workspace ci-update --inject-ci --execute."
 
 
 def _error_payload(kind: str, exc: Exception, routes: dict[str, tuple[str, ...]], root: Path) -> dict[str, object]:
@@ -172,14 +176,18 @@ def workspace_init_command(
     if recover_partial:
         from agentic_project_kit.workspace_recovery import recover_workspace
         if inject_ci or inject_pre_commit:
-            payload = {"result_status": "BLOCKED", "written": False, "reason": "Recovery does not inject CI or pre-commit files."}
+            # KIT-GF-115: the same recovery without the injection flags, then ci-update.
+            payload = {"result_status": "BLOCKED", "written": False, "code": "RECOVERY_NO_INJECTION",
+                       "reason": "Recovery does not inject CI or pre-commit files.",
+                       "next_action": "Plan the recovery without --inject-ci/--inject-pre-commit. " + AFTER_RECOVERY,
+                       **read_only_route(*INIT_ERROR_ROUTES["RECOVERY_NO_INJECTION"], root=root)}
         else:
             payload = recover_workspace(
                 root, execute=execute, expected_signature=expected_signature,
                 approved_by=approved_by, consent_source=consent_source,
                 name=name, project_type=project_type, profile=profile,
             )
-        if payload["result_status"] == "BLOCKED":
+        if payload["result_status"] == "BLOCKED" and not payload.get("next_command"):
             payload.update(human_reason(str(payload.get("reason") or payload.get("next_action") or "Recovery blocked.")))
         # Recovery always answers in JSON (unchanged).
         payload = emit_routed(payload, json_output=True)
@@ -205,8 +213,17 @@ def workspace_init_command(
             text=render_workspace_init_plan(plan, written=execute),
         )
     except WorkspaceInitError as exc:
+        from agentic_project_kit.workspace_recovery import generated_project_recoverable
+        routes = dict(INIT_ERROR_ROUTES)
+        if exc.code == "FOREIGN_AGENTIC" and not generated_project_recoverable(root.resolve()):
+            routes.pop("FOREIGN_AGENTIC")  # a foreign .agentic/ stays with the person
+        payload = _error_payload("workspace_init_result", exc, routes, root)
+        if exc.code == "FOREIGN_AGENTIC" and "FOREIGN_AGENTIC" in routes:
+            # KIT-GF-114: an init project is recovered, not initialized.
+            payload["next_action"] = "This is a generated project: plan its signed recovery." + (
+                " " + AFTER_RECOVERY if inject_ci else "")
         emit_routed(
-            _error_payload("workspace_init_result", exc, INIT_ERROR_ROUTES, root),
+            payload,
             json_output=json_output,
             text=render_workspace_init_error(exc),
         )

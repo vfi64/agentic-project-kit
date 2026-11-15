@@ -130,3 +130,26 @@ def test_approved_directories_are_covered_by_the_files_committed_under_them():
     assert not covers_approved_paths([".agentic/state/handoff/reportsX", "CHANGELOG.md"], approved)
     assert not covers_approved_paths([], [])
     assert covers_approved_paths(sorted(PATHS), PATHS)
+
+
+class _PushRefused(type(_unpushed())):
+    """The resumed work finish stops again (the origin still refuses the push), without a route."""
+
+    def __call__(self, argv, cwd):
+        command = [str(a) for a in argv]
+        if command[1:3] == ["work", "finish"] and "--execute" in command:
+            self.calls.append(command)
+            return self._completed(command, json.dumps({"result_status": "BLOCKED", "blockers": ["push"]}), rc=2)
+        return super().__call__(argv, cwd)
+
+
+def test_a_b4_stop_without_its_own_route_names_the_plan_run(tmp_path):
+    # KIT-GF-116 (G3 remedy table): the stop names the plan run that offers the resume again.
+    _stopped_b4(tmp_path)
+    runner = _PushRefused(pr=False, remote_branch="", commits=("c1",), subjects=PREPARE)
+    gate = _run(tmp_path, runner)["gate"]
+    result = _run(tmp_path, runner, execute=True, expected_signature=gate["approval_signature"])
+    assert result["result_status"] == "BLOCKED" and result["current_step"] == "B4", result
+    assert result["next_command_kind"] == "kit" and result["next_command_autonomous"] is True
+    assert result["next_command"] == f"agentic-kit release run --version 1.2.3 --root {tmp_path}"
+    assert "resume" in result["next_action"]

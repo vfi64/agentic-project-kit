@@ -69,6 +69,23 @@ def _inventory(root: Path, allowed: set[str], directories: set[str]) -> dict[str
     return inventory
 
 
+def generated_project_recoverable(root: Path) -> bool:
+    """KIT-GF-114: ``workspace init`` over an ``init`` project routes to the recovery plan.
+
+    True for an external root with a valid generated project contract of a supported type; the
+    recovery plan itself still checks every file before it offers a signature.
+    """
+    try:
+        if is_agentic_project_kit_development_checkout(root) or (root / ".agentic").is_symlink():
+            return False
+        contract = load_project_contract(root)
+    except (OSError, ValueError, yaml.YAMLError):
+        return False
+    if contract is None or validate_project_contract(contract):
+        return False
+    return contract["project"]["type"] in GENERATOR_TO_WORKSPACE_PROJECT_TYPES
+
+
 def _recovery_plan(root: Path, *, name: str | None, project_type: str | None, profile: str | None) -> tuple[dict, dict[str, str]]:
     if is_agentic_project_kit_development_checkout(root):
         raise ValueError("Recovery is only for external workspaces.")

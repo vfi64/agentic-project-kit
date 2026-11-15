@@ -43,6 +43,19 @@ KIT-GF-113: `tests/test_g3_command_routes.py` requires a routed
 --older-than` and no collection. The test failed before the fix with a Click
 usage error and no JSON.
 
+KIT-GF-114 to KIT-GF-116: `tests/test_g3_remedy_table.py` drives every entry
+of the G3 remedy table (`g3_remedies.REMEDIES`) through its emitter and fails
+when an entry has no case or its emitted `next_command` differs:
+`workspace init` over an `init` project names the recovery, a recovery with
+`--inject-ci` returns `RECOVERY_NO_INJECTION` with the recovery route, and a
+`release run` B4 stop names the plan run (also
+`tests/test_k7_release_b4_resume.py`). The cases failed before with the human
+marker. KIT-GF-114 and KIT-GF-115 have installed-wheel machine contracts.
+
+KIT-GF-117: `tests/test_g3_init_github_routes.py` requires the remote effects
+`push` and `release_publish` for `init` and `github-create`, none for `init`
+without `--github`, and `needs_consent` for `init --github`.
+
 `tests/test_greenfield_retest.py` names GF-104/105/106/108 as the only local
 retests without machine contracts. Their catalog entries must state a native
 regression and the unsupported fixture topology; other new local findings

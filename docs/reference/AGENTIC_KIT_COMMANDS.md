@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: a12dcbdf3406
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 59e0d7f172f2
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -1502,7 +1502,7 @@ Run a governed planner intent through Kit-owned execution surfaces.
 - Surface: `orchestrator`
 - When to use: Create and push a GitHub repository for an initialized project.
 - Dry-run available: `False`
-- Remote effects: `release_publish`
+- Remote effects: `push`, `release_publish`
 
 Create and push a GitHub repository for an initialized project.
 
@@ -1669,7 +1669,7 @@ _No parameters._
 - Surface: `orchestrator`
 - When to use: Create a governed project skeleton with selected profiles and policy packs.
 - Dry-run available: `False`
-- Remote effects: `none`
+- Remote effects: `push`, `release_publish`
 
 Create a governed project skeleton with selected profiles and policy packs.
 

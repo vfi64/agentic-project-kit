@@ -112,6 +112,16 @@ rules:
   documents:
   - path: docs/TEST_GATES.md
     terms: [KIT-GF-113, tests/test_g3_command_routes.py, FAIL_INVALID_OLDER_THAN]
+- id: greenfield-g3-remedy-table
+  description: A BLOCKED or FAIL whose cause a Kit command resolves names that command.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-114, KIT-GF-115, KIT-GF-116, tests/test_g3_remedy_table.py, RECOVERY_NO_INJECTION]
+- id: greenfield-init-github-remote-effects
+  description: init --github counts as an owner consent; init without it has no remote effects.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-117, tests/test_g3_init_github_routes.py, release_publish]
 - id: external-handoff-v2-and-bound-return
   description: External deterministic projections and evidence-bound installation returns remain visible and independently verified.
   documents:

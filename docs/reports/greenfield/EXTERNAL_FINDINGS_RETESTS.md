@@ -2160,6 +2160,83 @@ Expected: Exit 2 with one JSON document: FAIL_INVALID_OLDER_THAN, no candidates 
 
 Expected result fields: `{"assertions": ["result_status FAIL, outcome FAIL_INVALID_OLDER_THAN, next_command_kind human, candidate_count 0; control with 2026-01-01 PASS."]}`.
 
+## KIT-GF-114
+
+Title: workspace init over an init project fails FOREIGN_AGENTIC without naming the recovery route
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-114-workspace-init-over-init-project-2026-11-15.md
+
+Execution class: local (effects: none); machine contract: workspace init over an init project names the signed recovery plan as next_command, the plan offers its signature, and a foreign .agentic/ keeps the human marker
+
+Preconditions: Disposable directory; agentic-kit init created a python-lib project, whose .agentic/ holds project.yaml but no workspace manifest.
+
+```text
+agentic-kit workspace init --root demo --name demo --inject-ci --json
+agentic-kit workspace init --root demo --recover-partial --json
+```
+
+Expected: Exit 1 with FAIL FOREIGN_AGENTIC and next_command naming the recovery plan, which then offers its signature; a foreign .agentic/ without a generated contract keeps the human route.
+
+Expected result fields: `{"assertions": ["code FOREIGN_AGENTIC, next_command_kind kit, next_command 'agentic-kit workspace init --recover-partial --root demo', next_command_autonomous true; recovery plan AWAITING_APPROVAL; foreign control next_command_kind human."]}`.
+
+## KIT-GF-115
+
+Title: workspace init --recover-partial with --inject-ci blocks without naming the recovery and ci-update route
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-115-recovery-with-injection-flags-2026-11-15.md
+
+Execution class: local (effects: none); machine contract: a recovery with --inject-ci blocks without writing and names the recovery plan as next_command and ci-update as the step after it
+
+Preconditions: Disposable directory; agentic-kit init created a python-lib project without a workspace manifest.
+
+```text
+agentic-kit workspace init --root demo --recover-partial --inject-ci --json
+```
+
+Expected: Exit 2 with BLOCKED RECOVERY_NO_INJECTION, nothing written, next_command naming the recovery plan without the flag and next_action naming workspace ci-update --inject-ci --execute.
+
+Expected result fields: `{"assertions": ["code RECOVERY_NO_INJECTION, written false, next_command_kind kit, next_command 'agentic-kit workspace init --recover-partial --root demo'; no workspace manifest written."]}`.
+
+## KIT-GF-116
+
+Title: release run B4 stop after a refused push routes only to the log, not to the plan run that offers the resume
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-116-release-b4-stop-route-2026-11-15.md
+
+Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: A release run whose signed B4 committed the release commit and stopped because the origin refused the push.
+
+```text
+agentic-kit release run --version {version} --execute --expected-signature {signature} --approved-by {owner} --consent-source {source} --json
+```
+
+Expected: Exit 2 with BLOCKED at B4 and next_command 'agentic-kit release run --version {version}' (kit, autonomous); the plan run then offers the K7 resume.
+
+Expected result fields: `{"assertions": ["Native test_a_b4_stop_without_its_own_route_names_the_plan_run and the G3 remedy table case release run/B4; journey J4 runs the interruption itself."]}`.
+
+## KIT-GF-117
+
+Title: Command manifest lists init with remote effects none although init --github creates the repository and pushes
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-117-init-github-remote-effects-2026-11-15.md
+
+Execution class: owner_remote (effects: push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: A disposable GitHub account or organization where a new private repository may be created and deleted.
+
+```text
+agentic-kit init {name} --type python-lib --no-pre-commit --github --owner {owner} --visibility private --json
+```
+
+Expected: The manifest lists push and release_publish for init and github-create; init without --github stays without remote effects; a journey counts init --github as an owner consent.
+
+Expected result fields: `{"assertions": ["Native test_init_remote_effects_follow_the_github_flag: manifest effects, release_effects narrowing and needs_consent for both forms."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Title: rule-registry check hard-fails and report crashes in an external workspace without a mechanism inventory

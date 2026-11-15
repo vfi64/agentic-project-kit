@@ -7,14 +7,16 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shlex
 import subprocess
 import time
 from typing import Any
 
 import yaml
 
-from agentic_project_kit.blocked_route import ROUTE_FIELDS, nested_route
+from agentic_project_kit.blocked_route import ROUTE_FIELDS, kit_route, nested_route
 from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.g3_remedies import REMEDIES
 from agentic_project_kit.publication_policy import publication_policy_for
 from agentic_project_kit.release_run_policy import release_branch_plan, release_step_sequence
 from agentic_project_kit.workspace import load_workspace
@@ -142,6 +144,9 @@ class ReleaseRun:
         return self._work_finish("B3", branch=self.branch, paths=paths, execute=False, expected_status="PLANNED")
 
     def _step_b4(self) -> dict[str, Any]:
+        return self._b4_route(self._run_b4())
+
+    def _run_b4(self) -> dict[str, Any]:
         from agentic_project_kit.release_run_b4_resume import RESUME_MODE, UNPUBLISHED_MODE, complete
 
         gate = (self.state.get("gates") or {}).get("B4") or {}
@@ -156,9 +161,25 @@ class ReleaseRun:
                 "blockers": ["changed-paths-drift"],
                 "expected_paths": list(expected),
                 "current_paths": list(current),
-                "next_action": "Rerun release run without --execute to refresh the B4 approval gate.",
             }
         return self._work_finish("B4", branch=self.branch, paths=list(expected), execute=True, expected_status="PASS")
+
+    def _b4_route(self, result: dict[str, Any]) -> dict[str, Any]:
+        """KIT-GF-116 (G3 remedy table): a B4 stop without a route of its own names the plan run.
+
+        The next plan run refreshes the B4 gate: the ordinary B4 again, or the K7 resume of the
+        release commits that never reached the origin. A route the failed step brought (K6) wins.
+        """
+        if result.get("result_status") != "BLOCKED" or str(result.get("next_command") or "").strip():
+            return result
+        words = ["agentic-kit", *REMEDIES[("release run", "B4")], "--version", self.version]
+        if self.options.root != Path("."):
+            words += ["--root", str(self.options.root)]
+        command = shlex.join(words)
+        result.update(kit_route(command, autonomous=True))
+        result["next_action"] = (f"Run {command} to refresh the B4 gate; after a stop past the release commit "
+                                 "it offers the resume of the commits that did not reach the origin.")
+        return result
 
     def _step_c1(self) -> dict[str, Any]:
         result = self._command(
