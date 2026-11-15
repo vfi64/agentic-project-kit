@@ -9014,6 +9014,124 @@
         },
         "verification": "Native regression tests fail on the previous code (no first-release mode: release run blocked in A2 at release-from-tag, the notes blocked every commit without a PR number). release run pushes and publishes, so the local retest harness does not run it; journey J6 covers the first release offline, the live run before 1.4.0 on GitHub."
       }
+    },
+    {
+      "id": "KIT-GF-119",
+      "title": "First release under a publishing policy still blocks on the release-note category of its direct init and adoption commits",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-119-first-release-direct-commit-category-2026-11-15.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "A project created by agentic-kit init with a publishing policy (not none), adopted through the signed workspace recovery, with an origin and without any v* tag."
+        ],
+        "commands": [
+          "agentic-kit release run --version {version} --json"
+        ],
+        "bindings": {
+          "version": "Version of the first release"
+        },
+        "expected": [
+          "AWAITING_APPROVAL at B4 without a BLOCKED step; an unclassified direct commit of the first release is listed under Changed with a warning. From the second release on an unclassified commit still blocks (KIT-CHK-RELEASE-NOTE-CATEGORY)."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native tests test_first_release_lists_unclassified_direct_commits_under_changed_with_a_warning and test_a_second_release_still_blocks_an_unclassified_commit in tests/test_release_first_release.py."
+          ]
+        },
+        "verification": "Native regression test fails on the previous code (the first release blocked: Unclassified product release-note items). release run pushes and publishes, so the local retest harness does not run it; the live run before 1.4.0 runs the first release under publication none, which the private fallback already covered."
+      }
+    },
+    {
+      "id": "KIT-GF-120",
+      "title": "agentic-kit init leaves the new repository on Git's default branch, which is master on machines without init.defaultBranch=main",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-120-init-main-branch-2026-11-15.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "Disposable directory on a machine whose Git default branch is not main."
+        ],
+        "commands": [
+          "agentic-kit init demo --type python-lib --no-pre-commit --json"
+        ],
+        "bindings": {},
+        "expected": [
+          "PASS with the initial commit on main and no other local branch, whatever init.defaultBranch says."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "git branch --show-current in demo prints main after the run-local Git default branch was set to master."
+          ]
+        },
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest) and native test tests/test_init_main_branch.py; both fail on the previous code (branch master). Observed in the stub probe of order 0112.",
+        "machine": {
+          "fixture": "git_repository",
+          "covers": "init starts the new repository on main although the run-local Git default branch is master",
+          "steps": [
+            {
+              "run": [
+                "git",
+                "config",
+                "--global",
+                "init.defaultBranch",
+                "master"
+              ],
+              "expect": {
+                "returncode": 0
+              }
+            },
+            {
+              "run": [
+                "agentic-kit",
+                "init",
+                "demo",
+                "--type",
+                "python-lib",
+                "--no-pre-commit",
+                "--json"
+              ],
+              "expect": {
+                "returncode": 0,
+                "json": {
+                  "result_status": "PASS",
+                  "project_created": true,
+                  "initial_commit": true
+                }
+              }
+            },
+            {
+              "run": [
+                "git",
+                "branch",
+                "--show-current"
+              ],
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "main"
+              }
+            },
+            {
+              "run": [
+                "git",
+                "for-each-ref",
+                "--format=%(refname:short)",
+                "refs/heads"
+              ],
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "main"
+              }
+            }
+          ]
+        }
+      }
     }
   ],
   "kind": "external_findings_catalog",

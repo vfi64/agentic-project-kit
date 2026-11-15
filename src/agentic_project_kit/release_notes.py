@@ -140,6 +140,7 @@ def build_release_notes_report(
     if private_unclassified_fallback is None:
         private_unclassified_fallback = _publication_is_private(project_root)
     fallback_items: list[ReleaseNoteItem] = []
+    first_release_fallback_items: list[ReleaseNoteItem] = []
     plain_version = version.removeprefix("v")
     commits, evidence_errors = _collect_commits(
         project_root, from_tag=from_tag, to_ref=to_ref, runner=runner, first_release=first_release)
@@ -182,6 +183,10 @@ def build_release_notes_report(
         if item.category == "Unclassified" and private_unclassified_fallback:
             item = _private_fallback_item(item)
             fallback_items.append(item)
+        elif item.category == "Unclassified" and first_release and _is_direct_commit(item):
+            # KIT-GF-119: a direct commit of the first release has no PR that could carry a category.
+            item = _first_release_fallback_item(item)
+            first_release_fallback_items.append(item)
         if item.category == "Administrative Handoff Refresh":
             administrative_items.append(item)
         else:
@@ -213,7 +218,7 @@ def build_release_notes_report(
         unclassified_items=tuple(unclassified_items),
         missing_evidence=tuple(missing_evidence),
         validation=validation,
-        warnings=_fallback_warnings(fallback_items),
+        warnings=(*_fallback_warnings(fallback_items), *_first_release_fallback_warnings(first_release_fallback_items)),
         first_release=first_release,
     )
 
@@ -250,6 +255,29 @@ def _private_fallback_item(item: ReleaseNoteItem) -> ReleaseNoteItem:
             },
         ),
     )
+
+
+def _first_release_fallback_item(item: ReleaseNoteItem) -> ReleaseNoteItem:
+    return replace(
+        item,
+        category=PRIVATE_FALLBACK_CATEGORY,
+        confidence="fallback",
+        evidence=(
+            *item.evidence,
+            {
+                "type": "unclassified_first_release_direct_commit",
+                "category": PRIVATE_FALLBACK_CATEGORY,
+                "reason": "first release: direct commit without a PR category; no subject heuristic matched",
+            },
+        ),
+    )
+
+
+def _first_release_fallback_warnings(items: list[ReleaseNoteItem]) -> tuple[str, ...]:
+    if not items:
+        return ()
+    refs = ", ".join(item.commit_sha[:8] for item in items)
+    return (f"Unclassified direct commits of the first release listed under {PRIVATE_FALLBACK_CATEGORY}: {refs}",)
 
 
 def _fallback_warnings(fallback_items: list[ReleaseNoteItem]) -> tuple[str, ...]:

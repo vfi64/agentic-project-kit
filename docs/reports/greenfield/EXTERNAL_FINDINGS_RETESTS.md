@@ -2256,6 +2256,44 @@ Expected: AWAITING_APPROVAL at B4 without a BLOCKED step; the B4 gate carries fi
 
 Expected result fields: `{"assertions": ["Native tests in tests/test_release_first_release.py; journey J6 runs init to the B4 gate of the first release."]}`.
 
+## KIT-GF-119
+
+Title: First release under a publishing policy still blocks on the release-note category of its direct init and adoption commits
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-119-first-release-direct-commit-category-2026-11-15.md
+
+Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: A project created by agentic-kit init with a publishing policy (not none), adopted through the signed workspace recovery, with an origin and without any v* tag.
+
+```text
+agentic-kit release run --version {version} --json
+```
+
+Expected: AWAITING_APPROVAL at B4 without a BLOCKED step; an unclassified direct commit of the first release is listed under Changed with a warning. From the second release on an unclassified commit still blocks (KIT-CHK-RELEASE-NOTE-CATEGORY).
+
+Expected result fields: `{"assertions": ["Native tests test_first_release_lists_unclassified_direct_commits_under_changed_with_a_warning and test_a_second_release_still_blocks_an_unclassified_commit in tests/test_release_first_release.py."]}`.
+
+## KIT-GF-120
+
+Title: agentic-kit init leaves the new repository on Git's default branch, which is master on machines without init.defaultBranch=main
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-120-init-main-branch-2026-11-15.md
+
+Execution class: local (effects: none); machine contract: init starts the new repository on main although the run-local Git default branch is master
+
+Preconditions: Disposable directory on a machine whose Git default branch is not main.
+
+```text
+agentic-kit init demo --type python-lib --no-pre-commit --json
+```
+
+Expected: PASS with the initial commit on main and no other local branch, whatever init.defaultBranch says.
+
+Expected result fields: `{"assertions": ["git branch --show-current in demo prints main after the run-local Git default branch was set to master."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Title: rule-registry check hard-fails and report crashes in an external workspace without a mechanism inventory
