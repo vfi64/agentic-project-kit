@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `d2a085d0aa3d934051e90ab855601386a7ca22af` (`d2a085d0`), after `Finding catalog KIT-GF-109 to 113: post-merge-complete and artifact-gc routes (#2806)`.
-Last substantive work state is `d2a085d0aa3d934051e90ab855601386a7ca22af` (`d2a085d0`), after `Finding catalog KIT-GF-109 to 113: post-merge-complete and artifact-gc routes (#2806)`.
+Current verified main/admin HEAD is `a5f1d58866e5b0bb9b30c9fcd66e8e78ff6286fc` (`a5f1d588`), after `G3 remedy table: routes for KIT-GF-114 to 117 from the live run (#2808)`.
+Last substantive work state is `a5f1d58866e5b0bb9b30c9fcd66e8e78ff6286fc` (`a5f1d588`), after `G3 remedy table: routes for KIT-GF-114 to 117 from the live run (#2808)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
