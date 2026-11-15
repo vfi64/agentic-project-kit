@@ -12723,6 +12723,15 @@
             "--consent-source"
           ],
           "required": false
+        },
+        {
+          "default": null,
+          "help": "Publication policy for the manifest: none, github, github+pypi, or github+pypi+zenodo (default).",
+          "name": "publication",
+          "opts": [
+            "--publication"
+          ],
+          "required": false
         }
       ],
       "qualified_name": "agentic-kit workspace init",
