@@ -20,17 +20,20 @@ path dates from #1742.
 The G3 remedy table (`g3_remedies.REMEDIES`) maps `FOREIGN_AGENTIC` of
 `workspace init` to `agentic-kit workspace init --recover-partial`, under the
 condition that the root holds a valid, recoverable generated project contract
-(`generated_project_recoverable`). The result names that plan as an autonomous
+and an existing Git HEAD (`generated_project_recoverable`; `init` without a Git
+identity leaves no HEAD, KIT-GF-104). The result names that plan as an autonomous
 `next_command`; with `--inject-ci` its `next_action` adds
 `workspace ci-update --inject-ci --execute` for after the recovery. A foreign
-`.agentic/` without such a contract keeps the human marker. Exit code, code
+`.agentic/` without such a contract, or a generated project without a commit,
+keeps the human marker. Exit code, code
 and error text are unchanged.
 
 ## Regression evidence
 
 `tests/test_g3_remedy_table.py` (cases `FOREIGN_AGENTIC`, text mode) checks
-JSON and text output, that the named plan offers a signature, and the foreign
-control. Against the previous code it fails with `next_command_kind` human.
+JSON and text output, that the named plan offers a signature, the foreign
+control and the control without a Git HEAD; the module sets a Git identity, as
+CI runners have none. Against the previous code it fails with `next_command_kind` human.
 The machine contract runs the same with the installed wheel.
 
 ## Boundaries

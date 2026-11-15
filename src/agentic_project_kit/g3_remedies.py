@@ -14,7 +14,7 @@ from __future__ import annotations
 
 REMEDIES: dict[tuple[str, str], tuple[str, ...]] = {
     ("workspace init", "ALREADY_INITIALIZED"): ("workspace", "upgrade"),
-    # Only over a generated project with a valid .agentic/project.yaml (``init`` output).
+    # Only over a generated project with a valid .agentic/project.yaml (``init`` output) and a Git HEAD.
     ("workspace init", "FOREIGN_AGENTIC"): ("workspace", "init", "--recover-partial"),
     ("workspace init", "RECOVERY_NO_INJECTION"): ("workspace", "init", "--recover-partial"),
     ("workspace upgrade", "NO_MANIFEST"): ("workspace", "init"),
@@ -26,7 +26,7 @@ REMEDIES: dict[tuple[str, str], tuple[str, ...]] = {
 }
 
 CONDITIONS: dict[tuple[str, str], str] = {
-    ("workspace init", "FOREIGN_AGENTIC"): "a valid, recoverable generated .agentic/project.yaml contract",
+    ("workspace init", "FOREIGN_AGENTIC"): "a valid, recoverable generated .agentic/project.yaml contract and an existing Git HEAD",
 }
 
 

@@ -10,9 +10,12 @@ from __future__ import annotations
 import json
 import os
 import shlex
+import shutil
+import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.blocked_route import KIND_HUMAN, KIND_KIT, route_problems
@@ -26,6 +29,14 @@ from agentic_project_kit.workspace_upgrade import WorkspaceUpgradeError
 from agentic_project_kit.workspace_remove import WorkspaceRemoveError
 
 runner = CliRunner()
+
+
+@pytest.fixture(autouse=True)
+def _git_identity(monkeypatch):
+    """`init` commits only with a Git identity; CI runners have none (KIT-GF-104)."""
+    for key, value in {"GIT_AUTHOR_NAME": "Fixture", "GIT_AUTHOR_EMAIL": "fixture@example.invalid",
+                       "GIT_COMMITTER_NAME": "Fixture", "GIT_COMMITTER_EMAIL": "fixture@example.invalid"}.items():
+        monkeypatch.setenv(key, value)
 
 
 def _json(args: list[str], code: int) -> dict:
@@ -75,6 +86,12 @@ def case_foreign_agentic(tmp_path: Path) -> None:
     other = _json(["workspace", "init", "--root", str(foreign)], 1)
     assert other["code"] == "FOREIGN_AGENTIC" and other["next_command_kind"] == KIND_HUMAN
     assert route_problems(other) == []
+    # Condition: a generated project without a Git HEAD (init without identity) is not recoverable.
+    shutil.rmtree(root / ".git")
+    subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+    headless = _json(["workspace", "init", "--root", str(root), "--name", "demo"], 1)
+    assert headless["code"] == "FOREIGN_AGENTIC" and headless["next_command_kind"] == KIND_HUMAN
+    assert route_problems(headless) == []
 
 
 def case_recovery_no_injection(tmp_path: Path) -> None:
