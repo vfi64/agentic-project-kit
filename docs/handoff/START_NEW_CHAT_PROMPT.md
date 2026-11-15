@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: dc353102c84c57b2bf9d2aba693b91d6fd942913d685c21fdd3cf977e68bf2cc
 - docs/reference/agentic-kit-commands.json: f3acb7d07d63e8640631d4557382f60f04b3b05a0ee5f23eb15262ab140e0d2e
-## Operational documentation refresh state after PR #2810
+## Operational documentation refresh state after PR #2812
 
-Current administrative handoff refresh state is `6ae4bf75` (`workspace init --publication: choose the publication policy through the Kit (#2810)`). Continue next only after this post-PR2810 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `2d68196d` (`KIT-GF-118: first release without a previous tag, journey J6 (#2812)`). Continue next only after this post-PR2812 refresh is committed and merged; the next substantive slice must be created from fresh main.

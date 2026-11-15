@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `6ae4bf75e80a1c279d1ee6f4a63c4b7520cdd1be` (`6ae4bf75`), after `workspace init --publication: choose the publication policy through the Kit (#2810)`.
-Last substantive work state is `6ae4bf75e80a1c279d1ee6f4a63c4b7520cdd1be` (`6ae4bf75`), after `workspace init --publication: choose the publication policy through the Kit (#2810)`.
+Current verified main/admin HEAD is `2d68196d27e639b7d280a8e59b2690fda7015f06` (`2d68196d`), after `KIT-GF-118: first release without a previous tag, journey J6 (#2812)`.
+Last substantive work state is `2d68196d27e639b7d280a8e59b2690fda7015f06` (`2d68196d`), after `KIT-GF-118: first release without a previous tag, journey J6 (#2812)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
