@@ -8792,7 +8792,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); the live GitHub Actions run of the G4 preflight and consumer VERIFIED_FIXED remain independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-109",
       "kit_state": "CLOSED",
       "prs": [
@@ -8885,7 +8885,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); the GitHub origin is redirected to the local bare origin with url.insteadOf. Consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-110",
       "kit_state": "CLOSED",
       "prs": [
@@ -8984,7 +8984,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); a live GitHub Actions run of a generated project and consumer VERIFIED_FIXED remain independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-111",
       "kit_state": "CLOSED",
       "prs": [
@@ -9019,7 +9019,7 @@
         "verification": "Native regression test failed before the fix (PASS with exit 2) and passes after it. The route merges a pull request, so the local retest harness does not run it; consumer verification and release remain separate.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-112",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9093,7 +9093,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-113",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9214,7 +9214,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); live run 0107 observed the defect; consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-114",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9299,7 +9299,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest); live run 0107 observed the defect; consumer VERIFIED_FIXED remains independent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-115",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9338,7 +9338,7 @@
         "verification": "Native regression tests fail on the previous code (human marker with 'Inspect … and fix step B4'). The route pushes, opens a pull request and merges, so the local retest harness does not run it; journey J4 covers the interruption offline, the live run before 1.4.0 covers it on GitHub.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-116",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9373,7 +9373,7 @@
         "verification": "Native regression test fails on the previous manifest (needs_consent False for init --github). The route creates a GitHub repository, so the local retest harness does not run it; the live run before 1.4.0 counts its consent.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-117",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9409,7 +9409,7 @@
         "verification": "Native regression tests fail on the previous code (no first-release mode: release run blocked in A2 at release-from-tag, the notes blocked every commit without a PR number). release run pushes and publishes, so the local retest harness does not run it; journey J6 covers the first release offline, the live run before 1.4.0 on GitHub.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-118",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9445,7 +9445,7 @@
         "verification": "Native regression test fails on the previous code (the first release blocked: Unclassified product release-note items). release run pushes and publishes, so the local retest harness does not run it; the live run before 1.4.0 runs the first release under publication none, which the private fallback already covered.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-119",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9538,7 +9538,7 @@
         "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest) and native test tests/test_init_main_branch.py; both fail on the previous code (branch master). Observed in the stub probe of order 0112.",
         "workspace_kind": "external_manifest"
       },
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "id": "KIT-GF-120",
       "kit_state": "CLOSED",
       "prs": [],
@@ -9686,5 +9686,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 67,
   "schema_version": 1,
-  "source_sha256": "6fc08a39280b55e8cf824a5434626b8f6ab22d4279a2660ed4b1a1546ed03e73"
+  "source_sha256": "8647a154f13b747228b1b955b71f1c5b5b67b05c84a46decc66e975c7ac8f6e7"
 }

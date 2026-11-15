@@ -2069,7 +2069,7 @@ Expected result fields: `{"assertions": ["Native ignored-parent-repository and o
 
 Title: Injected workspace CI fails the setup-python pip cache in a workspace without requirements.txt or pyproject.toml
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-109-workspace-ci-pip-cache-key-2026-11-14.md
 
 Execution class: local (effects: none); machine contract: workspace init --inject-ci in a repository without requirements.txt or pyproject.toml keys the setup-python pip cache on the injected managed source .agentic/ci/agentic-gate.yaml
@@ -2088,7 +2088,7 @@ Expected result fields: `{"assertions": ["cache-dependency-path names .agentic/c
 
 Title: An origin added after workspace init blocks work start because the successor package still names the fallback repository identity
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-110-late-origin-identity-2026-11-14.md
 
 Execution class: local (effects: fetch); machine contract: An origin with a GitHub identity added after workspace init lets work start continue as a late identity binding instead of blocking on a successor-package refresh
@@ -2107,7 +2107,7 @@ Expected result fields: `{"assertions": ["result_status PASS; the post-merge-che
 
 Title: Generated project CI keys the pip cache on no existing file for project types without pyproject.toml
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-111-generator-ci-pip-cache-key-2026-11-14.md
 
 Execution class: local (effects: none); machine contract: agentic-kit init for the governance-wrapper type, which has no pyproject.toml, writes CI whose pip cache key includes the existing .github/workflows/ci.yml
@@ -2126,7 +2126,7 @@ Expected result fields: `{"assertions": ["init PASS; demo has no pyproject.toml;
 
 Title: transfer post-merge-complete reports PASS with exit 2 when the final known-volatile cleanup fails
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-112-post-merge-complete-final-cleanup-2026-11-14.md
 
 Execution class: owner_remote (effects: merge); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -2145,7 +2145,7 @@ Expected result fields: `{"assertions": ["Native test_post_merge_complete_cli_bl
 
 Title: artifact-gc with an invalid --older-than value ends as a Click usage error without JSON or route
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-113-artifact-gc-invalid-older-than-2026-11-14.md
 
 Execution class: local (effects: none); machine contract: artifact-gc with an unreadable --older-than returns a routed FAIL result in JSON instead of a Click usage error, collects nothing, and a valid ISO date still passes
@@ -2164,7 +2164,7 @@ Expected result fields: `{"assertions": ["result_status FAIL, outcome FAIL_INVAL
 
 Title: workspace init over an init project fails FOREIGN_AGENTIC without naming the recovery route
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-114-workspace-init-over-init-project-2026-11-15.md
 
 Execution class: local (effects: none); machine contract: workspace init over an init project names the signed recovery plan as next_command, the plan offers its signature, and a foreign .agentic/ keeps the human marker
@@ -2184,7 +2184,7 @@ Expected result fields: `{"assertions": ["code FOREIGN_AGENTIC, next_command_kin
 
 Title: workspace init --recover-partial with --inject-ci blocks without naming the recovery and ci-update route
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-115-recovery-with-injection-flags-2026-11-15.md
 
 Execution class: local (effects: none); machine contract: a recovery with --inject-ci blocks without writing and names the recovery plan as next_command and ci-update as the step after it
@@ -2203,7 +2203,7 @@ Expected result fields: `{"assertions": ["code RECOVERY_NO_INJECTION, written fa
 
 Title: release run B4 stop after a refused push routes only to the log, not to the plan run that offers the resume
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-116-release-b4-stop-route-2026-11-15.md
 
 Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -2222,7 +2222,7 @@ Expected result fields: `{"assertions": ["Native test_a_b4_stop_without_its_own_
 
 Title: Command manifest lists init with remote effects none although init --github creates the repository and pushes
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-117-init-github-remote-effects-2026-11-15.md
 
 Execution class: owner_remote (effects: push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -2241,7 +2241,7 @@ Expected result fields: `{"assertions": ["Native test_init_remote_effects_follow
 
 Title: First release of an init project blocks in release run without a previous v* tag, and its direct commits block the release notes
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-118-first-release-without-tag-2026-11-15.md
 
 Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -2260,7 +2260,7 @@ Expected result fields: `{"assertions": ["Native tests in tests/test_release_fir
 
 Title: First release under a publishing policy still blocks on the release-note category of its direct init and adoption commits
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-119-first-release-direct-commit-category-2026-11-15.md
 
 Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
@@ -2279,7 +2279,7 @@ Expected result fields: `{"assertions": ["Native tests test_first_release_lists_
 
 Title: agentic-kit init leaves the new repository on Git's default branch, which is master on machines without init.defaultBranch=main
 
-Kit state: CLOSED; fixed_in: unreleased.
+Kit state: CLOSED; fixed_in: 1.4.0.
 Evidence: docs/reports/greenfield/KIT-GF-120-init-main-branch-2026-11-15.md
 
 Execution class: local (effects: none); machine contract: init starts the new repository on main although the run-local Git default branch is master
