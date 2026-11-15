@@ -40,8 +40,8 @@ Critical rule IDs:
 ## Current continuation state
 
 - branch: `feat/workspace-init-publication`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -459,13 +459,13 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "feat/workspace-init-publication",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "61604535466c95a9563e17416a26afd90f1cb814",
-    "head_matches_origin_main": true,
-    "head_short": "61604535",
+    "head": "11392603f45d5552bc8c4dfcfd2ef1d386a5eeb0",
+    "head_matches_origin_main": false,
+    "head_short": "11392603",
     "local_path": "cd /path/to/",
     "origin_main": "61604535466c95a9563e17416a26afd90f1cb814",
     "origin_main_short": "61604535",
-    "worktree_clean": false
+    "worktree_clean": true
   }
 }
 ```
