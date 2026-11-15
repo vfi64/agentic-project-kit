@@ -1,15 +1,15 @@
 {
   "authority": "Kit adjudication; VERIFIED_FIXED belongs to the consuming workspace",
   "counts": {
-    "CLOSED": 117,
+    "CLOSED": 119,
     "NOT_APPLICABLE": 0,
     "OPEN": 0,
     "PARTIAL": 0
   },
   "execution_classes": {
     "kit_release": 8,
-    "local": 70,
-    "owner_remote": 39
+    "local": 71,
+    "owner_remote": 40
   },
   "findings": [
     {
@@ -9419,6 +9419,135 @@
     {
       "external_retest": {
         "bindings": {
+          "version": "Version of the first release"
+        },
+        "commands": [
+          "agentic-kit release run --version {version} --json"
+        ],
+        "execution_class": "owner_remote",
+        "expected": [
+          "AWAITING_APPROVAL at B4 without a BLOCKED step; an unclassified direct commit of the first release is listed under Changed with a warning. From the second release on an unclassified commit still blocks (KIT-CHK-RELEASE-NOTE-CATEGORY)."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native tests test_first_release_lists_unclassified_direct_commits_under_changed_with_a_warning and test_a_second_release_still_blocks_an_unclassified_commit in tests/test_release_first_release.py."
+          ]
+        },
+        "preconditions": [
+          "A project created by agentic-kit init with a publishing policy (not none), adopted through the signed workspace recovery, with an origin and without any v* tag."
+        ],
+        "remote_effects": [
+          "merge",
+          "pull_request",
+          "push",
+          "release_publish"
+        ],
+        "verification": "Native regression test fails on the previous code (the first release blocked: Unclassified product release-note items). release run pushes and publishes, so the local retest harness does not run it; the live run before 1.4.0 runs the first release under publication none, which the private fallback already covered.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-119",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-119-first-release-direct-commit-category-2026-11-15.md",
+      "title": "First release under a publishing policy still blocks on the release-note category of its direct init and adoption commits"
+    },
+    {
+      "external_retest": {
+        "bindings": {},
+        "commands": [
+          "agentic-kit init demo --type python-lib --no-pre-commit --json"
+        ],
+        "execution_class": "local",
+        "expected": [
+          "PASS with the initial commit on main and no other local branch, whatever init.defaultBranch says."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "git branch --show-current in demo prints main after the run-local Git default branch was set to master."
+          ]
+        },
+        "machine": {
+          "covers": "init starts the new repository on main although the run-local Git default branch is master",
+          "fixture": "git_repository",
+          "steps": [
+            {
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "config",
+                "--global",
+                "init.defaultBranch",
+                "master"
+              ]
+            },
+            {
+              "expect": {
+                "json": {
+                  "initial_commit": true,
+                  "project_created": true,
+                  "result_status": "PASS"
+                },
+                "returncode": 0
+              },
+              "run": [
+                "agentic-kit",
+                "init",
+                "demo",
+                "--type",
+                "python-lib",
+                "--no-pre-commit",
+                "--json"
+              ]
+            },
+            {
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "main"
+              },
+              "run": [
+                "git",
+                "branch",
+                "--show-current"
+              ]
+            },
+            {
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0,
+                "stdout_equals": "main"
+              },
+              "run": [
+                "git",
+                "for-each-ref",
+                "--format=%(refname:short)",
+                "refs/heads"
+              ]
+            }
+          ]
+        },
+        "preconditions": [
+          "Disposable directory on a machine whose Git default branch is not main."
+        ],
+        "remote_effects": [
+          "none"
+        ],
+        "verification": "Installed-wheel machine contract PASS (agentic-kit greenfield retest) and native test tests/test_init_main_branch.py; both fail on the previous code (branch master). Observed in the stub probe of order 0112.",
+        "workspace_kind": "external_manifest"
+      },
+      "fixed_in": "unreleased",
+      "id": "KIT-GF-120",
+      "kit_state": "CLOSED",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-120-init-main-branch-2026-11-15.md",
+      "title": "agentic-kit init leaves the new repository on Git's default branch, which is master on machines without init.defaultBranch=main"
+    },
+    {
+      "external_retest": {
+        "bindings": {
           "signature": "Supply the actual signature of the disposable authorized workspace; one argv token."
         },
         "commands": [
@@ -9555,7 +9684,7 @@
     }
   ],
   "kind": "external_findings_status",
-  "machine_contracts": 66,
+  "machine_contracts": 67,
   "schema_version": 1,
-  "source_sha256": "7ca8100eaab801c10344a3abba9db1f06bd7886c740a81befa75c8b0e10f6da2"
+  "source_sha256": "6fc08a39280b55e8cf824a5434626b8f6ab22d4279a2660ed4b1a1546ed03e73"
 }

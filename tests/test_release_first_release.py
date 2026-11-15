@@ -200,3 +200,29 @@ def test_release_ready_blocks_on_unfetched_origin_tags_before_the_scan(monkeypat
     steps = json.loads(result.stdout)["steps"]
     assert [s["name"] for s in steps if not s["ok"]] == ["release-range"]
     assert not [call for call in calls if "standard-error-scan" in call or "release-notes-generate" in call]
+
+
+def test_first_release_lists_unclassified_direct_commits_under_changed_with_a_warning(tmp_path):
+    """KIT-GF-119: the init and adoption commits match no heuristic and have no PR to carry a category."""
+    root = _project(tmp_path)
+    (root / "x.txt").write_text("x\n")
+    _git(root, "add", "x.txt")
+    _git(root, "commit", "-q", "-m", "Initialize agentic project")
+    report = _notes(root, from_tag="", first_release=True)
+    assert report.validation.status == "PASS", report.validation.reasons
+    item = report.items[-1]
+    assert (item.title, item.category, item.confidence) == ("Initialize agentic project", "Changed", "fallback")
+    assert item.evidence[-1]["type"] == "unclassified_first_release_direct_commit"
+    assert report.warnings and "first release" in report.warnings[0] and item.commit_sha[:8] in report.warnings[0]
+    assert not report.unclassified_items
+
+
+def test_a_second_release_still_blocks_an_unclassified_commit(tmp_path):
+    root = _project(tmp_path)
+    _git(root, "tag", "v0.1.0")
+    (root / "x.txt").write_text("x\n")
+    _git(root, "add", "x.txt")
+    _git(root, "commit", "-q", "-m", "Initialize agentic project (#7)")
+    report = _notes(root, from_tag="v0.1.0")
+    assert report.validation.status == "BLOCK"
+    assert any("Unclassified" in reason for reason in report.validation.reasons)

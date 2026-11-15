@@ -65,6 +65,15 @@ which the approval signature binds. Journey J6 (`tests/test_g4_journeys.py`,
 fixture `external_init`) runs `init`, the signed recovery with `--publication
 none`, the CI update and `release run` up to the B4 gate of the first release.
 
+KIT-GF-119: `tests/test_release_first_release.py` requires that an
+unclassified direct commit of the first release is listed under `Changed` with
+evidence `unclassified_first_release_direct_commit` and a warning, and that a
+second release still blocks an unclassified commit.
+
+KIT-GF-120: `tests/test_init_main_branch.py` requires that `init` starts the
+new repository on `main` whatever `init.defaultBranch` says (`master`, `trunk`,
+unset); the catalog entry has an installed-wheel machine contract.
+
 `tests/test_greenfield_retest.py` names GF-104/105/106/108 as the only local
 retests without machine contracts. Their catalog entries must state a native
 regression and the unsupported fixture topology; other new local findings

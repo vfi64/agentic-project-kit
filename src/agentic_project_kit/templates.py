@@ -314,6 +314,13 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
     try:
         # Captured: a JSON caller (agentic-kit init --json) keeps a clean stdout.
         subprocess.run(["git", "init"], cwd=target, check=False, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        # KIT-GF-120: the Kit's workflows assume main; Git's own default branch depends on the
+        # machine (init.defaultBranch). A new repository without commits starts on main.
+        unborn = subprocess.run(["git", "rev-parse", "--verify", "--quiet", "HEAD"], cwd=target, check=False,
+                                text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT).returncode != 0
+        if unborn:
+            subprocess.run(["git", "symbolic-ref", "HEAD", "refs/heads/main"], cwd=target, check=False, text=True,
+                           stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     except FileNotFoundError as exc:
         raise RuntimeError(
             "git executable not found; install Git before creating an agentic project"
