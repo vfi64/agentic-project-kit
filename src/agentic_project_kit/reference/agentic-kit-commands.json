@@ -10517,7 +10517,7 @@
           "secondary_opts": []
         },
         {
-          "default": null,
+          "default": "",
           "help": "Previous release tag used as the lower diff bound.",
           "is_flag": false,
           "metavar": null,
@@ -10527,7 +10527,21 @@
             "--from-tag"
           ],
           "param_type": "TyperOption",
-          "required": true,
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "First release without a previous v* tag: notes start at the root commit and list commits without a PR number as direct (KIT-GF-118).",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "first_release",
+          "opts": [
+            "--first-release"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
           "secondary_opts": []
         },
         {
@@ -18172,13 +18186,27 @@
         },
         {
           "default": "",
-          "help": "Previous release tag for release notes checks. Defaults to the latest local v* git tag.",
+          "help": "Previous release tag for release notes checks. Defaults to the latest local v* git tag; without one the scan checks the first release (KIT-GF-118).",
           "is_flag": false,
           "metavar": null,
           "multiple": false,
           "name": "from_tag",
           "opts": [
             "--from-tag"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
+        },
+        {
+          "default": false,
+          "help": "Check the first release: release notes from the root commit (KIT-GF-118).",
+          "is_flag": true,
+          "metavar": null,
+          "multiple": false,
+          "name": "first_release",
+          "opts": [
+            "--first-release"
           ],
           "param_type": "TyperOption",
           "required": false,
@@ -21060,7 +21088,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "f1792899a01f",
+    "manifest_sha": "47c58c29a596",
     "schema_version": 2
   },
   "schema_version": 3,

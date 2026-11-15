@@ -122,6 +122,11 @@ rules:
   documents:
   - path: docs/TEST_GATES.md
     terms: [KIT-GF-117, tests/test_g3_init_github_routes.py, release_publish]
+- id: greenfield-first-release-without-tag
+  description: Without a previous v* tag release run prepares the first release up to the B4 gate.
+  documents:
+  - path: docs/TEST_GATES.md
+    terms: [KIT-GF-118, tests/test_release_first_release.py, first_release, J6]
 - id: external-handoff-v2-and-bound-return
   description: External deterministic projections and evidence-bound installation returns remain visible and independently verified.
   documents:

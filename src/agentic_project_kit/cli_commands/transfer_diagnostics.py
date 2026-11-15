@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from agentic_project_kit.cli_executable import default_agentic_kit
+from agentic_project_kit.release_range import ReleaseRange, local_release_tags, resolve as resolve_release_range
 
 # ruff: noqa: F403,F405
 
@@ -435,19 +436,6 @@ def _scan_static_meta_preference_projection_drift(root: Path) -> dict[str, objec
         "matches": matches,
     }
 
-def _latest_release_tag() -> str:
-    completed = subprocess.run(
-        ["git", "tag", "--sort=-creatordate"],
-        text=True,
-        capture_output=True,
-    )
-    if completed.returncode != 0:
-        return ""
-    for line in completed.stdout.splitlines():
-        tag = line.strip()
-        if tag.startswith("v"):
-            return tag
-    return ""
 
 def _run_standard_error_scan_step(
     name: str,
@@ -569,7 +557,8 @@ def standard_error_scan_command(
         help="Run the release-oriented standard-error scan bundle.",
     ),
     version: str = typer.Option("", "--version", help="Release version for before-release checks. Required with --before-release."),
-    from_tag: str = typer.Option("", "--from-tag", help="Previous release tag for release notes checks. Defaults to the latest local v* git tag."),
+    from_tag: str = typer.Option("", "--from-tag", help="Previous release tag for release notes checks. Defaults to the latest local v* git tag; without one the scan checks the first release (KIT-GF-118)."),
+    first_release: bool = typer.Option(False, "--first-release", help="Check the first release: release notes from the root commit (KIT-GF-118)."),
     to_ref: str = typer.Option("main", "--to-ref", help="Target ref for release notes checks."),
     date: str = typer.Option("", "--date", help="Release date for release-prep dry-run. Defaults to today."),
     summary_lines: list[str] | None = typer.Option(
@@ -584,7 +573,15 @@ def standard_error_scan_command(
     project_root = root.resolve()
     kit_executable = default_agentic_kit(project_root)
     release_date = date or date_cls.today().isoformat()
-    effective_from_tag = from_tag or _latest_release_tag()
+    if first_release and from_tag.strip():
+        release_range = ReleaseRange("", True, ("--first-release and --from-tag exclude each other",))
+    elif first_release:
+        release_range = ReleaseRange("", True)
+    elif before_release:
+        release_range = resolve_release_range(project_root, from_tag)  # KIT-GF-118: no v* tag = first release
+    else:  # no release checks: no origin read
+        release_range = ReleaseRange(from_tag.strip() or next(iter(local_release_tags(project_root)), ""), False)
+    effective_from_tag = release_range.from_tag
     steps: list[dict[str, object]] = []
 
     def step(name: str, argv: list[str], *, allowed_returncodes: set[int] | None = None) -> None:
@@ -659,7 +656,7 @@ def standard_error_scan_command(
                     "stderr": "--version is required with --before-release.",
                 }
             )
-        if not effective_from_tag:
+        if release_range.blockers:
             steps.append(
                 {
                     "name": "release-from-tag",
@@ -668,7 +665,7 @@ def standard_error_scan_command(
                     "ok": False,
                     "allowed_returncodes": [0],
                     "stdout": "",
-                    "stderr": "--from-tag was not provided and no local v* git tag could be derived.",
+                    "stderr": "; ".join(release_range.blockers),
                 }
             )
         # The workspace temp root: tmp/ in the Kit, .agentic/tmp in external workspaces (KIT-GF-032).
@@ -681,8 +678,7 @@ def standard_error_scan_command(
                 "release-notes-generate",
                 "--version",
                 version,
-                "--from-tag",
-                effective_from_tag,
+                *release_range.notes_args(),
                 "--to-ref",
                 to_ref,
                 "--include-github-metadata",
@@ -788,6 +784,7 @@ def standard_error_scan_command(
         "before_release": before_release,
         "version": version,
         "from_tag": effective_from_tag,
+        "first_release": release_range.first_release,
         "to_ref": to_ref,
         "date": release_date,
         "blockers": blockers,

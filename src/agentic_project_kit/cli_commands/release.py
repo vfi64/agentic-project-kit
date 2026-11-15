@@ -204,7 +204,11 @@ def release_status_command(
 def release_notes_generate_command(
     project_root: Path = typer.Option(Path("."), "--root"),
     version: str = typer.Option(..., "--version", help="Target release version without leading v."),
-    from_tag: str = typer.Option(..., "--from-tag", help="Previous release tag used as the lower diff bound."),
+    from_tag: str = typer.Option("", "--from-tag", help="Previous release tag used as the lower diff bound."),
+    first_release: bool = typer.Option(
+        False, "--first-release",
+        help="First release without a previous v* tag: notes start at the root commit and list commits without a PR number as direct (KIT-GF-118).",
+    ),
     to_ref: str = typer.Option("HEAD", "--to-ref", help="Upper git ref used for release-note evidence."),
     json_out: Path | None = typer.Option(None, "--json-out", help="Write generated JSON release notes here."),
     out: Path | None = typer.Option(None, "--out", help="Write generated Markdown release notes here."),
@@ -219,12 +223,20 @@ def release_notes_generate_command(
     json_output: bool = typer.Option(False, "--json", help="Print a machine-readable result."),
 ) -> None:
     """Generate deterministic evidence-backed release notes from a local git tag diff."""
+    if bool(from_tag.strip()) == first_release:
+        message = "release-notes-generate needs exactly one of --from-tag and --first-release"
+        if json_output:
+            _print_json({"ok": False, "status": "BLOCK", "message": message})
+        else:
+            console.print(f"BLOCK: {message}", markup=False)
+        raise typer.Exit(code=2)
     result = build_release_notes_report(
         project_root.resolve(),
         version=version,
-        from_tag=from_tag,
+        from_tag=from_tag.strip(),
         to_ref=to_ref,
         include_github_metadata=include_github_metadata,
+        first_release=first_release,
     )
     if summary_lines_json is not None:
         _write_release_summary_lines_artifact(result, summary_lines_json=summary_lines_json)
@@ -312,6 +324,7 @@ def _write_release_summary_lines_artifact(report: object, *, summary_lines_json:
         "kind": "release_prep_summary_lines",
         "version": getattr(report, "version"),
         "from_tag": getattr(report, "from_tag"),
+        **({"first_release": True} if getattr(report, "first_release", False) else {}),
         "to_ref": getattr(report, "to_ref"),
         "source": "agentic-kit release-notes-generate",
         "summary_lines": lines,

@@ -42,10 +42,16 @@ MANIFEST_FIXTURES = frozenset({
     "external_adoption",
     "external_release_curated",
 })
+# Journey J6 (KIT-GF-118): an empty run root with a local bare origin and an owned runtime; the journey
+# itself creates the project with ``agentic-kit init`` (no hand tag, no hand configuration).
+INIT_FIXTURE = "external_init"
 # external_adoption owns a pip-capable .venv with installed wheels instead of a copied runtime.
-OWNED_FIXTURES = (MANIFEST_FIXTURES - {"external_manifest", "external_adoption"}) | {"external_kit_return"}
-FIXTURES = ("git_repository", "external_kit_return", "external_projection_transition", *sorted(MANIFEST_FIXTURES))
+OWNED_FIXTURES = (MANIFEST_FIXTURES - {"external_manifest", "external_adoption"}) | {"external_kit_return", INIT_FIXTURE}
+FIXTURES = ("git_repository", "external_kit_return", "external_projection_transition", INIT_FIXTURE,
+            *sorted(MANIFEST_FIXTURES))
 STEP_KINDS = ("run", "write", "append", "replace", "assert")
+# A run step may name its working directory inside the run root (J6: the project init created).
+STEP_OPTIONS = ("expect", "capture", "cwd")
 EXPECT_KEYS = frozenset(
     {"returncode", "returncode_nonzero", "json", "json_contains", "stdout_contains", "stdout_equals"}
 )
@@ -61,6 +67,8 @@ BUILTIN_VARIABLES = ("kit_python", "kit_version", "fixture_head")
 FIXTURE_VARIABLES = {"external_adoption": ("adoption_version",), "external_release_curated": ("unreleased_line",)}
 # Release fixtures: a release run there is local (journeys) and every remote stays in the run root.
 RELEASE_FIXTURES = frozenset({"external_release", "external_release_curated"})
+# Fixtures whose remotes the runner confines to the run root, so a journey treats release run as local.
+LOCAL_RELEASE_FIXTURES = RELEASE_FIXTURES | {INIT_FIXTURE}
 _PATH_TOKEN = re.compile(r"([^.\[\]]+)|\[(\d+)\]")
 
 
@@ -144,7 +152,7 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None, effec
         raise ValueError(f"{finding_id}: invalid machine contract keys")
     if machine.get("fixture") not in FIXTURES or not isinstance(machine.get("origin", False), bool):
         raise ValueError(f"{finding_id}: unknown fixture")
-    if machine["fixture"] in {*RELEASE_FIXTURES, "external_adoption"} and not machine.get("origin"):
+    if machine["fixture"] in {*LOCAL_RELEASE_FIXTURES, "external_adoption"} and not machine.get("origin"):
         raise ValueError(f"{finding_id}: {machine['fixture']} requires a local origin")
     if not isinstance(machine.get("covers"), str) or not machine["covers"].strip():
         raise ValueError(f"{finding_id}: a machine contract states what it covers")
@@ -157,8 +165,12 @@ def validate_machine(finding_id: str, retest: dict[str, Any], routes=None, effec
     for step in steps:
         if not isinstance(step, dict) or len(set(step) & set(STEP_KINDS)) != 1:
             raise ValueError(f"{finding_id}: every step has exactly one kind")
-        if set(step) - {*STEP_KINDS, "expect", "capture"}:
+        if set(step) - {*STEP_KINDS, *STEP_OPTIONS}:
             raise ValueError(f"{finding_id}: unknown step keys")
+        if "cwd" in step:
+            if "run" not in step:
+                raise ValueError(f"{finding_id}: only run steps name a working directory")
+            _relative(step["cwd"])
         unknown = _placeholders(step) - known
         if unknown:
             raise ValueError(f"{finding_id}: unbound placeholders {sorted(unknown)}")
@@ -324,7 +336,7 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
     from agentic_project_kit import __version__
 
     variables: dict[str, str] = {"kit_python": sys.executable, "kit_version": __version__}
-    setup = [["git", "init", "-b", "main"]]
+    setup = [] if machine["fixture"] == INIT_FIXTURE else [["git", "init", "-b", "main"]]
     if machine["fixture"] in MANIFEST_FIXTURES:
         setup += [
             ["agentic-kit", "workspace", "init", "--root", ".", "--name", "external",
@@ -338,7 +350,10 @@ def _fixture(machine: dict[str, Any], base: Path, env: dict[str, str], stack=Non
         # The release fixture later seeds this local origin from its prepared commits.
         origin = base / "origin.git"
         variables["origin"] = str(origin)
-        if machine["fixture"] in MANIFEST_FIXTURES:
+        if machine["fixture"] == INIT_FIXTURE:
+            # The journey adds this origin to the project init creates (init --github would push there).
+            setup += [["git", "init", "--bare", "-b", "main", str(origin)]]
+        elif machine["fixture"] in MANIFEST_FIXTURES:
             setup += [
                 ["git", "clone", "--bare", "--quiet", ".", str(origin)],
                 ["git", "remote", "add", "origin", str(origin)],
@@ -478,16 +493,20 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
             failed: list[str] = []
             if "run" in step:
                 record["argv"] = raw["run"]
+                cwd = root / step["cwd"] if "cwd" in step else root
+                if "cwd" in step:
+                    record["cwd"] = raw["cwd"]
                 if machine["fixture"] in {"external_release_check", "external_release_check_stale_editable"}:
                     from agentic_project_kit.greenfield_retest_release_check import guard_index
                     try:
                         guard_index(root, variables["kit_python"], variables["release_index_url"], step["run"])
                     except (ValueError, OSError) as exc:
                         return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
-                if machine["fixture"] in RELEASE_FIXTURES and step["run"][0] == "agentic-kit":
+                if machine["fixture"] in LOCAL_RELEASE_FIXTURES and step["run"][0] == "agentic-kit":
                     from agentic_project_kit.greenfield_retest_release import guard_local_origin
                     try:
-                        guard_local_origin(root, base, env, _run)
+                        # J6 starts in a run root without a repository (agentic-kit init creates it).
+                        guard_local_origin(cwd, base, env, _run, allow_no_repository=machine["fixture"] == INIT_FIXTURE)
                     except ValueError as exc:
                         return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
                 if machine["fixture"] == "external_adoption" and step["run"][0] == "agentic-kit":
@@ -496,7 +515,7 @@ def run_machine(machine: dict[str, Any]) -> dict[str, Any]:
                         guard_adoption_index(root, variables, step["run"])
                     except (ValueError, OSError) as exc:
                         return {"result": "FAIL", "failures": [str(exc)], "steps": steps}
-                completed = _run(step["run"], root, env)
+                completed = _run(step["run"], cwd, env)
                 record["returncode"] = completed.returncode
                 failed = _check(step.get("expect", {}), completed)
                 if not failed and raw.get("capture"):

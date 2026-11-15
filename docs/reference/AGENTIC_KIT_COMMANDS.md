@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f1792899a01f
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 47c58c29a596
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -2208,7 +2208,8 @@ Generate deterministic evidence-backed release notes from a local git tag diff.
 |---|---:|---|---:|---|---|
 | `project_root` | `TyperOption` | --root | `False` | `PosixPath('.')` |  |
 | `version` | `TyperOption` | --version | `True` |  | Target release version without leading v. |
-| `from_tag` | `TyperOption` | --from-tag | `True` |  | Previous release tag used as the lower diff bound. |
+| `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag used as the lower diff bound. |
+| `first_release` | `TyperOption` | --first-release | `False` | `False` | First release without a previous v* tag: notes start at the root commit and list commits without a PR number as direct (KIT-GF-118). |
 | `to_ref` | `TyperOption` | --to-ref | `False` | `HEAD` | Upper git ref used for release-note evidence. |
 | `json_out` | `TyperOption` | --json-out | `False` |  | Write generated JSON release notes here. |
 | `out` | `TyperOption` | --out | `False` |  | Write generated Markdown release notes here. |
@@ -3771,7 +3772,8 @@ Run a bounded scan for known workflow standard errors before patch/transfer/rele
 |---|---:|---|---:|---|---|
 | `before_release` | `TyperOption` | --before-release | `False` | `False` | Run the release-oriented standard-error scan bundle. |
 | `version` | `TyperOption` | --version | `False` | `` | Release version for before-release checks. Required with --before-release. |
-| `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag for release notes checks. Defaults to the latest local v* git tag. |
+| `from_tag` | `TyperOption` | --from-tag | `False` | `` | Previous release tag for release notes checks. Defaults to the latest local v* git tag; without one the scan checks the first release (KIT-GF-118). |
+| `first_release` | `TyperOption` | --first-release | `False` | `False` | Check the first release: release notes from the root commit (KIT-GF-118). |
 | `to_ref` | `TyperOption` | --to-ref | `False` | `main` | Target ref for release notes checks. |
 | `date` | `TyperOption` | --date | `False` | `` | Release date for release-prep dry-run. Defaults to today. |
 | `summary_lines` | `TyperOption` | --summary-line | `False` |  | Additional release changelog summary line for the release-prep dry-run (KIT-GF-045). Repeatable. |
