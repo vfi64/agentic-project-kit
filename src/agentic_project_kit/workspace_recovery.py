@@ -26,6 +26,7 @@ from agentic_project_kit.workspace_init import (
     _append_gitignore_volatile,
     _gitignore_diff,
     build_workspace_init_plan,
+    validate_publication_option,
 )
 from agentic_project_kit.workspace_lock import acquire_workspace_lock
 
@@ -90,7 +91,8 @@ def generated_project_recoverable(root: Path) -> bool:
     return True
 
 
-def _recovery_plan(root: Path, *, name: str | None, project_type: str | None, profile: str | None) -> tuple[dict, dict[str, str]]:
+def _recovery_plan(root: Path, *, name: str | None, project_type: str | None, profile: str | None,
+                   publication: str | None = None) -> tuple[dict, dict[str, str]]:
     if is_agentic_project_kit_development_checkout(root):
         raise ValueError("Recovery is only for external workspaces.")
     if (root / ".agentic").is_symlink():
@@ -109,7 +111,7 @@ def _recovery_plan(root: Path, *, name: str | None, project_type: str | None, pr
         raise ValueError("Recovery overrides conflict with the preserved project contract.")
     plan = build_workspace_init_plan(
         root, name=project["name"], project_type=workspace_type, profile=profile,
-        recovery_plan=True,
+        recovery_plan=True, publication=publication,
     )
     allowed = set(plan.files) | {".agentic/project.yaml", ".agentic/todo.yaml"}
     directories = set(plan.directories)
@@ -158,12 +160,13 @@ def _recovery_plan(root: Path, *, name: str | None, project_type: str | None, pr
 def recover_workspace(
     root: Path, *, execute: bool = False, expected_signature: str = "",
     approved_by: str = "", consent_source: str = "", name: str | None = None,
-    project_type: str | None = None, profile: str | None = None,
+    project_type: str | None = None, profile: str | None = None, publication: str | None = None,
 ) -> dict:
     """Plan without writes; execute only the identical reviewed additive plan."""
     result = {"schema_version": 1, "kind": "workspace_recovery_result", "result_status": "BLOCKED", "written": False}
     written_paths: list[str] = []
     try:
+        validate_publication_option(publication)
         root = root.resolve()
         if (root / ".agentic/config.yaml").is_file():
             # A completed workspace is not reset to seed contents on repetition.
@@ -172,14 +175,19 @@ def recover_workspace(
             validation = validate_rule_sources(root)
             if workspace.manifest_schema_version == 0 or validation.fail_closed:
                 raise ValueError("Initialized workspace needs rule/config diagnosis; no recovery writes permitted.")
+            if publication is not None and publication != workspace.publication:
+                raise ValueError(f"Initialized workspace has publication {workspace.publication!r}; "
+                                 "recovery does not change the publication policy.")
             return {**result, "result_status": "PASS", "changed_paths": [], "next_action": "Already initialized; no recovery needed."}
-        result, additions = _recovery_plan(root, name=name, project_type=project_type, profile=profile)
+        result, additions = _recovery_plan(root, name=name, project_type=project_type, profile=profile,
+                                    publication=publication)
         if not execute:
             return result
         if not approved_by.strip() or not consent_source.strip() or expected_signature != result["approval_signature"]:
             raise ValueError("Explicit maintainer attribution and the current plan signature are required.")
         with acquire_workspace_lock(root, "workspace-recovery"):
-            fresh, _ = _recovery_plan(root, name=name, project_type=project_type, profile=profile)
+            fresh, _ = _recovery_plan(root, name=name, project_type=project_type, profile=profile,
+                                    publication=publication)
             if fresh["approval_signature"] != expected_signature:
                 raise ValueError("Workspace changed after approval; review a fresh plan.")
             _append_gitignore_volatile(root)

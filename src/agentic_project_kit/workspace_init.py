@@ -10,6 +10,7 @@ from agentic_project_kit import __version__ as PACKAGE_VERSION
 from agentic_project_kit.volatile_paths import RULE_ACK_DIRECTORY_PATH, SUCCESSOR_RUNTIME_IDENTITY_PATH
 from agentic_project_kit.workspace import (
     ALLOWED_PROFILES,
+    ALLOWED_PUBLICATION_POLICIES,
     DEFAULT_PUBLICATION_POLICY,
     ALLOWED_PROJECT_TYPES,
     DEFAULT_REVIEW_BUDGETS,
@@ -113,8 +114,10 @@ def build_workspace_init_plan(
     inject_ci: bool = False,
     inject_pre_commit: bool = False,
     recovery_plan: bool = False,
+    publication: str | None = None,
 ) -> WorkspaceInitPlan:
     root_path = Path(root)
+    validate_publication_option(publication)
     if not recovery_plan:
         _preflight_workspace_absence(root_path)
     adopted = analyze_workspace_adoption(root_path)
@@ -124,7 +127,7 @@ def build_workspace_init_plan(
         project_type=project_type,
         profile=profile,
     )
-    manifest = _manifest_for(project)
+    manifest = _manifest_for(project, publication=publication)
     manifest_yaml = yaml.safe_dump(manifest, sort_keys=False)
     files = _planned_files(root_path, project, manifest_yaml)
     directories = (
@@ -200,8 +203,16 @@ def execute_workspace_init(plan: WorkspaceInitPlan) -> None:
         load_workspace(plan.root)
 
 
-def workspace_init_manifest_yaml(project: ProjectSuggestion) -> str:
-    return yaml.safe_dump(_manifest_for(project), sort_keys=False)
+def workspace_init_manifest_yaml(project: ProjectSuggestion, *, publication: str | None = None) -> str:
+    return yaml.safe_dump(_manifest_for(project, publication=publication), sort_keys=False)
+
+
+def validate_publication_option(publication: str | None) -> None:
+    """``--publication`` takes one of the manifest's publication policies (default when omitted)."""
+    if publication is not None and publication not in ALLOWED_PUBLICATION_POLICIES:
+        allowed = ", ".join(sorted(ALLOWED_PUBLICATION_POLICIES))
+        raise WorkspaceInitError(f"invalid publication policy {publication!r}; expected one of {allowed}",
+                                 code="INVALID_PUBLICATION")
 
 
 def workspace_init_generated_files(
@@ -324,7 +335,7 @@ def _override_project(
     )
 
 
-def _manifest_for(project: ProjectSuggestion) -> dict[str, object]:
+def _manifest_for(project: ProjectSuggestion, *, publication: str | None = None) -> dict[str, object]:
     return {
         "kit_schema_version": SUPPORTED_MANIFEST_SCHEMA_VERSION,
         "project": {
@@ -341,7 +352,7 @@ def _manifest_for(project: ProjectSuggestion) -> dict[str, object]:
         "transfer": {
             "visibility": "repo",
         },
-        "publication": DEFAULT_PUBLICATION_POLICY,
+        "publication": publication or DEFAULT_PUBLICATION_POLICY,
         "hygiene": default_hygiene_manifest(),
         **({"handoff": {"projection_contract_min": 2}} if _v2_active() else {}),
         "paths": {

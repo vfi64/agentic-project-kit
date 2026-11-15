@@ -142,7 +142,7 @@ def build_workspace_remove_plan(
     expected_files = workspace_init_generated_files(
         root_path,
         project,
-        manifest_yaml=workspace_init_manifest_yaml(project),
+        manifest_yaml=workspace_init_manifest_yaml(project, publication=workspace.publication),
     )
     expected_files = {
         path: content

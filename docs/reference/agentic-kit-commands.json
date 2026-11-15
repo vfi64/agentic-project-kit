@@ -20888,6 +20888,20 @@
           "param_type": "TyperOption",
           "required": false,
           "secondary_opts": []
+        },
+        {
+          "default": null,
+          "help": "Publication policy for the manifest: none, github, github+pypi, or github+pypi+zenodo (default).",
+          "is_flag": false,
+          "metavar": null,
+          "multiple": false,
+          "name": "publication",
+          "opts": [
+            "--publication"
+          ],
+          "param_type": "TyperOption",
+          "required": false,
+          "secondary_opts": []
         }
       ],
       "path": [
@@ -21046,7 +21060,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "59e0d7f172f2",
+    "manifest_sha": "f1792899a01f",
     "schema_version": 2
   },
   "schema_version": 3,

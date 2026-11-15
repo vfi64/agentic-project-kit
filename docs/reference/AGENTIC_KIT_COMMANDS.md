@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 59e0d7f172f2
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: f1792899a01f
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -4416,6 +4416,7 @@ Plan or create a bounded operating-layer workspace.
 | `expected_signature` | `TyperOption` | --expected-signature | `False` | `` | Reviewed recovery plan signature. |
 | `approved_by` | `TyperOption` | --approved-by | `False` | `` | Maintainer approving recovery. |
 | `consent_source` | `TyperOption` | --consent-source | `False` | `` | Source of explicit recovery consent. |
+| `publication` | `TyperOption` | --publication | `False` |  | Publication policy for the manifest: none, github, github+pypi, or github+pypi+zenodo (default). |
 
 ### `agentic-kit workspace remove`
 
