@@ -9,6 +9,7 @@ from pathlib import Path
 import re
 
 from agentic_project_kit.release import CommandResult, run_command
+from agentic_project_kit.release_range import FIRST_RELEASE_RANGE
 
 
 ReleaseNotesRunner = Callable[[Path, Sequence[str]], CommandResult]
@@ -79,9 +80,12 @@ class ReleaseNotesReport:
     missing_evidence: tuple[dict[str, object], ...]
     validation: ReleaseNotesValidation
     warnings: tuple[str, ...] = ()
+    first_release: bool = False
 
     def as_dict(self) -> dict[str, object]:
+        extra: dict[str, object] = {"first_release": True} if self.first_release else {}
         return {
+            **extra,
             "schema_version": self.schema_version,
             "kind": self.kind,
             "version": self.version,
@@ -123,13 +127,23 @@ def build_release_notes_report(
     command_runner: ReleaseNotesRunner | None = None,
     include_github_metadata: bool = False,
     private_unclassified_fallback: bool | None = None,
+    first_release: bool = False,
 ) -> ReleaseNotesReport:
+    """Release notes for from_tag..to_ref, or from the root commit for the first release (KIT-GF-118).
+
+    In the first release (no previous v* tag) a product commit without a PR number is listed as a
+    direct commit instead of blocking; from the second release on the PR evidence stays mandatory.
+    """
     runner = command_runner or run_command
+    if first_release and from_tag:
+        raise ValueError("--first-release and --from-tag exclude each other")
     if private_unclassified_fallback is None:
         private_unclassified_fallback = _publication_is_private(project_root)
     fallback_items: list[ReleaseNoteItem] = []
     plain_version = version.removeprefix("v")
-    commits, evidence_errors = _collect_commits(project_root, from_tag=from_tag, to_ref=to_ref, runner=runner)
+    commits, evidence_errors = _collect_commits(
+        project_root, from_tag=from_tag, to_ref=to_ref, runner=runner, first_release=first_release)
+    range_label = f"{FIRST_RELEASE_RANGE}..{to_ref}" if first_release else f"{from_tag}..{to_ref}"
     pr_coverage, coverage_evidence = _collect_merge_pr_coverage(project_root, commits=commits, runner=runner)
     if include_github_metadata:
         github_coverage, github_coverage_evidence = _collect_github_commit_pr_coverage(
@@ -160,10 +174,10 @@ def build_release_notes_report(
             github_metadata_available = False
         item, item_missing_evidence = _item_from_commit(
             commit,
-            from_tag=from_tag,
-            to_ref=to_ref,
+            range_label=range_label,
             github_metadata=github_metadata,
             pr_coverage=coverage,
+            first_release=first_release,
         )
         if item.category == "Unclassified" and private_unclassified_fallback:
             item = _private_fallback_item(item)
@@ -200,6 +214,7 @@ def build_release_notes_report(
         missing_evidence=tuple(missing_evidence),
         validation=validation,
         warnings=_fallback_warnings(fallback_items),
+        first_release=first_release,
     )
 
 
@@ -283,11 +298,13 @@ def render_release_notes_markdown(report: ReleaseNotesReport) -> str:
     lines.append("")
 
     lines.append("## Evidence")
-    lines.append(f"- Range: `{report.from_tag}..{report.to_ref}`.")
+    if report.first_release:
+        lines.append(f"- Range: first release, from the root commit to `{report.to_ref}`.")
+    else:
+        lines.append(f"- Range: `{report.from_tag}..{report.to_ref}`.")
     lines.append(f"- Generated timestamp source: `{report.deterministic_timestamp_source}`.")
     for item in (*report.items, *report.administrative_items):
-        pr = f"PR #{item.pr_number}" if item.pr_number is not None else "PR <missing>"
-        lines.append(f"- `{item.commit_sha[:8]}` {pr}: {item.title}")
+        lines.append(f"- `{item.commit_sha[:8]}` {_pr_label(item)}: {item.title}")
     lines.append("")
 
     lines.append("## Known Issues")
@@ -335,17 +352,27 @@ def _collect_commits(
     from_tag: str,
     to_ref: str,
     runner: ReleaseNotesRunner,
+    first_release: bool = False,
 ) -> tuple[tuple[_GitCommit, ...], tuple[dict[str, object], ...]]:
     missing_evidence: list[dict[str, object]] = []
-    if runner(project_root, ["git", "rev-parse", "--verify", from_tag]).returncode != 0:
+    if first_release:
+        tags = runner(project_root, ["git", "tag", "--list", "v*"])
+        existing = [line.strip() for line in tags.stdout.splitlines() if line.strip()] if tags.returncode == 0 else []
+        if tags.returncode != 0 or existing:
+            # A first release is a release without any previous v* tag (KIT-GF-118).
+            missing_evidence.append({"type": "first_release_with_release_tag", "tags": existing[:5],
+                                     "stderr": tags.stderr.strip()})
+            return (), tuple(missing_evidence)
+    elif runner(project_root, ["git", "rev-parse", "--verify", from_tag]).returncode != 0:
         missing_evidence.append({"type": "missing_ref", "ref": from_tag})
         return (), tuple(missing_evidence)
     if runner(project_root, ["git", "rev-parse", "--verify", to_ref]).returncode != 0:
         missing_evidence.append({"type": "missing_ref", "ref": to_ref})
         return (), tuple(missing_evidence)
-    result = runner(project_root, ["git", "log", "--reverse", "--format=%H%x1f%P%x1f%s%x1f%cI%x1e", f"{from_tag}..{to_ref}"])
+    revision_range = to_ref if first_release else f"{from_tag}..{to_ref}"
+    result = runner(project_root, ["git", "log", "--reverse", "--format=%H%x1f%P%x1f%s%x1f%cI%x1e", revision_range])
     if result.returncode != 0:
-        missing_evidence.append({"type": "git_log_failed", "range": f"{from_tag}..{to_ref}", "stderr": result.stderr.strip()})
+        missing_evidence.append({"type": "git_log_failed", "range": revision_range, "stderr": result.stderr.strip()})
         return (), tuple(missing_evidence)
     commits: list[_GitCommit] = []
     for record in result.stdout.strip("\x1e\n").split("\x1e"):
@@ -382,22 +409,25 @@ def _to_utc_iso(value: str) -> str:
 def _item_from_commit(
     commit: _GitCommit,
     *,
-    from_tag: str,
-    to_ref: str,
+    range_label: str,
     github_metadata: dict[str, object] | None,
     pr_coverage: _PrCoverage | None,
+    first_release: bool = False,
 ) -> tuple[ReleaseNoteItem, tuple[dict[str, object], ...]]:
     direct_pr_number = _pr_number_from_subject(commit.subject)
     pr_number = direct_pr_number or (pr_coverage.number if pr_coverage is not None else None)
     title = _title_from_subject(commit.subject)
     category = _classify_with_metadata(commit.subject, github_metadata)
     missing_evidence: list[dict[str, object]] = []
-    if pr_number is None:
+    direct = first_release and pr_number is None
+    if pr_number is None and not direct:
         missing_evidence.append({"type": "missing_pr_number", "commit_sha": commit.sha, "title": title})
     evidence: list[dict[str, object]] = [
         {"type": "commit", "sha": commit.sha, "subject": commit.subject, "committed_at": _to_utc_iso(commit.committed_at)},
-        {"type": "tag_diff", "range": f"{from_tag}..{to_ref}"},
+        {"type": "tag_diff", "range": range_label},
     ]
+    if direct:  # KIT-GF-118: listed as a direct commit of the first release instead of blocking
+        evidence.append({"type": "direct_commit", "range": FIRST_RELEASE_RANGE})
     if pr_number is not None:
         evidence.append({"type": "pull_request", "number": pr_number})
     if pr_coverage is not None:
@@ -877,7 +907,8 @@ def _validate_release_notes(
     if product_missing_pr:
         refs = ", ".join(str(evidence.get("commit_sha", ""))[:8] for evidence in product_missing_pr)
         reasons.append(f"Product release-note items are missing PR evidence: {refs}")
-    ref_errors = [evidence for evidence in missing_evidence if evidence.get("type") in {"missing_ref", "git_log_failed", "unparseable_git_log_record"}]
+    ref_errors = [evidence for evidence in missing_evidence if evidence.get("type") in {
+        "missing_ref", "git_log_failed", "unparseable_git_log_record", "first_release_with_release_tag"}]
     for evidence in ref_errors:
         reasons.append(f"Missing or invalid git evidence: {evidence}")
     return ReleaseNotesValidation(status="BLOCK" if reasons else "PASS", reasons=tuple(reasons))
@@ -887,6 +918,15 @@ def _is_product_commit(evidence: dict[str, object]) -> bool:
     return not _is_administrative_subject(str(evidence.get("title", "")))
 
 
+def _is_direct_commit(item: ReleaseNoteItem) -> bool:
+    return any(evidence.get("type") == "direct_commit" for evidence in item.evidence)
+
+
+def _pr_label(item: ReleaseNoteItem) -> str:
+    if item.pr_number is not None:
+        return f"PR #{item.pr_number}"
+    return "direct commit" if _is_direct_commit(item) else "PR <missing>"
+
+
 def _render_item(item: ReleaseNoteItem) -> str:
-    pr = f"PR #{item.pr_number}" if item.pr_number is not None else "PR <missing>"
-    return f"- {item.title} ({pr}, `{item.commit_sha[:8]}`)."
+    return f"- {item.title} ({_pr_label(item)}, `{item.commit_sha[:8]}`)."

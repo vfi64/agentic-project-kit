@@ -56,6 +56,15 @@ KIT-GF-117: `tests/test_g3_init_github_routes.py` requires the remote effects
 `push` and `release_publish` for `init` and `github-create`, none for `init`
 without `--github`, and `needs_consent` for `init --github`.
 
+KIT-GF-118: `tests/test_release_first_release.py` requires the first release
+without a previous `v*` tag: release notes from the root commit that list
+commits without a PR number as direct commits, only in the first release (a
+second release still blocks without PR evidence), a block for release tags the
+origin lists but the clone lacks, and the `first_release` field in the B4 gate,
+which the approval signature binds. Journey J6 (`tests/test_g4_journeys.py`,
+fixture `external_init`) runs `init`, the signed recovery with `--publication
+none`, the CI update and `release run` up to the B4 gate of the first release.
+
 `tests/test_greenfield_retest.py` names GF-104/105/106/108 as the only local
 retests without machine contracts. Their catalog entries must state a native
 regression and the unsupported fixture topology; other new local findings

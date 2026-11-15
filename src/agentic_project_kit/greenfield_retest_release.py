@@ -65,12 +65,16 @@ def prepare_release_fixture(root: Path, variables: dict[str, str], env: dict[str
 
 
 def guard_local_origin(root: Path, base: Path, env: dict[str, str],
-                       run: Callable[..., subprocess.CompletedProcess]) -> None:
+                       run: Callable[..., subprocess.CompletedProcess], *, allow_no_repository: bool = False) -> None:
     """Before every Kit step: every remote URL is a local path inside the run's temporary root.
 
     Journey J4 (G4) executes a signed release run here; its push reaches only the disposable bare
     origin and its GitHub steps find no GitHub remote. A contract that points a remote elsewhere fails.
+    Journey J6 starts in a run root without a repository: there, and only there, a directory outside
+    any Git work tree has no remote to check (``allow_no_repository``).
     """
+    if allow_no_repository and run(["git", "rev-parse", "--git-dir"], root, env).returncode != 0:
+        return
     listed = run(["git", "remote", "-v"], root, env)
     if listed.returncode != 0:
         raise ValueError("local_origin_unreadable")

@@ -2237,6 +2237,25 @@ Expected: The manifest lists push and release_publish for init and github-create
 
 Expected result fields: `{"assertions": ["Native test_init_remote_effects_follow_the_github_flag: manifest effects, release_effects narrowing and needs_consent for both forms."]}`.
 
+## KIT-GF-118
+
+Title: First release of an init project blocks in release run without a previous v* tag, and its direct commits block the release notes
+
+Kit state: CLOSED; fixed_in: unreleased.
+Evidence: docs/reports/greenfield/KIT-GF-118-first-release-without-tag-2026-11-15.md
+
+Execution class: owner_remote (effects: merge, pull_request, push, release_publish); no machine contract; `greenfield retest` reports NOT_RUN_LOCALLY.
+
+Preconditions: A project created by agentic-kit init and adopted through the signed workspace recovery, with an origin and without any v* tag.
+
+```text
+agentic-kit release run --version {version} --json
+```
+
+Expected: AWAITING_APPROVAL at B4 without a BLOCKED step; the B4 gate carries first_release (range root, root commit, direct commits), which its signature binds; the release notes list commits without a PR number as direct commits. From the second release on the PR evidence stays mandatory, and release tags the origin lists but the clone lacks block.
+
+Expected result fields: `{"assertions": ["Native tests in tests/test_release_first_release.py; journey J6 runs init to the B4 gate of the first release."]}`.
+
 ## KIT-GF-RULE-REGISTRY-BOOTSTRAP
 
 Title: rule-registry check hard-fails and report crashes in an external workspace without a mechanism inventory

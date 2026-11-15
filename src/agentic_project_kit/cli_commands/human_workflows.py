@@ -18,6 +18,7 @@ from agentic_project_kit.cli_executable import default_agentic_kit, default_pyth
 from agentic_project_kit.doc_lifecycle import build_doc_lifecycle_release_blockers
 from agentic_project_kit.release_metadata_authority_gate import release_anchor_changes
 from agentic_project_kit.release_prepare import refresh_dpa_readiness_command_manifest_ack
+from agentic_project_kit.release_range import ReleaseRange, local_release_tags, resolve as resolve_release_range
 from agentic_project_kit.release_deadline_gate import deadline_blockers
 from agentic_project_kit.release_run import ReleaseRunOptions, run_release
 from agentic_project_kit.release_review_projection import review_projection_command
@@ -278,14 +279,29 @@ def _python(*parts: str) -> list[str]:
 
 
 def _latest_release_tag() -> str:
-    completed = subprocess.run(["git", "tag", "--sort=-creatordate"], text=True, capture_output=True)
-    if completed.returncode != 0:
-        return ""
-    for line in completed.stdout.splitlines():
-        tag = line.strip()
-        if tag.startswith("v"):
-            return tag
-    return ""
+    tags = local_release_tags(Path("."))
+    return tags[0] if tags else ""
+
+
+def _release_range(from_tag: str) -> ReleaseRange:
+    """The explicit tag, else the newest local v* tag, else the first release (KIT-GF-118)."""
+    return resolve_release_range(Path("."), from_tag.strip() or _latest_release_tag())
+
+
+def _scan_range_args(release_range: ReleaseRange) -> list[str]:
+    return ["--first-release"] if release_range.first_release else ["--from-tag", release_range.from_tag]
+
+
+def _release_range_step(release_range: ReleaseRange) -> dict[str, object]:
+    return {
+        "name": "release-range",
+        "argv": [],
+        "returncode": 2,
+        "ok": False,
+        "allowed_returncodes": [0],
+        "stdout": "",
+        "stderr": "; ".join(release_range.blockers),
+    }
 
 
 def _path_args(paths: list[Path]) -> list[str]:
@@ -810,6 +826,7 @@ def _write_release_prepare_report_step(
     to_ref: str,
     summary_lines_path: Path,
     prior_steps: list[dict[str, object]],
+    first_release: bool = False,
     base_ref: str = "origin/main",
     explicit_summary_lines: list[str] | None = None,
 ) -> dict[str, object]:
@@ -823,6 +840,7 @@ def _write_release_prepare_report_step(
             "version": version,
             "date": release_date,
             "from_tag": from_tag,
+            **({"first_release": True} if first_release else {}),
             "to_ref": to_ref,
             "base_ref": base_ref,
             "summary_lines_path": str(summary_lines_path),
@@ -1369,17 +1387,22 @@ def release_ready_command(
     _require_release_deadline(version, action="release-ready", json_output=json_output)
     summary_line_args = _summary_line_args(summary_lines)
     release_date = date or date_cls.today().isoformat()
-    effective_from_tag = from_tag or _latest_release_tag()
     summary_lines_path = load_workspace(Path(".")).tmp_file(f"release-{version.replace('.', '')}-ready-summary-lines.json")
     steps = [_run_step("sync-main", _agentic("transfer", "sync-main"))]
+    # KIT-GF-118: derived after sync-main fetched the tags; no previous v* tag = first release.
+    release_range = _release_range(from_tag)
+    effective_from_tag = release_range.from_tag
+    if release_range.blockers:
+        steps.append(_release_range_step(release_range))
     if is_external_manifest_workspace(Path(".")):
         # KIT-GF-032: sync-main normalizes the session and removes the LLM-context
         # carriers, which live in excluded runtime paths of an external workspace;
         # regenerate them before the scan checks them.
         steps.append(_run_step("refresh-llm-context-carriers", _agentic("transfer", "refresh-llm-context-carriers", "--json")))
-    steps.append(_run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--date", release_date, *summary_line_args, "--json"), allowed_returncodes={0}))
+    if not release_range.blockers:
+        steps.append(_run_step("standard-error-scan", _agentic("transfer", "standard-error-scan", "--before-release", "--version", version, *_scan_range_args(release_range), "--to-ref", to_ref, "--date", release_date, *summary_line_args, "--json"), allowed_returncodes={0}))
     if all(step["ok"] for step in steps):
-        steps.append(_run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json")))
+        steps.append(_run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, *release_range.notes_args(), "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json")))
     if all(step["ok"] for step in steps):
         steps.append(_run_step("release-prep-dry-run", _agentic("release-prep", "--version", version, "--date", release_date, *summary_line_args, "--summary-lines-from", str(summary_lines_path), "--dry-run", "--json")))
     steps += [
@@ -1392,6 +1415,7 @@ def release_ready_command(
         extra={
             "version": version,
             "from_tag": effective_from_tag,
+            "first_release": release_range.first_release,
             "to_ref": to_ref,
             "date": release_date,
             "summary_lines_path": str(summary_lines_path),
@@ -1422,10 +1446,13 @@ def release_prepare_command(
         return
     summary_line_args = _summary_line_args(summary_lines)
     release_date = date or date_cls.today().isoformat()
-    effective_from_tag = from_tag or _latest_release_tag()
+    release_range = _release_range(from_tag)  # KIT-GF-118
+    effective_from_tag = release_range.from_tag
+    if release_range.blockers:
+        steps.append(_release_range_step(release_range))
     summary_lines_path = load_workspace(Path(".")).tmp_file(f"release-{version.replace('.', '')}-summary-lines.json")
     if all(step["ok"] for step in steps):
-        steps.append(_run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, "--from-tag", effective_from_tag, "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json")))
+        steps.append(_run_step("release-notes-generate", _agentic("release-notes-generate", "--version", version, *release_range.notes_args(), "--to-ref", to_ref, "--include-github-metadata", "--summary-lines-json", str(summary_lines_path), "--json")))
     if all(step["ok"] for step in steps):
         release_prep_argv = _agentic(
             "release-prep",
@@ -1467,6 +1494,7 @@ def release_prepare_command(
             version=version,
             release_date=release_date,
             from_tag=effective_from_tag,
+            first_release=release_range.first_release,
             to_ref=to_ref,
             summary_lines_path=summary_lines_path,
             prior_steps=list(steps),
@@ -1482,6 +1510,7 @@ def release_prepare_command(
         extra={
             "version": version,
             "from_tag": effective_from_tag,
+            "first_release": release_range.first_release,
             "to_ref": to_ref,
             "date": release_date,
             "summary_lines_path": str(summary_lines_path),

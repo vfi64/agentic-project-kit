@@ -81,7 +81,7 @@ def test_consent_is_a_signed_execution_or_an_effect_beyond_local_and_network_rea
 
 def test_approval_baselines_are_one_per_finish_plus_one_per_signed_adoption():
     assert {jid: journey["approvals"] for jid, journey in _journeys().items()} == {
-        "J1": 1, "J2": 2, "J3": 1, "J4": 1, "J5": 0}
+        "J1": 1, "J2": 2, "J3": 1, "J4": 1, "J5": 0, "J6": 1}
 
 
 def test_only_the_adoption_fixture_treats_an_exact_kit_update_as_local():
@@ -150,6 +150,57 @@ def test_the_curated_release_fixture_is_a_release_fixture_with_its_line():
     steps = _journeys()["J5"]["machine"]["steps"]
     assert all("--summary-line" not in step.get("run", []) for step in steps)
     assert [step["assert"]["section"]["heading"] for step in steps if "assert" in step] == ["## v0.1.1", "## Unreleased"]
+
+
+def test_the_init_journey_starts_without_a_project_and_without_hand_tag_or_hand_config():
+    """J6 (KIT-GF-118): init creates the project; the first release reaches B4 with first_release."""
+    from agentic_project_kit.greenfield_retest import INIT_FIXTURE, LOCAL_RELEASE_FIXTURES, RELEASE_FIXTURES
+
+    journey = _journeys()["J6"]
+    steps = journey["machine"]["steps"]
+    assert journey["machine"]["fixture"] == INIT_FIXTURE and INIT_FIXTURE not in RELEASE_FIXTURES
+    assert LOCAL_RELEASE_FIXTURES == RELEASE_FIXTURES | {INIT_FIXTURE}
+    assert steps[0]["run"][:3] == ["agentic-kit", "init", "demo"] and "cwd" not in steps[0]
+    assert "--github" not in steps[0]["run"]
+    runs = [step["run"] for step in steps if "run" in step]
+    assert not [argv for argv in runs if argv[:2] == ["git", "tag"] and "--list" not in argv], "no hand tag"
+    assert not [step for step in steps if {"write", "append", "replace"} & set(step)], "no hand configuration"
+    recovery = next(argv for argv in runs if argv[1:3] == ["workspace", "init"])
+    assert recovery[recovery.index("--publication") + 1] == "none"
+    release = steps[-2]
+    assert release["run"][1:3] == ["release", "run"] and release["cwd"] == "demo"
+    assert release["expect"]["json"] == {"result_status": "AWAITING_APPROVAL", "current_step": "B4",
+                                         "gate.first_release.range": "root"}
+    plan = ["agentic-kit", "release", "run", "--version", "0.1.1", "--json"]
+    assert journey_effects(plan, check_route(plan), INIT_FIXTURE) == ["push"]
+
+
+@pytest.mark.parametrize("change,message", [
+    (lambda steps: steps[1].update(cwd="/elsewhere"), "relative and confined"),
+    (lambda steps: steps[1].update(cwd="../demo"), "relative and confined"),
+    (lambda steps: steps.append({"assert": {"exists": ["demo"]}, "cwd": "demo"}), "only run steps name"),
+])
+def test_a_step_working_directory_stays_inside_the_run_root(change, message):
+    journey = json.loads(json.dumps(_journeys()["J6"]))
+    change(journey["machine"]["steps"])
+    with pytest.raises(ValueError, match=message):
+        validate(journey)
+
+
+def test_the_origin_guard_skips_only_a_directory_without_repository_in_the_init_fixture(tmp_path):
+    import subprocess as sp
+
+    from agentic_project_kit.greenfield_retest_release import guard_local_origin
+
+    def run(argv, cwd, env):
+        return sp.run(argv, cwd=cwd, env=env, capture_output=True, text=True)
+
+    env = {**os.environ, "GIT_CEILING_DIRECTORIES": str(tmp_path)}
+    empty = tmp_path / "empty"
+    empty.mkdir()
+    guard_local_origin(empty, tmp_path, env, run, allow_no_repository=True)
+    with pytest.raises(ValueError, match="local_origin_unreadable"):
+        guard_local_origin(empty, tmp_path, env, run)
 
 
 @pytest.mark.parametrize("section,message", [

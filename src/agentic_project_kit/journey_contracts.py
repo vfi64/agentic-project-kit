@@ -27,6 +27,13 @@ expect BLOCKED, and only for the declared release step; every other Kit step kee
 J5 (K8) runs in the curated variant of the release fixture, whose merged PR left exactly one
 Unreleased line: ``release run`` without summary lines reaches the B4 gate, and the release section
 carries exactly that line while Unreleased is empty (``assert`` with ``section``).
+
+J6 (KIT-GF-118) starts without a project: ``agentic-kit init`` creates it in the empty run root of the
+init fixture, the journey adds the local bare origin and pushes (what ``init --github`` does on
+GitHub), adopts the workspace through the signed recovery with ``--publication none`` and the CI
+update, and runs ``release run`` for the first release up to the B4 gate, whose ``first_release``
+field names the root commit. No hand tag and no hand configuration; run steps name their working
+directory (``cwd``) inside the run root, and the runner confines the remotes as in J4.
 """
 from __future__ import annotations
 
@@ -36,12 +43,12 @@ from importlib.resources import files
 from typing import Any
 
 from agentic_project_kit.greenfield_retest import (
-    LOCAL_EFFECTS, RELEASE_FIXTURES, check_route, run_machine, validate_machine,
+    LOCAL_EFFECTS, LOCAL_RELEASE_FIXTURES, check_route, run_machine, validate_machine,
 )
 from agentic_project_kit.greenfield_retest_adoption import adoption_effects
 from agentic_project_kit.greenfield_retest_release_check import release_effects
 
-JOURNEY_IDS = ("J1", "J2", "J3", "J4", "J5")
+JOURNEY_IDS = ("J1", "J2", "J3", "J4", "J5", "J6")
 STEP_STATUSES = frozenset({"PASS", "PLANNED", "AWAITING_APPROVAL"})
 CONSENT_FREE_EFFECTS = LOCAL_EFFECTS | {"network_read"}
 # Routes whose output is a record without result_status; such a step must exit 0.
@@ -56,7 +63,7 @@ def journey_effects(command, entry, fixture=None) -> list[str]:
     argv = shlex.split(command) if isinstance(command, str) else list(command)
     if tuple(entry["path"]) == ("work", "finish") and "--execute" not in argv:
         return ["fetch"]  # dry run: plan plus `git ls-remote origin HEAD`
-    if fixture in RELEASE_FIXTURES and tuple(entry["path"]) == ("release", "run") and "--root" not in argv:
+    if fixture in LOCAL_RELEASE_FIXTURES and tuple(entry["path"]) == ("release", "run") and "--root" not in argv:
         return ["push"]  # local bare origin only (guard_local_origin); no GitHub remote, publication none
     local = adoption_effects(argv, entry, fixture)
     return local if local is not None else release_effects(argv, entry, fixture)

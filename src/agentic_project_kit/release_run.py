@@ -392,6 +392,11 @@ class ReleaseRun:
                 "paths": list(self.state.get("b_paths") or []),
                 "target_commit": target_commit,
             }
+            from agentic_project_kit.release_range import first_release_gate
+
+            first_release = first_release_gate(self.root, target_commit)
+            if first_release is not None:   # KIT-GF-118: the signature binds the first release
+                gate["first_release"] = first_release
             from agentic_project_kit.release_greenfield_stamp import gate_findings
 
             finding_gate = gate_findings(self.root, self.version)

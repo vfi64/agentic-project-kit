@@ -8985,6 +8985,35 @@
         },
         "verification": "Native regression test fails on the previous manifest (needs_consent False for init --github). The route creates a GitHub repository, so the local retest harness does not run it; the live run before 1.4.0 counts its consent."
       }
+    },
+    {
+      "id": "KIT-GF-118",
+      "title": "First release of an init project blocks in release run without a previous v* tag, and its direct commits block the release notes",
+      "kit_state": "CLOSED",
+      "fixed_in": "unreleased",
+      "prs": [],
+      "report": "docs/reports/greenfield/KIT-GF-118-first-release-without-tag-2026-11-15.md",
+      "external_retest": {
+        "workspace_kind": "external_manifest",
+        "preconditions": [
+          "A project created by agentic-kit init and adopted through the signed workspace recovery, with an origin and without any v* tag."
+        ],
+        "commands": [
+          "agentic-kit release run --version {version} --json"
+        ],
+        "bindings": {
+          "version": "Version of the first release"
+        },
+        "expected": [
+          "AWAITING_APPROVAL at B4 without a BLOCKED step; the B4 gate carries first_release (range root, root commit, direct commits), which its signature binds; the release notes list commits without a PR number as direct commits. From the second release on the PR evidence stays mandatory, and release tags the origin lists but the clone lacks block."
+        ],
+        "expected_result_fields": {
+          "assertions": [
+            "Native tests in tests/test_release_first_release.py; journey J6 runs init to the B4 gate of the first release."
+          ]
+        },
+        "verification": "Native regression tests fail on the previous code (no first-release mode: release run blocked in A2 at release-from-tag, the notes blocked every commit without a PR number). release run pushes and publishes, so the local retest harness does not run it; journey J6 covers the first release offline, the live run before 1.4.0 on GitHub."
+      }
     }
   ],
   "kind": "external_findings_catalog",

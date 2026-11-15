@@ -2095,6 +2095,11 @@ documents:
     owner: maintainers
     status: active
     summary: Remote effects of init --github and needs_consent.
+  - path: docs/reports/greenfield/KIT-GF-118-first-release-without-tag-2026-11-15.md
+    class: evidence/log
+    owner: maintainers
+    status: active
+    summary: First release without a previous tag; direct commits; B4 first_release.
   - path: docs/reports/greenfield/KIT-GF-103-case-stable-projection-identity-2026-11-03.md
     class: evidence/log
     owner: maintainers
