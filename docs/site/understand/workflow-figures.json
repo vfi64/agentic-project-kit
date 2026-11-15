@@ -810,7 +810,7 @@
   "schema_version": 1,
   "sources": {
     "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "24c40c94497c88315b532658b934c91918a67e55314e21f59e924d30685388d9",
-    "docs/reference/agentic-kit-commands.json": "c4e03552f5ae4a47eef4af512f3280fcb666d2309f378fbbcab62cf403132bef",
+    "docs/reference/agentic-kit-commands.json": "f3acb7d07d63e8640631d4557382f60f04b3b05a0ee5f23eb15262ab140e0d2e",
     "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
     "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
     "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -820,7 +820,7 @@
     "site/templates/figures/G2.svg": "8765be0ba0e6d94c6c9448905e816211583ff3fdb1fb457fbde766c3dba1ec60",
     "site/templates/figures/G3-mobile.svg": "6d9cccea1ddf7b43fb34bec25c215175c40becb2497b9cd71ebc9de8293a5e72",
     "site/templates/figures/G3.svg": "52ba78e99e8496b7c3de1ccb04889f860afdcea8566c448a40d5a555b8c82152",
-    "src/agentic_project_kit/cli_commands/human_workflows.py": "2cc480b5a3cb76f7e3909a97c08dab0a2520c15256259293f6593553dfec6729",
+    "src/agentic_project_kit/cli_commands/human_workflows.py": "f794c292e4d38f3a3138f92af2be681c1c9f894334415ff728d0e3429779a185",
     "src/agentic_project_kit/successor_handoff_package.py": "6637afce01d6bf2fefd1aa12c16efac08c3d73d97e50f6b5b362b41791bdfa47"
   }
 }
