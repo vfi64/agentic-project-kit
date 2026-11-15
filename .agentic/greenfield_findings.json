@@ -8367,7 +8367,7 @@
       "id": "KIT-GF-109",
       "title": "Injected workspace CI fails the setup-python pip cache in a workspace without requirements.txt or pyproject.toml",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [
         2782
       ],
@@ -8447,7 +8447,7 @@
       "id": "KIT-GF-110",
       "title": "An origin added after workspace init blocks work start because the successor package still names the fallback repository identity",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [
         2786
       ],
@@ -8536,7 +8536,7 @@
       "id": "KIT-GF-111",
       "title": "Generated project CI keys the pip cache on no existing file for project types without pyproject.toml",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [
         2786
       ],
@@ -8631,7 +8631,7 @@
       "id": "KIT-GF-112",
       "title": "transfer post-merge-complete reports PASS with exit 2 when the final known-volatile cleanup fails",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-112-post-merge-complete-final-cleanup-2026-11-14.md",
       "external_retest": {
@@ -8660,7 +8660,7 @@
       "id": "KIT-GF-113",
       "title": "artifact-gc with an invalid --older-than value ends as a Click usage error without JSON or route",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-113-artifact-gc-invalid-older-than-2026-11-14.md",
       "external_retest": {
@@ -8730,7 +8730,7 @@
       "id": "KIT-GF-114",
       "title": "workspace init over an init project fails FOREIGN_AGENTIC without naming the recovery route",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-114-workspace-init-over-init-project-2026-11-15.md",
       "external_retest": {
@@ -8847,7 +8847,7 @@
       "id": "KIT-GF-115",
       "title": "workspace init --recover-partial with --inject-ci blocks without naming the recovery and ci-update route",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-115-recovery-with-injection-flags-2026-11-15.md",
       "external_retest": {
@@ -8928,7 +8928,7 @@
       "id": "KIT-GF-116",
       "title": "release run B4 stop after a refused push routes only to the log, not to the plan run that offers the resume",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-116-release-b4-stop-route-2026-11-15.md",
       "external_retest": {
@@ -8960,7 +8960,7 @@
       "id": "KIT-GF-117",
       "title": "Command manifest lists init with remote effects none although init --github creates the repository and pushes",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-117-init-github-remote-effects-2026-11-15.md",
       "external_retest": {
@@ -8990,7 +8990,7 @@
       "id": "KIT-GF-118",
       "title": "First release of an init project blocks in release run without a previous v* tag, and its direct commits block the release notes",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-118-first-release-without-tag-2026-11-15.md",
       "external_retest": {
@@ -9019,7 +9019,7 @@
       "id": "KIT-GF-119",
       "title": "First release under a publishing policy still blocks on the release-note category of its direct init and adoption commits",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-119-first-release-direct-commit-category-2026-11-15.md",
       "external_retest": {
@@ -9048,7 +9048,7 @@
       "id": "KIT-GF-120",
       "title": "agentic-kit init leaves the new repository on Git's default branch, which is master on machines without init.defaultBranch=main",
       "kit_state": "CLOSED",
-      "fixed_in": "unreleased",
+      "fixed_in": "1.4.0",
       "prs": [],
       "report": "docs/reports/greenfield/KIT-GF-120-init-main-branch-2026-11-15.md",
       "external_retest": {
