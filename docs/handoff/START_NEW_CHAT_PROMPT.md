@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 11751f7fb89b06844c17c4f2426e4e4a7b749648472482a7727064e7f19e1417
 - docs/reference/agentic-kit-commands.json: c4e03552f5ae4a47eef4af512f3280fcb666d2309f378fbbcab62cf403132bef
-## Operational documentation refresh state after PR #2808
+## Operational documentation refresh state after PR #2810
 
-Current administrative handoff refresh state is `a5f1d588` (`G3 remedy table: routes for KIT-GF-114 to 117 from the live run (#2808)`). Continue next only after this post-PR2808 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `6ae4bf75` (`workspace init --publication: choose the publication policy through the Kit (#2810)`). Continue next only after this post-PR2810 refresh is committed and merged; the next substantive slice must be created from fresh main.
