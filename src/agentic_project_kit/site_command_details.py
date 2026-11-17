@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import re
 from string import Template
+from .site_navigation import render_site_navigation
 
 from .site_task_routes import task_navigation
 from .site_public_contract import projection_provenance
@@ -62,6 +63,7 @@ def render_command_detail(root: Path, row: dict, *, product_name: str, version: 
                       f'<br>Required: {str(bool(param.get("required"))).lower()} · Default: '
                       f'<code>{escape(str(param.get("default")))}</code></dd></div>')
     return Template((root / "site/templates/command-detail.html").read_text()).substitute(
+        site_nav=render_site_navigation("commands/" + row["file"]),
         product_name=escape(product_name), command=escape(row["command"]), description=escape(row["description"]),
         package_version=escape(version), manifest_sha=escape(manifest_sha), contracts=contracts,
         routes="".join(routes) or "<p>This quickstart command has no reviewed D1 task route.</p>",

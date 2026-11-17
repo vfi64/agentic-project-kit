@@ -34,6 +34,7 @@ from agentic_project_kit.site_explanation import (
 )
 
 
+from agentic_project_kit.site_navigation import render_site_navigation
 from agentic_project_kit.site_public_contract import (
     product_title, publication_evidence, publication_text, projection_provenance,
     scoped_claim_counts, self_hosting_case,
@@ -727,6 +728,7 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
     template_path = root / "site" / "templates" / "index.html"
     template = Template(template_path.read_text(encoding="utf-8"))
     values = {
+        "site_nav": render_site_navigation("index.html"),
         "product_name": escape(metadata.product_name),
         "former_product_name": escape(metadata.former_product_name),
         "package_name": escape(metadata.package_name),
@@ -815,6 +817,7 @@ def render_workflows_html(
     template_path = root / "site" / "templates" / "workflows.html"
     template = Template(template_path.read_text(encoding="utf-8"))
     values = {
+        "site_nav": render_site_navigation("workflows/index.html"),
         "product_name": escape(metadata.product_name),
         "package_version": escape(metadata.package_version),
         "manifest_sha": escape(metadata.manifest_sha),
@@ -1282,6 +1285,7 @@ def render_quickstart_html(
     template_path = root / "site" / "templates" / "quickstart.html"
     template = Template(template_path.read_text(encoding="utf-8"))
     values = {
+        "site_nav": render_site_navigation("quickstart/index.html"),
         "product_name": escape(metadata.product_name),
         "package_name": escape(metadata.package_name),
         "package_version": escape(metadata.package_version),
@@ -1362,6 +1366,7 @@ def render_claims_html(
     template = Template(template_path.read_text(encoding="utf-8"))
     rows = "\n".join(_claim_table_row(claim) for claim in claim_report.claims)
     values = {
+        "site_nav": render_site_navigation("claims/index.html"),
         "product_name": escape(metadata.product_name),
         "manifest_sha": escape(metadata.manifest_sha),
         "package_version": escape(metadata.package_version),
@@ -1414,6 +1419,11 @@ def render_command_view_html(
     template = Template(template_path.read_text(encoding="utf-8"))
     rows = "\n".join(_command_table_row(entry, metadata, detail_file=(detail_files or {}).get(entry.qualified_name)) for entry in entries)
     values = {
+        "site_nav": render_site_navigation({
+            "Guided Commands": "commands/guided.html",
+            "Diagnostic Commands": "commands/diagnostics.html",
+            "Complete Command Reference": "commands/index.html",
+        }[title]),
         "product_name": escape(metadata.product_name),
         "title": escape(title),
         "description": escape(description),

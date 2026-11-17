@@ -3,30 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Agentic Project Kit keeps context, rules, checks and handoffs in your repository for AI-assisted development — from browser chats to local coding agents. Explore benefits, architecture, evidence and limits.">
+    <meta name="description" content="Agentic Project Kit helps maintainers direct AI-assisted work through repository-owned decisions, checks, evidence and handoffs.">
     <title>Agentic Project Kit</title>
     <link rel="stylesheet" href="static/site.css">
   </head>
   <body>
     <main class="page">
-      <nav class="topnav" aria-label="Site">
-        <a href="index.html">Overview</a>
-        <a href="understand/index.html">Understand the Kit</a>
-        <a href="history/index.html">History and architecture</a>
-        <a href="quickstart/index.html">Quickstart</a>
-        <a href="workflows/index.html">Workflows</a>
-        <a href="commands/guided.html">Guided</a>
-        <a href="commands/diagnostics.html">Diagnostics</a>
-        <a href="commands/index.html">Complete</a>
-        <a href="evidence/index.html">Safety evidence</a><a href="claims/index.html">Claims</a>
-      </nav>
+      <nav class="topnav" aria-label="Site"><a href="index.html" aria-current="page">Overview</a><a href="understand/index.html">Understand the Kit</a><a href="quickstart/index.html">Quickstart</a><a href="workflows/index.html">Workflows</a><a href="commands/guided.html">Guided</a><a href="commands/diagnostics.html">Diagnostics</a><a href="commands/index.html">Complete</a><a href="evidence/index.html">Safety evidence</a><a href="claims/index.html">Claims</a><a href="history/index.html">History and architecture</a></nav>
 
       <section class="overview" aria-labelledby="site-title">
         <div>
           <p class="eyebrow">Repository-owned governance for AI-assisted work</p>
           <h1 id="site-title">Agentic Project Kit</h1>
-          <p class="lede">Keep project context, rules and work results in your repository when developing with an AI assistant — including an ordinary browser chat.</p>
-          <p>For maintainers who want inspectable context and controlled lifecycle steps. You provide the coding assistant and own the requirements and approvals.</p>
+          <p class="lede">Give AI more work, not more authority.</p>
+          <p>Keep project decisions, checks, evidence and handoffs in your Git repository. The Kit helps maintainers direct AI-assisted work and review its results. Your chosen assistant or a person makes the changes; you own design, approvals and releases.</p>
           <div class="hero-actions" aria-label="Primary generated views">
             <a href="quickstart/index.html">Quickstart</a>
             <a href="understand/index.html">Benefits, architecture and limits</a>
@@ -43,10 +33,10 @@
       </section>
 
       <section class="panel" aria-labelledby="everyday-title">
-        <p class="eyebrow">An everyday use case</p><h2 id="everyday-title">Continue tomorrow without rebuilding the project context</h2>
-        <p>You discuss a change in a browser chat. The Kit prepares repository context and a bounded next step. You run the local workflow; it records check results and the remaining work. When you change chats or assistants, a generated handoff carries the repository state forward.</p>
-        <p>You can also use a local coding agent or controller. An autonomous multi-agent framework, paid agent platform or LLM API is not a prerequisite. Git, a local Kit installation and the permissions required by your chosen workflow still matter.</p>
-        <p>The useful result is an inspectable work process: what was requested, what ran, what passed or failed, and what is next. Checks enforce defined rules; the maintainer still reviews whether the change solves the right problem.</p>
+        <p class="eyebrow">Two sessions, one repository</p><h2 id="everyday-title">Continue a reviewed change in a new chat</h2>
+        <p>Imagine a small Python CSV exporter. In the first session, you ask an assistant to add a tab-separated output option while preserving the existing comma-separated output. The assistant proposes the change and a regression test for the comma output. You review both, then run the configured Kit checks and record their result with the work state.</p>
+        <p>Before changing chats, generate and validate the successor package. In the second session, the next assistant reads the package and repository state before extending the exporter. If the old-output test fails, the test gate reports the failure. A passing check confirms only its defined conditions; it cannot decide whether the export format meets your needs.</p>
+        <p>You decide whether the change meets the requirement and whether to approve a merge or release. A local coding agent or controller can use the same repository record.</p>
         <a href="workflows/index.html">See the four interaction paths</a>
       </section>
 

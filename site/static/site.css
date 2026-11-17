@@ -65,7 +65,7 @@ body {
   text-decoration: none;
 }
 
-.topnav a:first-child,
+.topnav a[aria-current],
 .hero-actions a:first-child {
   border-color: var(--accent);
   color: var(--accent);
