@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 0c35a61c21cd60a714b675df1abf08346a0941c1
-  short: 0c35a61c
-  subject: Archive release 1.4.0 evidence (#2820)
+  full: 016956f1bffd35542ead77e85708af0b54d6d457
+  short: 016956f1
+  subject: Unify website navigation and clarify Kit introduction (#2822)
 last_substantive_work_state:
-  full: 0c35a61c21cd60a714b675df1abf08346a0941c1
-  short: 0c35a61c
-  subject: Archive release 1.4.0 evidence (#2820)
+  full: 016956f1bffd35542ead77e85708af0b54d6d457
+  short: 016956f1
+  subject: Unify website navigation and clarify Kit introduction (#2822)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
