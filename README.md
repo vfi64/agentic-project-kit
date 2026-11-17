@@ -1,7 +1,10 @@
 # Agentic Project Kit
 
-> Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` externally. New chats verify package and execution contract, not chat memory.
+**Give AI more work, not more authority.**
 
+Agentic Project Kit keeps project decisions, checks, evidence, and handoffs in a Git repository. It helps maintainers direct AI-assisted work and review its results. Coding assistants or people make the changes; the maintainer owns design, approvals, and releases. The Kit checks defined rules and records what happened. It does not judge whether an architecture or a change is good.
+
+The Kit can carry repository context into a later chat and block a workflow when a defined condition fails. Its controls have targeted tests and bounded observations; a reduction in development time, defects, or total cost has not been established. Maintaining contracts, tests, state files, and closeout evidence takes work.
 
 Current version: 1.4.0
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
@@ -9,6 +12,18 @@ Current version: 1.4.0
 `agentic-project-kit` is a local Python CLI for governing AI-assisted repository work with contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
 
 Generated website: <https://vfi64.github.io/agentic-project-kit/>.
+
+## Why this exists
+
+AI-assisted development works best when context is explicit, current, and machine-checkable. Otherwise, agents drift into stale handoffs, unclear branch rules, missing test evidence, and unstructured logs.
+
+The kit turns those lessons into reusable repository scaffolding.
+
+Goal: make repository state, handoffs, documentation coverage, tasks, release state, and policy expectations visible enough to reduce context drift.
+
+## Release and handoff details
+
+> Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` externally. New chats verify package and execution contract, not chat memory.
 
 External finding adjudications and exact retest contracts are available with
 `agentic-kit greenfield status --json`. The generated
@@ -28,14 +43,6 @@ covered) instead of combining them with the generated PR-title list. Release run
 reports C3 as `WAITING` while the package-index run waits for an environment
 approval in GitHub, settles C3 from the finished run, and resumes an unchanged,
 already approved gate without asking again.
-
-## Why this exists
-
-AI-assisted development works best when context is explicit, current, and machine-checkable. Otherwise, agents drift into stale handoffs, unclear branch rules, missing test evidence, and unstructured logs.
-
-The kit turns those lessons into reusable repository scaffolding.
-
-Goal: make repository state, handoffs, documentation coverage, tasks, release state, and policy expectations visible enough to reduce context drift.
 
 ## Why not just Cookiecutter?
 

@@ -5,6 +5,7 @@ import re
 from html import escape
 from pathlib import Path
 from string import Template
+from .site_navigation import render_site_navigation
 from urllib.parse import quote
 
 BINDINGS = "site/content/safety_evidence_sources.json"
@@ -103,6 +104,7 @@ def render_safety_evidence(root: Path, data: dict, *, repository_url: str, produ
                       for key, s in data["sources"].items())
     baseline, development = data["baseline"], data["development"]
     return Template((root / "site/templates/evidence.html").read_text()).substitute(
+        site_nav=render_site_navigation("evidence/index.html"),
         product_name=escape(product_name), findings=findings, mitigations=mitigations,
         finding_count=len(data["findings"]), observation_date=data["observation_date"],
         baseline_runtime=escape(baseline["runtime"]),

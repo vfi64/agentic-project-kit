@@ -8,6 +8,7 @@ import json
 from pathlib import Path
 import re
 from string import Template
+from .site_navigation import render_site_navigation
 from urllib.parse import quote
 from .site_public_contract import projection_provenance
 
@@ -92,6 +93,7 @@ def render_history(root: Path, data: dict, *, product_name: str, version: str, r
                       for s in data["sources"].values())
     surfaces = "".join(f'<li>{count} {escape(surface)} commands</li>' for surface, count in data["current_command_surfaces"].items())
     return Template((root / "site/templates/history.html").read_text()).substitute(
+        site_nav=render_site_navigation("history/index.html"),
         product_name=escape(product_name), package_version=escape(version), events=events,
         archive_version=escape(data["snapshot"]["version"]), audit_date=escape(data["snapshot"]["audit_date"]),
         testimony=escape(data["testimony"]["summary"]), manifest_sha=escape(data["manifest_sha"]), surfaces=surfaces,

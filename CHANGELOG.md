@@ -1,5 +1,7 @@
 ## Unreleased
 
+- Fixed: Generated website pages now share one navigation order and mark the current page or command area. The README and website opening explain the Kit's role, limits, and a two-session example more directly.
+
 ## v1.4.0 - 2026-11-15
 
 - Fixed: An unclassified direct commit of the first release (no PR that could carry a category, e.g. the init or adoption commit) is listed under `Changed` with a warning instead of blocking under a publishing policy (KIT-GF-119); from the second release on an unclassified commit still blocks. `agentic-kit init` starts the new repository on `main` whatever `init.defaultBranch` says, so its first commit and the `init --github` push no longer land on `master` (KIT-GF-120).

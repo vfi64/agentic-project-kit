@@ -11,6 +11,7 @@ from html import escape
 from pathlib import Path
 import re
 from string import Template
+from .site_navigation import render_site_navigation
 from urllib.parse import urlparse
 
 import yaml
@@ -99,6 +100,7 @@ def render_explanation(root: Path, projection: dict[str, object], *, repository_
                        product_name: str, version: str) -> str:
     template = Template((root / "site/templates/understand.html").read_text())
     return template.substitute(
+        site_nav=render_site_navigation("understand/index.html"),
         product_name=escape(product_name), package_version=escape(version),
         repository_url=escape(repository_url, quote=True),
         evidence_cards=render_evidence_cards(projection, repository_url=repository_url),

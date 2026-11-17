@@ -119,6 +119,48 @@ def test_all_generated_links_assets_fragments_and_control_labels_resolve(built):
                 assert unquote(parts.fragment) in pages[target].ids, (path, link)
 
 
+def test_site_navigation_has_one_order_and_marks_the_current_page(built):
+    css = (built / "static/site.css").read_text(encoding="utf-8")
+    assert ".topnav a:first-child" not in css
+    assert ".topnav a[aria-current]" in css
+
+    class Navigation(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.in_site_nav = False
+            self.links = []
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if tag == "nav" and attrs.get("aria-label") == "Site":
+                self.in_site_nav = True
+            elif tag == "a" and self.in_site_nav:
+                self.links.append(attrs)
+
+        def handle_endtag(self, tag):
+            if tag == "nav" and self.in_site_nav:
+                self.in_site_nav = False
+
+    expected = None
+    for page in built.rglob("*.html"):
+        navigation = Navigation()
+        navigation.feed(page.read_text(encoding="utf-8"))
+        links = navigation.links
+        targets = tuple((page.parent / link["href"]).resolve().relative_to(built.resolve()).as_posix()
+                        for link in links)
+        if expected is None:
+            expected = targets
+        assert targets == expected, page
+        current = [link for link in links if link.get("aria-current") == "page"]
+        assert len(current) == (1 if page.relative_to(built).as_posix() in targets else 0), page
+        if current:
+            assert (page.parent / current[0]["href"]).resolve() == page.resolve(), page
+        if page.name.startswith("detail-"):
+            location = [link for link in links if link.get("aria-current") == "location"]
+            assert len(location) == 1, page
+            assert (page.parent / location[0]["href"]).resolve() == built / "commands/index.html"
+
+
 def history_fixture(tmp_path):
     for name in ("site/content/history_sources.json", "site/templates/history.html",
                  ARCHIVE + "SOURCE_MANIFEST.json", ARCHIVE + HISTORY, ARCHIVE + METRICS, ARCHITECTURE):

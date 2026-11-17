@@ -2,6 +2,11 @@
 
 This directory contains the repository-native public website generator.
 
+The main navigation is rendered from `agentic_project_kit.site_navigation` on
+every generated page. It marks the exact page in the menu, or the command
+reference area on a command detail page. Page templates keep only their
+page-specific links.
+
 The generated output is a projection of current repository sources, not a manual
 technical truth surface. `site/scripts/build.py` calls
 `agentic_project_kit.site_generator` and writes the static artifact to
