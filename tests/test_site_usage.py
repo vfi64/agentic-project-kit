@@ -132,6 +132,8 @@ def test_quickstart_figure_uses_files_from_documented_init(tmp_path: Path, monke
     metadata = figure.find("svg:metadata", ns)
     assert metadata is not None
     assert json.loads(metadata.text or "{}") == {"files": expected}
+    visible_files = figure.findall(".//svg:text[@class='file']", ns)
+    assert visible_files and all(len(node.text or "") <= 30 for node in visible_files)
     assert shlex.join(init_argv) in "".join(figure.itertext())
 
 

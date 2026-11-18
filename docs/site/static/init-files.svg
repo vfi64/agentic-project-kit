@@ -8,11 +8,11 @@
 <text x="24" y="64" class="subtitle">agentic-kit init demo --type python-cli --no-github --description &#x27;CSV and TSV exporter&#x27;, Kit 1.4.0</text>
 <rect x="24" y="102" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
 <text x="40" y="129" class="heading">Agent instructions · 2</text>
-<text x="40" y="158" class="file">.github/copilot-instructions.md</text>
+<text x="40" y="158" class="file">…/copilot-instructions.md</text>
 <text x="40" y="182" class="file">AGENTS.md</text>
 <rect x="336" y="102" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
 <text x="352" y="129" class="heading">Project state · 5</text>
-<text x="352" y="158" class="file">.agentic/dpa/workspace_init_projection.json</text>
+<text x="352" y="158" class="file">workspace_init_projection.jso…</text>
 <text x="352" y="182" class="file">.agentic/project.yaml</text>
 <text x="352" y="206" class="file">.agentic/todo.yaml</text>
 <text x="352" y="237" class="more">+ 2 more</text>
@@ -26,12 +26,12 @@
 <text x="40" y="330" class="file">.github/workflows/ci.yml</text>
 <rect x="336" y="274" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
 <text x="352" y="301" class="heading">Handoff · 2</text>
-<text x="352" y="330" class="file">docs/handoff/CURRENT_HANDOFF.md</text>
-<text x="352" y="354" class="file">docs/handoff/STANDARD_AGENT_PROMPT.md</text>
+<text x="352" y="330" class="file">…/CURRENT_HANDOFF.md</text>
+<text x="352" y="354" class="file">…/STANDARD_AGENT_PROMPT.md</text>
 <rect x="648" y="274" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
 <text x="664" y="301" class="heading">Other project files · 13</text>
-<text x="664" y="330" class="file">.github/ISSUE_TEMPLATE/agent_regression.yml</text>
-<text x="664" y="354" class="file">.github/pull_request_template.md</text>
+<text x="664" y="330" class="file">…/agent_regression.yml</text>
+<text x="664" y="354" class="file">…/pull_request_template.md</text>
 <text x="664" y="378" class="file">.gitignore</text>
 <text x="664" y="409" class="more">+ 10 more</text>
 </svg>

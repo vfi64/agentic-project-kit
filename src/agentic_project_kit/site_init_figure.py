@@ -52,7 +52,7 @@ def render_init_files_figure(root: Path, *, version: str) -> str:
         lines = [f'<rect x="{x}" y="{y}" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>',
                  f'<text x="{x + 16}" y="{y + 27}" class="heading">{escape(label)} · {len(paths)}</text>']
         for row, path in enumerate(paths[:3]):
-            lines.append(f'<text x="{x + 16}" y="{y + 56 + row * 24}" class="file">{escape(path)}</text>')
+            lines.append(f'<text x="{x + 16}" y="{y + 56 + row * 24}" class="file">{escape(_short_path(path))}</text>')
         if len(paths) > 3:
             lines.append(f'<text x="{x + 16}" y="{y + 135}" class="more">+ {len(paths) - 3} more</text>')
         cards.extend(lines)
@@ -71,3 +71,11 @@ def render_init_files_figure(root: Path, *, version: str) -> str:
         f'<text x="24" y="64" class="subtitle">{escape(caption)}</text>\n'
         + "\n".join(cards) + "\n</svg>\n"
     )
+
+
+def _short_path(path: str) -> str:
+    if len(path) <= 30:
+        return path
+    filename = path.rsplit("/", 1)[-1]
+    shortened = "…/" + filename
+    return shortened if len(shortened) <= 30 else filename[:29] + "…"
