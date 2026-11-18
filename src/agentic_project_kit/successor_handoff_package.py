@@ -1864,6 +1864,8 @@ def write_successor_handoff_package(
     relative_output_dir = Path(_workspace_path_text(ws, resolved_output_dir))
     result = _build_successor_handoff_package(root_path, ws)
     result = replace(result, output_dir=relative_output_dir)
+    if result.validation_report["status"] != "PASS":
+        return result
     out = root_path / relative_output_dir
     out.mkdir(parents=True, exist_ok=True)
     (out / "successor_context.yaml").write_text(_json_block(result.context) + "\n", encoding="utf-8")

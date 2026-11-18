@@ -287,6 +287,13 @@ Generate and validate the deterministic successor package before changing chats:
 Read `validation_report.json` and `execution_contract.json` before continuing.
 The context and prompt are generated projections of repository sources, not a
 replacement for checking current Git state. Stop when validation fails.
+This automated package applies to the Kit repository and external workspaces
+with `.agentic/config.yaml`. A project created by `agentic-kit init` has
+`.agentic/project.yaml` instead; it currently maintains
+`docs/handoff/CURRENT_HANDOFF.md` and uses
+`docs/handoff/STANDARD_AGENT_PROMPT.md` for the next session. Invalid package
+validation returns a nonzero exit code in every output mode and leaves package
+and canonical prompt files untouched.
 
 ## agentic-kit work recover
 

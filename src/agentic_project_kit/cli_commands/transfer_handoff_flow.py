@@ -232,7 +232,7 @@ def _emit_successor_package(
         "source_manifest_path": str(package_dir / "source_manifest.json"),
         "validation_report_path": str(package_dir / "validation_report.json"),
         "successor_prompt_path": str(package_dir / "successor_prompt.md"),
-        "updated_canonical_prompts": update_canonical_prompts,
+        "updated_canonical_prompts": update_canonical_prompts and result.validation_report["status"] == "PASS",
         "generated_head": repo_identity["head"],
         "generated_head_short": str(repo_identity["head"])[:8] if runtime is not None else repo_identity["head_short"],
         "open_tasks": result.context["short_term_memory"]["open_tasks"],
@@ -240,20 +240,39 @@ def _emit_successor_package(
     }
     if runtime is not None:
         from agentic_project_kit.external_handoff_projection import RUNTIME_PATH, validate_runtime_identity
+        runtime_status = validate_runtime_identity(runtime, expected_head=runtime["head"])
         payload.update(
             runtime_identity=runtime, runtime_identity_path=RUNTIME_PATH,
             projection_contract_version=runtime["projection_contract_version"],
             input_digest=runtime["input_digest"], run_id=runtime["run_id"],
-            result_status=validate_runtime_identity(runtime, expected_head=runtime["head"]),
+            result_status=runtime_status if payload["result_status"] == "PASS" else payload["result_status"],
         )
     findings = payload["findings"]
     if payload["result_status"] in ROUTE_STATUSES and findings:
         payload["next_command_reason"] = "Successor package validation: " + first_line(
             findings[0] if isinstance(findings[0], str) else json.dumps(findings[0], sort_keys=True))
+    if payload["result_status"] != "PASS":
+        from agentic_project_kit.workspace_detection import has_generated_project_contract
+
+        if has_generated_project_contract(Path(".")) and runtime is None:
+            payload["next_action"] = (
+                "This init project has no valid automated successor package. "
+                "Maintain docs/handoff/CURRENT_HANDOFF.md and use "
+                "docs/handoff/STANDARD_AGENT_PROMPT.md in the next session."
+            )
+        else:
+            payload["next_action"] = "Do not use the successor package until validation passes."
+        if json_output:
+            _emit_transfer(payload, json_output=True, indent=2, ensure_ascii=False, sort_keys=True)
+        else:
+            _emit_transfer(
+                payload, json_output=False, route_lines=False,
+                text=lambda routed: json.dumps(routed, indent=2, ensure_ascii=False)
+                + "\nFINAL_SIGNAL=f\nFINAL_NEXT=" + payload["next_action"],
+            )
+        raise typer.Exit(code=1)
     if json_output:
         _emit_transfer(payload, json_output=True, indent=2, ensure_ascii=False, sort_keys=True)
-        if payload["result_status"] != "PASS":
-            raise typer.Exit(code=1)
         return
     if render_prompt:
         def prompt(_payload) -> str:
@@ -263,8 +282,6 @@ def _emit_successor_package(
                     + json.dumps(runtime, indent=2, sort_keys=True) + "\n```")
 
         _emit_transfer(payload, json_output=False, text=prompt)
-        if runtime is not None and payload["result_status"] != "PASS":
-            raise typer.Exit(code=1)
         return
     _emit_transfer(
         payload, json_output=False, route_lines=False,  # the JSON block carries the route

@@ -161,7 +161,7 @@ def test_canonical_chat_switch_prompts_cross_reference() -> None:
         assert "must_not_reconstruct_commands_from_memory" in text
 
 
-def test_successor_handoff_package_writes_deterministic_outputs(tmp_path: Path) -> None:
+def test_invalid_successor_handoff_does_not_write_outputs(tmp_path: Path) -> None:
     for source in MANDATORY_BOOT_SOURCES:
         path = tmp_path / source
         path.parent.mkdir(parents=True, exist_ok=True)
@@ -172,26 +172,17 @@ def test_successor_handoff_package_writes_deterministic_outputs(tmp_path: Path) 
         path.write_text("x\n", encoding="utf-8")
     _write_operational_handoff_state(tmp_path)
 
+    before = {
+        path.relative_to(tmp_path).as_posix(): path.read_bytes()
+        for path in tmp_path.rglob("*") if path.is_file()
+    }
     result = write_successor_handoff_package(tmp_path)
-    # tmp_path is intentionally not a Git repository, so validation may report
-    # unknown_head. The package must still write deterministic projections;
-    # repository-run validation is covered by the generated validation report.
-    assert result.validation_report["status"] in {"PASS", "FAIL"}
-    assert (tmp_path / "docs/reports/handoff-packages/latest/successor_context.yaml").exists()
-    assert (tmp_path / "docs/reports/handoff-packages/latest/successor_prompt.md").exists()
-
-    for rel in (BOOTSTRAP, CLOSEOUT_PROMPT):
-        text = (tmp_path / rel).read_text(encoding="utf-8")
-        assert "successor_context.yaml" in text
-        assert "agentic-kit command-for" in text
-        assert "must_not_reconstruct_commands_from_memory" in text
-        assert "Post-PR1245" not in text
-        assert "PR #880" not in text
-        assert "\\\\n" not in text
-
-    # START_NEW_CHAT_PROMPT is protected from broad package-refresh rewrites.
-    # It is updated only by dedicated minimal handoff/admin refresh slices.
-    assert (tmp_path / START_PROMPT).read_text(encoding="utf-8") == "x\n"
+    assert result.validation_report["status"] == "FAIL"
+    after = {
+        path.relative_to(tmp_path).as_posix(): path.read_bytes()
+        for path in tmp_path.rglob("*") if path.is_file()
+    }
+    assert after == before
 
 
 def test_successor_handoff_package_validation_blocks_stale_markers(tmp_path: Path) -> None:
