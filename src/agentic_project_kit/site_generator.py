@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from html import escape
 import json
 from pathlib import Path
@@ -37,7 +37,7 @@ from agentic_project_kit.site_explanation import (
 from agentic_project_kit.site_navigation import render_site_navigation
 from agentic_project_kit.site_public_contract import (
     product_title, publication_evidence, publication_text, projection_provenance,
-    scoped_claim_counts, self_hosting_case,
+    scoped_claim_counts,
 )
 
 SITE_KIND = "agentic_project_kit_generated_site"
@@ -411,10 +411,19 @@ def collect_site_foundation_metadata(
         records = records if isinstance(records, list) else []
         blockers.extend(pages_evidence_blockers(root, [r for r in records if isinstance(r, dict)]))
     if metadata is not None and command_catalog is not None:
+        quickstart_projection = _build_quickstart_projection(metadata, command_catalog)
         blockers.extend(
-            selected_command_blockers(
-                workflow_projection, _build_quickstart_projection(metadata, command_catalog)
-            )
+            selected_command_blockers(workflow_projection, quickstart_projection)
+        )
+        curated_names = {entry.qualified_name for entry in command_catalog.guided_entries}
+        for projection in (workflow_projection, quickstart_projection):
+            for key in ("modes", "flows"):
+                for group in projection.get(key, []):
+                    curated_names.update(row["qualified_name"] for row in group["commands"])
+        blockers.extend(
+            f"curated website command missing help: {entry.qualified_name}"
+            for entry in command_catalog.entries
+            if entry.qualified_name in curated_names and not entry.help
         )
     details, history = None, None
     if metadata is not None and command_catalog is not None:
@@ -478,6 +487,23 @@ def build_site(
     command_catalog = report.command_catalog
     assert metadata is not None
     assert command_catalog is not None
+    usage_html = None
+    init_figure = None
+    if (root / "site/templates/use.html").is_file():
+        from .site_usage import render_usage_page
+        from .site_init_figure import render_init_files_figure
+        try:
+            usage_html = render_usage_page(
+                root,
+                command_names={entry.qualified_name for entry in command_catalog.entries},
+                product_name=metadata.product_name,
+            )
+            init_figure = render_init_files_figure(root, version=metadata.package_version)
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            return SiteBuildResult(
+                root=root.as_posix(), output_dir=output.as_posix(),
+                report=replace(report, blockers=(*report.blockers, f"usage page invalid: {exc}")), files=(),
+            )
     if output.exists():
         shutil.rmtree(output)
     output.mkdir(parents=True, exist_ok=True)
@@ -486,6 +512,10 @@ def build_site(
     (output / "claims").mkdir(parents=True, exist_ok=True)
     (output / "quickstart").mkdir(parents=True, exist_ok=True)
     (output / "workflows").mkdir(parents=True, exist_ok=True)
+    if usage_html is not None:
+        (output / "use").mkdir(parents=True, exist_ok=True)
+        (output / "use/index.html").write_text(usage_html, encoding="utf-8")
+        (output / "static/init-files.svg").write_text(init_figure, encoding="utf-8")
 
     navigation = report.task_projection
     (output / "commands" / "tasks.json").write_text(
@@ -551,7 +581,11 @@ def build_site(
         evidence = report.explanation_projection["safety_evidence"]
         (evidence_output / "index.html").write_text(
             render_safety_evidence(root, evidence, repository_url=metadata.repository_url,
-                                   product_name=metadata.product_name), encoding="utf-8")
+                                   product_name=metadata.product_name,
+                                   version=metadata.package_version,
+                                   brownfield=workflow_projection.get("brownfield"),
+                                   observed_workflow=next((figure for figure in figures["figures"]
+                                                           if figure["id"] == "G0"), None)), encoding="utf-8")
         (evidence_output / "evidence.json").write_text(
             json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     (output / "commands" / "commands.json").write_text(
@@ -769,26 +803,6 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
             limit=6,
             empty="No common blocker diagnostics are currently projected.",
         ),
-        "verified_now_items": _claim_summary_items(
-            [
-                claim
-                for claim in report.claim_report.claims
-                if claim.required and claim.status == "verified"
-            ],
-            empty="No required claims are currently verified.",
-        ),
-        "available_evolving_items": _claim_summary_items(
-            [
-                claim
-                for claim in report.claim_report.claims
-                if not claim.required and claim.status == "verified"
-            ],
-            empty="No optional claims are currently verified.",
-        ),
-        "planned_items": _claim_summary_items(
-            [claim for claim in report.claim_report.claims if claim.status == "planned"],
-            empty="No planned public claims are currently declared.",
-        ),
         "workflow_mode_count": str(len(report.workflow_projection.get("modes", []))),
         "brownfield_cycle_count": escape(
             _projection_value(report.workflow_projection, "brownfield.real_cycles", "not recorded")
@@ -798,7 +812,6 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
         ),
         "homepage_evidence_cards": (
             render_release_card(report.explanation_projection["release"], repository_url=metadata.repository_url)
-            + self_hosting_case(root, metadata.package_version, metadata.repository_url)
             if report.explanation_projection is not None else ""
         ),
         "practice_evidence_cards": (
@@ -824,12 +837,7 @@ def render_workflows_html(
         "mode_cards": _workflow_mode_cards(projection),
         "core_workflow_items": _workflow_step_items(projection),
         "boundary_items": _workflow_boundary_items(projection),
-        "brownfield_items": _brownfield_fact_items(projection),
         "brownfield_status": escape(_projection_value(projection, "brownfield.status", "not recorded")),
-        "brownfield_source": escape(_projection_value(projection, "brownfield.source", "")),
-        "brownfield_evidence_type": escape(
-            _projection_value(projection, "brownfield.rule_ack_evidence_type", "not recorded")
-        ),
     }
     return template.safe_substitute(values).rstrip() + "\n"
 
@@ -907,20 +915,6 @@ def _command_summary_items(
 
 def _command_summary_text(entry: SiteCommandEntry) -> str:
     return SITE_COMMAND_SUMMARY_OVERRIDES.get(entry.qualified_name, entry.when_to_use)
-
-
-def _claim_summary_items(claims: list[object], *, empty: str) -> str:
-    if not claims:
-        return f"          <li>{escape(empty)}</li>"
-    rows = []
-    for claim in sorted(claims, key=lambda item: str(getattr(item, "id", ""))):
-        rows.append(
-            "          <li>"
-            f"<code>{escape(str(getattr(claim, 'id', '')))}</code>"
-            f"<span>{escape(str(getattr(claim, 'text', '')))} ({escape(str(getattr(claim, 'scope', 'technical')))})</span>"
-            "</li>"
-        )
-    return "\n".join(rows)
 
 
 def _build_quickstart_projection(
@@ -1234,38 +1228,6 @@ def _workflow_boundary_items(projection: dict[str, object]) -> str:
     if not isinstance(boundaries, list) or not boundaries:
         return "          <li>No boundaries are currently projected.</li>"
     return "\n".join(f"          <li><span>{escape(str(item))}</span></li>" for item in boundaries)
-
-
-def _brownfield_fact_items(projection: dict[str, object]) -> str:
-    brownfield = projection.get("brownfield")
-    if not isinstance(brownfield, dict):
-        return "          <li>No Brownfield evidence is currently projected.</li>"
-    facts = (
-        ("Status", brownfield.get("status")),
-        ("Real cycles", brownfield.get("real_cycles")),
-        ("Merge-boundary cycles", brownfield.get("merge_boundary_cycles")),
-        ("Administrative refresh PRs", brownfield.get("administrative_refresh_prs")),
-        ("Legacy seams", f"{brownfield.get('legacy_seams_start')} to {brownfield.get('legacy_seams_end')}"),
-        ("Full-suite runs", f"{brownfield.get('full_suite_min')} to {brownfield.get('full_suite_max')} tests"),
-        ("Cycle 005", brownfield.get("cycle_005_test_boundary")),
-        ("Core defects found", brownfield.get("defect_count")),
-    )
-    rows = []
-    for label, value in facts:
-        rows.append(
-            "          <li>"
-            f"<strong>{escape(str(label))}</strong>"
-            f"<span>{escape(_display_value(value))}</span>"
-            "</li>"
-        )
-    return "\n".join(rows)
-
-
-def _display_value(value: object) -> str:
-    text = "" if value is None else str(value)
-    if not text or text == "None to None" or text == "None to None tests":
-        return "not recorded"
-    return text
 
 
 def _projection_value(projection: dict[str, object], dotted_path: str, default: str) -> str:

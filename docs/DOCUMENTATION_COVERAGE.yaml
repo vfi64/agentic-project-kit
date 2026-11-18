@@ -266,6 +266,26 @@ rules:
     - tests/test_site_navigation_details_history.py
     - source-bound
     - 375/1280
+- id: website-agent-usage-example
+  description: The practical agent page keeps its prompt, tool claims and generated-project cycle tied to reviewed sources.
+  documents:
+  - path: README.md
+    terms:
+    - practical Codex or Claude walkthrough
+    - manual session handoff
+  - path: site/README.md
+    terms:
+    - site/content/usage_example.yaml
+    - site/content/executors.yaml
+    - templates.py
+  - path: site/templates/use.html
+    terms:
+    - What the agent does
+    - What the Kit checks
+    - docs/handoff/CURRENT_HANDOFF.md
+  - path: tests/test_site_usage.py
+    terms:
+    - test_public_usage_commands_run_in_generated_project
 - id: partial-external-bootstrap-recovery
   description: Signed additive recovery preserves external project state and isolates Kit-only gates.
   documents:

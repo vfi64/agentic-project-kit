@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Improved: Grouped website navigation and added a source-bound Codex/Claude walkthrough with a tested generated-project cycle; curated command descriptions now fail the site build when missing.
 - Fixed: Invalid legacy chat handoff packages no longer write successor files or return success in text and prompt modes; generated `init` projects use their documented manual handoff.
 - Fixed: Generated website pages now share one navigation order and mark the current page or command area. The README and website opening explain the Kit's role, limits, and a two-session example more directly.
 

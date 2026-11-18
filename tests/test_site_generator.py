@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 
-from agentic_project_kit.command_manifest import manifest_sha
+from agentic_project_kit.command_manifest import load_manifest, manifest_identity, manifest_sha
 from agentic_project_kit.site_generator import (
     DOCS_PAGES_FALLBACK_KIND,
     SITE_KIND,
@@ -232,6 +233,18 @@ def test_site_foundation_blocks_invalid_command_surface(tmp_path: Path) -> None:
 
     assert not report.ok
     assert "agentic-kit workspace init: invalid surface 'unknown'" in report.blockers
+
+
+def test_curated_page_command_without_help_blocks_site_build() -> None:
+    root = Path(__file__).resolve().parents[1]
+    manifest = copy.deepcopy(load_manifest(root))
+    command = next(row for row in manifest["commands"] if row["qualified_name"] == "agentic-kit work finish")
+    command["help"] = ""
+    manifest["meta"]["manifest_sha"] = manifest_identity(manifest)
+
+    report = collect_site_foundation_metadata(root, build_commit="a" * 40, manifest=manifest)
+
+    assert "curated website command missing help: agentic-kit work finish" in report.blockers
 
 
 def test_public_site_templates_name_remote_target_ci_limitation() -> None:
@@ -540,4 +553,6 @@ def _complete_selected_commands(root, commands):
                 "params": [],
             }
         )
+    for command in commands:
+        command["help"] = command.get("help") or command["when_to_use"]
     return commands

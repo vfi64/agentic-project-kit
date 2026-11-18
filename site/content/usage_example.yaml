@@ -1,0 +1,22 @@
+schema_version: 1
+kind: generated-project-first-cycle
+project_dir: demo
+steps:
+  - command: agentic-kit init
+    argv: [init, demo, --type, python-cli, --no-github, --description, "CSV and TSV exporter"]
+    title: Create the project
+    you: Choose the project type and ask your agent to keep CSV output while adding TSV.
+    agent: Runs the initialization command and reads the generated project instructions.
+    kit: Creates the project contract, status, test-gate and handoff files.
+  - command: agentic-kit check
+    argv: [check]
+    title: Check the project contract
+    you: Review the proposed code and the regression test for existing CSV output.
+    agent: Runs the project tests, then the Kit check in the generated project.
+    kit: Reports violations of its configured project rules; the regression test catches CSV breakage only if it covers that behavior.
+  - command: agentic-kit doctor
+    argv: [doctor]
+    title: Inspect project health
+    you: Decide whether the implementation and evidence are sufficient.
+    agent: Runs the health check and reports the result.
+    kit: Reports project health within its named checks. It cannot decide whether TSV is the right requirement.

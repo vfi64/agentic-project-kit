@@ -19,11 +19,7 @@
           <p>Keep project decisions, checks, evidence and handoffs in your Git repository. The Kit helps maintainers direct AI-assisted work and review its results. Your chosen assistant or a person makes the changes; you own design, approvals and releases.</p>
           <div class="hero-actions" aria-label="Primary generated views">
             <a href="quickstart/index.html">Quickstart</a>
-            <a href="understand/index.html">Benefits, architecture and limits</a>
-            <a href="workflows/index.html">Choose workflow</a>
-            <a href="${repository_url}">Repository</a>
-            <a href="commands/guided.html">Guided commands</a>
-            <a href="claims/index.html">Claim evidence</a>
+            <a href="use/index.html">Use with Codex or Claude</a>
           </div>
         </div>
         <figure class="system-map">
@@ -34,10 +30,10 @@
 
       <section class="panel" aria-labelledby="everyday-title">
         <p class="eyebrow">Two sessions, one repository</p><h2 id="everyday-title">Continue a reviewed change in a new chat</h2>
-        <p>Imagine a small Python CSV exporter. In the first session, you ask an assistant to add a tab-separated output option while preserving the existing comma-separated output. The assistant proposes the change and a regression test for the comma output. You review both, then run the configured Kit checks and record their result with the work state.</p>
-        <p>Before changing chats, generate and validate the successor package. In the second session, the next assistant reads the package and repository state before extending the exporter. If the old-output test fails, the test gate reports the failure. A passing check confirms only its defined conditions; it cannot decide whether the export format meets your needs.</p>
-        <p>You decide whether the change meets the requirement and whether to approve a merge or release. A local coding agent or controller can use the same repository record.</p>
-        <a href="workflows/index.html">See the four interaction paths</a>
+        <p>Imagine a small Python CSV exporter. You ask an assistant to add tab-separated output while preserving comma-separated output. The assistant proposes code and a regression test. You review both and run the tests and configured Kit checks.</p>
+        <p>For a project created by <code>agentic-kit init</code>, record the current goal, test results, and next step in <code>docs/handoff/CURRENT_HANDOFF.md</code>. In the next session, use the generated starter prompt so a new assistant reads the repository state. A failing CSV regression test reports a break only if the test covers that behavior.</p>
+        <p>You decide whether the change meets the requirement and whether to approve a merge or release. The Kit's green checks confirm only their named conditions.</p>
+        <a href="use/index.html">Follow the example with Codex or Claude</a>
       </section>
 
       <section class="band" aria-labelledby="workflow-title">
@@ -73,45 +69,16 @@
       <section aria-labelledby="practice-title"><p class="eyebrow">Evidence from actual use</p><h2 id="practice-title">Self-hosting, Greenfield and Brownfield</h2>
         <p>Using the Kit on itself exercises its own workflow. External adoption and maintenance tests exposed additional boundary defects and informed later repairs. Historical retests, recorded maintenance and current release notes are different evidence classes.</p>
         <div class="section-grid evidence-grid">${homepage_evidence_cards}</div>
-        <p><a href="understand/index.html#evidence">Methods and generalization limits</a> · <a href="understand/index.html#comparison">Comparison with open-source and commercial tools</a></p>
+        <p><a href="evidence/index.html#development-cases">Self-hosting and Brownfield cases</a> · <a href="understand/index.html#evidence">Methods and generalization limits</a> · <a href="understand/index.html#comparison">Comparison with open-source and commercial tools</a></p>
       </section>
 
       <section class="metrics" aria-label="Claim counts by scope">${scoped_claim_counts}</section>
 
-      <section class="status-board" aria-labelledby="status-title">
-        <div class="status-board-head">
-          <p class="eyebrow">Evidence Status</p>
-          <h2 id="status-title">Claims</h2>
-        </div>
-        <article>
-          <h3>Evidence checks within stated scope</h3>
-          <ul class="summary-list">
-${verified_now_items}
-          </ul>
-        </article>
-        <article>
-          <h3>Optional evidence checks</h3>
-          <ul class="summary-list">
-${available_evolving_items}
-          </ul>
-        </article>
-        <article>
-          <h3>Planned</h3>
-          <ul class="summary-list">
-${planned_items}
-          </ul>
-        </article>
-        <article>
-          <h3>Not claimed</h3>
-          <ul class="summary-list">
-            <li><span>Global DPA conformance for arbitrary foreign repositories is not claimed.</span></li>
-            <li><span>Remote target-CI validation is not claimed when the target repository reports no checks; remote adoption PR mechanics are separate from target-owned CI evidence.</span></li>
-            <li><span>Post-fix PyPI validation is not claimed until a later package is published and installed again from PyPI.</span></li>
-            <li><span>Full GUI parity with every CLI command is not claimed.</span></li>
-            <li><span>General Brownfield portability is not claimed from observations in one familiar private repository.</span></li>
-            <li><span>Live GitHub Pages publication depends on either GitHub Actions Pages deployment or the generated docs-source fallback being current.</span></li>
-          </ul>
-        </article>
+      <section class="panel" aria-labelledby="status-title">
+        <p class="eyebrow">Evidence Status</p>
+        <h2 id="status-title">Evidence checks within stated scope</h2>
+        <p>The counts above separate technical, documentation and historical observations. Each claim, its source and its limit is available on the <a href="claims/index.html">claim evidence page</a>.</p>
+        <p>Remote target-CI validation is not claimed when a target repository reports no checks.</p>
       </section>
 
       <section class="details"><p>Version ${package_version} · Python ${requires_python}</p>

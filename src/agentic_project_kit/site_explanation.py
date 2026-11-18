@@ -105,7 +105,12 @@ def render_explanation(root: Path, projection: dict[str, object], *, repository_
         repository_url=escape(repository_url, quote=True),
         evidence_cards=render_evidence_cards(projection, repository_url=repository_url),
         comparison_rows=_render_comparisons(projection),
-        workflow_figures=render_figures(projection['workflow_figures']) if 'workflow_figures' in projection else '',
+        workflow_figures=(render_figures({
+            **projection['workflow_figures'],
+            'figures': [figure for figure in projection['workflow_figures']['figures'] if figure['id'] != 'G0'],
+            'observation': None,
+            'boundary': 'Contract diagrams for bounded work and handoff. The observed work-finish run is on the Evidence page.',
+        }) if 'workflow_figures' in projection else ''),
     ).rstrip() + "\n"
 
 

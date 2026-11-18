@@ -4,6 +4,7 @@ import hashlib
 from html.parser import HTMLParser
 import json
 from pathlib import Path
+import re
 import shutil
 from urllib.parse import unquote, urlsplit
 
@@ -158,7 +159,69 @@ def test_site_navigation_has_one_order_and_marks_the_current_page(built):
         if page.name.startswith("detail-"):
             location = [link for link in links if link.get("aria-current") == "location"]
             assert len(location) == 1, page
-            assert (page.parent / location[0]["href"]).resolve() == built / "commands/index.html"
+            assert (page.parent / location[0]["href"]).resolve() == built / "commands/guided.html"
+
+
+def test_navigation_groups_related_pages_and_marks_the_subpage(built):
+    class Navigation(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.group = None
+            self.links = {}
+
+        def handle_starttag(self, tag, attrs):
+            attrs = dict(attrs)
+            if tag == "nav":
+                self.group = attrs.get("aria-label")
+                self.links.setdefault(self.group, [])
+            elif tag == "a" and self.group:
+                self.links[self.group].append(attrs)
+
+        def handle_endtag(self, tag):
+            if tag == "nav":
+                self.group = None
+
+    groups = {
+        "Commands": ("commands/guided.html", "commands/diagnostics.html", "commands/index.html"),
+        "Evidence": ("evidence/index.html", "claims/index.html"),
+    }
+    for page in built.rglob("*.html"):
+        parsed = Navigation()
+        parsed.feed(page.read_text(encoding="utf-8"))
+        main_labels = [link["aria-current"] for link in parsed.links["Site"] if "aria-current" in link]
+        assert len(parsed.links["Site"]) <= 8
+        main_html = page.read_text(encoding="utf-8").split('<nav class="topnav"', 1)[1].split("</nav>", 1)[0]
+        assert all(f">{label}<" not in main_html for label in
+                   ("Guided", "Diagnostics", "Complete", "Safety evidence", "Claims"))
+        relative = page.relative_to(built).as_posix()
+        if relative.startswith("commands/"):
+            group = "Commands"
+        elif relative in groups["Evidence"]:
+            group = "Evidence"
+        else:
+            assert not any(name in parsed.links for name in groups)
+            continue
+        links = parsed.links[group]
+        assert len(links) == len(groups[group])
+        current = [link for link in links if "aria-current" in link]
+        assert len(current) == 1, page
+        target = (page.parent / current[0]["href"]).resolve().relative_to(built.resolve()).as_posix()
+        assert target == (relative if relative in groups[group] else "commands/index.html")
+        assert len(main_labels) == 1
+
+
+def test_mobile_navigation_is_one_scrollable_row_and_current_style_is_distinct(built):
+    css = (built / "static/site.css").read_text(encoding="utf-8")
+    mobile = re.search(r"@media\s*\(max-width:\s*640px\)\s*\{(?P<body>.*?)\n\}", css, re.S)
+    assert mobile is not None
+    assert re.search(r"\.topnav\s*\{[^}]*flex-wrap:\s*nowrap;[^}]*overflow-x:\s*auto;", mobile["body"], re.S)
+    assert not re.search(r"[^{}]*\.topnav a\[aria-current\][^{}]*\.hero-actions", css, re.S)
+
+
+def test_curated_pages_have_descriptive_command_summaries(built):
+    for relative in ("workflows/index.html", "commands/guided.html", "quickstart/index.html"):
+        html = (built / relative).read_text(encoding="utf-8")
+        assert not re.search(r"<span>Run agentic-kit [^<]+\.</span>", html), relative
 
 
 def history_fixture(tmp_path):

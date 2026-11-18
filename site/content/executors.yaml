@@ -1,0 +1,23 @@
+schema_version: 1
+kind: website-executor-paths
+executors:
+  - name: Codex CLI
+    path: Agent Direct
+    instructions: Reads repository AGENTS.md automatically.
+    source: https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide
+    reviewed: "2026-11-18"
+  - name: Claude Code
+    path: Agent Direct
+    instructions: Reads AGENTS.md by default when no CLAUDE.md or CLAUDE.local.md is above the working directory, on supported versions; otherwise import @AGENTS.md from CLAUDE.md.
+    source: https://code.claude.com/docs/en/memory
+    reviewed: "2026-11-18"
+  - name: GitHub Copilot cloud agent
+    path: Agent Direct
+    instructions: Supports repository instructions and AGENTS.md; check the specific editor or agent surface.
+    source: https://docs.github.com/en/copilot/reference/custom-instructions-support
+    reviewed: "2026-11-18"
+  - name: Browser chat
+    path: Copy and Paste or File Transfer
+    instructions: Paste the starter prompt and provide the relevant repository files when the chat has no repository access.
+    source: ../workflows/index.html
+    reviewed: "2026-11-18"

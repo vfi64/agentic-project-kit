@@ -97,7 +97,7 @@ def publication_text(evidence: dict) -> str:
     if evidence["status"] != "verified":
         return "PyPI publication workflow evidence for this version is unverified."
     return (f"The PyPI publication workflow for version {evidence['version']} completed "
-            "successfully in the release run (C3). Index visibility and installability "
+            "successfully in the release run. Index visibility and installability "
             "are separate checks.")
 
 

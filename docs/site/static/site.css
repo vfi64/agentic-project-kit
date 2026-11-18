@@ -51,10 +51,11 @@ body {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  margin-bottom: 28px;
+  margin-bottom: 16px;
 }
 
 .topnav a,
+.subnav a,
 .hero-actions a,
 .command-links a {
   border: 1px solid var(--line);
@@ -66,9 +67,34 @@ body {
 }
 
 .topnav a[aria-current],
+.subnav a[aria-current] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+}
+
 .hero-actions a:first-child {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.subnav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+@media (max-width: 640px) {
+  .topnav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 8px;
+  }
+
+  .topnav a { flex: 0 0 auto; }
 }
 
 .overview {
@@ -78,6 +104,12 @@ body {
   align-items: center;
   border-bottom: 1px solid var(--line);
   padding: 18px 0 28px;
+}
+
+.quickstart-overview { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 680px) {
+  .quickstart-overview .system-map { overflow-x: auto; }
+  .quickstart-overview .system-map img { min-width: 720px; }
 }
 
 .eyebrow {
