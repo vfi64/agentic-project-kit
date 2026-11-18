@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 464" role="img" aria-labelledby="title desc">
+<title id="title">Your repository after init</title>
+<desc id="desc">Selected generated files grouped by purpose. agentic-kit init demo --type python-cli --no-github --description &#x27;CSV and TSV exporter&#x27;, Kit 1.4.0. Counts apply only to this command.</desc>
+<metadata>{"files": [".agentic/dpa/workspace_init_projection.json", ".agentic/project.yaml", ".agentic/todo.yaml", ".github/ISSUE_TEMPLATE/agent_regression.yml", ".github/copilot-instructions.md", ".github/pull_request_template.md", ".github/workflows/ci.yml", ".gitignore", ".pre-commit-config.yaml", "AGENTS.md", "CHANGELOG.md", "README.md", "docs/DOCUMENTATION_COVERAGE.yaml", "docs/LOGGING_AND_EVIDENCE.md", "docs/PROJECT_START.md", "docs/STATUS.md", "docs/TEST_GATES.md", "docs/TODO.md", "docs/architecture/ARCHITECTURE_CONTRACT.md", "docs/handoff/CURRENT_HANDOFF.md", "docs/handoff/STANDARD_AGENT_PROMPT.md", "pyproject.toml", "scripts/stage_recent_logs.py", "sentinel.yaml", "src/demo/__init__.py", "tests/test_smoke.py"]}</metadata>
+<style>.title{font:700 24px sans-serif;fill:#17365d}.subtitle{font:15px sans-serif;fill:#334b64}.heading{font:700 17px sans-serif;fill:#17365d}.file{font:14px monospace;fill:#18364f}.more{font:14px sans-serif;fill:#45627e}</style>
+<rect width="960" height="464" fill="#fff"/>
+<text x="24" y="35" class="title">Your repository after init</text>
+<text x="24" y="64" class="subtitle">agentic-kit init demo --type python-cli --no-github --description &#x27;CSV and TSV exporter&#x27;, Kit 1.4.0</text>
+<rect x="24" y="102" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
+<text x="40" y="129" class="heading">Agent instructions · 2</text>
+<text x="40" y="158" class="file">…/copilot-instructions.md</text>
+<text x="40" y="182" class="file">AGENTS.md</text>
+<rect x="336" y="102" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
+<text x="352" y="129" class="heading">Project state · 5</text>
+<text x="352" y="158" class="file">workspace_init_projection.jso…</text>
+<text x="352" y="182" class="file">.agentic/project.yaml</text>
+<text x="352" y="206" class="file">.agentic/todo.yaml</text>
+<text x="352" y="237" class="more">+ 2 more</text>
+<rect x="648" y="102" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
+<text x="664" y="129" class="heading">Checks · 3</text>
+<text x="664" y="158" class="file">docs/TEST_GATES.md</text>
+<text x="664" y="182" class="file">pyproject.toml</text>
+<text x="664" y="206" class="file">tests/test_smoke.py</text>
+<rect x="24" y="274" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
+<text x="40" y="301" class="heading">CI · 1</text>
+<text x="40" y="330" class="file">.github/workflows/ci.yml</text>
+<rect x="336" y="274" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
+<text x="352" y="301" class="heading">Handoff · 2</text>
+<text x="352" y="330" class="file">…/CURRENT_HANDOFF.md</text>
+<text x="352" y="354" class="file">…/STANDARD_AGENT_PROMPT.md</text>
+<rect x="648" y="274" width="294" height="152" rx="12" fill="#eef3fa" stroke="#b8c9dc"/>
+<text x="664" y="301" class="heading">Other project files · 13</text>
+<text x="664" y="330" class="file">…/agent_regression.yml</text>
+<text x="664" y="354" class="file">…/pull_request_template.md</text>
+<text x="664" y="378" class="file">.gitignore</text>
+<text x="664" y="409" class="more">+ 10 more</text>
+</svg>

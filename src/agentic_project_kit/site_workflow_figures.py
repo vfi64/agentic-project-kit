@@ -155,7 +155,7 @@ def render_figures(projection: dict) -> str:
     parts = ['<section id="workflow-figures"><p class="eyebrow">Generated from current sources</p><h2>Work and handoff</h2>',
              '<p>' + escape(projection['boundary']) + '</p>']
     for figure in projection['figures']:
-        parts.append(f'<article class="panel" id="figure-{figure["id"]}"><h3>{escape(figure["id"] + ": " + figure["title"])}</h3>'
+        parts.append(f'<article class="panel" id="figure-{figure["id"]}"><h3>{escape(figure["title"])}</h3>'
                      f'<figure class="architecture-map workflow-map"><picture><source media="(max-width: 1050px)" srcset="{figure["id"]}-mobile.svg"><img src="{figure["id"]}.svg" alt="{escape(figure["title"], quote=True)} — text sequence follows."></picture></figure><details><summary>Text description and source boundaries</summary><ol>')
         parts.extend(f'<li><strong>{escape(n["label"])}</strong>: {escape(n["detail"])}</li>' for n in figure['nodes'])
         parts.append('</ol><p>' + escape(figure['boundary']) + '</p></details></article>')

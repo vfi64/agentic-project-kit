@@ -6,6 +6,7 @@ from html import escape
 from pathlib import Path
 from string import Template
 from .site_navigation import render_site_navigation
+from .site_public_contract import self_hosting_case
 from urllib.parse import quote
 
 BINDINGS = "site/content/safety_evidence_sources.json"
@@ -91,7 +92,11 @@ def collect_safety_evidence(root: Path) -> dict:
             "development": development, "sources": bindings}
 
 
-def render_safety_evidence(root: Path, data: dict, *, repository_url: str, product_name: str) -> str:
+def render_safety_evidence(
+    root: Path, data: dict, *, repository_url: str, product_name: str,
+    version: str = "", brownfield: dict | None = None,
+    observed_workflow: dict | None = None,
+) -> str:
     findings = "".join('<tr>' + ''.join(f'<td>{escape(row[k])}</td>' for k in ("id", "severity", "area", "gap")) + '</tr>'
                        for row in data["findings"])
     mitigations = "".join(f'<article class="panel"><h3>{escape(", ".join(g["ids"]))}</h3><p>{escape(g["summary"])}</p></article>'
@@ -103,6 +108,42 @@ def render_safety_evidence(root: Path, data: dict, *, repository_url: str, produ
                       f' · source revision <code>{s["revision"]}</code> · SHA-256 <code>{s["sha256"]}</code></li>'
                       for key, s in data["sources"].items())
     baseline, development = data["baseline"], data["development"]
+    development_cases = ""
+    if version and isinstance(brownfield, dict):
+        source = str(brownfield.get("source") or "")
+        brownfield_link = (
+            f'<a href="{escape(repository_url, quote=True)}/blob/main/{quote(source, safe="/")}">Source report</a>'
+            if source.startswith("docs/reports/") and (root / source).is_file() else "Source report unavailable"
+        )
+        development_cases = (
+            '<section id="development-cases"><h2>Self-hosting and Brownfield development cases</h2>'
+            '<div class="section-grid evidence-grid">'
+            + self_hosting_case(root, version, repository_url)
+            + '<article class="panel"><p class="eyebrow">Historical Brownfield maintenance</p>'
+            '<h3>Five maintenance cycles in one familiar repository</h3>'
+            f'<p>{escape(str(brownfield.get("summary") or "No summary recorded."))}</p>'
+            f'<p>Status <code>{escape(str(brownfield.get("status") or "not recorded"))}</code> · {brownfield_link}</p>'
+            '<p>This case does not establish general portability to unrelated repositories.</p></article>'
+            '</div></section>'
+        )
+    observed_workflow_html = ""
+    if isinstance(observed_workflow, dict) and observed_workflow.get("id") == "G0":
+        nodes = observed_workflow.get("nodes", [])
+        if isinstance(nodes, list):
+            items = "".join(
+                f'<li><strong>{escape(str(node["label"]))}</strong>: {escape(str(node["detail"]))}</li>'
+                for node in nodes if isinstance(node, dict) and "label" in node and "detail" in node
+            )
+            observed_workflow_html = (
+                '<section id="observed-workflow"><h2>Observed work-finish sequence</h2>'
+                '<p>This is a bounded observation from the Kit repository, not a run in every generated project.</p>'
+                '<figure class="architecture-map workflow-map"><picture>'
+                '<source media="(max-width: 1050px)" srcset="../understand/G0-mobile.svg">'
+                '<img src="../understand/G0.svg" alt="Observed work-finish sequence; text alternative follows.">'
+                '</picture></figure><details><summary>Text description and source boundaries</summary><ol>'
+                + items + '</ol><p>' + escape(str(observed_workflow.get("boundary") or ""))
+                + '</p></details></section>'
+            )
     return Template((root / "site/templates/evidence.html").read_text()).substitute(
         site_nav=render_site_navigation("evidence/index.html"),
         product_name=escape(product_name), findings=findings, mitigations=mitigations,
@@ -115,6 +156,8 @@ def render_safety_evidence(root: Path, data: dict, *, repository_url: str, produ
         development_count=f'{development["detected"]} of {development["applicable"]}',
         baseline_revision=baseline["sandbox_revision"], development_revision=development["sandbox_revision"],
         development_runtime=escape(development["runtime"]),
+        development_cases=development_cases,
+        observed_workflow=observed_workflow_html,
     ).rstrip() + "\n"
 
 

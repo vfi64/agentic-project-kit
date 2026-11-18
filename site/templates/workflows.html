@@ -58,28 +58,8 @@ ${boundary_items}
         </article>
       </section>
 
-      <section class="status-board" aria-labelledby="brownfield-title">
-        <div class="status-board-head">
-          <p class="eyebrow">Evidence-bound Brownfield result</p>
-          <h2 id="brownfield-title">B1 Closeout</h2>
-          <p>The historical B1 threshold window provides evidence beyond self-hosting, but one familiar repository is not enough to establish general Brownfield portability.</p>
-          <p class="catalog-meta">Status <code>${brownfield_status}</code> · Source <code>${brownfield_source}</code> · Rule-Ack evidence <code>${brownfield_evidence_type}</code></p>
-        </div>
-        <article>
-          <h3>Measured Facts</h3>
-          <ul class="summary-list">
-${brownfield_items}
-          </ul>
-        </article>
-        <article>
-          <h3>Limits</h3>
-          <ul class="summary-list">
-            <li><span>The Brownfield repository was familiar and private, not an independent public adopter.</span></li>
-            <li><span>Cycle 005 changed CI configuration and has no historical local full-suite entry.</span></li>
-            <li><span>The external merge wrapper still has a local non-return defect after successful remote merge.</span></li>
-            <li><span>Fixes on Kit main and fixes in a released package are separate evidence types.</span></li>
-          </ul>
-        </article>
+      <section class="panel"><h2>Brownfield evidence and limits</h2>
+        <p>The recorded maintenance cycles and their limits are on the <a href="../evidence/index.html#development-cases">evidence page</a>.</p>
       </section>
       <section class="panel"><h2>Interaction boundaries</h2><p>The four paths do not imply equal maturity or test coverage. The GUI is an optional interface; full CLI parity is not claimed. Some recovery steps require the CLI or a manual fallback.</p></section>
     </main>

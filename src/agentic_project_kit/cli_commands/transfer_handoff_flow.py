@@ -535,6 +535,7 @@ def submit_user_task_command(
     ),
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
+    """Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier."""
     from agentic_project_kit.gui_task_editor import submit_user_task
 
     try:
@@ -581,6 +582,7 @@ def submit_user_task_command(
 def read_user_task_command(
     json_output: bool = typer.Option(False, "--json", help="Print machine-readable JSON."),
 ) -> None:
+    """Read the current GUI file-transfer task and report its next action."""
     from agentic_project_kit.gui_task_editor import read_user_task
 
     payload = read_user_task(Path("."))

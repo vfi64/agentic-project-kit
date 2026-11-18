@@ -1218,7 +1218,7 @@
     "schema_version": 1,
     "sources": {
       "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "6b43547e4d0dd39fea242ea7f21175e302e6c7cdf224689c96d8686acc6ce976",
-      "docs/reference/agentic-kit-commands.json": "414b66d3ec9a011462c047c0e1151291bead5ade3c11bcaf95601c3412b050f3",
+      "docs/reference/agentic-kit-commands.json": "07e5af94cf2212d18e19f469d1b68e4da09cfd109d4b7ecbe72bef4f02fcef2a",
       "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
       "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
       "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",

@@ -65,6 +65,7 @@ def cockpit_actions_command(
 
 @cockpit_app.command("select")
 def cockpit_select_command() -> None:
+    """List cockpit actions with their IDs for a bounded selection."""
     actions = cockpit_actions()
     console.print(render_action_selection(actions), markup=False)
 
@@ -76,6 +77,7 @@ def cockpit_run_command(
     allow_bounded: Annotated[bool, typer.Option("--allow-bounded")] = False,
     json_output: Annotated[bool, typer.Option("--json", help="Print machine-readable JSON action result.")] = False,
 ) -> None:
+    """Run a selected cockpit action subject to safety and dirty-state checks."""
     result = run_cockpit_action(action_id, project_root.resolve(), allow_bounded=allow_bounded)
     if json_output:
         typer.echo(json.dumps(action_result_as_json_data(result), indent=2, sort_keys=True))

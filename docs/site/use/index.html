@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Use Agentic Project Kit with Codex, Claude Code or a browser chat in a generated project.">
+    <title>Use with Codex or Claude — Agentic Project Kit</title>
+    <link rel="stylesheet" href="../static/site.css">
+  </head>
+  <body>
+    <main class="page">
+      <nav class="topnav" aria-label="Site"><a href="../index.html">Overview</a><a href="../understand/index.html">Understand the Kit</a><a href="../quickstart/index.html">Quickstart</a><a href="index.html" aria-current="page">Use with Codex or Claude</a><a href="../workflows/index.html">Workflows</a><a href="../commands/guided.html">Commands</a><a href="../evidence/index.html">Evidence</a><a href="../history/index.html">History and architecture</a></nav>
+      <header>
+        <p class="eyebrow">A practical first cycle</p>
+        <h1>Use with Codex or Claude</h1>
+        <p class="lede">You choose the goal and approve the result. Your coding agent edits and tests the project. The Kit creates durable project state and reports violations of defined rules.</p>
+      </header>
+
+      <section aria-labelledby="tool-heading">
+        <h2 id="tool-heading">Which path fits your tool?</h2>
+        <p>Agent Direct means the tool can work in the repository. Browser chats without repository access use the starter prompt and the <a href="../workflows/index.html">Copy and Paste or File Transfer workflow</a>. Tool behavior depends on the product version and settings; check the dated sources.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Tools and interaction paths">
+          <table><thead><tr><th>Tool</th><th>Kit path</th><th>Project instructions</th><th>Source and review date</th></tr></thead><tbody>
+<tr><td>Codex CLI</td><td>Agent Direct</td><td>Reads repository AGENTS.md automatically.</td><td><a href="https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide">Source</a> · 2026-11-18</td></tr>
+<tr><td>Claude Code</td><td>Agent Direct</td><td>Reads AGENTS.md by default when no CLAUDE.md or CLAUDE.local.md is above the working directory, on supported versions; otherwise import @AGENTS.md from CLAUDE.md.</td><td><a href="https://code.claude.com/docs/en/memory">Source</a> · 2026-11-18</td></tr>
+<tr><td>GitHub Copilot cloud agent</td><td>Agent Direct</td><td>Supports repository instructions and AGENTS.md; check the specific editor or agent surface.</td><td><a href="https://docs.github.com/en/copilot/reference/custom-instructions-support">Source</a> · 2026-11-18</td></tr>
+<tr><td>Browser chat</td><td>Copy and Paste or File Transfer</td><td>Paste the starter prompt and provide the relevant repository files when the chat has no repository access.</td><td><a href="../workflows/index.html">Source</a> · 2026-11-18</td></tr>
+          </tbody></table>
+        </div>
+      </section>
+
+      <section aria-labelledby="prompt-heading">
+        <h2 id="prompt-heading">Your first prompt</h2>
+        <p>Paste this into a new session when you want a reliable starting instruction. It is rendered from the generated project's <code>docs/handoff/STANDARD_AGENT_PROMPT.md</code> template. A coding agent may also load <code>AGENTS.md</code> automatically, but that file's read list must be followed to find the Kit commands.</p>
+        <pre id="starter-prompt"><code>You are working in this repository.
+
+Start by reading:
+
+1. AGENTS.md
+2. .agentic/project.yaml
+3. docs/PROJECT_START.md
+4. docs/STATUS.md
+5. docs/TEST_GATES.md
+6. docs/handoff/CURRENT_HANDOFF.md
+
+Do not infer current state from memory.
+Run or request:
+
+git status --short
+pytest -q
+agentic-kit check
+agentic-kit doctor
+
+For substantial work, close with:
+
+- Intended outcome:
+- Required evidence:
+- Outcome achieved:
+- Changed files:
+- Tests run:
+- Remaining risks:</code></pre>
+      </section>
+
+      <section aria-labelledby="cycle-heading">
+        <h2 id="cycle-heading">One work cycle: add TSV, keep CSV</h2>
+        <p>This scenario illustrates the roles; it is not a measurement of drift reduction. The three Kit commands below were run in a fresh generated Python project by the repository test. The agent's code change and regression test are proposed work, not part of that command fixture.</p>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="First work cycle">
+          <table><thead><tr><th>Step</th><th>What you do</th><th>What the agent does</th><th>What the Kit checks</th></tr></thead><tbody>
+<tr><th scope="row">Create the project<br><code>agentic-kit init demo --type python-cli --no-github --description CSV and TSV exporter</code></th><td>Choose the project type and ask your agent to keep CSV output while adding TSV.</td><td>Runs the initialization command and reads the generated project instructions.</td><td>Creates the project contract, status, test-gate and handoff files.</td></tr>
+<tr><th scope="row">Check the project contract<br><code>agentic-kit check</code></th><td>Review the proposed code and the regression test for existing CSV output.</td><td>Runs the project tests, then the Kit check in the generated project.</td><td>Reports violations of its configured project rules; the regression test catches CSV breakage only if it covers that behavior.</td></tr>
+<tr><th scope="row">Inspect project health<br><code>agentic-kit doctor</code></th><td>Decide whether the implementation and evidence are sufficient.</td><td>Runs the health check and reports the result.</td><td>Reports project health within its named checks. It cannot decide whether TSV is the right requirement.</td></tr>
+          </tbody></table>
+        </div>
+        <p>Before the next session, update <code>docs/handoff/CURRENT_HANDOFF.md</code> with the current goal, test results, and next step. Then use the starter prompt again. A project made with <code>agentic-kit init</code> currently uses this manual handoff; the automated successor package requires different workspace sources.</p>
+      </section>
+
+      <section class="panel" aria-labelledby="limits-heading">
+        <h2 id="limits-heading">What these checks do not decide</h2>
+        <p>The Kit does not choose TSV as a requirement, write the feature, or replace your review. A green <code>check</code> or <code>doctor</code> result covers its named rules. A CSV regression is caught only when a test asserts the old behavior and that test runs.</p>
+        <p><a href="../quickstart/index.html">Installation and commands</a> · <a href="../understand/index.html#limits-title">Mechanisms and limits</a></p>
+      </section>
+    </main>
+  </body>
+</html>

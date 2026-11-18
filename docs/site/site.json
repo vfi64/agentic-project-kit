@@ -265,7 +265,7 @@
         "blockers": [],
         "evidence": [
           {
-            "detail": "The PyPI publication workflow for version 1.4.0 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+            "detail": "The PyPI publication workflow for version 1.4.0 completed successfully in the release run. Index visibility and installability are separate checks.",
             "evidence_type": "release-pypi-workflow",
             "status": "verified"
           }
@@ -1320,7 +1320,7 @@
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": false,
         "group": "cockpit",
-        "help": "",
+        "help": "Run a selected cockpit action subject to safety and dirty-state checks.",
         "lifecycle_rank": null,
         "params": [
           {
@@ -1363,19 +1363,19 @@
         "qualified_name": "agentic-kit cockpit run",
         "safety": "BOUNDED",
         "surface": "primitive",
-        "when_to_use": "Run agentic-kit cockpit run."
+        "when_to_use": "Run a selected cockpit action subject to safety and dirty-state checks."
       },
       {
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": false,
         "group": "cockpit",
-        "help": "",
+        "help": "List cockpit actions with their IDs for a bounded selection.",
         "lifecycle_rank": null,
         "params": [],
         "qualified_name": "agentic-kit cockpit select",
         "safety": "BOUNDED",
         "surface": "primitive",
-        "when_to_use": "Run agentic-kit cockpit select."
+        "when_to_use": "List cockpit actions with their IDs for a bounded selection."
       },
       {
         "diagnostic_priority": "advanced_diagnostic",
@@ -10925,7 +10925,7 @@
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": false,
         "group": "transfer",
-        "help": "",
+        "help": "Read the current GUI file-transfer task and report its next action.",
         "lifecycle_rank": null,
         "params": [
           {
@@ -10941,7 +10941,7 @@
         "qualified_name": "agentic-kit transfer read-user-task",
         "safety": "BOUNDED",
         "surface": "primitive",
-        "when_to_use": "Run agentic-kit transfer read-user-task."
+        "when_to_use": "Read the current GUI file-transfer task and report its next action."
       },
       {
         "diagnostic_priority": "not_diagnostic",
@@ -11534,7 +11534,7 @@
         "diagnostic_priority": "not_diagnostic",
         "dry_run_available": false,
         "group": "transfer",
-        "help": "",
+        "help": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier.",
         "lifecycle_rank": null,
         "params": [
           {
@@ -11586,7 +11586,7 @@
         "qualified_name": "agentic-kit transfer submit-user-task",
         "safety": "BOUNDED",
         "surface": "primitive",
-        "when_to_use": "Run agentic-kit transfer submit-user-task."
+        "when_to_use": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier."
       },
       {
         "diagnostic_priority": "not_diagnostic",
@@ -14989,7 +14989,7 @@
     ],
     "execution_authorized": false,
     "kind": "command_detail_projection",
-    "manifest_sha": "236cd9a4df4b",
+    "manifest_sha": "260865a7910b",
     "schema_version": 1
   },
   "explanation_projection": {
@@ -16212,7 +16212,7 @@
       "schema_version": 1,
       "sources": {
         "docs/reference/HUMAN_WORKFLOW_COMMANDS.md": "6b43547e4d0dd39fea242ea7f21175e302e6c7cdf224689c96d8686acc6ce976",
-        "docs/reference/agentic-kit-commands.json": "414b66d3ec9a011462c047c0e1151291bead5ade3c11bcaf95601c3412b050f3",
+        "docs/reference/agentic-kit-commands.json": "07e5af94cf2212d18e19f469d1b68e4da09cfd109d4b7ecbe72bef4f02fcef2a",
         "docs/reports/offline_path_20261024/callbacks.json": "0f5c7f4ef41134cfaadb2099476ba423d370bd2c98dfaa064af383796ef0ca36",
         "docs/reports/offline_path_20261024/observation.json": "a3d3d20d98e05fee446ce1348846ea37c08b3c9e2e3a61008619f13853a483e8",
         "docs/reports/protection_mechanisms_20261023/reachability.json": "737b09201cfd7d6a987277ee921d7ac5f40e99ae2c05cfe72dbd1705ec85c5c4",
@@ -16248,7 +16248,7 @@
       "version": "0.2.0"
     },
     "kind": "bounded_history_projection",
-    "manifest_sha": "236cd9a4df4b",
+    "manifest_sha": "260865a7910b",
     "overhead": {
       "admin_refresh_prs": 83,
       "evidence_class": "historical classification",
@@ -16304,14 +16304,14 @@
     "current_verified_main": "See docs/STATUS.md",
     "former_product_name": "",
     "manifest_identity_verified": true,
-    "manifest_sha": "236cd9a4df4b",
+    "manifest_sha": "260865a7910b",
     "package_name": "agentic-project-kit",
     "package_version": "1.4.0",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
     "release_tag": "v1.4.0",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
-    "reproduced_manifest_sha": "236cd9a4df4b",
+    "reproduced_manifest_sha": "260865a7910b",
     "requires_python": ">=3.10",
     "safety_counts": {
       "BOUNDED": 178,
@@ -16378,7 +16378,7 @@
       ],
       "worktree_clean": "boolean"
     },
-    "manifest_sha": "236cd9a4df4b",
+    "manifest_sha": "260865a7910b",
     "routes": [
       {
         "command": "agentic-kit check",
@@ -16936,7 +16936,7 @@
             "qualified_name": "agentic-kit transfer read-user-task",
             "safety": "BOUNDED",
             "surface": "primitive",
-            "when_to_use": "Run agentic-kit transfer read-user-task."
+            "when_to_use": "Read the current GUI file-transfer task and report its next action."
           },
           {
             "dry_run_available": false,
@@ -16944,7 +16944,7 @@
             "qualified_name": "agentic-kit transfer submit-user-task",
             "safety": "BOUNDED",
             "surface": "primitive",
-            "when_to_use": "Run agentic-kit transfer submit-user-task."
+            "when_to_use": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier."
           },
           {
             "dry_run_available": false,
@@ -17072,7 +17072,7 @@
             "qualified_name": "agentic-kit cockpit run",
             "safety": "BOUNDED",
             "surface": "primitive",
-            "when_to_use": "Run agentic-kit cockpit run."
+            "when_to_use": "Run a selected cockpit action subject to safety and dirty-state checks."
           },
           {
             "dry_run_available": false,
@@ -17080,7 +17080,7 @@
             "qualified_name": "agentic-kit cockpit select",
             "safety": "BOUNDED",
             "surface": "primitive",
-            "when_to_use": "Run agentic-kit cockpit select."
+            "when_to_use": "List cockpit actions with their IDs for a bounded selection."
           }
         ],
         "id": "gui",

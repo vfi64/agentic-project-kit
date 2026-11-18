@@ -56,7 +56,7 @@
           "qualified_name": "agentic-kit transfer read-user-task",
           "safety": "BOUNDED",
           "surface": "primitive",
-          "when_to_use": "Run agentic-kit transfer read-user-task."
+          "when_to_use": "Read the current GUI file-transfer task and report its next action."
         },
         {
           "dry_run_available": false,
@@ -64,7 +64,7 @@
           "qualified_name": "agentic-kit transfer submit-user-task",
           "safety": "BOUNDED",
           "surface": "primitive",
-          "when_to_use": "Run agentic-kit transfer submit-user-task."
+          "when_to_use": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier."
         },
         {
           "dry_run_available": false,
@@ -192,7 +192,7 @@
           "qualified_name": "agentic-kit cockpit run",
           "safety": "BOUNDED",
           "surface": "primitive",
-          "when_to_use": "Run agentic-kit cockpit run."
+          "when_to_use": "Run a selected cockpit action subject to safety and dirty-state checks."
         },
         {
           "dry_run_available": false,
@@ -200,7 +200,7 @@
           "qualified_name": "agentic-kit cockpit select",
           "safety": "BOUNDED",
           "surface": "primitive",
-          "when_to_use": "Run agentic-kit cockpit select."
+          "when_to_use": "List cockpit actions with their IDs for a bounded selection."
         }
       ],
       "id": "gui",

@@ -1671,7 +1671,7 @@
     {
       "dry_run_available": false,
       "group": "cockpit",
-      "help": "",
+      "help": "Run a selected cockpit action subject to safety and dirty-state checks.",
       "name": "run",
       "params": [
         {
@@ -1746,12 +1746,12 @@
         "bounded",
         "cockpit"
       ],
-      "when_to_use": "Run agentic-kit cockpit run."
+      "when_to_use": "Run a selected cockpit action subject to safety and dirty-state checks."
     },
     {
       "dry_run_available": false,
       "group": "cockpit",
-      "help": "",
+      "help": "List cockpit actions with their IDs for a bounded selection.",
       "name": "select",
       "params": [],
       "path": [
@@ -1769,7 +1769,7 @@
         "bounded",
         "cockpit"
       ],
-      "when_to_use": "Run agentic-kit cockpit select."
+      "when_to_use": "List cockpit actions with their IDs for a bounded selection."
     },
     {
       "dry_run_available": false,
@@ -17372,7 +17372,7 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Read the current GUI file-transfer task and report its next action.",
       "name": "read-user-task",
       "params": [
         {
@@ -17405,7 +17405,7 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer read-user-task."
+      "when_to_use": "Read the current GUI file-transfer task and report its next action."
     },
     {
       "dry_run_available": false,
@@ -18395,7 +18395,7 @@
     {
       "dry_run_available": false,
       "group": "transfer",
-      "help": "",
+      "help": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier.",
       "name": "submit-user-task",
       "params": [
         {
@@ -18484,7 +18484,7 @@
         "bounded",
         "transfer"
       ],
-      "when_to_use": "Run agentic-kit transfer submit-user-task."
+      "when_to_use": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier."
     },
     {
       "dry_run_available": false,
@@ -21088,7 +21088,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "236cd9a4df4b",
+    "manifest_sha": "260865a7910b",
     "schema_version": 2
   },
   "schema_version": 3,

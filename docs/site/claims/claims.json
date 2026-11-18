@@ -264,7 +264,7 @@
       "blockers": [],
       "evidence": [
         {
-          "detail": "The PyPI publication workflow for version 1.4.0 completed successfully in the release run (C3). Index visibility and installability are separate checks.",
+          "detail": "The PyPI publication workflow for version 1.4.0 completed successfully in the release run. Index visibility and installability are separate checks.",
           "evidence_type": "release-pypi-workflow",
           "status": "verified"
         }

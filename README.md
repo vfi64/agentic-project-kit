@@ -11,7 +11,9 @@ Current version: 1.4.0
 
 `agentic-project-kit` is a local Python CLI for governing AI-assisted repository work with contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
 
-Generated website: <https://vfi64.github.io/agentic-project-kit/>.
+Generated website: <https://vfi64.github.io/agentic-project-kit/>. Start with the
+[practical Codex or Claude walkthrough](https://vfi64.github.io/agentic-project-kit/use/)
+for a tested generated-project cycle and its manual session handoff.
 
 ## Why this exists
 

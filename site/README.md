@@ -4,8 +4,17 @@ This directory contains the repository-native public website generator.
 
 The main navigation is rendered from `agentic_project_kit.site_navigation` on
 every generated page. It marks the exact page in the menu, or the command
-reference area on a command detail page. Page templates keep only their
-page-specific links.
+reference area on a command detail page. Commands and Evidence have section
+menus. Page templates keep only their page-specific links.
+
+The Use with Codex or Claude page renders its starter prompt from the generated
+project template in `templates.py`. Its first-cycle command list comes from
+`site/content/usage_example.yaml`; a test runs those commands in a fresh
+generated project. Tool-path statements come from dated, sourced rows in
+`site/content/executors.yaml`.
+The Quickstart file map runs that same documented `init` invocation in a
+temporary local project during the build. Its embedded file inventory and
+group counts therefore belong to that exact invocation and Kit version.
 
 The generated output is a projection of current repository sources, not a manual
 technical truth surface. `site/scripts/build.py` calls
