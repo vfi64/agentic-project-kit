@@ -254,7 +254,9 @@ project is implicitly legacy.
 
 ## Clean handoff / chat switch
 
-Use the deterministic successor handoff package before switching chats or continuing in another LLM:
+In this Kit repository and in an external workspace initialized with
+`.agentic/config.yaml`, generate and validate the deterministic successor
+handoff package before switching chats:
 
 ```bash
 agentic-kit transfer chat-switch-complete --render-prompt
@@ -277,6 +279,13 @@ docs/reports/handoff-packages/latest/
 The successor package separates the committed projection head from the final repository identity. `validation_report.json` records the HEAD used to generate the committed package. After an admin refresh commit, `post-merge-check` may report `successor_package_head_status=refresh_only_descendant` and `successor_package_current_head=<sha>` when the only intervening changes are generated handoff refresh/projection files. That post-merge evidence is the exact final-HEAD authority; do not rerender and recommit projections only to chase their own commit SHA.
 
 In external workspace mode the default package path is `.agentic/state/handoff/packages/latest/`. It updates canonical chat-switch projections, including the initial `START_NEW_CHAT_PROMPT.md` when missing. A successor chat uses `successor_prompt.md`, runs `agentic-kit transfer repo-status`, `agentic-kit check --root .`, and `agentic-kit doctor --root .`, and stops unless `validation_report.json` is `PASS`.
+
+A project created by `agentic-kit init` uses `.agentic/project.yaml` instead.
+It does not yet have the sources required for an automated successor package.
+For that project, maintain `docs/handoff/CURRENT_HANDOFF.md` and start the next
+session with `docs/handoff/STANDARD_AGENT_PROMPT.md`. A failed
+`chat-switch-complete` reports the invalid package without writing it; do not
+use a failed prompt as a handoff.
 
 After a PR merge, run `agentic-kit transfer post-merge-settle --after-pr PR_NUMBER`; it stops at READY/NOOP and blocks repeated generated/admin refresh loops.
 

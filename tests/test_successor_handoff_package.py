@@ -3,6 +3,8 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+import pytest
+
 
 def _seed_successor_long_term_sources(root: Path) -> None:
     from agentic_project_kit.successor_handoff_package import LONG_TERM_SOURCES
@@ -20,6 +22,22 @@ def _seed_successor_long_term_sources(root: Path) -> None:
             target.write_text("schema_version: 1\n", encoding="utf-8")
         else:
             target.write_text("fixture\n", encoding="utf-8")
+
+
+def _seed_valid_legacy_workspace(root: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    from agentic_project_kit import successor_handoff_package as package
+
+    _seed_successor_long_term_sources(root)
+
+    def fake_run_git(_root: Path, args: list[str]) -> str:
+        return {
+            ("rev-parse", "HEAD"): "abc123456789",
+            ("rev-parse", "origin/main"): "abc123456789",
+            ("status", "--short"): "",
+            ("branch", "--show-current"): "main",
+        }.get(tuple(args), "UNKNOWN")
+
+    monkeypatch.setattr(package, "_run_git", fake_run_git)
 
 
 def _init_git_repo(path, origin_url: str | None = None) -> None:
@@ -58,6 +76,40 @@ profile: generic
     (root / ".agentic/registries/documentation.yaml").write_text("version: 1\n", encoding="utf-8")
     (root / ".agentic/registries/rules.yaml").write_text("version: 1\n", encoding="utf-8")
     (root / ".agentic/rules/README.md").write_text("# Rules\n", encoding="utf-8")
+
+
+@pytest.mark.parametrize("output_args", [(), ("--json",), ("--render-prompt",)])
+def test_generated_project_invalid_chat_handoff_fails_without_writes(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, output_args: tuple[str, ...]
+) -> None:
+    from typer.testing import CliRunner
+
+    from agentic_project_kit.cli import app
+
+    monkeypatch.chdir(tmp_path)
+    runner = CliRunner()
+    created = runner.invoke(
+        app,
+        ["init", "demo", "--type", "python-cli", "--no-github", "--description", "demo", "--json"],
+    )
+    assert created.exit_code == 0, created.output
+    root = tmp_path / "demo"
+
+    def snapshot() -> dict[str, bytes]:
+        return {
+            path.relative_to(root).as_posix(): path.read_bytes()
+            for path in root.rglob("*")
+            if path.is_file() and ".git" not in path.relative_to(root).parts
+        }
+
+    before = snapshot()
+    monkeypatch.chdir(root)
+    handoff = runner.invoke(app, ["transfer", "chat-switch-complete", *output_args])
+
+    assert handoff.exit_code != 0, handoff.output
+    assert "missing_handoff_source" in handoff.output
+    assert "Use successor_prompt.md in the next chat" not in handoff.output
+    assert snapshot() == before
 
 
 def test_repo_identity_parses_https_url(tmp_path):
@@ -198,7 +250,7 @@ def test_successor_execution_contract_projection_contains_hard_start_rules():
 
 
 
-def test_write_successor_handoff_package_writes_execution_contract_json(tmp_path):
+def test_write_successor_handoff_package_writes_execution_contract_json(tmp_path, monkeypatch):
     import json
 
     from agentic_project_kit.successor_handoff_package import (
@@ -206,10 +258,12 @@ def test_write_successor_handoff_package_writes_execution_contract_json(tmp_path
         write_successor_handoff_package,
     )
 
+    _seed_valid_legacy_workspace(tmp_path, monkeypatch)
     result = write_successor_handoff_package(tmp_path, update_canonical_prompts=False)
 
     contract_path = tmp_path / DEFAULT_PACKAGE_DIR / "execution_contract.json"
     assert contract_path.exists()
+    assert result.validation_report["status"] == "PASS"
 
     contract = json.loads(contract_path.read_text(encoding="utf-8"))
     assert contract == result.execution_contract
@@ -222,22 +276,22 @@ def test_write_successor_handoff_package_writes_execution_contract_json(tmp_path
     assert "protected-file-preservation" in rule_ids
 
 
-def test_successor_handoff_artifacts_snapshot(tmp_path):
+def test_successor_handoff_artifacts_snapshot(tmp_path, monkeypatch):
     import json
 
     from agentic_project_kit.successor_handoff_package import write_successor_handoff_package
 
+    _seed_valid_legacy_workspace(tmp_path, monkeypatch)
+    before = {path.relative_to(tmp_path).as_posix() for path in tmp_path.rglob("*") if path.is_file()}
     result = write_successor_handoff_package(tmp_path, update_canonical_prompts=True)
 
     generated_paths = sorted(
         path.relative_to(tmp_path).as_posix()
         for path in tmp_path.rglob("*")
-        if path.is_file()
+        if path.is_file() and path.relative_to(tmp_path).as_posix() not in before
     )
+    assert result.validation_report["status"] == "PASS"
     assert generated_paths == [
-        "docs/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md",
-        "docs/handoff/NEXT_CHAT_BOOTSTRAP.md",
-        "docs/handoff/START_NEW_CHAT_PROMPT.md",
         "docs/reports/handoff-packages/latest/execution_contract.json",
         "docs/reports/handoff-packages/latest/source_manifest.json",
         "docs/reports/handoff-packages/latest/successor_context.yaml",
@@ -256,6 +310,8 @@ def test_successor_handoff_artifacts_snapshot(tmp_path):
     closeout_prompt = (
         tmp_path / "docs" / "handoff" / "CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md"
     ).read_text(encoding="utf-8")
+    assert next_bootstrap == result.next_chat_bootstrap
+    assert closeout_prompt == result.closeout_prompt
 
     assert result.output_dir.as_posix() == "docs/reports/handoff-packages/latest"
     assert context["kind"] == "successor_chat_context"

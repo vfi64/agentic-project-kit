@@ -2587,8 +2587,14 @@ rules:
     - agentic-kit transfer chat-switch-complete
     - successor handoff package
     - validation_report.json
+    - docs/handoff/STANDARD_AGENT_PROMPT.md
     - successor_package_head_status=refresh_only_descendant
     - successor_package_current_head
+  - path: docs/reference/HUMAN_WORKFLOW_COMMANDS.md
+    terms:
+    - .agentic/project.yaml
+    - docs/handoff/CURRENT_HANDOFF.md
+    - Invalid package
   - path: AGENTS.md
     terms:
     - Clean Handoff Command
