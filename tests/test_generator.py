@@ -1,5 +1,9 @@
 import json
 from pathlib import Path
+import re
+
+import pytest
+import yaml
 
 from agentic_project_kit.dpa_workspace_init_projection import (
     DPA_WORKSPACE_INIT_HANDOFF_TEMPLATE_PATH,
@@ -8,7 +12,31 @@ from agentic_project_kit.dpa_workspace_init_projection import (
     validate_workspace_init_projection_manifest,
 )
 from agentic_project_kit.models import ProjectOptions
+from agentic_project_kit.rule_source_validator import validate_rule_sources
 from agentic_project_kit.templates import create_project
+from agentic_project_kit.workspace import load_workspace
+
+
+@pytest.mark.parametrize("project_type,python_project", [
+    ("generic", False), ("governance-wrapper", False),
+    ("python-cli", True), ("python-lib", True),
+])
+def test_generated_ci_matches_project_type(tmp_path: Path, project_type: str, python_project: bool):
+    target = tmp_path / project_type
+    create_project(ProjectOptions(
+        name=project_type, description="CI fixture", project_type=project_type,
+        license_name="MIT", github_actions=True, pre_commit=False,
+        agent_docs=True, logging_evidence=True, target_dir=target,
+    ))
+    ci = (target / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    parsed = yaml.safe_load(ci)
+    assert set(parsed.get("on", parsed.get(True))) == {"push", "pull_request"}
+    assert "agentic-kit check" in ci
+    assert ("pytest -q" in ci) is python_project
+    assert ("pip install -e" in ci) is python_project
+    assert re.search(r"pip install agentic-project-kit==\d+\.\d+\.\d+", ci)
+    assert validate_rule_sources(target).is_valid
+    assert load_workspace(target).project_name == project_type
 
 
 def test_create_project_generates_core_files(tmp_path: Path):
@@ -36,6 +64,10 @@ def test_create_project_generates_core_files(tmp_path: Path):
     assert (target / ".gitignore").exists()
     assert "__pycache__/" in (target / ".gitignore").read_text(encoding="utf-8")
     assert (target / ".github/workflows/ci.yml").exists()
+    assert (target / ".agentic/config.yaml").is_file()
+    assert (target / ".agentic/state/handoff/packages/latest/validation_report.json").is_file()
+    assert validate_rule_sources(target).is_valid
+    assert load_workspace(target).project_name == "demo"
 
 
 def test_generated_project_dpa_manifest_classifies_handoff_as_external_template(

@@ -1536,7 +1536,17 @@ recorded; it is not inferred from a missing E1 snapshot step.
 agrees with that boundary. Existing archive contents are preserved, including
 through workspace removal. `tests/test_site_quickstart_path.py` permits only
 `.agentic/` and `.gitignore` for default initialization; opt-in integration
-coverage remains separate. The generator-mode project skeleton is unchanged.
+coverage remains separate. `tests/test_generator.py` checks that `init` combines
+the project skeleton with the external operating layer, including valid rule
+sources and workspace manifest. `tests/test_workspace_recovery.py` reconstructs
+an old partial `init` fixture and verifies signed additive completion without
+replacing the project contract. `tests/test_human_workflows.py` checks that
+external `work finish` skips the Kit-only release scan while retaining the CI
+pin guard. The generated-CI test parses all four project types and requires
+`pytest` and editable project installation only for Python types. An offline
+bare-remote run also exercised `init`, rule acknowledgement, handoff, work
+start, `work finish`, PR creation, simulated CI, merge, and closeout; simulated
+CI is a fixture assumption, not a hosted GitHub Actions result.
 
 
 ### Bounded command-reference source flow

@@ -353,6 +353,22 @@ def test_work_finish_dry_run_requires_paths(monkeypatch):
     assert "path-selection" in payload["blockers"]
 
 
+def test_external_work_finish_omits_kit_release_content_scan(monkeypatch):
+    from pathlib import Path
+    monkeypatch.setattr(human_workflows, "is_external_manifest_workspace", lambda root: True)
+    steps = human_workflows._release_content_steps(
+        "codex/demo", "Demo", paths=[Path("sample.txt")], return_context=None,
+    )
+    assert steps[0]["name"] == "kit-ci-pin-guard" and steps[0]["ok"]
+    assert all(step["name"] != "standard-error-scan" or not step["argv"] for step in steps)
+
+    monkeypatch.setattr(human_workflows, "_kit_ci_pin_guard_step", lambda: {"name": "kit-ci-pin-guard", "ok": False})
+    blocked = human_workflows._release_content_steps(
+        "codex/demo", "Demo", paths=[Path("sample.txt")], return_context=None,
+    )
+    assert len(blocked) == 1 and not blocked[0]["ok"]
+
+
 def test_work_finish_dry_run_surfaces_remote_preflight(monkeypatch):
     calls: list[list[str]] = []
 

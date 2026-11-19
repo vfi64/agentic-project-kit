@@ -10,6 +10,13 @@ from agentic_project_kit.dpa_workspace_init_projection import (
 )
 from agentic_project_kit.models import ProjectOptions
 from agentic_project_kit.rendering import render_template_string, write_file
+from agentic_project_kit.workspace import GENERATOR_TO_WORKSPACE_PROJECT_TYPES
+from agentic_project_kit.workspace_adopt import ProjectSuggestion
+from agentic_project_kit.workspace_init import (
+    _append_gitignore_volatile,
+    workspace_init_generated_files,
+    workspace_init_manifest_yaml,
+)
 
 GENERATED_GITIGNORE = """.venv/
 venv/
@@ -172,6 +179,12 @@ line-length = 100
 target-version = "py310"
 '''
 
+CI_PYTHON_INSTALL_COMMAND = '          if [ -f pyproject.toml ]; then pip install -e ".[dev]" || pip install -e .; fi\n'
+CI_PYTHON_TEST_STEP = '''      - name: Run tests
+        run: |
+          if [ -d tests ]; then pytest -q; fi
+'''
+
 CI = '''
 name: CI
 
@@ -206,14 +219,12 @@ jobs:
           key: ${{ runner.os }}-ms-playwright-${{ hashFiles('**/pyproject.toml', '**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-ms-playwright-
-      - name: Install project
+      - name: $install_step_name
         run: |
           python -m pip install --upgrade pip
-          if [ -f pyproject.toml ]; then pip install -e ".[dev]" || pip install -e .; fi
+$project_install_command
 $kit_install_command
-      - name: Run tests
-        run: |
-          if [ -d tests ]; then pytest -q; fi
+$project_test_step
       - name: Run agentic checks
         run: |
           agentic-kit check
@@ -260,6 +271,10 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
 
     context = {k: str(v) for k, v in asdict(options).items()}
     context["kit_install_command"] = KIT_INSTALL_COMMANDS[options.kit_source]
+    python_project = options.project_type in {"python-cli", "python-lib"}
+    context["install_step_name"] = "Install project and Kit" if python_project else "Install Kit"
+    context["project_install_command"] = CI_PYTHON_INSTALL_COMMAND if python_project else ""
+    context["project_test_step"] = CI_PYTHON_TEST_STEP if python_project else ""
     files = dict(BASE_FILES)
     files[".gitignore"] = GENERATED_GITIGNORE
     files[".agentic/project.yaml"] = render_contract_yaml(
@@ -296,13 +311,28 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
     if options.pre_commit:
         files[".pre-commit-config.yaml"] = PRECOMMIT
 
+    workspace_type = GENERATOR_TO_WORKSPACE_PROJECT_TYPES[options.project_type]
+    workspace_project = ProjectSuggestion(
+        name=options.name,
+        type=workspace_type,
+        profile="python-default" if workspace_type == "python" else "generic",
+    )
+    workspace_files = workspace_init_generated_files(
+        target,
+        workspace_project,
+        workspace_init_manifest_yaml(
+            workspace_project, publication="none",
+        ),
+    )
+    workspace_files.pop(DPA_WORKSPACE_INIT_MANIFEST_PATH)
+
     files[DPA_WORKSPACE_INIT_MANIFEST_PATH] = render_workspace_init_projection_manifest(
         project_name=options.name,
         project_type=options.project_type,
         profile="",
         profiles=options.profiles,
         generated_target_paths=tuple(
-            sorted(path for path in files if path != DPA_WORKSPACE_INIT_MANIFEST_PATH)
+            sorted((set(files) | set(workspace_files)) - {DPA_WORKSPACE_INIT_MANIFEST_PATH})
         ),
         emits_current_handoff_template=True,
     )
@@ -310,6 +340,9 @@ def create_project(options: ProjectOptions, overwrite: bool = False) -> None:
     for rel_path, template in files.items():
         content = render_template_string(template, context)
         write_file(target / rel_path, content, overwrite=overwrite)
+    for rel_path, content in workspace_files.items():
+        write_file(target / rel_path, content, overwrite=overwrite)
+    _append_gitignore_volatile(target)
 
     try:
         # Captured: a JSON caller (agentic-kit init --json) keeps a clean stdout.
