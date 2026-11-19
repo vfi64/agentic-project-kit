@@ -62,8 +62,10 @@ commits without a PR number as direct commits, only in the first release (a
 second release still blocks without PR evidence), a block for release tags the
 origin lists but the clone lacks, and the `first_release` field in the B4 gate,
 which the approval signature binds. Journey J6 (`tests/test_g4_journeys.py`,
-fixture `external_init`) runs `init`, the signed recovery with `--publication
-none`, the CI update and `release run` up to the B4 gate of the first release.
+fixture `external_init`) runs `init` with its complete operating layer and
+`publication: none`, updates CI, and reaches the B4 gate of the first release
+through `release run`. Signed recovery remains tested separately for historical
+partial `init` projects.
 
 KIT-GF-119: `tests/test_release_first_release.py` requires that an
 unclassified direct commit of the first release is listed under `Changed` with

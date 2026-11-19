@@ -2169,7 +2169,7 @@ Evidence: docs/reports/greenfield/KIT-GF-114-workspace-init-over-init-project-20
 
 Execution class: local (effects: none); machine contract: workspace init over an init project names the signed recovery plan as next_command, the plan offers its signature, and a foreign .agentic/ keeps the human marker
 
-Preconditions: Disposable directory; agentic-kit init created a python-lib project, whose .agentic/ holds project.yaml but no workspace manifest.
+Preconditions: Disposable directory; the fixture strips the complete operating layer from a generated python-lib project to reproduce a historical partial init with project.yaml but no workspace manifest.
 
 ```text
 agentic-kit workspace init --root demo --name demo --inject-ci --json
@@ -2189,7 +2189,7 @@ Evidence: docs/reports/greenfield/KIT-GF-115-recovery-with-injection-flags-2026-
 
 Execution class: local (effects: none); machine contract: a recovery with --inject-ci blocks without writing and names the recovery plan as next_command and ci-update as the step after it
 
-Preconditions: Disposable directory; agentic-kit init created a python-lib project without a workspace manifest.
+Preconditions: Disposable directory; the fixture strips the complete operating layer from a generated python-lib project to reproduce a historical partial init without a workspace manifest.
 
 ```text
 agentic-kit workspace init --root demo --recover-partial --inject-ci --json

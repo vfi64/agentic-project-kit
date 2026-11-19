@@ -8736,7 +8736,7 @@
       "external_retest": {
         "workspace_kind": "external_manifest",
         "preconditions": [
-          "Disposable directory; agentic-kit init created a python-lib project, whose .agentic/ holds project.yaml but no workspace manifest."
+          "Disposable directory; the fixture strips the complete operating layer from a generated python-lib project to reproduce a historical partial init with project.yaml but no workspace manifest."
         ],
         "commands": [
           "agentic-kit workspace init --root demo --name demo --inject-ci --json",
@@ -8773,6 +8773,16 @@
                   "project_created": true
                 }
               }
+            },
+            {
+              "run": ["git", "rm", "-r", "-q", ".agentic"],
+              "cwd": "demo",
+              "expect": {"returncode": 0}
+            },
+            {
+              "run": ["git", "restore", "--source=HEAD", "--staged", "--worktree", "--", ".agentic/project.yaml", ".agentic/todo.yaml", ".agentic/dpa/workspace_init_projection.json"],
+              "cwd": "demo",
+              "expect": {"returncode": 0}
             },
             {
               "run": [
@@ -8853,7 +8863,7 @@
       "external_retest": {
         "workspace_kind": "external_manifest",
         "preconditions": [
-          "Disposable directory; agentic-kit init created a python-lib project without a workspace manifest."
+          "Disposable directory; the fixture strips the complete operating layer from a generated python-lib project to reproduce a historical partial init without a workspace manifest."
         ],
         "commands": [
           "agentic-kit workspace init --root demo --recover-partial --inject-ci --json"
@@ -8889,6 +8899,16 @@
                   "project_created": true
                 }
               }
+            },
+            {
+              "run": ["git", "rm", "-r", "-q", ".agentic"],
+              "cwd": "demo",
+              "expect": {"returncode": 0}
+            },
+            {
+              "run": ["git", "restore", "--source=HEAD", "--staged", "--worktree", "--", ".agentic/project.yaml", ".agentic/todo.yaml", ".agentic/dpa/workspace_init_projection.json"],
+              "cwd": "demo",
+              "expect": {"returncode": 0}
             },
             {
               "run": [

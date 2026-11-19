@@ -79,9 +79,9 @@ def test_consent_is_a_signed_execution_or_an_effect_beyond_local_and_network_rea
     assert not needs_consent(["agentic-kit", "release", "ready", "--version", "0.1.1", "--json"])
 
 
-def test_approval_baselines_are_one_per_finish_plus_one_per_signed_adoption():
+def test_approval_baselines_include_only_required_consents():
     assert {jid: journey["approvals"] for jid, journey in _journeys().items()} == {
-        "J1": 1, "J2": 2, "J3": 1, "J4": 1, "J5": 0, "J6": 1}
+        "J1": 1, "J2": 2, "J3": 1, "J4": 1, "J5": 0, "J6": 0}
 
 
 def test_only_the_adoption_fixture_treats_an_exact_kit_update_as_local():
@@ -165,8 +165,7 @@ def test_the_init_journey_starts_without_a_project_and_without_hand_tag_or_hand_
     runs = [step["run"] for step in steps if "run" in step]
     assert not [argv for argv in runs if argv[:2] == ["git", "tag"] and "--list" not in argv], "no hand tag"
     assert not [step for step in steps if {"write", "append", "replace"} & set(step)], "no hand configuration"
-    recovery = next(argv for argv in runs if argv[1:3] == ["workspace", "init"])
-    assert recovery[recovery.index("--publication") + 1] == "none"
+    assert not [argv for argv in runs if argv[1:3] == ["workspace", "init"]]
     release = steps[-2]
     assert release["run"][1:3] == ["release", "run"] and release["cwd"] == "demo"
     assert release["expect"]["json"] == {"result_status": "AWAITING_APPROVAL", "current_step": "B4",

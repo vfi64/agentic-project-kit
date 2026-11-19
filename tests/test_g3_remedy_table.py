@@ -22,6 +22,7 @@ from agentic_project_kit.blocked_route import KIND_HUMAN, KIND_KIT, route_proble
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands import workspace as workspace_cli
 from agentic_project_kit.cli_commands.routed_output import kit_command
+from agentic_project_kit.dpa_workspace_init_projection import DPA_WORKSPACE_INIT_MANIFEST_PATH
 from agentic_project_kit.g3_remedies import CONDITIONS, REMEDIES, routes_for
 from agentic_project_kit.greenfield_retest import check_route
 from agentic_project_kit.release_run import ReleaseRun
@@ -54,7 +55,11 @@ def _generated_project(tmp_path: Path) -> Path:
         os.chdir(previous)
     assert result.exit_code == 0, result.output
     root = tmp_path / "demo"
-    assert (root / ".agentic/project.yaml").is_file() and not (root / ".agentic/config.yaml").exists()
+    assert (root / ".agentic/project.yaml").is_file()
+    preserved = {".agentic/project.yaml", ".agentic/todo.yaml", DPA_WORKSPACE_INIT_MANIFEST_PATH}
+    for path in (root / ".agentic").rglob("*"):
+        if path.is_file() and path.relative_to(root).as_posix() not in preserved:
+            path.unlink()  # historical partial-init fixture
     return root
 
 

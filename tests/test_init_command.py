@@ -136,5 +136,5 @@ def test_init_generated_project_check_and_doctor_do_not_emit_legacy_warning(
     assert "implicit legacy profile" not in check_result.output
     assert "LegacyProfileDeprecationWarning" not in doctor_result.output
     assert "implicit legacy profile" not in doctor_result.output
-    assert "[SKIP] workspace manifest" in doctor_result.output
-    assert ".agentic/project.yaml" in doctor_result.output
+    assert "[PASS] workspace manifest" in doctor_result.output
+    assert "[PASS] project contract" in doctor_result.output

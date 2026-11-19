@@ -103,17 +103,15 @@
     {
       "id": "J6",
       "title": "From init to the first release",
-      "approvals": 1,
+      "approvals": 0,
       "machine": {
         "fixture": "external_init",
         "origin": true,
-        "covers": "J6 (KIT-GF-118): agentic-kit init creates the project in an empty run root; the journey adds the local bare origin and pushes, as init --github does on GitHub. The workspace comes through the signed recovery with --publication none and the CI update, without a hand tag or hand configuration. release run then prepares the first release: no previous v* tag, notes from the root commit with the init and adoption commits listed as direct commits, and the B4 gate carries first_release. It reaches the B4 gate without a BLOCKED step; offline the run stops there, whose signed execution is the GitHub part.",
+        "covers": "J6 (KIT-GF-118): agentic-kit init creates the project and its external operating layer in an empty run root; the journey adds the local bare origin and pushes, as init --github does on GitHub. The generated workspace has publication none and receives a CI update without a hand tag or hand configuration. release run then prepares the first release: no previous v* tag, notes from the root commit with the init and adoption commits listed as direct commits, and the B4 gate carries first_release. It reaches the B4 gate without a BLOCKED step; offline the run stops there, whose signed execution is the GitHub part.",
         "steps": [
           {"run": ["agentic-kit", "init", "demo", "--type", "python-lib", "--no-pre-commit", "--json"], "expect": {"returncode": 0, "json": {"result_status": "PASS", "project_created": true}}},
           {"run": ["git", "remote", "add", "origin", "{origin}"], "cwd": "demo", "expect": {"returncode": 0}},
           {"run": ["git", "push", "--quiet", "-u", "origin", "main"], "cwd": "demo", "expect": {"returncode": 0}},
-          {"run": ["agentic-kit", "workspace", "init", "--root", ".", "--recover-partial", "--publication", "none", "--json"], "cwd": "demo", "expect": {"returncode": 0, "json": {"result_status": "AWAITING_APPROVAL", "written": false}}, "capture": {"signature": "approval_signature"}},
-          {"run": ["agentic-kit", "workspace", "init", "--root", ".", "--recover-partial", "--publication", "none", "--execute", "--expected-signature", "{signature}", "--approved-by", "J6 journey", "--consent-source", "journey contract J6", "--json"], "cwd": "demo", "expect": {"returncode": 0, "json": {"result_status": "PASS"}}},
           {"run": ["agentic-kit", "workspace", "ci-update", "--root", ".", "--inject-ci", "--execute", "--json"], "cwd": "demo", "expect": {"returncode": 0, "json": {"result_status": "PASS"}}},
           {"run": ["agentic-kit", "commands", "sync-entrypoints", "--execute", "--json"], "cwd": "demo", "expect": {"returncode": 0, "json": {"result_status": "PASS"}}},
           {"run": ["agentic-kit", "transfer", "prepare-successor-handoff", "--render-prompt", "--json"], "cwd": "demo", "expect": {"returncode": 0, "json": {"result_status": "PASS"}}},

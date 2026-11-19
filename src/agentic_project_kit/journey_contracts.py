@@ -28,10 +28,10 @@ J5 (K8) runs in the curated variant of the release fixture, whose merged PR left
 Unreleased line: ``release run`` without summary lines reaches the B4 gate, and the release section
 carries exactly that line while Unreleased is empty (``assert`` with ``section``).
 
-J6 (KIT-GF-118) starts without a project: ``agentic-kit init`` creates it in the empty run root of the
-init fixture, the journey adds the local bare origin and pushes (what ``init --github`` does on
-GitHub), adopts the workspace through the signed recovery with ``--publication none`` and the CI
-update, and runs ``release run`` for the first release up to the B4 gate, whose ``first_release``
+J6 (KIT-GF-118) starts without a project: ``agentic-kit init`` creates it with its external
+operating layer in the empty run root of the init fixture. The journey adds the local bare origin
+and pushes (what ``init --github`` does on GitHub), updates CI, and runs ``release run`` for the
+first release up to the B4 gate, whose ``first_release``
 field names the root commit. No hand tag and no hand configuration; run steps name their working
 directory (``cwd``) inside the run root, and the runner confines the remotes as in J4.
 """
