@@ -123,7 +123,7 @@ def workspace_dpa_intake_command(
     ] = False,
     json_output: Annotated[bool, typer.Option("--json", help="Emit machine-readable JSON.")] = False,
 ) -> None:
-    """Run the deterministic DPA repository-intake orchestration."""
+    """Run the deterministic Document Projection Architecture repository-intake orchestration."""
 
     report = build_workspace_dpa_intake_report(
         root.resolve(),

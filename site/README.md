@@ -10,7 +10,8 @@ menus. Page templates keep only their page-specific links.
 The Use with Codex or Claude page renders its starter prompt from the generated
 project template in `templates.py`. Its first-cycle command list comes from
 `site/content/usage_example.yaml`; a test runs those commands in a fresh
-generated project. Tool-path statements come from dated, sourced rows in
+generated project. The page also shows agent work and the manual handoff as
+command-free steps grouped across the first two sessions. Tool-path statements come from dated, sourced rows in
 `site/content/executors.yaml`.
 The Quickstart file map runs that same documented `init` invocation in a
 temporary local project during the build. Its embedded file inventory and

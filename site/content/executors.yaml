@@ -4,8 +4,8 @@ executors:
   - name: Codex CLI
     path: Agent Direct
     instructions: Reads repository AGENTS.md automatically.
-    source: https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide
-    reviewed: "2026-11-18"
+    source: https://developers.openai.com/codex/guides/agents-md
+    reviewed: "2026-11-19"
   - name: Claude Code
     path: Agent Direct
     instructions: Reads AGENTS.md by default when no CLAUDE.md or CLAUDE.local.md is above the working directory, on supported versions; otherwise import @AGENTS.md from CLAUDE.md.

@@ -12555,7 +12555,7 @@
       "diagnostic_priority": "not_diagnostic",
       "dry_run_available": true,
       "group": "workspace",
-      "help": "Run the deterministic DPA repository-intake orchestration.",
+      "help": "Run the deterministic Document Projection Architecture repository-intake orchestration.",
       "lifecycle_rank": 21,
       "params": [
         {
@@ -12625,7 +12625,7 @@
       "qualified_name": "agentic-kit workspace dpa-intake",
       "safety": "BOUNDED",
       "surface": "orchestrator",
-      "when_to_use": "Run the deterministic DPA repository-intake orchestration."
+      "when_to_use": "Run the deterministic Document Projection Architecture repository-intake orchestration."
     },
     {
       "diagnostic_priority": "not_diagnostic",
