@@ -216,11 +216,29 @@ def _emit_successor_package(
     output_dir: str | None,
     update_canonical_prompts: bool,
 ) -> None:
-    result = write_successor_handoff_package(
-        Path("."),
-        Path(output_dir) if output_dir is not None else None,
-        update_canonical_prompts=update_canonical_prompts,
-    )
+    try:
+        result = write_successor_handoff_package(
+            Path("."),
+            Path(output_dir) if output_dir is not None else None,
+            update_canonical_prompts=update_canonical_prompts,
+        )
+    except (OSError, ValueError) as exc:
+        payload = {
+            "schema_version": 1,
+            "kind": "transfer_chat_switch_complete_result",
+            "result_status": "FAIL",
+            "findings": [str(exc)],
+            "next_action": "Do not use the successor package until the source error is fixed.",
+        }
+        if json_output:
+            _emit_transfer(payload, json_output=True, indent=2, ensure_ascii=False, sort_keys=True)
+        else:
+            _emit_transfer(
+                payload, json_output=False, route_lines=False,
+                text=lambda routed: json.dumps(routed, indent=2, ensure_ascii=False)
+                + "\nFINAL_SIGNAL=f\nFINAL_NEXT=" + payload["next_action"],
+            )
+        raise typer.Exit(code=1) from exc
     package_dir = result.output_dir
     runtime = result.runtime_identity
     repo_identity = runtime if runtime is not None else result.context["repo"]

@@ -9139,6 +9139,36 @@
               ]
             },
             {
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "rm",
+                "-r",
+                "-q",
+                ".agentic"
+              ]
+            },
+            {
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "restore",
+                "--source=HEAD",
+                "--staged",
+                "--worktree",
+                "--",
+                ".agentic/project.yaml",
+                ".agentic/todo.yaml",
+                ".agentic/dpa/workspace_init_projection.json"
+              ]
+            },
+            {
               "expect": {
                 "json": {
                   "code": "FOREIGN_AGENTIC",
@@ -9206,7 +9236,7 @@
           ]
         },
         "preconditions": [
-          "Disposable directory; agentic-kit init created a python-lib project, whose .agentic/ holds project.yaml but no workspace manifest."
+          "Disposable directory; the fixture strips the complete operating layer from a generated python-lib project to reproduce a historical partial init with project.yaml but no workspace manifest."
         ],
         "remote_effects": [
           "none"
@@ -9259,6 +9289,36 @@
               ]
             },
             {
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "rm",
+                "-r",
+                "-q",
+                ".agentic"
+              ]
+            },
+            {
+              "cwd": "demo",
+              "expect": {
+                "returncode": 0
+              },
+              "run": [
+                "git",
+                "restore",
+                "--source=HEAD",
+                "--staged",
+                "--worktree",
+                "--",
+                ".agentic/project.yaml",
+                ".agentic/todo.yaml",
+                ".agentic/dpa/workspace_init_projection.json"
+              ]
+            },
+            {
               "expect": {
                 "json": {
                   "code": "RECOVERY_NO_INJECTION",
@@ -9291,7 +9351,7 @@
           ]
         },
         "preconditions": [
-          "Disposable directory; agentic-kit init created a python-lib project without a workspace manifest."
+          "Disposable directory; the fixture strips the complete operating layer from a generated python-lib project to reproduce a historical partial init without a workspace manifest."
         ],
         "remote_effects": [
           "none"
@@ -9686,5 +9746,5 @@
   "kind": "external_findings_status",
   "machine_contracts": 67,
   "schema_version": 1,
-  "source_sha256": "8647a154f13b747228b1b955b71f1c5b5b67b05c84a46decc66e975c7ac8f6e7"
+  "source_sha256": "8e4906220eaa192c452564efcd64a8550a69269f03e70bbca1e6a930b779bbc4"
 }

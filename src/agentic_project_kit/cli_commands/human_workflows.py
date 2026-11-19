@@ -590,6 +590,13 @@ def _release_content_steps(
         CHECK_ID, SCAN_DETAIL_COMMAND, release_run_covering_branch, scan_summary,
     )
 
+    if is_external_manifest_workspace(Path(".")):
+        guard = _kit_ci_pin_guard_step()
+        if not guard["ok"]:
+            guard["check_id"] = CHECK_ID
+            return [guard]
+        return [guard, _noop_step("standard-error-scan", "Kit self-hosting release scan is not applicable to an external workspace.\n")]
+
     if return_context is not None:
         return [_noop_step("standard-error-scan", "Installation return closeout (GF095): the release scan is not applicable.\n")]
     covered_by = release_run_covering_branch(Path("."), branch)

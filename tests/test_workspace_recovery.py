@@ -15,6 +15,8 @@ from agentic_project_kit.workspace_recovery import recover_workspace
 from agentic_project_kit import workspace_recovery
 from agentic_project_kit.workspace_detection import is_external_operating_workspace, is_partial_external_workspace
 from agentic_project_kit.dpa_workspace_init_projection import render_workspace_init_projection_manifest, DPA_WORKSPACE_INIT_MANIFEST_PATH
+from agentic_project_kit.workspace_adopt import ProjectSuggestion
+from agentic_project_kit.workspace_init import workspace_init_generated_files, workspace_init_manifest_yaml
 
 
 def git(root: Path, *args: str) -> str:
@@ -243,6 +245,21 @@ def _git_identity(monkeypatch):
         monkeypatch.setenv(key, value)
 
 
+def _simulate_old_init(target: Path, generator_type: str) -> None:
+    """Remove only the operating layer added to init after GF-104."""
+    workspace_type = "generic" if generator_type == "generic" else "python"
+    project = ProjectSuggestion(
+        name=target.name, type=workspace_type,
+        profile="generic" if workspace_type == "generic" else "python-default",
+    )
+    generated = workspace_init_generated_files(
+        target, project, workspace_init_manifest_yaml(project, publication="none"),
+    )
+    for relative in generated:
+        if relative != DPA_WORKSPACE_INIT_MANIFEST_PATH:
+            (target / relative).unlink()
+
+
 @pytest.mark.parametrize("generator_type", ["python-cli", "python-lib", "governance-wrapper"])
 def test_generated_type_mapping_recovery(tmp_path, monkeypatch, generator_type):
     """Real generator contracts remain byte-for-byte intact through signed recovery."""
@@ -253,6 +270,7 @@ def test_generated_type_mapping_recovery(tmp_path, monkeypatch, generator_type):
                                "--description", "GF-104 fixture", "--no-github",
                                "--no-pre-commit", "--no-github-actions"])
     assert init.exit_code == 0, init.output
+    _simulate_old_init(target, generator_type)
     project_path = target / ".agentic/project.yaml"
     original = project_path.read_bytes()
     assert not (target / ".agentic/config.yaml").exists()
@@ -283,6 +301,7 @@ def test_generator_type_override_and_unknown_block_without_writes(tmp_path, monk
                                "--description", "GF-104 fixture", "--no-github",
                                "--no-pre-commit", "--no-github-actions"])
     assert init.exit_code == 0, init.output
+    _simulate_old_init(target, "python-cli")
     before = snapshot(target)
     allowed = recover_workspace(target, project_type="python")
     assert allowed["result_status"] == "AWAITING_APPROVAL", allowed

@@ -94,6 +94,7 @@ def test_generated_project_invalid_chat_handoff_fails_without_writes(
     )
     assert created.exit_code == 0, created.output
     root = tmp_path / "demo"
+    (root / ".agentic/state/status.md").unlink()
 
     def snapshot() -> dict[str, bytes]:
         return {

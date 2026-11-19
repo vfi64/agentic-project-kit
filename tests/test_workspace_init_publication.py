@@ -19,6 +19,7 @@ from typer.testing import CliRunner
 from agentic_project_kit.blocked_route import KIND_HUMAN, KIND_KIT, route_problems
 from agentic_project_kit.cli import app
 from agentic_project_kit.cli_commands.routed_output import kit_command
+from agentic_project_kit.dpa_workspace_init_projection import DPA_WORKSPACE_INIT_MANIFEST_PATH
 from agentic_project_kit.publication_policy import publication_policy_for
 from agentic_project_kit.workspace import ALLOWED_PUBLICATION_POLICIES, DEFAULT_PUBLICATION_POLICY
 
@@ -54,7 +55,14 @@ def _generated_project(tmp_path: Path) -> Path:
     finally:
         os.chdir(previous)
     assert result.exit_code == 0, result.output
-    return tmp_path / "demo"
+    root = tmp_path / "demo"
+    # Exercise the historical partial-init recovery route explicitly. Fresh init
+    # now includes the whole operating layer and needs no recovery.
+    preserved = {".agentic/project.yaml", ".agentic/todo.yaml", DPA_WORKSPACE_INIT_MANIFEST_PATH}
+    for path in (root / ".agentic").rglob("*"):
+        if path.is_file() and path.relative_to(root).as_posix() not in preserved:
+            path.unlink()
+    return root
 
 
 def _publication(root: Path) -> str:
