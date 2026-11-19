@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 4ed508011936e458f7d0ee06e81e9c774d89afcb
-  short: 4ed50801
-  subject: Improve website onboarding and navigation (#2825)
+  full: f976c95daa6fb814cc6283cb88612bef81ced9d5
+  short: f976c95d
+  subject: Clarify practical website work cycle (#2827)
 last_substantive_work_state:
-  full: 4ed508011936e458f7d0ee06e81e9c774d89afcb
-  short: 4ed50801
-  subject: Improve website onboarding and navigation (#2825)
+  full: f976c95daa6fb814cc6283cb88612bef81ced9d5
+  short: f976c95d
+  subject: Clarify practical website work cycle (#2827)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

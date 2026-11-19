@@ -87,6 +87,6 @@ Command reference contract:
 source_hashes:
 - docs/reference/AGENTIC_KIT_COMMANDS.md: 5e54b1bebf4126bf2a8d5cbaafc2fbec1f7bd22b938329e8dee33161904a795e
 - docs/reference/agentic-kit-commands.json: 8730168ccf25c7079021b7dc601615bda666b8d4d312dd7b2a95e24c35bf360a
-## Operational documentation refresh state after PR #2825
+## Operational documentation refresh state after PR #2827
 
-Current administrative handoff refresh state is `4ed50801` (`Improve website onboarding and navigation (#2825)`). Continue next only after this post-PR2825 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `f976c95d` (`Clarify practical website work cycle (#2827)`). Continue next only after this post-PR2827 refresh is committed and merged; the next substantive slice must be created from fresh main.
