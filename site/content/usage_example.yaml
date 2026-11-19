@@ -2,21 +2,42 @@ schema_version: 1
 kind: generated-project-first-cycle
 project_dir: demo
 steps:
-  - command: agentic-kit init
-    argv: [init, demo, --type, python-cli, --no-github, --description, "CSV and TSV exporter"]
+  - session: setup
     title: Create the project
-    you: Choose the project type and ask your agent to keep CSV output while adding TSV.
-    agent: Runs the initialization command and reads the generated project instructions.
+    command: agentic-kit init
+    argv: [init, demo, --type, python-cli, --no-github, --description, "CSV and TSV exporter"]
+    you: Choose the project type.
+    agent: Runs the command on your request.
     kit: Creates the project contract, status, test-gate and handoff files.
-  - command: agentic-kit check
+  - session: "1"
+    title: Ask for the change
+    command: null
+    you: "State the requirement: add TSV output and keep CSV output unchanged."
+    agent: Changes the code and adds a regression test for existing CSV output.
+    kit: Nothing runs at this step; the Kit does not write or judge code.
+  - session: "1"
+    title: Check the work
+    command: agentic-kit check
     argv: [check]
-    title: Check the project contract
-    you: Review the proposed code and the regression test for existing CSV output.
-    agent: Runs the project tests, then the Kit check in the generated project.
-    kit: Reports violations of its configured project rules; the regression test catches CSV breakage only if it covers that behavior.
-  - command: agentic-kit doctor
-    argv: [doctor]
+    you: Review the diff and the test result.
+    agent: Runs the project tests, then the Kit check.
+    kit: Reports configured rule violations. A CSV break is caught by the regression test, not by the Kit.
+  - session: "1"
     title: Inspect project health
-    you: Decide whether the implementation and evidence are sufficient.
+    command: agentic-kit doctor
+    argv: [doctor]
+    you: Decide whether the change and its evidence are sufficient.
     agent: Runs the health check and reports the result.
-    kit: Reports project health within its named checks. It cannot decide whether TSV is the right requirement.
+    kit: Reports project health within its named checks.
+  - session: "1"
+    title: Hand off
+    command: null
+    you: Confirm the handoff text.
+    agent: Writes the goal, test results and next step to docs/handoff/CURRENT_HANDOFF.md.
+    kit: No automated successor package is available in a plain init project.
+  - session: "2"
+    title: Start the next session
+    command: null
+    you: Paste the starter prompt into a new session.
+    agent: Reads AGENTS.md, project state and the handoff before continuing. It runs check and doctor again for new work.
+    kit: No check runs merely from pasting the prompt; later checks have the same limits as in session 1.

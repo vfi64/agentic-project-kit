@@ -409,6 +409,9 @@ th {
   text-transform: uppercase;
 }
 
+th code, td code { text-transform: none; }
+.session-heading th { text-transform: none; background: var(--panel); font-size: 1rem; }
+
 @media (max-width: 860px) {
   .page {
     width: min(100% - 24px, 1160px);

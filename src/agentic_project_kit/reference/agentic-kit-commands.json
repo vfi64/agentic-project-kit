@@ -20622,7 +20622,7 @@
     {
       "dry_run_available": true,
       "group": "workspace",
-      "help": "Run the deterministic DPA repository-intake orchestration.",
+      "help": "Run the deterministic Document Projection Architecture repository-intake orchestration.",
       "lifecycle_rank": 21,
       "name": "dpa-intake",
       "params": [
@@ -20740,7 +20740,7 @@
         "bounded",
         "workspace"
       ],
-      "when_to_use": "Run the deterministic DPA repository-intake orchestration."
+      "when_to_use": "Run the deterministic Document Projection Architecture repository-intake orchestration."
     },
     {
       "dry_run_available": true,
@@ -21088,7 +21088,7 @@
   "kind": "agentic_kit_command_reference",
   "meta": {
     "generated_md": "docs/reference/AGENTIC_KIT_COMMANDS.md",
-    "manifest_sha": "260865a7910b",
+    "manifest_sha": "eca007586ae2",
     "schema_version": 2
   },
   "schema_version": 3,

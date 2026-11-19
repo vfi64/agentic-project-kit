@@ -17,6 +17,7 @@ import yaml
 from agentic_project_kit.cli import app
 from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.site_generator import build_site
+from agentic_project_kit.site_init_figure import _short_path
 from agentic_project_kit.site_usage import render_usage_page
 from agentic_project_kit.templates import BASE_FILES
 
@@ -53,12 +54,50 @@ def test_public_usage_commands_run_in_generated_project(tmp_path: Path, monkeypa
     known = {row["qualified_name"] for row in load_manifest(ROOT)["commands"]}
     runner = CliRunner()
     monkeypatch.chdir(tmp_path)
+    assert any(step["command"] is None for step in example["steps"])
     for step in example["steps"]:
+        if step["command"] is None:
+            continue
         assert step["command"] in known
         result = runner.invoke(app, step["argv"])
         assert result.exit_code == 0, (step["command"], result.output)
         if step["command"] == "agentic-kit init":
             monkeypatch.chdir(tmp_path / example["project_dir"])
+
+
+def test_usage_story_groups_sessions_and_marks_steps_without_commands(tmp_path: Path) -> None:
+    result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    page = (tmp_path / "site/use/index.html").read_text(encoding="utf-8")
+    assert page.index("Set up once") < page.index("Session 1") < page.index("Session 2")
+    assert re.search(r"<th scope=\"row\">Ask for the change<br>No Kit command</th>", page)
+    assert "No Kit command</code>" not in page
+    css = (tmp_path / "site/static/site.css").read_text(encoding="utf-8")
+    assert re.search(r"th code\s*,\s*td code\s*\{\s*text-transform:\s*none", css)
+
+
+@pytest.mark.parametrize("change", ["missing_argv", "orphan_argv", "missing_session"])
+def test_usage_story_rejects_incomplete_steps(tmp_path: Path, change: str) -> None:
+    for relative in ("site/templates/use.html", "site/content/usage_example.yaml", "site/content/executors.yaml"):
+        target = tmp_path / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(ROOT / relative, target)
+    path = tmp_path / "site/content/usage_example.yaml"
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    step = data["steps"][0]
+    if change == "missing_argv":
+        del step["argv"]
+    elif change == "orphan_argv":
+        step["command"] = None
+    else:
+        del step["session"]
+    path.write_text(yaml.safe_dump(data), encoding="utf-8")
+    with pytest.raises(ValueError, match="usage example step"):
+        render_usage_page(
+            tmp_path,
+            command_names={row["qualified_name"] for row in load_manifest(ROOT)["commands"]},
+            product_name="Agentic Project Kit",
+        )
 
 
 @pytest.mark.parametrize("missing", ["source", "reviewed"])
@@ -84,7 +123,7 @@ def test_entry_pages_do_not_show_internal_work_ids(tmp_path: Path) -> None:
     result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
     assert result.ok, result.report.blockers
     pattern = re.compile(r"\b(?:KIT-GF-\d+|[BCDGKP]\d+[a-z]?|B1_EVALUABLE|BOUNDED_COMPLETE|PAA|DPA)\b")
-    for relative in ("index.html", "quickstart/index.html", "workflows/index.html", "use/index.html"):
+    for relative in ("index.html", "quickstart/index.html", "workflows/index.html", "use/index.html", "commands/guided.html"):
         visible = VisibleText()
         visible.feed((tmp_path / "site" / relative).read_text(encoding="utf-8"))
         assert not pattern.search(" ".join(visible.parts)), relative
@@ -143,3 +182,36 @@ def test_entry_figures_keep_text_legible_at_desktop_width() -> None:
     assert sizes and min(sizes) >= 26
     quickstart_css = (ROOT / "site/static/site.css").read_text(encoding="utf-8")
     assert ".quickstart-overview" in quickstart_css
+
+
+def test_long_init_filename_keeps_extension() -> None:
+    label = _short_path(".agentic/dpa/workspace_init_projection.json")
+    assert len(label) <= 30
+    assert label.endswith(".json")
+    assert "…" in label
+
+
+def test_tool_source_links_are_distinct_and_codex_uses_agent_guide(tmp_path: Path) -> None:
+    result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    page = (tmp_path / "site/use/index.html").read_text(encoding="utf-8")
+    labels = re.findall(r'<a href="[^"]+">(Source: [^<]+)</a>', page)
+    assert len(labels) == 4 and len(set(labels)) == 4
+    assert "https://developers.openai.com/codex/guides/agents-md" in page
+
+
+def test_entry_headings_use_sentence_case(tmp_path: Path) -> None:
+    result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    old_titles = (
+        "Choose How You Want To Work", "Repository Memory", "Start Locally",
+        "Install in a Virtual Environment", "Adopt Before Initializing",
+        "Create a Governed Project", "Develop the Kit Locally", "Use the Local Image",
+        "Test the PyPI Package Safely with Docker", "Update a Managed Repository",
+        "Read Next", "Public Projections", "Executor Is Replaceable; Repository Governance Persists",
+        "Task To Handoff", "What Persists", "Why YAML And JSON",
+    )
+    for relative in ("index.html", "quickstart/index.html", "workflows/index.html", "use/index.html"):
+        page = (tmp_path / "site" / relative).read_text(encoding="utf-8")
+        headings = " ".join(re.findall(r"<h[123][^>]*>(.*?)</h[123]>", page, re.S))
+        assert not any(title in headings for title in old_titles), relative

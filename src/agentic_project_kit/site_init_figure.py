@@ -78,4 +78,11 @@ def _short_path(path: str) -> str:
         return path
     filename = path.rsplit("/", 1)[-1]
     shortened = "…/" + filename
-    return shortened if len(shortened) <= 30 else filename[:29] + "…"
+    if len(shortened) <= 30:
+        return shortened
+    stem, dot, extension = filename.rpartition(".")
+    suffix = dot + extension if dot else ""
+    stem = stem if dot else filename
+    available = 29 - len(suffix)
+    front = max(1, available * 3 // 4)
+    return stem[:front] + "…" + stem[-(available - front):] + suffix

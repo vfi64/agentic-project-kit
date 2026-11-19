@@ -1,6 +1,6 @@
 # Agentic-kit command reference
 
-GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: 260865a7910b
+GENERATED FROM agentic-kit-commands.json — do not edit; manifest_sha: eca007586ae2
 
 > Successor handoff contract note: the machine-readable successor execution contract is written to `docs/reports/handoff-packages/latest/execution_contract.json`. This generated command reference points to the contract instead of duplicating local-command rules.
 
@@ -4386,11 +4386,11 @@ Plan or update the managed workspace CI template.
 
 - Safety: `BOUNDED`
 - Surface: `orchestrator`
-- When to use: Run the deterministic DPA repository-intake orchestration.
+- When to use: Run the deterministic Document Projection Architecture repository-intake orchestration.
 - Dry-run available: `True`
 - Remote effects: `none`
 
-Run the deterministic DPA repository-intake orchestration.
+Run the deterministic Document Projection Architecture repository-intake orchestration.
 
 | Parameter | Type | Options | Required | Default | Help |
 |---|---:|---|---:|---|---|
