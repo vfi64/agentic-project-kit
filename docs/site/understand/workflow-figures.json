@@ -820,7 +820,7 @@
     "site/templates/figures/G2.svg": "8765be0ba0e6d94c6c9448905e816211583ff3fdb1fb457fbde766c3dba1ec60",
     "site/templates/figures/G3-mobile.svg": "6d9cccea1ddf7b43fb34bec25c215175c40becb2497b9cd71ebc9de8293a5e72",
     "site/templates/figures/G3.svg": "52ba78e99e8496b7c3de1ccb04889f860afdcea8566c448a40d5a555b8c82152",
-    "src/agentic_project_kit/cli_commands/human_workflows.py": "f794c292e4d38f3a3138f92af2be681c1c9f894334415ff728d0e3429779a185",
+    "src/agentic_project_kit/cli_commands/human_workflows.py": "e544a9fef299ee053fdbd47343d7866e7f4bf88f5ec6d74fa9dbe1160b170ca1",
     "src/agentic_project_kit/successor_handoff_package.py": "6cee39d60fef5a5bcf1fdfccbf71721d67cdffa3e0d45fdef9e4ef9d7a192aaf"
   }
 }
