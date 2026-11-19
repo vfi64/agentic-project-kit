@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `016956f1bffd35542ead77e85708af0b54d6d457` (`016956f1`), after `Unify website navigation and clarify Kit introduction (#2822)`.
-Last substantive work state is `016956f1bffd35542ead77e85708af0b54d6d457` (`016956f1`), after `Unify website navigation and clarify Kit introduction (#2822)`.
+Current verified main/admin HEAD is `4ed508011936e458f7d0ee06e81e9c774d89afcb` (`4ed50801`), after `Improve website onboarding and navigation (#2825)`.
+Last substantive work state is `4ed508011936e458f7d0ee06e81e9c774d89afcb` (`4ed50801`), after `Improve website onboarding and navigation (#2825)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.

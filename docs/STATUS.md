@@ -7,17 +7,17 @@ Current verified release: 1.4.0.
 Current release tag: v1.4.0.
 Zenodo concept DOI: `10.5281/zenodo.20101359`.
 Verified Zenodo version DOI: `10.5281/zenodo.24250696`.
-Current verified main: `6417552e` (`Fail closed on invalid chat handoff packages (#2824)`).
-Latest substantive work: PR #2824 (`Fail closed on invalid chat handoff packages (#2824)`).
-Latest administrative refresh-only descendant: pending after PR #2824; the handoff projection is being refreshed in the current work branch.
+Current verified main: `4ed50801` (`Improve website onboarding and navigation (#2825)`).
+Latest substantive work: PR #2825 (`Improve website onboarding and navigation (#2825)`).
+Latest administrative refresh-only descendant: post-PR2825 refresh is represented by this source-tree update; final refresh PR/merge identifiers are validated by the post-merge handoff status gate, not precomputed in STATUS.md.
 Latest Brownfield external evidence: Cycle 007 report
 `docs/reports/POST_V1_0_7_B1_COMM_SCI_CYCLE_007_PROVIDER_SETTINGS_20260831.md`
 records Comm-SCI App2 provider-settings seam reduction from `55` to `44`,
 target PR #16, target successor refresh PR #17, final target head
 `ea21b3a3`, and post-merge-settle `READY`.
-Current governed slice: update the public website and onboarding documentation from fresh main; do not repeat already verified release publication steps.
-Post-merge handoff status: post-PR2824 projection refresh pending in the current work branch.
-Next safe step: complete the website and onboarding documentation checks, then publish the reviewed branch.
+Current governed slice: continue from fresh main with the next planned governed slice after post-merge handoff checks pass; do not repeat already verified release publication steps.
+Post-merge handoff status: PASS/NOOP after PR #2825 administrative refresh.
+Next safe step: continue from fresh main with the next planned governed slice.
 
 ## Historical State Snapshots
 
@@ -422,6 +422,6 @@ DPA-700 evidence, exact refs and Maintainer-authorized scope.
 ## Operational documentation refresh state after PR #2013
 
 Current administrative handoff refresh state is `e3509718` (`Refresh handoff state after PR2013 (#2014)`). The post-PR2013 administrative refresh is committed and merged; the next substantive slice must be created from fresh main.
-## Operational documentation refresh state after PR #2822
+## Operational documentation refresh state after PR #2825
 
-Current administrative handoff refresh state is `016956f1` (`Unify website navigation and clarify Kit introduction (#2822)`). Continue next only after this post-PR2822 refresh is committed and merged; the next substantive slice must be created from fresh main.
+Current administrative handoff refresh state is `4ed50801` (`Improve website onboarding and navigation (#2825)`). Continue next only after this post-PR2825 refresh is committed and merged; the next substantive slice must be created from fresh main.
