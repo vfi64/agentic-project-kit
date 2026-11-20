@@ -32,7 +32,7 @@ def normalize_session(
     _run_local_garbage_collector_preflight()
     import ast
     import json
-    from shlex import join
+    from shlex import quote
     import subprocess
     from pathlib import Path
     from typing import Any
@@ -80,11 +80,9 @@ def normalize_session(
     upstream_action = ""
     if branch and head and not upstream and run(["git", "config", "--get", f"branch.{branch}.merge"])["returncode"] == 1:
         if run(["git", "show-ref", "--verify", "--quiet", f"refs/remotes/origin/{branch}"])["ok"]:
-            command = join(["git", "branch", "-u", f"origin/{branch}"])
-            upstream_action = f"Set upstream: {command}"
+            upstream_action = f"Set upstream: git branch -u {quote(f'origin/{branch}')}"
         elif run(["git", "remote", "get-url", "origin"])["ok"]:
-            command = join(["git", "push", "-u", "origin", branch])
-            upstream_action = f"Publish and set upstream when ready: {command}"
+            upstream_action = f"Publish and set upstream when ready: git push -u origin {quote(branch)}"
         else:
             upstream_action = "Configure a remote and set the branch to track its upstream."
     raw_dirty_status = status_result["stdout"]
