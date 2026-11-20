@@ -168,8 +168,8 @@ class ReleaseRun:
         """Route red CI to a human, then prefer an existing route or the B4 recovery plan."""
         if result.get("result_status") != "BLOCKED":
             return result
-        ci_action = self._b4_failed_ci_action(result.get("json"))
-        if ci_action:
+        payload = result.get("json")
+        if isinstance(payload, dict) and (ci_action := self._b4_failed_ci_action(payload)):
             result.update(ci_state="FAILED", next_action=ci_action, **human_route(ci_action))
             return result
         if str(result.get("next_command") or "").strip():
@@ -183,9 +183,7 @@ class ReleaseRun:
                                  "it offers the resume of the commits that did not reach the origin.")
         return result
 
-    def _b4_failed_ci_action(self, payload: Any) -> str:
-        if not isinstance(payload, dict):
-            return ""
+    def _b4_failed_ci_action(self, payload: dict[str, Any]) -> str:
         # Normal B4 runs work finish; a B4 resume can call pr-complete directly.
         if "pr-create-complete" in (payload.get("blockers") or []):
             payload = _pr_step_payload(payload, "pr-create-complete")
