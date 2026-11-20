@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Fixed: Evidence page tests accept a release branch without archived release evidence, and a failed release PR check reports its name and link instead of suggesting another release-run attempt.
 - Fixed: The Agent Direct card and sequence show the tested Use workflow. Wide diagrams put each action and command at its arrow, and labels describe the sending actor.
 - Fixed: Figure tests check word boundaries in the rendered SVGs. The generated-project walkthrough reports the verified match between the validated successor package and the five files on its simulated remote.
 - Added: The website generates a ranked path chooser, a sequence diagram for each public work path, and diagrams showing the maintainer's role. The executor table includes Cursor Agent.

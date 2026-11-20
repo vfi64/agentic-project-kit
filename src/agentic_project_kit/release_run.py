@@ -14,7 +14,7 @@ from typing import Any
 
 import yaml
 
-from agentic_project_kit.blocked_route import ROUTE_FIELDS, kit_route, nested_route
+from agentic_project_kit.blocked_route import ROUTE_FIELDS, human_route, kit_route, nested_route
 from agentic_project_kit.cli_executable import default_agentic_kit
 from agentic_project_kit.g3_remedies import REMEDIES
 from agentic_project_kit.publication_policy import publication_policy_for
@@ -165,12 +165,14 @@ class ReleaseRun:
         return self._work_finish("B4", branch=self.branch, paths=list(expected), execute=True, expected_status="PASS")
 
     def _b4_route(self, result: dict[str, Any]) -> dict[str, Any]:
-        """KIT-GF-116 (G3 remedy table): a B4 stop without a route of its own names the plan run.
-
-        The next plan run refreshes the B4 gate: the ordinary B4 again, or the K7 resume of the
-        release commits that never reached the origin. A route the failed step brought (K6) wins.
-        """
-        if result.get("result_status") != "BLOCKED" or str(result.get("next_command") or "").strip():
+        """Route red CI to a human, then prefer an existing route or the B4 recovery plan."""
+        if result.get("result_status") != "BLOCKED":
+            return result
+        ci_action = self._b4_failed_ci_action(result.get("json"))
+        if ci_action:
+            result.update(ci_state="FAILED", next_action=ci_action, **human_route(ci_action))
+            return result
+        if str(result.get("next_command") or "").strip():
             return result
         words = ["agentic-kit", *REMEDIES[("release run", "B4")], "--version", self.version]
         if self.options.root != Path("."):
@@ -180,6 +182,41 @@ class ReleaseRun:
         result["next_action"] = (f"Run {command} to refresh the B4 gate; after a stop past the release commit "
                                  "it offers the resume of the commits that did not reach the origin.")
         return result
+
+    def _b4_failed_ci_action(self, payload: Any) -> str:
+        if not isinstance(payload, dict):
+            return ""
+        # Normal B4 runs work finish; a B4 resume can call pr-complete directly.
+        if "pr-create-complete" in (payload.get("blockers") or []):
+            payload = _pr_step_payload(payload, "pr-create-complete")
+            if payload.get("ci_state") == "FAILED":
+                payload = _pr_step_payload(payload, "pr-complete")
+        if payload.get("ci_state") != "FAILED" or payload.get("failed_step") != "pr-wait-ci":
+            return ""
+        pr, head = payload.get("pr_number"), payload.get("expected_head_sha")
+        if not isinstance(pr, int) or pr < 1 or not re.fullmatch(r"[0-9a-f]{40}", str(head or "")):
+            return ""
+
+        output = _pr_step_stdout(payload, "pr-wait-ci")
+        names = [line.partition("- check failed: ")[2].strip()
+                 for line in output.splitlines() if "- check failed: " in line]
+        observation = self._command("B4-ci-checks", [
+            "gh", "pr", "view", str(pr), "--json", "headRefOid,statusCheckRollup",
+        ])
+        snapshot = observation.get("json")
+        checks = []
+        if observation["result_status"] == "PASS" and isinstance(snapshot, dict) and snapshot.get("headRefOid") == head:
+            from agentic_project_kit.github_check_policy import is_failed_check_conclusion
+
+            for check in snapshot.get("statusCheckRollup") or []:
+                if not isinstance(check, dict):
+                    continue
+                name = check.get("name") or check.get("context")
+                if name and is_failed_check_conclusion(check.get("conclusion") or check.get("state") or ""):
+                    url = check.get("detailsUrl") or check.get("targetUrl")
+                    checks.append(f"{name} ({url})" if url else str(name))
+        details = ", ".join(checks or names) or "check details unavailable"
+        return f"Release PR #{pr} has failed CI: {details}. Inspect and resolve the failure before continuing."
 
     def _step_c1(self) -> dict[str, Any]:
         result = self._command(
@@ -607,6 +644,18 @@ def _parse_json(text: str) -> Any:
         return json.loads(stripped)
     except json.JSONDecodeError:
         return None
+
+
+def _pr_step_stdout(payload: dict[str, Any], name: str) -> str:
+    for step in payload.get("steps") or []:
+        if isinstance(step, dict) and step.get("name") == name:
+            return str(step.get("stdout") or "")
+    return ""
+
+
+def _pr_step_payload(payload: dict[str, Any], name: str) -> dict[str, Any]:
+    parsed = _parse_json(_pr_step_stdout(payload, name))
+    return parsed if isinstance(parsed, dict) else {}
 
 
 def _status_matches(payload: Any, expected: str) -> bool:

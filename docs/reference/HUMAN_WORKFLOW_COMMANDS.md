@@ -450,6 +450,11 @@ The command stops with `AWAITING_APPROVAL` at these gates:
 - D4: execute `work finish` for the DOI closeout branch.
 - D2R: resume the original DOI PR after an API read failure, or regenerate a failed closeout on a replacement branch, with a fresh signed approval.
 
+If B4 stops because a release PR check failed, `next_action` names the check
+and includes its link when GitHub returns it for the same PR head. The result
+uses the human-action marker. A CI wait timeout retains its separate recovery
+route.
+
 Each gate prints an `approval_signature` over the exact branch, paths, tag,
 target commit, or workflow it will affect. A rerun with `--execute
 --expected-signature <signature>` executes only that gate, then continues until
@@ -457,7 +462,7 @@ the next gate or blocker. A stale signature blocks without running the gated
 remote effect. If the workspace publication policy is `none`, package-index
 publication, Zenodo wait, and DOI closeout are skipped.
 
-After a failed B4, stay on the release branch and run
+After a recoverable B4 interruption, stay on the release branch and run
 `agentic-kit release run --version <version> --json` again. Without a release
 commit the ordinary B4 gate returns. With an open release PR, B4 offers
 `resume-existing-release-pr` (KIT-GF-080): `transfer pr-complete` with the exact
