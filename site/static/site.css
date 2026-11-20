@@ -483,3 +483,5 @@ summary { cursor: pointer; padding-block: 10px; }
 .skip-link:focus { position: static; display: inline-block; padding: 12px; }
 input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
 @media (max-width: 680px) { .task-grid, .command-contract { grid-template-columns: minmax(0, 1fr); } }
+
+.role-map img { min-width: 0; }

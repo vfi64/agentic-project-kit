@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 428" role="img" aria-labelledby="title desc">
+<title id="title">Which path fits your assistant?</title><desc id="desc">Which path fits your assistant?. File Transfer: Browser chat. Copy and Paste: Browser chat. Agent Direct: Codex CLI, Claude Code, GitHub Copilot cloud agent. GUI: Kit interface. The four paths are not equally mature.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.sub{font:15px sans-serif;fill:#586674}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.foot{font:14px sans-serif;fill:#586674}</style>
+<metadata>{&quot;executors&quot;: [{&quot;name&quot;: &quot;Codex CLI&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Claude Code&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;GitHub Copilot cloud agent&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Browser chat&quot;, &quot;path&quot;: &quot;Copy and Paste or File Transfer&quot;}], &quot;mode_tools&quot;: {&quot;Agent Direct&quot;: [&quot;Codex CLI&quot;, &quot;Claude Code&quot;, &quot;GitHub Copilot cloud agent&quot;], &quot;Copy and Paste&quot;: [&quot;Browser chat&quot;], &quot;File Transfer&quot;: [&quot;Browser chat&quot;], &quot;GUI&quot;: []}, &quot;modes&quot;: [&quot;File Transfer&quot;, &quot;Copy and Paste&quot;, &quot;Agent Direct&quot;, &quot;GUI&quot;]}</metadata>
+<rect width="960" height="428" fill="#fff"/>
+<text x="24" y="36" class="title">Which path fits your assistant?</text>
+<text x="24" y="65" class="sub">Choose an available interface for your tool and task</text>
+<rect x="24" y="98" width="444" height="87" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
+<text x="38" y="127" class="head">File Transfer</text>
+<text x="38" y="154" class="body">Browser chat</text>
+<rect x="492" y="98" width="444" height="87" rx="10" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
+<text x="506" y="127" class="head">Copy and Paste</text>
+<text x="506" y="154" class="body">Browser chat</text>
+<rect x="24" y="209" width="444" height="133" rx="10" fill="#fff" stroke="#a16207" stroke-width="1.5"/>
+<text x="38" y="238" class="head">Agent Direct</text>
+<text x="38" y="265" class="body">Codex CLI</text>
+<text x="38" y="288" class="body">Claude Code</text>
+<text x="38" y="311" class="body">GitHub Copilot cloud agent</text>
+<rect x="492" y="209" width="444" height="133" rx="10" fill="#fff" stroke="#586674" stroke-width="1.5"/>
+<text x="506" y="238" class="head">GUI</text>
+<text x="506" y="265" class="body">Kit interface</text>
+<text x="24" y="382" class="foot">The four paths are not equally mature.</text>
+</svg>

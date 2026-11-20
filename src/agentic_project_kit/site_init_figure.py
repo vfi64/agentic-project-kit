@@ -13,14 +13,16 @@ from tempfile import TemporaryDirectory
 import yaml
 
 
-def render_init_files_figure(root: Path, *, version: str) -> str:
-    """Run the example locally and project its generated files into an SVG."""
+def collect_init_fixture(root: Path) -> tuple[dict, list[str], str]:
+    """Run the documented local init once for the website projections."""
     example = yaml.safe_load((root / "site/content/usage_example.yaml").read_text(encoding="utf-8"))
     step = example["steps"][0]
     argv = list(step["argv"])
     project_dir = str(example["project_dir"])
     if step["command"] != "agentic-kit init" or argv[:2] != ["init", project_dir]:
         raise ValueError("init figure requires the documented init example")
+    if "--no-github" not in argv or "--github" in argv or Path(project_dir).name != project_dir or project_dir in {"", ".", ".."}:
+        raise ValueError("documented init must target a local fixture directory without GitHub")
     with TemporaryDirectory(prefix="kit-site-init-") as scratch:
         project = Path(scratch) / project_dir
         source = Path(__file__).resolve().parents[1]
@@ -36,6 +38,14 @@ def render_init_files_figure(root: Path, *, version: str) -> str:
             for path in project.rglob("*")
             if path.is_file() and ".git" not in path.relative_to(project).parts
         )
+        ci = (project / ".github/workflows/ci.yml").read_text(encoding="utf-8")
+    return example, files, ci
+
+
+def render_init_files_figure(fixture: tuple[dict, list[str], str], *, version: str) -> str:
+    """Project the generated files into an SVG."""
+    example, files, _ = fixture
+    argv = example["steps"][0]["argv"]
     groups = (
         ("Agent instructions", [path for path in files if path == "AGENTS.md" or path.endswith("copilot-instructions.md")]),
         ("Project state", [path for path in files if path.startswith(".agentic/") or path in {"docs/STATUS.md", "docs/PROJECT_START.md"}]),

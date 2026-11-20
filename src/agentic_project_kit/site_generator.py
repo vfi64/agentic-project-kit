@@ -489,16 +489,20 @@ def build_site(
     assert command_catalog is not None
     usage_html = None
     init_figure = None
+    role_figures = {}
     if (root / "site/templates/use.html").is_file():
         from .site_usage import render_usage_page
-        from .site_init_figure import render_init_files_figure
+        from .site_init_figure import collect_init_fixture, render_init_files_figure
+        from .site_role_figures import render_role_figures
         try:
             usage_html = render_usage_page(
                 root,
                 command_names={entry.qualified_name for entry in command_catalog.entries},
                 product_name=metadata.product_name,
             )
-            init_figure = render_init_files_figure(root, version=metadata.package_version)
+            fixture = collect_init_fixture(root)
+            init_figure = render_init_files_figure(fixture, version=metadata.package_version)
+            role_figures = render_role_figures(root, report.workflow_projection, fixture)
         except (OSError, ValueError, KeyError, TypeError) as exc:
             return SiteBuildResult(
                 root=root.as_posix(), output_dir=output.as_posix(),
@@ -508,6 +512,8 @@ def build_site(
         shutil.rmtree(output)
     output.mkdir(parents=True, exist_ok=True)
     (output / "static").mkdir(parents=True, exist_ok=True)
+    for filename, source in role_figures.items():
+        (output / "static" / filename).write_text(source, encoding="utf-8")
     (output / "commands").mkdir(parents=True, exist_ok=True)
     (output / "claims").mkdir(parents=True, exist_ok=True)
     (output / "quickstart").mkdir(parents=True, exist_ok=True)
