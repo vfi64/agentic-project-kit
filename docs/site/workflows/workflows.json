@@ -53,34 +53,34 @@
         {
           "dry_run_available": false,
           "manifest_present": true,
-          "qualified_name": "agentic-kit command-for",
-          "safety": "READ_ONLY",
-          "surface": "diagnostic",
-          "when_to_use": "Select by raw command, task tag or explicit state-aware intent; never execute."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer remote-work-start",
+          "qualified_name": "agentic-kit work start",
           "safety": "BOUNDED",
           "surface": "orchestrator",
-          "when_to_use": "Prepare a remote work branch with freshness, status, and transfer safety checks."
+          "when_to_use": "Start a human patch/slice workflow with the safe standard startup sequence."
         },
         {
           "dry_run_available": false,
           "manifest_present": true,
-          "qualified_name": "agentic-kit transfer pr-create-complete",
-          "safety": "BOUNDED",
-          "surface": "orchestrator",
-          "when_to_use": "Create, validate, merge, and optionally close out a PR without manual PR/SHA copying."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer protected-diff-plan",
+          "qualified_name": "agentic-kit check",
           "safety": "READ_ONLY",
           "surface": "diagnostic",
-          "when_to_use": "Write the current diff to the OS temp directory and run the Python protected change planner on it."
+          "when_to_use": "Validate the project contract and required repository files without changing them."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit doctor",
+          "safety": "READ_ONLY",
+          "surface": "diagnostic",
+          "when_to_use": "Run a compact project health check."
+        },
+        {
+          "dry_run_available": true,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit work finish",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Finish a human work slice by planning or executing commit, push, PR, merge, and closeout checks."
         },
         {
           "dry_run_available": false,

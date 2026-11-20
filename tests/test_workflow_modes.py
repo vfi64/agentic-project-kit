@@ -1,12 +1,24 @@
 """Keep GUI and website workflow projections tied to manifest-backed data."""
 from pathlib import Path
 
+import yaml
+
 from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.gui_communication_modes import (
     DEFAULT_COMMUNICATION_MODE,
     communication_mode_definitions,
 )
 from agentic_project_kit.workflow_modes import ROLE_LABELS, WORKFLOW_MODES, modes_for
+
+
+def test_agent_direct_includes_the_use_example_session_commands() -> None:
+    root = Path(__file__).resolve().parents[1]
+    example = yaml.safe_load((root / "site/content/usage_example.yaml").read_text())
+    commands = {step["command"] for step in example["steps"] if str(step["session"]) == "1" and step["command"]}
+    mode = next(mode for mode in modes_for("site") if mode.mode_id == "agent_direct")
+    assert commands
+    assert commands <= set(mode.commands)
+    assert commands <= {step.command for step in mode.flow}
 
 
 def test_workflow_mode_projections_share_roles_and_actions() -> None:

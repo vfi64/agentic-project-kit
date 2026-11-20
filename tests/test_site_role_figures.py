@@ -36,6 +36,36 @@ def test_every_website_mode_has_a_sequence_in_its_own_card(built_site: Path) -> 
             assert all(step.command in card for step in mode.flow if step.command)
 
 
+def test_wide_sequence_labels_follow_their_arrows(built_site: Path) -> None:
+    from agentic_project_kit.workflow_modes import modes_for
+
+    ns = "{http://www.w3.org/2000/svg}"
+    for mode in modes_for("site"):
+        _, svg = _svg(built_site, f"mode-{mode.mode_id.replace('_', '-')}")
+        lanes = dict(zip(("you", "assistant", "kit"), (int(line.attrib["x1"]) for line in svg.iter(ns + "line")), strict=True))
+        for index, step in enumerate(mode.flow, 1):
+            row = svg.find(f'{ns}g[@data-step="{index}"]')
+            assert row is not None
+            texts = list(row.iter(ns + "text"))
+            action = [node for node in texts if node.get("data-source") == step.action]
+            command = [node for node in texts if step.command and node.get("data-source") == step.command]
+            assert action and bool(command) == bool(step.command)
+            start, end = lanes[step.actor_from], lanes[step.actor_to]
+            for label in action + command:
+                assert label.get("text-anchor") == "middle"
+                center = int(label.attrib["x"])
+                if start != end:
+                    assert center == (start + end) // 2
+                else:
+                    assert 0 < abs(center - start) < 320
+            arrow = row.find(ns + "path")
+            assert arrow is not None
+            arrow_y = int(re.match(r"M\d+ (\d+)", arrow.attrib["d"])[1])
+            assert all(int(node.attrib["y"]) < arrow_y for node in action)
+            assert all(int(node.attrib["y"]) > arrow_y for node in command)
+            assert row.find(f'{ns}rect[@fill="#fff"]') is not None
+
+
 def test_added_website_mode_gets_a_diagram_and_requires_a_flow(tmp_path: Path, monkeypatch) -> None:
     from dataclasses import replace
     from agentic_project_kit import workflow_modes
