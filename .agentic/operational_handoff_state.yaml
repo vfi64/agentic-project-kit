@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 48ebf6751d63dc2d9779c0205506c101b155745c
-  short: 48ebf675
-  subject: Generate the public workflow and ownership diagrams (#2841)
+  full: a501272eef8aeb866bebb6d323ce1a240dcaaf71
+  short: a501272e
+  subject: Align Agent Direct with the tested Use workflow (#2843)
 last_substantive_work_state:
-  full: 48ebf6751d63dc2d9779c0205506c101b155745c
-  short: 48ebf675
-  subject: Generate the public workflow and ownership diagrams (#2841)
+  full: a501272eef8aeb866bebb6d323ce1a240dcaaf71
+  short: a501272e
+  subject: Align Agent Direct with the tested Use workflow (#2843)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
