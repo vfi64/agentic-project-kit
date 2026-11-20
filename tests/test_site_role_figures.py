@@ -10,7 +10,7 @@ import pytest
 import yaml
 
 from agentic_project_kit.site_generator import build_site
-from agentic_project_kit.site_role_figures import collect_role_figure_facts
+from agentic_project_kit.site_role_figures import _ci_summary, _lines, collect_role_figure_facts
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -76,15 +76,75 @@ def test_repository_figure_uses_init_files_and_example_steps(built_site: Path) -
 def test_enforcement_figure_uses_generated_ci_and_manifest(built_site: Path) -> None:
     facts = _facts(_svg(built_site, "asked-checked-enforced")[1])
     assert "push" in facts["ci_events"] and "pull_request" in facts["ci_events"]
-    assert "agentic-kit check" in facts["ci_steps"]
+    assert "Runs agentic-kit check" in facts["ci_summary"]
     assert "agentic-kit check" in facts["manifest_commands"]
-    assert "pytest" in " ".join(facts["ci_steps"])
+    assert "Runs project tests" in facts["ci_summary"]
 
 
 def test_role_figure_blocks_when_ci_drops_the_kit_check() -> None:
     ci = "on: {push: {}, pull_request: {}}\njobs: {test: {steps: [{run: pytest}]}}"
     with pytest.raises(ValueError, match="generated CI no longer runs agentic-kit check"):
         collect_role_figure_facts(ROOT, {}, ({}, [], ci))
+
+
+@pytest.mark.parametrize("narrow", [False, True])
+def test_control_levels_show_meaning_and_increasing_card_heights(built_site: Path, narrow: bool) -> None:
+    source, svg = _svg(built_site, "asked-checked-enforced", narrow)
+    assert not re.search(r"\b(?:pip|then|fi)\b|if \[|--upgrade", source)
+    namespace = "{http://www.w3.org/2000/svg}"
+    labels = [node.text for node in svg.iter(namespace + "text")]
+    assert "Runs on: push, pull request" in labels
+    assert "Runs project tests" in labels
+    assert "Runs agentic-kit check" in labels
+    assert "STANDARD_AGENT_PROMPT.md" in labels
+    cards = [node for node in svg.iter(namespace + "rect") if node.get("rx") == "10"]
+    heights = [int(card.attrib["height"]) for card in cards]
+    assert len(heights) == 3 and heights[0] < heights[1] < heights[2]
+    if not narrow:
+        assert len({int(card.attrib["y"]) + int(card.attrib["height"]) for card in cards}) == 1
+
+
+@pytest.mark.parametrize("narrow", [False, True])
+def test_repository_arrows_and_second_session_are_readable(built_site: Path, narrow: bool) -> None:
+    _, svg = _svg(built_site, "repository-memory", narrow)
+    namespace = "{http://www.w3.org/2000/svg}"
+    labels = [node.text for node in svg.iter(namespace + "text")]
+    content = yaml.safe_load((ROOT / "site/content/role_figures.yaml").read_text(encoding="utf-8"))
+    arrow_labels = content["figures"]["repository-memory"]["arrow_labels"]
+    assert all(label in labels for label in arrow_labels.values())
+    index = labels.index("Session 2")
+    action = _facts(svg)["second_session_action"]
+    example = yaml.safe_load((ROOT / "site/content/usage_example.yaml").read_text(encoding="utf-8"))
+    assert action == next(step["agent"] for step in example["steps"] if str(step["session"]) == "2")
+    assert action.startswith(" ".join(labels[index + 1:index + 3]).rstrip("…"))
+    assert "Reads" in labels[index + 1]
+    assert len(list(svg.iter(namespace + "path"))) == 2
+
+
+def test_ci_summary_omits_project_tests_when_ci_does_not_run_them() -> None:
+    ci = "on: {push: {}, pull_request: {}}\njobs: {test: {steps: [{run: agentic-kit check}]}}"
+    _, summary = _ci_summary(ci)
+    assert summary == ["Runs on: push, pull request", "Runs agentic-kit check"]
+
+
+@pytest.mark.parametrize("job, step", [
+    ("continue-on-error: true, ", ""),
+    ("", "continue-on-error: true, "),
+    ("if: false, ", ""),
+    ("", "if: false, "),
+])
+def test_ci_summary_blocks_checks_that_do_not_enforce_the_result(job: str, step: str) -> None:
+    ci = "on: {push: {}, pull_request: {}}\njobs: {test: {" + job + "steps: [{" + step + "run: agentic-kit check}]}}"
+    with pytest.raises(ValueError, match="conditional or allows failure"):
+        _ci_summary(ci)
+
+
+
+def test_file_labels_wrap_at_separators_without_breaking_words() -> None:
+    assert _lines(["STANDARD_AGENT_PROMPT.md"], 14) == ["STANDARD_", "AGENT_", "PROMPT.md"]
+    assert _lines(["Extraordinary filename"], 12) == ["Extraordinary", "filename"]
+
+
 
 
 def test_unpublished_figures_are_not_embedded(built_site: Path) -> None:

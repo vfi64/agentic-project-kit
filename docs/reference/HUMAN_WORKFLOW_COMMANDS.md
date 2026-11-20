@@ -221,6 +221,10 @@ For the default `main` start ref, it runs sync-main, rules acknowledge,
 post-merge-check, repo-status, and then creates or switches to the requested
 branch.
 
+For a local branch without tracking configuration, `missing_upstream` names
+the manual Git step. If `origin/main` already exists, run
+`git branch -u origin/main` while on `main`, then retry.
+
 For a non-main `--from-ref`, such as a release tag or remote-tracking
 integration branch, it fetches refs, acknowledges rules, skips the post-merge
 check as a pre-PR gate, runs repo-status, and then creates or switches to the

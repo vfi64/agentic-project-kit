@@ -279,7 +279,7 @@ rules:
   - path: README.md
     terms:
     - practical Codex or Claude walkthrough
-    - manual session handoff
+    - tested generated-project cycle
   - path: site/README.md
     terms:
     - site/content/usage_example.yaml
@@ -292,7 +292,8 @@ rules:
     - One work cycle
   - path: site/content/usage_example.yaml
     terms:
-    - docs/handoff/CURRENT_HANDOFF.md
+    - transfer chat-switch-complete
+    - work finish
   - path: tests/test_site_usage.py
     terms:
     - test_public_usage_commands_run_in_generated_project

@@ -4,10 +4,13 @@ from __future__ import annotations
 from html import unescape
 from html.parser import HTMLParser
 import json
+import os
 from pathlib import Path
 import re
 import shlex
 import shutil
+import subprocess
+import sys
 from xml.etree import ElementTree as ET
 
 import pytest
@@ -46,23 +49,73 @@ def test_public_usage_page_renders_template_prompt_and_source_bound_tools(tmp_pa
     assert "Codex" in page and "Claude Code" in page and "Browser chat" in page
     assert "What you do" in page and "What the agent does" in page and "What the Kit checks" in page
     assert "docs/handoff/CURRENT_HANDOFF.md" in page
-    assert "transfer chat-switch-complete" not in page
+    assert "transfer chat-switch-complete" in page
+    assert "git push -u origin main" in page
+    assert "simulates GitHub, including a passing CI result and the merge" in page
+    assert re.search(r"<code>agentic-kit work finish [^<]* --dry-run</code>", page)
+    assert "manual handoff" not in page.lower()
 
 
 def test_public_usage_commands_run_in_generated_project(tmp_path: Path, monkeypatch) -> None:
     example = yaml.safe_load((ROOT / "site/content/usage_example.yaml").read_text(encoding="utf-8"))
     known = {row["qualified_name"] for row in load_manifest(ROOT)["commands"]}
-    runner = CliRunner()
-    monkeypatch.chdir(tmp_path)
-    assert any(step["command"] is None for step in example["steps"])
+    commands = {step["command"] for step in example["steps"]}
+    assert {"agentic-kit rules acknowledge", "agentic-kit work start",
+            "agentic-kit transfer chat-switch-complete", "agentic-kit work finish", None} <= commands
+
+    # All Git effects target this local bare repo. The fake GH models green CI.
+    remote = tmp_path / "origin.git"
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    cli = bin_dir / "agentic-kit"
+    cli.write_text(f"#!{sys.executable}\nfrom agentic_project_kit.cli import app\napp()\n", encoding="utf-8")
+    cli.chmod(0o755)
+    gh = bin_dir / "gh"
+    gh.symlink_to(ROOT / "scripts/offline_path/fake_gh.py")
+    monkeypatch.setenv("PATH", os.pathsep.join((str(bin_dir), str(Path(sys.executable).parent), os.environ["PATH"])))
+    monkeypatch.setenv("PYTHONPATH", str(ROOT / "src"))
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", str(tmp_path / "gitconfig"))
+    monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
+    monkeypatch.setenv("GIT_CONFIG_COUNT", "0")
+    monkeypatch.setenv("GIT_ALLOW_PROTOCOL", "file")
+    monkeypatch.setenv("FAKE_GH_ORIGIN", str(remote))
+    monkeypatch.setenv("FAKE_GH_DB", str(tmp_path / "gh.json"))
+    monkeypatch.setenv("FAKE_GH_REPO", "sim/kit-sim")
+
+    def run(*argv: str, cwd: Path) -> str:
+        result = subprocess.run(argv, cwd=cwd, text=True, capture_output=True, timeout=90, check=False)
+        assert result.returncode == 0, (argv, result.returncode, result.stdout, result.stderr)
+        return result.stdout
+
+    run("git", "config", "--global", "user.name", "Site Example", cwd=tmp_path)
+    run("git", "config", "--global", "user.email", "site-example@example.invalid", cwd=tmp_path)
+    run("git", "init", "--bare", "--initial-branch=main", str(remote), cwd=tmp_path)
+    cwd = tmp_path
     for step in example["steps"]:
         if step["command"] is None:
             continue
-        assert step["command"] in known
-        result = runner.invoke(app, step["argv"])
-        assert result.exit_code == 0, (step["command"], result.output)
-        if step["command"] == "agentic-kit init":
-            monkeypatch.chdir(tmp_path / example["project_dir"])
+        command = step["command"]
+        assert command in known
+        json_flag = ["--json"] if command in {"agentic-kit work finish", "agentic-kit transfer chat-switch-complete"} else []
+        output = run(str(cli), *step["argv"], *json_flag, cwd=cwd)
+        if command == "agentic-kit init":
+            cwd = tmp_path / example["project_dir"]
+            run("git", "remote", "add", "origin", str(remote), cwd=cwd)
+            run("git", "push", "-u", "origin", "main", cwd=cwd)
+        elif command == "agentic-kit work start":
+            assert run("git", "branch", "--show-current", cwd=cwd).strip() == "feat/tsv"
+            (cwd / "export-format.txt").write_text("Formats: CSV and TSV\n", encoding="utf-8")
+        elif command == "agentic-kit work finish":
+            assert json.loads(output)["result_status"] == "PLANNED"
+            args = [argument for argument in step["argv"] if argument != "--dry-run"]
+            assert json.loads(run(str(cli), *args, "--execute", "--json", cwd=cwd))["result_status"] == "PASS"
+            prs = json.loads((tmp_path / "gh.json").read_text(encoding="utf-8"))["prs"]
+            assert prs["1"]["state"] == "MERGED"
+            assert "Formats: CSV and TSV" in run("git", "--git-dir", str(remote), "show",
+                                                 "main:export-format.txt", cwd=cwd)
+        elif command == "agentic-kit transfer chat-switch-complete":
+            report_path = Path(json.loads(output)["validation_report_path"])
+            assert json.loads((cwd / report_path).read_text(encoding="utf-8"))["status"] == "PASS"
 
 
 def test_usage_story_groups_sessions_and_marks_steps_without_commands(tmp_path: Path) -> None:

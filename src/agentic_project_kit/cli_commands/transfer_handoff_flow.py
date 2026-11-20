@@ -32,6 +32,7 @@ def normalize_session(
     _run_local_garbage_collector_preflight()
     import ast
     import json
+    from shlex import join
     import subprocess
     from pathlib import Path
     from typing import Any
@@ -76,6 +77,16 @@ def normalize_session(
     head = head_result["stdout"].strip()
     upstream = upstream_result["stdout"].strip() if upstream_result["ok"] else ""
     upstream_head = upstream_head_result["stdout"].strip() if upstream_head_result["ok"] else ""
+    upstream_action = ""
+    if branch and head and not upstream and run(["git", "config", "--get", f"branch.{branch}.merge"])["returncode"] == 1:
+        if run(["git", "show-ref", "--verify", "--quiet", f"refs/remotes/origin/{branch}"])["ok"]:
+            command = join(["git", "branch", "-u", f"origin/{branch}"])
+            upstream_action = f"Set upstream: {command}"
+        elif run(["git", "remote", "get-url", "origin"])["ok"]:
+            command = join(["git", "push", "-u", "origin", branch])
+            upstream_action = f"Publish and set upstream when ready: {command}"
+        else:
+            upstream_action = "Configure a remote and set the branch to track its upstream."
     raw_dirty_status = status_result["stdout"]
     dirty_status, ignored_known_volatile_dirty_status = split_known_volatile_status(
         raw_dirty_status,
@@ -144,7 +155,7 @@ def normalize_session(
     if not checks["worktree_clean"]:
         blockers.append("dirty_worktree")
     if not checks["head_matches_upstream"]:
-        blockers.append("head_upstream_mismatch_or_missing_upstream")
+        blockers.append("missing_upstream" if upstream_action else "head_upstream_mismatch_or_missing_upstream")
     if not checks["rule_ack_current"]:
         blockers.append("rule_ack_not_current")
     if not checks["canonical_inbox_syntax_ok"]:
@@ -159,6 +170,8 @@ def normalize_session(
         if result_status == "PASS"
         else "Resolve blockers before running transfer work: " + ", ".join(blockers)
     )
+    if upstream_action:
+        next_action += ". " + upstream_action
 
     payload: dict[str, Any] = {
         "schema_version": 1,

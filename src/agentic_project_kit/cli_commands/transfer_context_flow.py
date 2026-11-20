@@ -291,6 +291,9 @@ def sync_main(
                 item["payload_result_status"] = result_status
             if result_status in {"BLOCK", "BLOCKED", "FAIL", "FAILED", "ERROR"}:
                 item["ok"] = False
+            if name == "normalize-session" and payload.get("blockers") == ["missing_upstream"]:
+                item["blocker"] = "missing_upstream"
+                item["next_action"] = str(payload.get("next_action") or "")
         steps.append(item)
         return item
 
@@ -313,7 +316,7 @@ def sync_main(
     step("normalize-session", [agentic_kit, "transfer", "normalize-session", "--json"])
 
     blockers = [
-        str(item["name"]) + "_failed"
+        str(item.get("blocker") or (str(item["name"]) + "_failed"))
         for item in steps
         if item["returncode"] != 0 or item.get("ok") is False
     ]
@@ -324,6 +327,8 @@ def sync_main(
         if status == "PASS"
         else "Inspect sync-main blockers before continuing: " + ", ".join(blockers)
     )
+    if blockers == ["missing_upstream"]:
+        next_action = str(steps[-1]["next_action"])
     payload = {
         "schema_version": 1,
         "kind": "transfer_sync_main_result",

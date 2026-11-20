@@ -923,8 +923,17 @@ def work_start_command(
     """Start a human patch/slice workflow with the safe standard startup sequence."""
     base_ref = from_ref.strip() or "main"
     starts_from_main = _is_main_start_ref(base_ref)
+    upstream_action = ""
     if starts_from_main:
-        steps = [_run_step("sync-main", _agentic("transfer", "sync-main", "--main-branch", "main"))]
+        steps = [_run_step("sync-main", _agentic("transfer", "sync-main", "--main-branch", "main", "--json"))]
+        if not steps[0]["ok"]:
+            try:
+                sync_result = json.loads(str(steps[0]["stdout"]))
+            except ValueError:
+                sync_result = None
+            if isinstance(sync_result, dict) and sync_result.get("blockers") == ["missing_upstream"]:
+                upstream_action = str(sync_result.get("next_action") or "")
+                steps[0]["next_command_reason"] = upstream_action
         if _workflow_steps_ok(steps):
             steps.append(_run_step("rules-acknowledge", _agentic("rules", "acknowledge")))
         if _workflow_steps_ok(steps):
@@ -965,6 +974,8 @@ def work_start_command(
                 )
             )
     payload = _payload("work-start", steps, extra={"branch": branch, "from_ref": base_ref, "work_kind": kind})
+    if upstream_action:
+        payload["next_action"] = upstream_action
     _emit(payload, json_output=json_output)
     _exit_if_blocked(payload)
 

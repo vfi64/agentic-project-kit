@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Fixed: Work start explains how to connect a branch without an upstream, and the website walkthrough and its diagrams show the generated-project workflow, handoff and CI checks more clearly.
 - Added: Source-bound, accessible wide and narrow SVGs explain control levels, repository memory and available work paths on the website.
 - Changed: The website work-cycle table reads as labelled cards on narrow screens; project direction now records the Kit's primary abstraction goal and language-neutral follow-up.
 - Fixed: `init` now creates the complete external operating layer used by `workspace init`, so generated projects can acknowledge rules and run the governed work cycle from their first commit. Historical partial `init` projects retain signed additive recovery; external `work finish` keeps the Kit pin guard and omits the Kit-only release scan. Journey J6 now uses this direct path; a missing handoff source returns a routed failure.
