@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `5ee6dda1c3e1186992ece5e09fa15a853cec4756` (`5ee6dda1`), after `Explain the Kit as a control layer for AI-assisted work (#2839)`.
-Last substantive work state is `5ee6dda1c3e1186992ece5e09fa15a853cec4756` (`5ee6dda1`), after `Explain the Kit as a control layer for AI-assisted work (#2839)`.
+Current verified main/admin HEAD is `48ebf6751d63dc2d9779c0205506c101b155745c` (`48ebf675`), after `Generate the public workflow and ownership diagrams (#2841)`.
+Last substantive work state is `48ebf6751d63dc2d9779c0205506c101b155745c` (`48ebf675`), after `Generate the public workflow and ownership diagrams (#2841)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
