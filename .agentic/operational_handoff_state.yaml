@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: f976c95daa6fb814cc6283cb88612bef81ced9d5
-  short: f976c95d
-  subject: Clarify practical website work cycle (#2827)
+  full: 35bbc54fdbec42304e3064cab8aa6013c4a6e337
+  short: 35bbc54f
+  subject: Complete generated operating layer and generic CI (#2829)
 last_substantive_work_state:
-  full: f976c95daa6fb814cc6283cb88612bef81ced9d5
-  short: f976c95d
-  subject: Clarify practical website work cycle (#2827)
+  full: 35bbc54fdbec42304e3064cab8aa6013c4a6e337
+  short: 35bbc54f
+  subject: Complete generated operating layer and generic CI (#2829)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
