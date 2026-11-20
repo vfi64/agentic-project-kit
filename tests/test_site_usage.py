@@ -266,7 +266,7 @@ def test_tool_source_links_are_distinct_and_codex_uses_agent_guide(tmp_path: Pat
     assert result.ok, result.report.blockers
     page = (tmp_path / "site/use/index.html").read_text(encoding="utf-8")
     labels = re.findall(r'<a href="[^"]+">(Source: [^<]+)</a>', page)
-    assert len(labels) == 4 and len(set(labels)) == 4
+    assert len(labels) == 5 and len(set(labels)) == 5
     assert "https://developers.openai.com/codex/guides/agents-md" in page
 
 

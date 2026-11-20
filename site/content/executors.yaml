@@ -21,3 +21,8 @@ executors:
     instructions: Paste the starter prompt and provide the relevant repository files when the chat has no repository access.
     source: ../workflows/index.html
     reviewed: "2026-11-18"
+  - name: Cursor
+    path: Agent Direct
+    instructions: Cursor Agent automatically reads AGENTS.md at the project root.
+    source: https://cursor.com/help/customization/rules
+    reviewed: "2026-11-20"

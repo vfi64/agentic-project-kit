@@ -14,7 +14,7 @@ from agentic_project_kit.site_role_figures import _ci_summary, _lines, collect_r
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIGURES = ("asked-checked-enforced", "repository-memory", "path-chooser")
+FIGURES = ("asked-checked-enforced", "repository-memory", "path-chooser", "background-and-ownership", "kit-conductor")
 
 
 def test_every_website_mode_has_a_sequence_in_its_own_card(built_site: Path) -> None:
@@ -80,7 +80,8 @@ def _facts(root: ET.Element) -> dict:
 
 
 def test_role_figures_are_accessible_responsive_and_source_bound(built_site: Path) -> None:
-    pages = {"asked-checked-enforced": "understand/index.html", "repository-memory": "use/index.html", "path-chooser": "workflows/index.html"}
+    pages = {"asked-checked-enforced": "understand/index.html", "repository-memory": "use/index.html", "path-chooser": "workflows/index.html",
+             "background-and-ownership": "understand/index.html", "kit-conductor": "index.html"}
     for name in FIGURES:
         for narrow in (False, True):
             source, root = _svg(built_site, name, narrow)
@@ -209,10 +210,29 @@ def test_file_labels_wrap_at_separators_without_breaking_words() -> None:
 
 
 
-def test_unpublished_figures_are_not_embedded(built_site: Path) -> None:
-    content = yaml.safe_load((ROOT / "site/content/role_figures.yaml").read_text(encoding="utf-8"))
-    assert content["figures"]["background-and-ownership"]["published"] is False
-    assert content["figures"]["kit-conductor"]["published"] is False
-    pages = " ".join(path.read_text(encoding="utf-8") for path in built_site.rglob("*.html"))
-    assert "background-and-ownership.svg" not in pages
-    assert "kit-conductor.svg" not in pages
+def test_ownership_figures_obey_publication_flags(tmp_path: Path, monkeypatch) -> None:
+    original = Path.read_text
+    config = ROOT / "site/content/role_figures.yaml"
+    content = yaml.safe_load(original(config, encoding="utf-8"))
+    for name in FIGURES[-2:]:
+        content["figures"][name]["published"] = False
+
+    def read(path, *args, **kwargs):
+        return yaml.safe_dump(content) if path == config else original(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", read)
+    result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    for name, page in zip(FIGURES[-2:], ("understand/index.html", "index.html")):
+        assert name not in (tmp_path / "site" / page).read_text()
+        assert not (tmp_path / "site/static" / f"{name}.svg").exists()
+
+
+def test_conductor_uses_reviewed_executors_and_names_simulation(built_site: Path) -> None:
+    executors = yaml.safe_load((ROOT / "site/content/executors.yaml").read_text())["executors"]
+    for narrow in (False, True):
+        _, svg = _svg(built_site, "kit-conductor", narrow)
+        assert _facts(svg)["executors"] == [{"name": row["name"], "path": row["path"]} for row in executors]
+        labels = " ".join(node.text or "" for node in svg.iter("{http://www.w3.org/2000/svg}text"))
+        assert all(row["name"] in labels for row in executors)
+        assert "simulates GitHub" in labels

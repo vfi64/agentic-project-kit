@@ -97,12 +97,19 @@ def collect_explanation(root: Path, *, version: str) -> dict[str, object]:
 
 
 def render_explanation(root: Path, projection: dict[str, object], *, repository_url: str,
-                       product_name: str, version: str) -> str:
+                       product_name: str, version: str, ownership: bool = False) -> str:
+    from .site_path_figures import picture
+
     template = Template((root / "site/templates/understand.html").read_text())
     return template.substitute(
         site_nav=render_site_navigation("understand/index.html"),
         product_name=escape(product_name), package_version=escape(version),
         repository_url=escape(repository_url, quote=True),
+        ownership_figure=(
+            '<figure class="architecture-map role-map">'
+            + picture("background-and-ownership", prefix="../static/", alt="Which project responsibilities stay with you.")
+            + "</figure>" if ownership else ""
+        ),
         evidence_cards=render_evidence_cards(projection, repository_url=repository_url),
         comparison_rows=_render_comparisons(projection),
         workflow_figures=(render_figures({

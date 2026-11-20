@@ -526,7 +526,7 @@ def build_site(
     navigation = report.task_projection
     (output / "commands" / "tasks.json").write_text(
         json.dumps(navigation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    index_html = render_index_html(root, report)
+    index_html = render_index_html(root, report, conductor="kit-conductor.svg" in role_figures)
     quickstart_projection = _build_quickstart_projection(metadata, command_catalog)
     detail_files = {r["command"]: r["file"] for r in (report.detail_projection or {}).get("commands", [])}
     quickstart_projection["detail_links"] = detail_files
@@ -568,6 +568,7 @@ def build_site(
         explanation_output.mkdir()
         (explanation_output / "index.html").write_text(
             render_explanation(root, report.explanation_projection,
+                               ownership="background-and-ownership.svg" in role_figures,
                                repository_url=metadata.repository_url,
                                product_name=metadata.product_name,
                                version=metadata.package_version), encoding="utf-8")
@@ -760,7 +761,8 @@ def _docs_pages_fallback_status_projection(root: Path) -> SiteStatusProjection:
     )
 
 
-def render_index_html(root: Path, report: SiteFoundationReport) -> str:
+def render_index_html(root: Path, report: SiteFoundationReport, *, conductor: bool = False) -> str:
+    from .site_path_figures import picture
     from .site_usage import render_generated_finish_status
 
     metadata = report.metadata
@@ -772,6 +774,11 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
     values = {
         "site_nav": render_site_navigation("index.html"),
         "generated_finish_status": render_generated_finish_status(root),
+        "hero_map_class": " conductor-map" if conductor else "",
+        "hero_map": (
+            picture("kit-conductor", prefix="static/", alt="You direct the work. The Kit coordinates checks and repository state.")
+            if conductor else '<img src="static/kit-architecture.svg" alt="The Kit connects human intent, assistants, checks and repository evidence.">'
+        ),
         "product_name": escape(metadata.product_name),
         "former_product_name": escape(metadata.former_product_name),
         "package_name": escape(metadata.package_name),

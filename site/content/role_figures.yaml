@@ -25,6 +25,31 @@ figures:
     question: Where does your AI assistant work?
     footnote: The four paths are not equally mature.
   background-and-ownership:
-    published: false
+    published: true
+    title: What the Kit handles and what stays with you
+    delegated_heading: Handled for you
+    retained_heading: Stays with you
+    delegated:
+      - Code changes → your chosen assistant
+      - Rules, checks and project memory → the Kit
+    retained:
+      - Requirements and priorities
+      - Design and architecture decisions
+      - Review and approval before merge
+      - Git setup and repair
+    operations: &git_operations Branch, PR, CI waiting, merge → Kit commands
+    footnote: &simulation_boundary The generated-project walkthrough simulates GitHub and a passing CI result.
   kit-conductor:
-    published: false
+    published: true
+    title: You direct the work
+    owner: You set the direction
+    owner_detail: Decide, review and approve.
+    kit: Agentic Project Kit
+    controls:
+      - Rules and contracts
+      - Checks and gates
+      - Repository memory and handoff
+    executor_heading: Choose an assistant
+    repository_heading: Git repository and GitHub
+    operations: *git_operations
+    footnote: *simulation_boundary

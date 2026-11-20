@@ -7,6 +7,7 @@ from pathlib import Path
 from textwrap import wrap
 
 from .site_path_figures import render_mode_figures, render_path_chooser
+from .site_ownership_figures import render_ownership_figure
 from .workflow_modes import modes_for
 
 import yaml
@@ -117,6 +118,18 @@ def render_role_figures(root: Path, workflow_projection: dict, fixture: tuple[di
             else:
                 cards = _cards(name, facts[name], content[name])
                 result[filename] = _render_svg(name, content[name], facts[name], cards, narrow=narrow)
+    for name in ("background-and-ownership", "kit-conductor"):
+        if content[name]["published"] is not True:
+            continue
+        commands = ("agentic-kit work start", "agentic-kit work finish")
+        documented = {step["command"] for step in fixture[0]["steps"]}
+        if not set(commands) <= known & documented:
+            raise ValueError(f"{name} requires the documented generated-project work cycle")
+        for narrow in (False, True):
+            filename = name + ("-narrow" if narrow else "") + ".svg"
+            result[filename] = render_ownership_figure(
+                name, content[name], facts["path-chooser"]["executors"], commands, narrow=narrow,
+            )
     return result
 
 

@@ -486,3 +486,5 @@ input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px 
 
 .role-map img { min-width: 0; }
 .workflow-cards { grid-template-columns: minmax(0, 1fr); }
+.overview:has(> .conductor-map) { grid-template-columns: minmax(0, 1fr); }
+.conductor-map { width: min(100%, 1000px); box-sizing: border-box; }
