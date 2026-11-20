@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Fixed: Figure tests check word boundaries in the rendered SVGs. The generated-project walkthrough reports the verified match between the validated successor package and the five files on its simulated remote.
 - Added: The website generates a ranked path chooser, a sequence diagram for each public work path, and diagrams showing the maintainer's role. The executor table includes Cursor Agent.
 - Changed: The README and website explain how the Kit helps people direct AI coding agents, prioritize the available work paths and state the limits of the generated-project evidence.
 - Changed: Workflow roles and steps now come from one source for the GUI and website. The walkthrough distinguishes the local successor package from repository files, and work start preserves the upstream hint alongside other blockers.

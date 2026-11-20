@@ -15,7 +15,7 @@ figures:
     published: true
     title: The chat ends, the repository remembers
     subtitle: A later session can use the same agent or another one
-    footnote: The successor package is local. Copy it explicitly to another machine. Chat history is not carried over.
+    footnote: In this example, the validated package matches the five files on the simulated remote. Chat history is not carried over.
     arrow_labels:
       writes: writes
       reads: reads

@@ -56,10 +56,10 @@ steps:
     argv: [transfer, chat-switch-complete]
     you: Request a handoff before changing sessions.
     agent: Prepares the successor package after the approved closeout.
-    kit: Writes and validates the successor package; a failed validation blocks.
+    kit: Writes and validates the successor package locally; a failed validation blocks. The package in this example already matches the version on the simulated remote.
   - session: "2"
     title: Start the next session
     command: null
-    you: Give the new session access to the validated package. Copy it explicitly if you switch machines.
-    agent: Reads repository files and the supplied package.
-    kit: Builds the package locally from repository context.
+    you: Give the new session access to the repository and its validated package.
+    agent: Reads repository files and the versioned package.
+    kit: Validates the package locally. The simulated remote has all five package files in this example.

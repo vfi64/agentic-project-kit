@@ -102,7 +102,7 @@ def test_path_figure_uses_executor_names_and_current_site_modes(built_site: Path
     assert [mode["role"] for mode in projection["modes"]] == ["primary", "cost_saving", "emergency", "optional"]
     page = (built_site / "workflows/index.html").read_text(encoding="utf-8")
     assert 'id="mode-remote"' not in page
-    assert "In the GUI, Remote covers the GitHub pull request and CI steps." in page
+    assert "In the GUI, this path appears as Remote. Remote covers the GitHub pull request and CI steps." in page
     assert facts["executors"] == [{"name": row["name"], "path": row["path"]} for row in executors]
     assert facts["modes"] == [row["title"] for row in projection["modes"]]
     for mode, names in facts["mode_tools"].items():
@@ -171,8 +171,7 @@ def test_repository_arrows_and_second_session_are_readable(built_site: Path, nar
     displayed_action = " ".join(labels[index + 1:index + 3]).rstrip("…")
     assert action == displayed_action or action.startswith(displayed_action + " ")
     assert "Reads" in labels[index + 1]
-    assert "package is local" in " ".join(labels)
-    assert "another machine" in " ".join(labels)
+    assert "validated package matches the five files on the simulated remote" in " ".join(labels)
     repository = labels[labels.index("Repository files") + 1:labels.index(arrow_labels["writes"])]
     names: list[str] = []
     for line in repository:
@@ -236,3 +235,23 @@ def test_conductor_uses_reviewed_executors_and_names_simulation(built_site: Path
         labels = " ".join(node.text or "" for node in svg.iter("{http://www.w3.org/2000/svg}text"))
         assert all(row["name"] in labels for row in executors)
         assert "simulates GitHub" in labels
+
+
+def test_rendered_svg_text_preserves_source_word_boundaries(built_site: Path) -> None:
+    from agentic_project_kit.workflow_modes import modes_for
+
+    names = (*FIGURES, *(f"mode-{mode.mode_id.replace('_', '-')}" for mode in modes_for("site")))
+    for name in names:
+        for narrow in (False, True):
+            _, svg = _svg(built_site, name, narrow)
+            for element in svg.iter("{http://www.w3.org/2000/svg}text"):
+                source = element.get("data-source")
+                line = (element.text or "").removesuffix("…")
+                assert source and line, (name, narrow, element.text)
+                boundaries = r"[\s/_-]"
+                assert any(
+                    (match.start() == 0 or re.match(boundaries, source[match.start() - 1]))
+                    and (match.end() == len(source) or re.match(boundaries, source[match.end()])
+                         or re.match(boundaries, line[-1]))
+                    for match in re.finditer(re.escape(line), source)
+                ), (name, narrow, source, line)
