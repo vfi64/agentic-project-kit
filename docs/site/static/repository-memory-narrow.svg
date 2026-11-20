@@ -1,31 +1,40 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 785" role="img" aria-labelledby="title desc">
-<title id="title">The chat ends, the repository remembers</title><desc id="desc">The chat ends, the repository remembers. Session 1: Ask for the change, Check the work, Inspect project health, Hand off. Repository files: AGENTS.md, docs/STATUS.md, docs/handoff/CURRENT_HANDOFF.md, src/demo/__init__.py, tests/test_smoke.py. Session 2: Start the next session. Chat history: not carried over. The repository carries the recorded state; chat history is not carried over.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 872" role="img" aria-labelledby="title desc">
+<title id="title">The chat ends, the repository remembers</title><desc id="desc">The chat ends, the repository remembers. Session 1: Ask for the change, Start the work, Check the work, Inspect project health, Publish, Hand off. Repository files: AGENTS.md, docs/STATUS.md, docs/handoff/CURRENT_HANDOFF.md, src/demo/__init__.py, tests/test_smoke.py. Session 2: Reads AGENTS.md, project state and the successor package.. Chat history: not carried over. The repository carries the recorded state. Chat history is not carried over.</desc>
 <style>.title{font:700 22px sans-serif;fill:#17202a}.sub{font:15px sans-serif;fill:#586674}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.foot{font:14px sans-serif;fill:#586674}</style>
-<metadata>{&quot;init_files&quot;: [&quot;.agentic/DOC_LIFECYCLE.md&quot;, &quot;.agentic/INITIAL_LLM_PROMPT.md&quot;, &quot;.agentic/ci/agentic-gate.yaml&quot;, &quot;.agentic/ci/pre-commit-snippet.yaml&quot;, &quot;.agentic/config.yaml&quot;, &quot;.agentic/dpa/workspace_init_projection.json&quot;, &quot;.agentic/project.yaml&quot;, &quot;.agentic/registries/documentation.yaml&quot;, &quot;.agentic/registries/rules.yaml&quot;, &quot;.agentic/rules/README.md&quot;, &quot;.agentic/state/README.md&quot;, &quot;.agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md&quot;, &quot;.agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md&quot;, &quot;.agentic/state/handoff/README.md&quot;, &quot;.agentic/state/handoff/START_NEW_CHAT_PROMPT.md&quot;, &quot;.agentic/state/handoff/packages/latest/execution_contract.json&quot;, &quot;.agentic/state/handoff/packages/latest/source_manifest.json&quot;, &quot;.agentic/state/handoff/packages/latest/successor_context.yaml&quot;, &quot;.agentic/state/handoff/packages/latest/successor_prompt.md&quot;, &quot;.agentic/state/handoff/packages/latest/validation_report.json&quot;, &quot;.agentic/state/status.md&quot;, &quot;.agentic/todo.yaml&quot;, &quot;.agentic/transfer/inbox/.gitkeep&quot;, &quot;.github/ISSUE_TEMPLATE/agent_regression.yml&quot;, &quot;.github/copilot-instructions.md&quot;, &quot;.github/pull_request_template.md&quot;, &quot;.github/workflows/ci.yml&quot;, &quot;.gitignore&quot;, &quot;.pre-commit-config.yaml&quot;, &quot;AGENTS.md&quot;, &quot;CHANGELOG.md&quot;, &quot;README.md&quot;, &quot;docs/DOCUMENTATION_COVERAGE.yaml&quot;, &quot;docs/LOGGING_AND_EVIDENCE.md&quot;, &quot;docs/PROJECT_START.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/TEST_GATES.md&quot;, &quot;docs/TODO.md&quot;, &quot;docs/architecture/ARCHITECTURE_CONTRACT.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;docs/handoff/STANDARD_AGENT_PROMPT.md&quot;, &quot;pyproject.toml&quot;, &quot;scripts/stage_recent_logs.py&quot;, &quot;sentinel.yaml&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;sessions&quot;: [{&quot;name&quot;: &quot;1&quot;, &quot;steps&quot;: [&quot;Ask for the change&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Hand off&quot;]}, {&quot;name&quot;: &quot;2&quot;, &quot;steps&quot;: [&quot;Start the next session&quot;]}], &quot;shown_files&quot;: [&quot;AGENTS.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;steps&quot;: [&quot;Create the project&quot;, &quot;Ask for the change&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Hand off&quot;, &quot;Start the next session&quot;]}</metadata>
-<rect width="480" height="785" fill="#fff"/>
+<metadata>{&quot;first_session_steps&quot;: [&quot;Ask for the change&quot;, &quot;Start the work&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Publish&quot;, &quot;Hand off&quot;], &quot;init_files&quot;: [&quot;.agentic/DOC_LIFECYCLE.md&quot;, &quot;.agentic/INITIAL_LLM_PROMPT.md&quot;, &quot;.agentic/ci/agentic-gate.yaml&quot;, &quot;.agentic/ci/pre-commit-snippet.yaml&quot;, &quot;.agentic/config.yaml&quot;, &quot;.agentic/dpa/workspace_init_projection.json&quot;, &quot;.agentic/project.yaml&quot;, &quot;.agentic/registries/documentation.yaml&quot;, &quot;.agentic/registries/rules.yaml&quot;, &quot;.agentic/rules/README.md&quot;, &quot;.agentic/state/README.md&quot;, &quot;.agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md&quot;, &quot;.agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md&quot;, &quot;.agentic/state/handoff/README.md&quot;, &quot;.agentic/state/handoff/START_NEW_CHAT_PROMPT.md&quot;, &quot;.agentic/state/handoff/packages/latest/execution_contract.json&quot;, &quot;.agentic/state/handoff/packages/latest/source_manifest.json&quot;, &quot;.agentic/state/handoff/packages/latest/successor_context.yaml&quot;, &quot;.agentic/state/handoff/packages/latest/successor_prompt.md&quot;, &quot;.agentic/state/handoff/packages/latest/validation_report.json&quot;, &quot;.agentic/state/status.md&quot;, &quot;.agentic/todo.yaml&quot;, &quot;.agentic/transfer/inbox/.gitkeep&quot;, &quot;.github/ISSUE_TEMPLATE/agent_regression.yml&quot;, &quot;.github/copilot-instructions.md&quot;, &quot;.github/pull_request_template.md&quot;, &quot;.github/workflows/ci.yml&quot;, &quot;.gitignore&quot;, &quot;.pre-commit-config.yaml&quot;, &quot;AGENTS.md&quot;, &quot;CHANGELOG.md&quot;, &quot;README.md&quot;, &quot;docs/DOCUMENTATION_COVERAGE.yaml&quot;, &quot;docs/LOGGING_AND_EVIDENCE.md&quot;, &quot;docs/PROJECT_START.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/TEST_GATES.md&quot;, &quot;docs/TODO.md&quot;, &quot;docs/architecture/ARCHITECTURE_CONTRACT.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;docs/handoff/STANDARD_AGENT_PROMPT.md&quot;, &quot;pyproject.toml&quot;, &quot;scripts/stage_recent_logs.py&quot;, &quot;sentinel.yaml&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;second_session_action&quot;: &quot;Reads AGENTS.md, project state and the successor package.&quot;, &quot;shown_files&quot;: [&quot;AGENTS.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;steps&quot;: [&quot;Create the project&quot;, &quot;Acknowledge the rules&quot;, &quot;Ask for the change&quot;, &quot;Start the work&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Publish&quot;, &quot;Hand off&quot;, &quot;Start the next session&quot;]}</metadata>
+<rect width="480" height="872" fill="#fff"/>
 <text x="24" y="36" class="title">The chat ends, the repository remembers</text>
 <text x="24" y="65" class="sub">A later session can use the same agent or another one</text>
-<rect x="24" y="98" width="432" height="156" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
+<rect x="24" y="98" width="432" height="202" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
 <text x="38" y="127" class="head">Session 1</text>
 <text x="38" y="154" class="body">Ask for the change</text>
-<text x="38" y="177" class="body">Check the work</text>
-<text x="38" y="200" class="body">Inspect project health</text>
-<text x="38" y="223" class="body">Hand off</text>
-<path d="M0 0v22m-5 -5 5 5 5 -5" transform="translate(240 254)" fill="none" stroke="#586674" stroke-width="1.5"/>
-<rect x="24" y="278" width="432" height="179" rx="10" fill="#fff" stroke="#17202a" stroke-width="1.5"/>
-<text x="38" y="307" class="head">Repository files</text>
-<text x="38" y="334" class="body">AGENTS.md</text>
-<text x="38" y="357" class="body">docs/STATUS.md</text>
-<text x="38" y="380" class="body">docs/handoff/CURRENT_HANDOFF.md</text>
-<text x="38" y="403" class="body">src/demo/__init__.py</text>
-<text x="38" y="426" class="body">tests/test_smoke.py</text>
-<path d="M0 0v22m-5 -5 5 5 5 -5" transform="translate(240 457)" fill="none" stroke="#586674" stroke-width="1.5"/>
-<rect x="24" y="481" width="432" height="87" rx="10" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
-<text x="38" y="510" class="head">Session 2</text>
-<text x="38" y="537" class="body">Start the next session</text>
-<rect x="24" y="592" width="432" height="87" rx="10" fill="#fff" stroke="#586674" stroke-width="1.5" stroke-dasharray="6 5"/>
-<text x="38" y="621" class="head">Chat history</text>
-<text x="38" y="648" class="body">not carried over</text>
-<text x="24" y="719" class="foot">The repository carries the recorded state; chat history</text>
-<text x="24" y="739" class="foot">is not carried over.</text>
+<text x="38" y="177" class="body">Start the work</text>
+<text x="38" y="200" class="body">Check the work</text>
+<text x="38" y="223" class="body">Inspect project health</text>
+<text x="38" y="246" class="body">Publish</text>
+<text x="38" y="269" class="body">Hand off</text>
+<rect x="24" y="656" width="432" height="110" rx="10" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
+<text x="38" y="685" class="head">Session 2</text>
+<text x="38" y="712" class="body">Reads AGENTS.md, project state and the</text>
+<text x="38" y="735" class="body">successor package.</text>
+<rect x="318" y="358" width="138" height="86" rx="10" fill="#fff" stroke="#586674" stroke-width="1.5" stroke-dasharray="6 5"/>
+<text x="332" y="387" class="head">Chat history</text>
+<text x="332" y="414" class="body">not carried over</text>
+<rect x="24" y="358" width="276" height="240" rx="10" fill="#fff" stroke="#17202a" stroke-width="1.5"/>
+<text x="38" y="387" class="head">Repository files</text>
+<rect x="34" y="399" width="256" height="35" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="43" y="420" class="body">AGENTS.md</text>
+<rect x="34" y="444" width="256" height="35" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="43" y="465" class="body">docs/STATUS.md</text>
+<rect x="34" y="489" width="256" height="35" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="43" y="510" class="body">docs/handoff/CURRENT_HANDOFF.md</text>
+<rect x="34" y="534" width="256" height="54" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="43" y="555" class="body">src/demo/__init__.py</text>
+<text x="43" y="574" class="body">tests/test_smoke.py</text>
+<path d="M162 300V355m-5 -6 5 6 5 -6" fill="none" stroke="#0f766e" stroke-width="1.5"/>
+<text x="174" y="334" class="body">writes</text>
+<path d="M162 598V653m-5 -6 5 6 5 -6" fill="none" stroke="#3454d1" stroke-width="1.5"/>
+<text x="174" y="632" class="body">reads</text>
+<text x="24" y="806" class="foot">The repository carries the recorded state. Chat history</text>
+<text x="24" y="826" class="foot">is not carried over.</text>
 </svg>
