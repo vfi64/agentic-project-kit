@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 74f0d4b2df583fc1cdaa6d98fd953ddfcbf60283
-  short: 74f0d4b2
-  subject: Show the full first cycle and explain upstream setup (#2835)
+  full: 9ccee4898be9eab600e88b20c204b9aaf266fb27
+  short: 9ccee489
+  subject: Share workflow modes across the GUI and website (#2837)
 last_substantive_work_state:
-  full: 74f0d4b2df583fc1cdaa6d98fd953ddfcbf60283
-  short: 74f0d4b2
-  subject: Show the full first cycle and explain upstream setup (#2835)
+  full: 9ccee4898be9eab600e88b20c204b9aaf266fb27
+  short: 9ccee489
+  subject: Share workflow modes across the GUI and website (#2837)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
