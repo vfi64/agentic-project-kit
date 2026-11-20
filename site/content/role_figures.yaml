@@ -1,0 +1,23 @@
+schema_version: 1
+kind: website-role-figures
+figures:
+  asked-checked-enforced:
+    published: true
+    title: Asked, checked, enforced
+    subtitle: How strongly a project rule binds an agent
+    footnote: Branch protection is a GitHub setting; the Kit lists it as a setup task.
+    branch_protection: Required checks can block a merge only when a maintainer enables branch protection in GitHub.
+  repository-memory:
+    published: true
+    title: The chat ends, the repository remembers
+    subtitle: A later session can use the same agent or another one
+    footnote: The repository carries the recorded state; chat history is not carried over.
+  path-chooser:
+    published: true
+    title: Which path fits your assistant?
+    subtitle: Choose an available interface for your tool and task
+    footnote: The four paths are not equally mature.
+  background-and-ownership:
+    published: false
+  kit-conductor:
+    published: false

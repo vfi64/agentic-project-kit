@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Added: Source-bound, accessible wide and narrow SVGs explain control levels, repository memory and available work paths on the website.
 - Changed: The website work-cycle table reads as labelled cards on narrow screens; project direction now records the Kit's primary abstraction goal and language-neutral follow-up.
 - Fixed: `init` now creates the complete external operating layer used by `workspace init`, so generated projects can acknowledge rules and run the governed work cycle from their first commit. Historical partial `init` projects retain signed additive recovery; external `work finish` keeps the Kit pin guard and omits the Kit-only release scan. Journey J6 now uses this direct path; a missing handoff source returns a routed failure.
 - Fixed: `generic` and `governance-wrapper` CI no longer installs a Python project or invokes `pytest` for a non-Python repository; Python project types keep their test step.

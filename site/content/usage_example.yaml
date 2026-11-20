@@ -34,7 +34,7 @@ steps:
     command: null
     you: Confirm the handoff text.
     agent: Writes the goal, test results and next step to docs/handoff/CURRENT_HANDOFF.md.
-    kit: No automated successor package is available in a plain init project.
+    kit: This example records the handoff manually in the repository.
   - session: "2"
     title: Start the next session
     command: null
