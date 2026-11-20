@@ -60,6 +60,6 @@ steps:
   - session: "2"
     title: Start the next session
     command: null
-    you: Open a new session with the validated handoff.
-    agent: Reads AGENTS.md, project state and the successor package.
-    kit: Supplies versioned context for the next session.
+    you: Give the new session access to the validated package. Copy it explicitly if you switch machines.
+    agent: Reads repository files and the supplied package.
+    kit: Builds the package locally from repository context.

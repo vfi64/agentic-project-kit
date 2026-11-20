@@ -38,6 +38,15 @@ def test_work_start_reports_missing_upstream_and_passes_after_tracking(tmp_path)
     assert "git branch -u origin/main" in result["next_action"]
     run(project, "git", "config", "--get", "branch.main.merge", expected=1)
 
+    dirty_file = project / "uncommitted.txt"
+    dirty_file.write_text("Uncommitted user work.\n", encoding="utf-8")
+    result = json.loads(run(project, *start, "--json", expected=2))
+    assert "missing_upstream" in result["next_action"]
+    assert "dirty_worktree" in result["next_action"]
+    assert "git branch -u origin/main" in result["next_action"]
+    assert dirty_file.read_text(encoding="utf-8") == "Uncommitted user work.\n"
+    dirty_file.unlink()
+
     run(project, "git", "config", "branch.main.remote", "origin")
     run(project, "git", "config", "branch.main.merge", "refs/heads/unavailable")
     result = json.loads(run(project, *start, "--json", expected=2))

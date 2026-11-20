@@ -98,9 +98,9 @@ def test_site_foundation_build_writes_deterministic_static_artifact(tmp_path: Pa
     assert quickstart["flows"][0]["commands"][0]["qualified_name"] == "agentic-kit init"
     assert workflows["kind"] == "site_workflow_projection"
     assert [mode["id"] for mode in workflows["modes"]] == [
+        "agent-direct",
         "file-transfer",
         "copy-paste",
-        "agent-direct",
         "gui",
     ]
     assert workflows["brownfield"]["status"] == "not_recorded"

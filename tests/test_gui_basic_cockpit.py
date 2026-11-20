@@ -148,7 +148,7 @@ def test_basic_cockpit_modes_keep_file_transfer_as_default_and_copy_paste_as_fal
     assert modes["file_transfer"].selected is True
     assert modes["remote"].is_default is False
     assert modes["copy_paste"].is_default is False
-    assert modes["copy_paste"].role == "Recovery/Fallback"
+    assert modes["copy_paste"].role == "Emergency only"
 
 
 def test_basic_cockpit_modes_are_built_from_shared_definitions() -> None:

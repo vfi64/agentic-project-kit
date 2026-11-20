@@ -13,6 +13,10 @@ project template in `templates.py`. Its first-cycle command list comes from
 generated project with a local Git remote. Agent work and the validated successor
 package are shown across two sessions. Tool-path statements come from dated, sourced rows in
 `site/content/executors.yaml`.
+The website work paths and GUI mode walkthroughs share the definitions in
+`workflow_modes.py`. The website orders its cards by role. Remote is available
+in the GUI for pull request and CI steps.
+
 The Quickstart file map runs that same documented `init` invocation in a
 temporary local project during the build. Its embedded file inventory and
 group counts therefore belong to that exact invocation and Kit version.

@@ -56,6 +56,10 @@ def test_path_figure_uses_executor_names_and_current_site_modes(built_site: Path
     facts = _facts(_svg(built_site, "path-chooser")[1])
     executors = yaml.safe_load((ROOT / "site/content/executors.yaml").read_text(encoding="utf-8"))["executors"]
     projection = json.loads((built_site / "workflows/workflows.json").read_text(encoding="utf-8"))
+    assert [mode["role"] for mode in projection["modes"]] == ["primary", "cost_saving", "emergency", "optional"]
+    page = (built_site / "workflows/index.html").read_text(encoding="utf-8")
+    assert 'id="mode-remote"' not in page
+    assert "In the GUI, Remote covers the GitHub pull request and CI steps." in page
     assert facts["executors"] == [{"name": row["name"], "path": row["path"]} for row in executors]
     assert facts["modes"] == [row["title"] for row in projection["modes"]]
     for mode, names in facts["mode_tools"].items():
@@ -116,8 +120,19 @@ def test_repository_arrows_and_second_session_are_readable(built_site: Path, nar
     action = _facts(svg)["second_session_action"]
     example = yaml.safe_load((ROOT / "site/content/usage_example.yaml").read_text(encoding="utf-8"))
     assert action == next(step["agent"] for step in example["steps"] if str(step["session"]) == "2")
-    assert action.startswith(" ".join(labels[index + 1:index + 3]).rstrip("…"))
+    displayed_action = " ".join(labels[index + 1:index + 3]).rstrip("…")
+    assert action == displayed_action or action.startswith(displayed_action + " ")
     assert "Reads" in labels[index + 1]
+    assert "package is local" in " ".join(labels)
+    assert "another machine" in " ".join(labels)
+    repository = labels[labels.index("Repository files") + 1:labels.index(arrow_labels["writes"])]
+    names: list[str] = []
+    for line in repository:
+        if names and names[-1].endswith(("/", "_", "-")):
+            names[-1] += line
+        else:
+            names.append(line)
+    assert names == _facts(svg)["shown_files"]
     assert len(list(svg.iter(namespace + "path"))) == 2
 
 
