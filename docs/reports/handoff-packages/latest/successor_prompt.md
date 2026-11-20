@@ -468,9 +468,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/use-upstream-role-figures",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "5076c6504d206aa8034f94fc6d659def5982e1fa",
+    "head": "0962c5a89989d5c453e199b1399733d569b70d2e",
     "head_matches_origin_main": false,
-    "head_short": "5076c650",
+    "head_short": "0962c5a8",
     "local_path": "cd /path/to/",
     "origin_main": "6d7fab549000c7afeeca61e9ae0407f78cefb52f",
     "origin_main_short": "6d7fab54",
