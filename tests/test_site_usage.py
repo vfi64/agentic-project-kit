@@ -70,7 +70,7 @@ def test_usage_story_groups_sessions_and_marks_steps_without_commands(tmp_path: 
     assert result.ok, result.report.blockers
     page = (tmp_path / "site/use/index.html").read_text(encoding="utf-8")
     assert page.index("Set up once") < page.index("Session 1") < page.index("Session 2")
-    assert re.search(r"<th scope=\"row\">Ask for the change<br>No Kit command</th>", page)
+    assert re.search(r'<th scope="row" data-label="Step">Ask for the change<br>No Kit command</th>', page)
     assert "No Kit command</code>" not in page
     css = (tmp_path / "site/static/site.css").read_text(encoding="utf-8")
     assert re.search(r"th code\s*,\s*td code\s*\{\s*text-transform:\s*none", css)
@@ -200,18 +200,33 @@ def test_tool_source_links_are_distinct_and_codex_uses_agent_guide(tmp_path: Pat
     assert "https://developers.openai.com/codex/guides/agents-md" in page
 
 
+def _invalid_heading_words(page: str) -> list[str]:
+    allowed = {"Kit", "Codex", "Claude", "GitHub", "Git", "PyPI", "Python", "GUI", "CLI", "Copilot", "Project", "Greenfield", "Brownfield", "Docker", "Transfer", "Paste", "Direct"}
+    invalid = []
+    for heading in re.findall(r"<h[123][^>]*>(.*?)</h[123]>", page, re.S):
+        words = re.findall(r"[A-Za-z][A-Za-z0-9]*", unescape(re.sub(r"<[^>]+>", "", heading)))
+        invalid.extend(word for word in words[1:] if word[0].isupper() and word not in allowed and not word.isupper())
+    return invalid
+
+
+def test_heading_rule_rejects_new_title_case() -> None:
+    assert _invalid_heading_words('<h2>A Fresh Heading</h2>') == ["Fresh", "Heading"]
+
+
 def test_entry_headings_use_sentence_case(tmp_path: Path) -> None:
     result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
     assert result.ok, result.report.blockers
-    old_titles = (
-        "Choose How You Want To Work", "Repository Memory", "Start Locally",
-        "Install in a Virtual Environment", "Adopt Before Initializing",
-        "Create a Governed Project", "Develop the Kit Locally", "Use the Local Image",
-        "Test the PyPI Package Safely with Docker", "Update a Managed Repository",
-        "Read Next", "Public Projections", "Executor Is Replaceable; Repository Governance Persists",
-        "Task To Handoff", "What Persists", "Why YAML And JSON",
-    )
     for relative in ("index.html", "quickstart/index.html", "workflows/index.html", "use/index.html"):
         page = (tmp_path / "site" / relative).read_text(encoding="utf-8")
-        headings = " ".join(re.findall(r"<h[123][^>]*>(.*?)</h[123]>", page, re.S))
-        assert not any(title in headings for title in old_titles), relative
+        assert not _invalid_heading_words(page), (relative, _invalid_heading_words(page))
+
+
+def test_work_cycle_cells_are_labelled_for_mobile_cards(tmp_path: Path) -> None:
+    result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    page = (tmp_path / "site/use/index.html").read_text(encoding="utf-8")
+    cycle = page.split('aria-label="First work cycle"', 1)[1].split("</tbody>", 1)[0].split("<tbody>", 1)[1]
+    for row in re.findall(r"<tr[^>]*>(.*?)</tr>", cycle, re.S):
+        assert all('data-label="' in cell for cell in re.findall(r"<(?:th|td)\b[^>]*>", row))
+    css = (tmp_path / "site/static/site.css").read_text(encoding="utf-8")
+    assert re.search(r"@media\s*\(max-width:\s*640px\)[\s\S]*?First work cycle[\s\S]*?display:\s*block", css)

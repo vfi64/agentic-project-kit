@@ -16335,7 +16335,7 @@
     },
     "status": "active",
     "strategy_counts": {
-      "active": 5
+      "active": 6
     },
     "updated_after_pr": "2591",
     "updated_after_pr_current_main_claimed": false,

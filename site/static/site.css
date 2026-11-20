@@ -412,6 +412,18 @@ th {
 th code, td code { text-transform: none; }
 .session-heading th { text-transform: none; background: var(--panel); font-size: 1rem; }
 
+@media (max-width: 640px) {
+  [aria-label="First work cycle"] table { min-width: 0; }
+  [aria-label="First work cycle"] thead { display: none; }
+  [aria-label="First work cycle"] tbody tr { display: block; margin: 16px 0; border: 1px solid var(--line); }
+  [aria-label="First work cycle"] tbody th,
+  [aria-label="First work cycle"] tbody td { display: block; border: 0; overflow-wrap: anywhere; }
+  [aria-label="First work cycle"] tbody th::before,
+  [aria-label="First work cycle"] tbody td::before { content: attr(data-label); display: block; font-weight: 700; margin-bottom: 4px; }
+  [aria-label="First work cycle"] .session-heading { border: 0; margin-top: 24px; }
+  [aria-label="First work cycle"] .session-heading th::before { display: none; }
+}
+
 @media (max-width: 860px) {
   .page {
     width: min(100% - 24px, 1160px);

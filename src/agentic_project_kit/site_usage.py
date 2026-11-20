@@ -57,7 +57,7 @@ def render_usage_page(root: Path, *, command_names: set[str], product_name: str)
         if session != last_session:
             if last_session is not None and list(session_labels).index(session) < list(session_labels).index(last_session):
                 raise ValueError("usage example step sessions are out of order")
-            step_rows.append(f'<tr class="session-heading"><th colspan="4" scope="colgroup">{session_labels[session]}</th></tr>')
+            step_rows.append(f'<tr class="session-heading"><th colspan="4" scope="colgroup" data-label="Session">{session_labels[session]}</th></tr>')
             last_session = session
         command = step["command"]
         if command is None:
@@ -73,9 +73,10 @@ def render_usage_page(root: Path, *, command_names: set[str], product_name: str)
             command_html = f"<code>{escape(shlex.join(['agentic-kit', *(str(part) for part in argv)]))}</code>"
         step_rows.append(
             "<tr>"
-            f"<th scope=\"row\">{escape(str(step['title']))}<br>{command_html}</th>"
-            f"<td>{escape(str(step['you']))}</td><td>{escape(str(step['agent']))}</td>"
-            f"<td>{escape(str(step['kit']))}</td>"
+            f"<th scope=\"row\" data-label=\"Step\">{escape(str(step['title']))}<br>{command_html}</th>"
+            f"<td data-label=\"What you do\">{escape(str(step['you']))}</td>"
+            f"<td data-label=\"What the agent does\">{escape(str(step['agent']))}</td>"
+            f"<td data-label=\"What the Kit checks\">{escape(str(step['kit']))}</td>"
             "</tr>"
         )
     prompt = BASE_FILES["docs/handoff/STANDARD_AGENT_PROMPT.md"].split("```text\n", 1)[1].split("\n```", 1)[0]

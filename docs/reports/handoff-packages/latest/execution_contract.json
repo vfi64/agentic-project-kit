@@ -73,6 +73,15 @@
           "docs/planning/PROJECT_DIRECTION.yaml",
           "docs/DOCUMENTATION_REGISTRY.yaml"
         ],
+        "id": "language-neutral-projects",
+        "status": "active",
+        "summary": "Language-neutral projects after Init-Übernahme"
+      },
+      {
+        "files": [
+          "docs/planning/PROJECT_DIRECTION.yaml",
+          "docs/DOCUMENTATION_REGISTRY.yaml"
+        ],
         "id": "lifecycle-backlog-clearance",
         "status": "active",
         "summary": "Clear current documentation lifecycle backlog before suite-level strict mode"
@@ -323,14 +332,14 @@
       "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
     ],
     "repo": {
-      "branch": "docs/post-pr2829-handoff-refresh",
+      "branch": "codex/site-planning-20261120",
       "dirty_paths": [],
       "full_name": "vfi64/agentic-project-kit",
-      "head": "35bbc54fdbec42304e3064cab8aa6013c4a6e337",
-      "head_matches_origin_main": true,
+      "head": "bbac4c88e50af7c2058ae948c1cda9e1c055a800",
+      "head_matches_origin_main": false,
       "local_path": "cd /path/to/",
-      "origin_main": "35bbc54fdbec42304e3064cab8aa6013c4a6e337",
-      "worktree_clean": false
+      "origin_main": "7a5eeb5ce88692a0adf01a2303f662d2f3860617",
+      "worktree_clean": true
     },
     "scope": "current-continuation-state"
   },
@@ -510,14 +519,14 @@
   },
   "kind": "successor_execution_contract",
   "repo": {
-    "branch": "docs/post-pr2829-handoff-refresh",
+    "branch": "codex/site-planning-20261120",
     "dirty_paths": [],
     "full_name": "vfi64/agentic-project-kit",
-    "head": "35bbc54fdbec42304e3064cab8aa6013c4a6e337",
-    "head_matches_origin_main": true,
+    "head": "bbac4c88e50af7c2058ae948c1cda9e1c055a800",
+    "head_matches_origin_main": false,
     "local_path": "cd /path/to/",
-    "origin_main": "35bbc54fdbec42304e3064cab8aa6013c4a6e337",
-    "worktree_clean": false
+    "origin_main": "7a5eeb5ce88692a0adf01a2303f662d2f3860617",
+    "worktree_clean": true
   },
   "rules": [
     {
