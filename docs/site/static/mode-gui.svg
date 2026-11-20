@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 365" role="img" aria-labelledby="title desc">
+<title id="title">GUI</title><desc id="desc">You to Kit and repository: Select a Kit action. Command: agentic-kit cockpit select. Kit and repository to You: Check safety and working tree state before running the action. Command: agentic-kit cockpit run.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.note{font:14px sans-serif;fill:#586674}.role{font:700 14px sans-serif;fill:#0f766e}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#0f766e"/></marker></defs>
+<metadata>{&quot;flow&quot;: [{&quot;action&quot;: &quot;Select a Kit action.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;kit&quot;, &quot;command&quot;: &quot;agentic-kit cockpit select&quot;}, {&quot;action&quot;: &quot;Check safety and working tree state before running the action.&quot;, &quot;actor_from&quot;: &quot;kit&quot;, &quot;actor_to&quot;: &quot;you&quot;, &quot;command&quot;: &quot;agentic-kit cockpit run&quot;}], &quot;mode_id&quot;: &quot;gui&quot;}</metadata>
+<rect width="960" height="365" fill="#fff"/>
+<text x="24" y="36" class="title" data-source="GUI">GUI</text>
+<rect x="40" y="62" width="230" height="40" rx="9" fill="#edf3f1" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="55" y="88" class="head" data-source="You">You</text>
+<line x1="155" y1="103" x2="155" y2="344" stroke="#c8d3dc" stroke-dasharray="5 5"/>
+<rect x="359" y="62" width="230" height="40" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="374" y="88" class="head" data-source="AI assistant (optional)">AI assistant (optional)</text>
+<line x1="474" y1="103" x2="474" y2="344" stroke="#c8d3dc" stroke-dasharray="5 5"/>
+<rect x="684" y="62" width="230" height="40" rx="9" fill="#edf3f1" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="699" y="88" class="head" data-source="Kit and repository">Kit and repository</text>
+<line x1="799" y1="103" x2="799" y2="344" stroke="#c8d3dc" stroke-dasharray="5 5"/>
+<text x="24" y="175" class="role" data-source="1">1</text>
+<path d="M155 168 H799" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="65" y="179" width="865" height="42" fill="#fff"/>
+<text x="72" y="195" class="body" data-source="Select a Kit action.">Select a Kit action.</text>
+<text x="72" y="216" class="note" data-source="agentic-kit cockpit select">agentic-kit cockpit select</text>
+<text x="24" y="280" class="role" data-source="2">2</text>
+<path d="M799 273 H155" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="65" y="284" width="865" height="42" fill="#fff"/>
+<text x="72" y="300" class="body" data-source="Check safety and working tree state before running the action.">Check safety and working tree state before running the action.</text>
+<text x="72" y="321" class="note" data-source="agentic-kit cockpit run">agentic-kit cockpit run</text>
+</svg>

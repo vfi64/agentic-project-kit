@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 512" role="img" aria-labelledby="title desc">
+<title id="title">Copy and Paste</title><desc id="desc">AI assistant to You: Review the proposed recovery block. You to Kit and repository: Run the approved block locally. Kit and repository to You: Identify the relevant output with its log header. Command: agentic-kit transfer log-header. You to AI assistant: Paste the relevant output into the chat.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.note{font:14px sans-serif;fill:#586674}.role{font:700 14px sans-serif;fill:#0f766e}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#0f766e"/></marker></defs>
+<metadata>{&quot;flow&quot;: [{&quot;action&quot;: &quot;Review the proposed recovery block.&quot;, &quot;actor_from&quot;: &quot;assistant&quot;, &quot;actor_to&quot;: &quot;you&quot;, &quot;command&quot;: null}, {&quot;action&quot;: &quot;Run the approved block locally.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;kit&quot;, &quot;command&quot;: null}, {&quot;action&quot;: &quot;Identify the relevant output with its log header.&quot;, &quot;actor_from&quot;: &quot;kit&quot;, &quot;actor_to&quot;: &quot;you&quot;, &quot;command&quot;: &quot;agentic-kit transfer log-header&quot;}, {&quot;action&quot;: &quot;Paste the relevant output into the chat.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;assistant&quot;, &quot;command&quot;: null}], &quot;mode_id&quot;: &quot;copy_paste&quot;}</metadata>
+<rect width="960" height="512" fill="#fff"/>
+<text x="24" y="36" class="title" data-source="Copy and Paste">Copy and Paste</text>
+<rect x="40" y="62" width="230" height="40" rx="9" fill="#edf3f1" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="55" y="88" class="head" data-source="You">You</text>
+<line x1="155" y1="103" x2="155" y2="491" stroke="#c8d3dc" stroke-dasharray="5 5"/>
+<rect x="359" y="62" width="230" height="40" rx="9" fill="#edf3f1" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="374" y="88" class="head" data-source="AI assistant">AI assistant</text>
+<line x1="474" y1="103" x2="474" y2="491" stroke="#c8d3dc" stroke-dasharray="5 5"/>
+<rect x="684" y="62" width="230" height="40" rx="9" fill="#edf3f1" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="699" y="88" class="head" data-source="Kit and repository">Kit and repository</text>
+<line x1="799" y1="103" x2="799" y2="491" stroke="#c8d3dc" stroke-dasharray="5 5"/>
+<text x="24" y="175" class="role" data-source="1">1</text>
+<path d="M474 168 H155" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="65" y="179" width="865" height="21" fill="#fff"/>
+<text x="72" y="195" class="body" data-source="Review the proposed recovery block.">Review the proposed recovery block.</text>
+<text x="24" y="259" class="role" data-source="2">2</text>
+<path d="M155 252 H799" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="65" y="263" width="865" height="21" fill="#fff"/>
+<text x="72" y="279" class="body" data-source="Run the approved block locally.">Run the approved block locally.</text>
+<text x="24" y="343" class="role" data-source="3">3</text>
+<path d="M799 336 H155" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="65" y="347" width="865" height="42" fill="#fff"/>
+<text x="72" y="363" class="body" data-source="Identify the relevant output with its log header.">Identify the relevant output with its log header.</text>
+<text x="72" y="384" class="note" data-source="agentic-kit transfer log-header">agentic-kit transfer log-header</text>
+<text x="24" y="448" class="role" data-source="4">4</text>
+<path d="M155 441 H474" fill="none" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="65" y="452" width="865" height="21" fill="#fff"/>
+<text x="72" y="468" class="body" data-source="Paste the relevant output into the chat.">Paste the relevant output into the chat.</text>
+</svg>

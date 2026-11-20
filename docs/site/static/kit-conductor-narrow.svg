@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 701" role="img" aria-labelledby="title desc">
+<title id="title">You direct the work</title><desc id="desc">You set the direction Agentic Project Kit Rules and contracts Checks and gates Repository memory and handoff Codex CLI Claude Code GitHub Copilot cloud agent Browser chat Cursor Branch, PR, CI waiting, merge → Kit commands The generated-project walkthrough simulates GitHub and a passing CI result.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.note{font:14px sans-serif;fill:#586674}.role{font:700 14px sans-serif;fill:#0f766e}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#0f766e"/></marker></defs>
+<metadata>{&quot;commands&quot;: [&quot;agentic-kit work start&quot;, &quot;agentic-kit work finish&quot;], &quot;executors&quot;: [{&quot;name&quot;: &quot;Codex CLI&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Claude Code&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;GitHub Copilot cloud agent&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Browser chat&quot;, &quot;path&quot;: &quot;Copy and Paste or File Transfer&quot;}, {&quot;name&quot;: &quot;Cursor&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}]}</metadata>
+<rect width="480" height="701" fill="#fff"/>
+<text x="24" y="37" class="title" data-source="You direct the work">You direct the work</text>
+<rect x="24" y="73" width="432" height="81" rx="9" fill="#eaeefc" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="41" y="102" class="head" data-source="You set the direction">You set the direction</text>
+<text x="41" y="128" class="body" data-source="Decide, review and approve.">Decide, review and approve.</text>
+<path d="M240 154 V176" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="24" y="179" width="432" height="133" rx="9" fill="#e6f2f0" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="41" y="208" class="head" data-source="Agentic Project Kit">Agentic Project Kit</text>
+<text x="41" y="234" class="body" data-source="Rules and contracts">Rules and contracts</text>
+<text x="41" y="260" class="body" data-source="Checks and gates">Checks and gates</text>
+<text x="41" y="286" class="body" data-source="Repository memory and handoff">Repository memory and handoff</text>
+<path d="M240 312 V334" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="24" y="337" width="432" height="185" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="41" y="366" class="head" data-source="Choose an assistant">Choose an assistant</text>
+<text x="41" y="392" class="body" data-source="Codex CLI">Codex CLI</text>
+<text x="41" y="418" class="body" data-source="Claude Code">Claude Code</text>
+<text x="41" y="444" class="body" data-source="GitHub Copilot cloud agent">GitHub Copilot cloud agent</text>
+<text x="41" y="470" class="body" data-source="Browser chat">Browser chat</text>
+<text x="41" y="496" class="body" data-source="Cursor">Cursor</text>
+<path d="M240 522 V544" stroke="#0f766e" stroke-width="1.5" marker-end="url(#arrow)"/>
+<rect x="24" y="547" width="432" height="81" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="41" y="576" class="head" data-source="Git repository and GitHub">Git repository and GitHub</text>
+<text x="41" y="602" class="body" data-source="Branch, PR, CI waiting, merge → Kit commands">Branch, PR, CI waiting, merge → Kit commands</text>
+<text x="24" y="655" class="note" data-source="The generated-project walkthrough simulates GitHub and a passing CI result.">The generated-project walkthrough simulates GitHub</text>
+<text x="24" y="676" class="note" data-source="The generated-project walkthrough simulates GitHub and a passing CI result.">and a passing CI result.</text>
+</svg>

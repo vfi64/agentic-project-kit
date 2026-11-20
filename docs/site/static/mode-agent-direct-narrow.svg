@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 432" role="img" aria-labelledby="title desc">
+<title id="title">Agent Direct</title><desc id="desc">You to AI assistant: State the task and its limits. AI assistant to Kit and repository: Find an applicable Kit command. Command: agentic-kit command-for. AI assistant to You: Present the change and its checks for review. You to AI assistant: Approve or reject the change.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.note{font:14px sans-serif;fill:#586674}.role{font:700 14px sans-serif;fill:#0f766e}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#0f766e"/></marker></defs>
+<metadata>{&quot;flow&quot;: [{&quot;action&quot;: &quot;State the task and its limits.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;assistant&quot;, &quot;command&quot;: null}, {&quot;action&quot;: &quot;Find an applicable Kit command.&quot;, &quot;actor_from&quot;: &quot;assistant&quot;, &quot;actor_to&quot;: &quot;kit&quot;, &quot;command&quot;: &quot;agentic-kit command-for&quot;}, {&quot;action&quot;: &quot;Present the change and its checks for review.&quot;, &quot;actor_from&quot;: &quot;assistant&quot;, &quot;actor_to&quot;: &quot;you&quot;, &quot;command&quot;: null}, {&quot;action&quot;: &quot;Approve or reject the change.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;assistant&quot;, &quot;command&quot;: null}], &quot;mode_id&quot;: &quot;agent_direct&quot;}</metadata>
+<rect width="480" height="432" fill="#fff"/>
+<text x="24" y="36" class="title" data-source="Agent Direct">Agent Direct</text>
+<rect x="24" y="63" width="432" height="74" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="86" class="role" data-source="1. You → AI assistant">1. You → AI assistant</text>
+<text x="36" y="116" class="body" data-source="State the task and its limits.">State the task and its limits.</text>
+<rect x="24" y="147" width="432" height="95" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="170" class="role" data-source="2. AI assistant → Kit and repository">2. AI assistant → Kit and repository</text>
+<text x="36" y="200" class="body" data-source="Find an applicable Kit command.">Find an applicable Kit command.</text>
+<text x="36" y="221" class="note" data-source="agentic-kit command-for">agentic-kit command-for</text>
+<rect x="24" y="252" width="432" height="74" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="275" class="role" data-source="3. AI assistant → You">3. AI assistant → You</text>
+<text x="36" y="305" class="body" data-source="Present the change and its checks for review.">Present the change and its checks for review.</text>
+<rect x="24" y="336" width="432" height="74" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="359" class="role" data-source="4. You → AI assistant">4. You → AI assistant</text>
+<text x="36" y="389" class="body" data-source="Approve or reject the change.">Approve or reject the change.</text>
+</svg>

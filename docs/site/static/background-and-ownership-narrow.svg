@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 534" role="img" aria-labelledby="title desc">
+<title id="title">What the Kit handles and what stays with you</title><desc id="desc">Code changes → your chosen assistant Rules, checks and project memory → the Kit Branch, PR, CI waiting, merge → Kit commands Requirements and priorities Design and architecture decisions Review and approval before merge Git setup and repair The generated-project walkthrough simulates GitHub and a passing CI result.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.note{font:14px sans-serif;fill:#586674}.role{font:700 14px sans-serif;fill:#0f766e}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#0f766e"/></marker></defs>
+<metadata>{&quot;commands&quot;: [&quot;agentic-kit work start&quot;, &quot;agentic-kit work finish&quot;], &quot;executors&quot;: [{&quot;name&quot;: &quot;Codex CLI&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Claude Code&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;GitHub Copilot cloud agent&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Browser chat&quot;, &quot;path&quot;: &quot;Copy and Paste or File Transfer&quot;}, {&quot;name&quot;: &quot;Cursor&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}]}</metadata>
+<rect width="480" height="534" fill="#fff"/>
+<text x="24" y="37" class="title" data-source="What the Kit handles and what stays with you">What the Kit handles and what stays</text>
+<text x="24" y="58" class="title" data-source="What the Kit handles and what stays with you">with you</text>
+<rect x="24" y="98" width="432" height="158" rx="9" fill="#e6f2f0" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="40" y="128" class="head" data-source="Handled for you">Handled for you</text>
+<text x="40" y="159" class="body" data-source="Code changes → your chosen assistant">Code changes → your chosen assistant</text>
+<text x="40" y="193" class="body" data-source="Rules, checks and project memory → the Kit">Rules, checks and project memory → the Kit</text>
+<text x="40" y="227" class="body" data-source="Branch, PR, CI waiting, merge → Kit commands">Branch, PR, CI waiting, merge → Kit commands</text>
+<rect x="24" y="269" width="432" height="192" rx="9" fill="#eaeefc" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="40" y="299" class="head" data-source="Stays with you">Stays with you</text>
+<text x="40" y="330" class="body" data-source="Requirements and priorities">Requirements and priorities</text>
+<text x="40" y="364" class="body" data-source="Design and architecture decisions">Design and architecture decisions</text>
+<text x="40" y="398" class="body" data-source="Review and approval before merge">Review and approval before merge</text>
+<text x="40" y="432" class="body" data-source="Git setup and repair">Git setup and repair</text>
+<text x="24" y="488" class="note" data-source="The generated-project walkthrough simulates GitHub and a passing CI result.">The generated-project walkthrough simulates GitHub</text>
+<text x="24" y="509" class="note" data-source="The generated-project walkthrough simulates GitHub and a passing CI result.">and a passing CI result.</text>
+</svg>
