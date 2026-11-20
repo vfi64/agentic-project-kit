@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 9ccee4898be9eab600e88b20c204b9aaf266fb27
-  short: 9ccee489
-  subject: Share workflow modes across the GUI and website (#2837)
+  full: 5ee6dda1c3e1186992ece5e09fa15a853cec4756
+  short: 5ee6dda1
+  subject: Explain the Kit as a control layer for AI-assisted work (#2839)
 last_substantive_work_state:
-  full: 9ccee4898be9eab600e88b20c204b9aaf266fb27
-  short: 9ccee489
-  subject: Share workflow modes across the GUI and website (#2837)
+  full: 5ee6dda1c3e1186992ece5e09fa15a853cec4756
+  short: 5ee6dda1
+  subject: Explain the Kit as a control layer for AI-assisted work (#2839)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
