@@ -468,9 +468,9 @@ Wenn der Bootstrap grün ist:
   "repo": {
     "branch": "codex/workflow-modes-and-followups",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "99a98d5402f848460c76a0fb5d371e569a2ee274",
+    "head": "68295b26639567cada88aec47c2741afc7a3678a",
     "head_matches_origin_main": false,
-    "head_short": "99a98d54",
+    "head_short": "68295b26",
     "local_path": "cd /path/to/",
     "origin_main": "3ccd61a59c5eef5b3c362010ca3b5b6aa514c4ef",
     "origin_main_short": "3ccd61a5",
