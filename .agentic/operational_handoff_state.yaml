@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 2d695d994900143971448d761e7d2bb1779c4f72
-  short: 2d695d99
-  subject: Improve mobile usage page and update project direction (#2831)
+  full: 181ca6d479a316f3e988a1ae2ba23fab363a65d1
+  short: 181ca6d4
+  subject: Explain Kit roles with generated website diagrams (#2833)
 last_substantive_work_state:
-  full: 2d695d994900143971448d761e7d2bb1779c4f72
-  short: 2d695d99
-  subject: Improve mobile usage page and update project direction (#2831)
+  full: 181ca6d479a316f3e988a1ae2ba23fab363a65d1
+  short: 181ca6d4
+  subject: Explain Kit roles with generated website diagrams (#2833)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."
