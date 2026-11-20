@@ -1,6 +1,6 @@
 # Agentic Project Kit
 
-Current version: 1.4.0
+Current version: 1.4.1
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
 
 Generated website: <https://vfi64.github.io/agentic-project-kit/>. Start with the
@@ -840,8 +840,8 @@ These repository settings are maintainer-owned and are not changed by the packag
 
 ## Current status
 
-Prepared release: `v1.4.0`; GitHub Release, tag publication, PyPI publication, and Zenodo version DOI verification are complete.
-Version `1.4.0` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
+Prepared release: `v1.4.1`; GitHub Release, tag publication, PyPI publication, and Zenodo version DOI verification are pending.
+Version `1.4.1` is the current release line prepared as a safety baseline after the pre-GUI transfer-wrapper, output-discipline, GUI wrapper-gating, PR diagnostics, and release-plan guard hardening work.
 Current verified release: `v1.4.0` with Zenodo version DOI `10.5281/zenodo.24250696`.
 Earlier verified version-specific DOI notes are maintained in `docs/releases/VERIFIED_RELEASES.md`; historical release records remain in this section and the verified release archive.
 

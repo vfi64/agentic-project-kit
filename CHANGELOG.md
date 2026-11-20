@@ -1,5 +1,8 @@
 ## Unreleased
 
+## v1.4.1 - 2026-11-20
+
+- Zenodo DOI verification pending for v1.4.1.
 - Fixed: The Agent Direct card and sequence show the tested Use workflow. Wide diagrams put each action and command at its arrow, and labels describe the sending actor.
 - Fixed: Figure tests check word boundaries in the rendered SVGs. The generated-project walkthrough reports the verified match between the validated successor package and the five files on its simulated remote.
 - Added: The website generates a ranked path chooser, a sequence diagram for each public work path, and diagrams showing the maintainer's role. The executor table includes Cursor Agent.
