@@ -39,9 +39,9 @@ Critical rule IDs:
 
 ## Current continuation state
 
-- branch: `docs/post-pr2829-handoff-refresh`
-- head_matches_origin_main: `True`
-- worktree_clean: `False`
+- branch: `codex/site-planning-20261120`
+- head_matches_origin_main: `False`
+- worktree_clean: `True`
 - open_tasks_source: `docs/planning/PROJECT_DIRECTION.yaml`
 - document_registry_source: `docs/DOCUMENTATION_REGISTRY.yaml`
 - Current state is volatile continuation data, not a durable rule source.
@@ -202,6 +202,15 @@ Wenn der Bootstrap grün ist:
       "id": "documentation-artifact-governance-os",
       "status": "planned",
       "summary": "Convert document, artifact, evidence, and policy control into lifecycle-aware governance for governance"
+    },
+    {
+      "files": [
+        "docs/planning/PROJECT_DIRECTION.yaml",
+        "docs/DOCUMENTATION_REGISTRY.yaml"
+      ],
+      "id": "language-neutral-projects",
+      "status": "active",
+      "summary": "Language-neutral projects after Init-Übernahme"
     },
     {
       "files": [
@@ -457,15 +466,15 @@ Wenn der Bootstrap grün ist:
     "release_publish_core must not remain able to execute removed ./ns release routes after the ns entrypoint removal."
   ],
   "repo": {
-    "branch": "docs/post-pr2829-handoff-refresh",
+    "branch": "codex/site-planning-20261120",
     "full_name": "vfi64/agentic-project-kit",
-    "head": "35bbc54fdbec42304e3064cab8aa6013c4a6e337",
-    "head_matches_origin_main": true,
-    "head_short": "35bbc54f",
+    "head": "bbac4c88e50af7c2058ae948c1cda9e1c055a800",
+    "head_matches_origin_main": false,
+    "head_short": "bbac4c88",
     "local_path": "cd /path/to/",
-    "origin_main": "35bbc54fdbec42304e3064cab8aa6013c4a6e337",
-    "origin_main_short": "35bbc54f",
-    "worktree_clean": false
+    "origin_main": "7a5eeb5ce88692a0adf01a2303f662d2f3860617",
+    "origin_main_short": "7a5eeb5c",
+    "worktree_clean": true
   }
 }
 ```
