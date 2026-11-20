@@ -1005,90 +1005,30 @@ def _build_workflow_projection(
     root: Path,
     command_catalog: SiteCommandCatalog | None,
 ) -> dict[str, object]:
+    from .workflow_modes import ROLE_LABELS, modes_for
+
     command_catalog = command_catalog or SiteCommandCatalog(entries=())
     brownfield = _read_b1_evidence(root)
     return {
         "schema_version": 1,
         "kind": "site_workflow_projection",
-        "source": "site_generator.py",
+        "source": "workflow_modes.py",
         "modes": [
             {
-                "id": "file-transfer",
-                "title": "File Transfer",
-                "best_for": "Web or hosted LLMs without direct terminal or repository access.",
-                "summary": (
-                    "The human and the LLM exchange bounded Kit transfer files while the "
-                    "repository remains the source of truth."
-                ),
-                "commands": _quickstart_commands(
-                    command_catalog,
-                    (
-                        "agentic-kit transfer read-user-task",
-                        "agentic-kit transfer submit-user-task",
-                        "agentic-kit transfer remote-next",
-                        "agentic-kit transfer chat-switch-complete",
-                    ),
-                ),
-            },
-            {
-                "id": "copy-paste",
-                "title": "Copy and Paste",
-                "best_for": "Small manual web-LLM sessions where a file-transfer carrier is not needed.",
-                "summary": (
-                    "The LLM proposes a bounded terminal block, the human runs it, and the "
-                    "important output is returned to the conversation."
-                ),
-                "commands": _quickstart_commands(
-                    command_catalog,
-                    (
-                        "agentic-kit workflow request",
-                        "agentic-kit workflow run",
-                        "agentic-kit transfer log-header",
-                        "agentic-kit transfer chat-switch-complete",
-                    ),
-                ),
-            },
-            {
-                "id": "agent-direct",
-                "title": "Agent Direct",
-                "best_for": "Executors with controlled repository and terminal access.",
-                "summary": (
-                    "The executor can run Kit commands directly, but repository governance, "
-                    "evidence, safety classes and handoff state remain separate from the agent."
-                ),
-                "commands": _quickstart_commands(
-                    command_catalog,
-                    (
-                        "agentic-kit command-for",
-                        "agentic-kit transfer remote-work-start",
-                        "agentic-kit transfer pr-create-complete",
-                        "agentic-kit transfer protected-diff-plan",
-                        "agentic-kit transfer chat-switch-complete",
-                    ),
-                ),
-            },
-            {
-                "id": "gui",
-                "title": "GUI",
-                "best_for": "Local operator visibility over manifest-backed actions and readiness checks.",
-                "summary": (
-                    "The GUI entry point is available, but full parity with every CLI command "
-                    "is not claimed. The manifest remains the command authority."
-                ),
-                "commands": _quickstart_commands(
-                    command_catalog,
-                    (
-                        "agentic-kit gui-readiness-gate",
-                        "agentic-kit cockpit run",
-                        "agentic-kit cockpit select",
-                    ),
-                ),
-            },
+                "id": mode.mode_id.replace("_", "-"),
+                "title": mode.label,
+                "role": mode.role,
+                "role_label": ROLE_LABELS[mode.role],
+                "best_for": mode.best_for,
+                "summary": mode.summary,
+                "commands": _quickstart_commands(command_catalog, mode.commands),
+            }
+            for mode in modes_for("site")
         ],
         "core_workflow": [
             {
                 "title": "Select the interaction mode",
-                "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the GUI surface.",
+                "detail": "Choose the work path that fits your assistant and access.",
             },
             {
                 "title": "Inspect before mutation",
@@ -1174,6 +1114,7 @@ def _workflow_mode_cards(projection: dict[str, object]) -> str:
             '        <article class="panel workflow-card" id="mode-'
             f'{escape(_string(mode.get("id")))}">'
             f"<h2>{escape(_string(mode.get('title')))}</h2>"
+            f'<p class="eyebrow">{escape(_string(mode.get("role_label")))}</p>'
             f"<p>{escape(_string(mode.get('summary')))}</p>"
             f"<p><strong>Best for:</strong> {escape(_string(mode.get('best_for')))}</p>"
             '<ul class="summary-list command-flow">'

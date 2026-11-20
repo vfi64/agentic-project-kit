@@ -931,7 +931,7 @@ def work_start_command(
                 sync_result = json.loads(str(steps[0]["stdout"]))
             except ValueError:
                 sync_result = None
-            if isinstance(sync_result, dict) and sync_result.get("blockers") == ["missing_upstream"]:
+            if isinstance(sync_result, dict) and "missing_upstream" in (sync_result.get("blockers") or []):
                 upstream_action = str(sync_result.get("next_action") or "")
                 steps[0]["next_command_reason"] = upstream_action
         if _workflow_steps_ok(steps):

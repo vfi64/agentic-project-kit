@@ -69,6 +69,20 @@ text = "not a command selection"
     assert rows[1]["unresolved"] is True
 
 
+def test_website_selection_resolves_shared_site_mode_commands():
+    source = '[_quickstart_commands(catalog, mode.commands) for mode in modes_for("site")]'
+    mode_source = """
+WORKFLOW_MODES = (
+    WorkflowMode(surfaces=("site", "gui"), commands=("known", "missing")),
+    WorkflowMode(surfaces=("gui",), commands=("private",)),
+)
+"""
+    rows = AUDIT.website_selections(source, {"known"}, mode_source)
+    assert rows == [{"line": 1, "commands": ["known", "missing"], "missing": ["missing"]}]
+    computed = mode_source.replace('("known", "missing")', "compute()")
+    assert AUDIT.website_selections(source, {"known"}, computed) == [{"line": 1, "unresolved": True}]
+
+
 def test_pinned_source_refuses_product_drift(monkeypatch):
     monkeypatch.setattr(
         AUDIT, "checked", lambda argv, _: "src/changed.py" if "diff" in argv else "a" * 40

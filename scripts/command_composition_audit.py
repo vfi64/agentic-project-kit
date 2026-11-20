@@ -58,10 +58,43 @@ def inventory_diff(current_commands, historical):
     }
 
 
-def website_selections(source, known):
-    """Only literal argument tuples to the actual selection helper; no execution."""
+def _website_mode_commands(source):
+    """Read the literal site selections from the shared definitions without importing them."""
+    table = next(
+        node.value for node in ast.parse(source).body
+        if isinstance(node, ast.Assign)
+        and any(isinstance(target, ast.Name) and target.id == "WORKFLOW_MODES" for target in node.targets)
+    )
+    if not isinstance(table, ast.Tuple):
+        raise ValueError("computed workflow mode table")
+    for entry in table.elts:
+        if not isinstance(entry, ast.Call) or not isinstance(entry.func, ast.Name) or entry.func.id != "WorkflowMode":
+            raise ValueError("computed workflow mode")
+        fields = {keyword.arg: keyword.value for keyword in entry.keywords}
+        surfaces = ast.literal_eval(fields["surfaces"])
+        if not isinstance(surfaces, tuple) or not set(surfaces) <= {"site", "gui"}:
+            raise ValueError("invalid workflow mode surfaces")
+        if "site" in surfaces:
+            commands = ast.literal_eval(fields["commands"])
+            if not isinstance(commands, tuple) or not all(isinstance(name, str) for name in commands):
+                raise ValueError("invalid workflow mode commands")
+            yield commands
+
+
+def website_selections(source, known, mode_source=None):
+    """Resolve literal selections and the shared website mode table without execution."""
     selections = []
-    for node in ast.walk(ast.parse(source)):
+    tree = ast.parse(source)
+    site_mode_calls = set()
+    for comp in (node for node in ast.walk(tree) if isinstance(node, ast.ListComp)):
+        if len(comp.generators) != 1:
+            continue
+        generator = comp.generators[0]
+        if ast.unparse(generator.target) == "mode" and ast.unparse(generator.iter) in {
+            "modes_for('site')", 'modes_for("site")',
+        } and not generator.ifs:
+            site_mode_calls.update(child for child in ast.walk(comp.elt) if isinstance(child, ast.Call))
+    for node in ast.walk(tree):
         if not (
             isinstance(node, ast.Call)
             and isinstance(node.func, ast.Name)
@@ -70,8 +103,11 @@ def website_selections(source, known):
         ):
             continue
         try:
-            names = ast.literal_eval(node.args[1])
-        except (ValueError, TypeError):
+            if mode_source is not None and node in site_mode_calls and ast.unparse(node.args[1]) == "mode.commands":
+                names = tuple(dict.fromkeys(name for commands in _website_mode_commands(mode_source) for name in commands))
+            else:
+                names = ast.literal_eval(node.args[1])
+        except (ValueError, TypeError, KeyError, StopIteration):
             selections.append({"line": node.lineno, "unresolved": True})
             continue
         selections.append(
@@ -309,7 +345,9 @@ def generate(root, source_commit):
         "shared_core_candidates": shared,
         "same_callback_alias_groups": [sorted(v) for v in by_fid.values() if len(v) > 1],
         "website_selections": website_selections(
-            (root / "src/agentic_project_kit/site_generator.py").read_text(), known
+            (root / "src/agentic_project_kit/site_generator.py").read_text(), known,
+            (root / "src/agentic_project_kit/workflow_modes.py").read_text()
+            if (root / "src/agentic_project_kit/workflow_modes.py").is_file() else None,
         ),
         "data_driven_tables": tables,
         "dynamic_dispatch_sites": dispatch_sites,

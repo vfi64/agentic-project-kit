@@ -28,6 +28,8 @@ from agentic_project_kit.gui_transfer_contract import (
     fetch_gui_transfer_ref_args,
     remote_gui_task_spec,
 )
+from agentic_project_kit.workflow_modes import modes_for
+
 REMOTE_STATUS_COMMAND_ARGS = ("transfer", "patch-cycle-status", "--json")
 FILE_TRANSFER_CONTINUE_COMMAND_ARGS = ("transfer", "continue", "--json")
 POSIX_AGENTIC_KIT = "agentic-kit"
@@ -116,11 +118,11 @@ def communication_mode_code(mode: str) -> str:
 
 def communication_mode_label(mode: str) -> str:
     normalized = normalize_communication_mode(mode)
-    return {
-        "remote": "Remote: GitHub/PR/CI",
-        "file_transfer": "File Transfer: Transfer files",
-        "copy_paste": "Copy-and-Paste: Recovery/Fallback",
-    }[normalized]
+    return next(
+        entry.gui.transport_label
+        for entry in modes_for("gui")
+        if entry.mode_id == normalized and entry.gui is not None
+    )
 
 
 def standard_command_args_for_communication_mode(mode: str) -> tuple[str, ...]:
@@ -191,7 +193,7 @@ def communication_reply_contract(mode: str) -> dict[str, object]:
     mode_map = {
         "a": {
             "mode": "remote",
-            "label": "Remote: GitHub/PR/CI",
+            "label": communication_mode_label("remote"),
             "standard_local_command": list(REMOTE_STATUS_COMMAND),
             "llm_response": (
                 "Finish the remote work through repo-backed PR/CI/evidence mechanisms, "
@@ -204,7 +206,7 @@ def communication_reply_contract(mode: str) -> dict[str, object]:
         },
         "b": {
             "mode": "file_transfer",
-            "label": "File Transfer: Transfer files",
+            "label": communication_mode_label("file_transfer"),
             "standard_local_command": list(TRANSFER_CONTINUE_COMMAND),
             "llm_response": (
                 "Publish a fresh active transfer order through the existing agentic-kit "
@@ -232,7 +234,7 @@ def communication_reply_contract(mode: str) -> dict[str, object]:
         },
         "c": {
             "mode": "copy_paste",
-            "label": "Copy-and-Paste: Recovery/Fallback",
+            "label": communication_mode_label("copy_paste"),
             "standard_local_command": [],
             "llm_response": (
                 "Reply with one complete copy-and-paste terminal block and no hidden side protocol. "

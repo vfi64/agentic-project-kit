@@ -291,8 +291,11 @@ def sync_main(
                 item["payload_result_status"] = result_status
             if result_status in {"BLOCK", "BLOCKED", "FAIL", "FAILED", "ERROR"}:
                 item["ok"] = False
-            if name == "normalize-session" and payload.get("blockers") == ["missing_upstream"]:
-                item["blocker"] = "missing_upstream"
+            repo = payload.get("repo")
+            detail = payload.get("blockers")
+            if (name == "normalize-session" and isinstance(repo, dict) and repo.get("branch") == main_branch
+                    and isinstance(detail, list) and "missing_upstream" in detail):
+                item["blockers"] = detail
                 item["next_action"] = str(payload.get("next_action") or "")
         steps.append(item)
         return item
@@ -316,9 +319,10 @@ def sync_main(
     step("normalize-session", [agentic_kit, "transfer", "normalize-session", "--json"])
 
     blockers = [
-        str(item.get("blocker") or (str(item["name"]) + "_failed"))
+        blocker
         for item in steps
         if item["returncode"] != 0 or item.get("ok") is False
+        for blocker in item.get("blockers", [str(item["name"]) + "_failed"])
     ]
     status = "PASS" if not blockers else "FAIL"
     final_signal = "d" if status == "PASS" else "f"
@@ -327,8 +331,8 @@ def sync_main(
         if status == "PASS"
         else "Inspect sync-main blockers before continuing: " + ", ".join(blockers)
     )
-    if blockers == ["missing_upstream"]:
-        next_action = str(steps[-1]["next_action"])
+    if "missing_upstream" in blockers:
+        next_action += ". " + str(steps[-1]["next_action"])
     payload = {
         "schema_version": 1,
         "kind": "transfer_sync_main_result",
