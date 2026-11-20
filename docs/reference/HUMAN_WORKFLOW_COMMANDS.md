@@ -452,8 +452,8 @@ The command stops with `AWAITING_APPROVAL` at these gates:
 
 If B4 stops because a release PR check failed, `next_action` names the check
 and includes its link when GitHub returns it for the same PR head. The result
-uses the human-action marker. A CI wait timeout retains its separate recovery
-route.
+uses the human-action marker. Cancelled or timed-out checks and a CI wait
+timeout retain the recovery route.
 
 Each gate prints an `approval_signature` over the exact branch, paths, tag,
 target commit, or workflow it will affect. A rerun with `--execute

@@ -206,13 +206,19 @@ class ReleaseRun:
         if observation["result_status"] == "PASS" and isinstance(snapshot, dict) and snapshot.get("headRefOid") == head:
             from agentic_project_kit.github_check_policy import is_failed_check_conclusion
 
+            interrupted = set()
             for check in snapshot.get("statusCheckRollup") or []:
                 if not isinstance(check, dict):
                     continue
                 name = check.get("name") or check.get("context")
-                if name and is_failed_check_conclusion(check.get("conclusion") or check.get("state") or ""):
+                conclusion = check.get("conclusion") or check.get("state") or ""
+                if name and conclusion in {"CANCELLED", "TIMED_OUT"}:
+                    interrupted.add(name)
+                elif name and is_failed_check_conclusion(conclusion):
                     url = check.get("detailsUrl") or check.get("targetUrl")
                     checks.append(f"{name} ({url})" if url else str(name))
+            if not checks and interrupted and interrupted.issuperset(names):
+                return ""
         details = ", ".join(checks or names) or "check details unavailable"
         return f"Release PR #{pr} has failed CI: {details}. Inspect and resolve the failure before continuing."
 

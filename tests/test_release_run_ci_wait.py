@@ -30,8 +30,10 @@ def _completed(argv, stdout='{"result_status": "PASS"}\n', rc=0):
 
 # --- the wait -----------------------------------------------------------------------------------
 
-@pytest.mark.parametrize("ci_state", ["FAILED", "PENDING"])
-def test_release_b4_routes_red_ci_to_a_human_and_keeps_timeout_recovery(tmp_path, ci_state):
+@pytest.mark.parametrize("ci_state, conclusion", [
+    ("FAILED", "FAILURE"), ("FAILED", "CANCELLED"), ("FAILED", "TIMED_OUT"), ("PENDING", None),
+])
+def test_release_b4_routes_only_red_ci_to_a_human(tmp_path, ci_state, conclusion):
     _workspace(tmp_path)
     head = "a" * 40
     check = "test-shard (1)"
@@ -45,7 +47,7 @@ def test_release_b4_routes_red_ci_to_a_human_and_keeps_timeout_recovery(tmp_path
                 return _completed(command, json.dumps({
                     "headRefOid": head,
                     "statusCheckRollup": [
-                        {"name": check, "status": "COMPLETED", "conclusion": "FAILURE", "detailsUrl": url},
+                        {"name": check, "status": "COMPLETED", "conclusion": conclusion, "detailsUrl": url},
                         {"name": "test-shard (2)", "status": "COMPLETED", "conclusion": "SUCCESS"},
                     ],
                 }))
@@ -79,7 +81,7 @@ def test_release_b4_routes_red_ci_to_a_human_and_keeps_timeout_recovery(tmp_path
     ), runner=runner)
     assert result["result_status"] == "BLOCKED"
     assert result["current_step"] == "B4"
-    if ci_state == "FAILED":
+    if conclusion == "FAILURE":
         assert result["next_command_kind"] == "human"
         assert result["next_command"] == ""
         assert check in result["next_action"]
@@ -87,7 +89,7 @@ def test_release_b4_routes_red_ci_to_a_human_and_keeps_timeout_recovery(tmp_path
         assert "test-shard (2)" not in result["next_action"]
     else:
         assert "release run" in result["next_command"]
-        assert not any(cmd[:3] == ["gh", "pr", "view"] for cmd in runner.calls)
+        assert any(cmd[:3] == ["gh", "pr", "view"] for cmd in runner.calls) == (ci_state == "FAILED")
 
 
 def test_work_finish_waits_900_seconds_by_default_and_passes_an_explicit_wait(monkeypatch):
