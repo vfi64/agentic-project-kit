@@ -6,6 +6,9 @@ import json
 from pathlib import Path
 from textwrap import wrap
 
+from .site_path_figures import render_mode_figures, render_path_chooser
+from .workflow_modes import modes_for
+
 import yaml
 
 
@@ -93,6 +96,7 @@ def collect_role_figure_facts(root: Path, workflow_projection: dict, fixture: tu
         "path-chooser": {
             "executors": [{"name": row["name"], "path": row["path"]} for row in executors],
             "modes": [row["title"] for row in modes],
+            "roles": {row["title"]: row["role"] for row in modes},
             "mode_tools": {mode["title"]: [row["name"] for row in executors if mode["title"] in row["path"].split(" or ")]
                            for mode in modes},
         },
@@ -102,11 +106,17 @@ def collect_role_figure_facts(root: Path, workflow_projection: dict, fixture: tu
 def render_role_figures(root: Path, workflow_projection: dict, fixture: tuple[dict, list[str], str]) -> dict[str, str]:
     content = yaml.safe_load((root / "site/content/role_figures.yaml").read_text(encoding="utf-8"))["figures"]
     facts = collect_role_figure_facts(root, workflow_projection, fixture)
-    result = {}
+    manifest = json.loads((root / "docs/reference/agentic-kit-commands.json").read_text(encoding="utf-8"))
+    known = {row["qualified_name"] for row in manifest["commands"]}
+    result = render_mode_figures(modes_for("site"), workflow_projection["modes"], known)
     for name in NAMES:
         for narrow in (False, True):
-            cards = _cards(name, facts[name], content[name])
-            result[name + ("-narrow" if narrow else "") + ".svg"] = _render_svg(name, content[name], facts[name], cards, narrow=narrow)
+            filename = name + ("-narrow" if narrow else "") + ".svg"
+            if name == "path-chooser":
+                result[filename] = render_path_chooser(content[name], facts[name], narrow=narrow)
+            else:
+                cards = _cards(name, facts[name], content[name])
+                result[filename] = _render_svg(name, content[name], facts[name], cards, narrow=narrow)
     return result
 
 
@@ -125,8 +135,7 @@ def _cards(name: str, facts: dict, content: dict) -> list[Card]:
             ("Session 2", [facts["second_session_action"]], ACCENT2),
             ("Chat history", ["not carried over"], MUTED),
         ]
-    return [(mode, facts["mode_tools"][mode] or ["Kit interface"], (ACCENT, ACCENT2, WARN, MUTED)[i % 4])
-            for i, mode in enumerate(facts["modes"])]
+    raise ValueError(f"unknown role figure: {name}")
 
 
 def _lines(items: list[str], width: int) -> list[str]:
@@ -251,31 +260,12 @@ def _memory_layout(cards: list[Card], labels: dict, *, narrow: bool) -> tuple[li
     return elements, max(repository_bottom, second_y + second_height)
 
 
-def _chooser_layout(cards: list[Card], *, narrow: bool) -> tuple[list[str], int]:
-    columns = 1 if narrow else 2
-    width = 432 if narrow else 444
-    y = 98
-    elements = []
-    for start in range(0, len(cards), columns):
-        row = [
-            (heading, [line for item in items for line in wrap(item, 47 if narrow else 43)], color)
-            for heading, items, color in cards[start:start + columns]
-        ]
-        height = max(64 + 23 * len(lines) for _, lines, _ in row)
-        for column, (heading, lines, color) in enumerate(row):
-            elements.extend(_card(24 + column * (width + 24), y, width, height, heading, lines, color))
-        y += height + 24
-    return elements, y - 24
-
-
 def _render_svg(name: str, content: dict, facts: dict, cards: list[Card], *, narrow: bool) -> str:
     width = 480 if narrow else 960
     if name == "asked-checked-enforced":
         body, bottom = _control_layout(cards, narrow=narrow)
-    elif name == "repository-memory":
-        body, bottom = _memory_layout(cards, content["arrow_labels"], narrow=narrow)
     else:
-        body, bottom = _chooser_layout(cards, narrow=narrow)
+        body, bottom = _memory_layout(cards, content["arrow_labels"], narrow=narrow)
     foot_lines = _lines([content["footnote"]], 55 if narrow else 110)
     height = bottom + 66 + 20 * len(foot_lines)
     title = escape(str(content["title"]))

@@ -17,6 +17,48 @@ ROOT = Path(__file__).resolve().parents[1]
 FIGURES = ("asked-checked-enforced", "repository-memory", "path-chooser")
 
 
+def test_every_website_mode_has_a_sequence_in_its_own_card(built_site: Path) -> None:
+    from agentic_project_kit.workflow_modes import modes_for
+
+    page = (built_site / "workflows/index.html").read_text()
+    slugs = {mode.mode_id.replace("_", "-") for mode in modes_for("site")}
+    assert {path.stem.removeprefix("mode-") for path in (built_site / "static").glob("mode-*.svg")
+            if not path.stem.endswith("-narrow")} == slugs
+    for mode in modes_for("site"):
+        slug = mode.mode_id.replace("_", "-")
+        card = page.split(f'id="mode-{slug}"', 1)[1].split("</article>", 1)[0]
+        assert f"mode-{slug}.svg" in card and f"mode-{slug}-narrow.svg" in card
+        for narrow in (False, True):
+            _, svg = _svg(built_site, f"mode-{slug}", narrow)
+            facts = _facts(svg)
+            assert [step["action"] for step in facts["flow"]] == [step.action for step in mode.flow]
+            assert svg.get("role") == "img" and len(svg.findtext("{http://www.w3.org/2000/svg}desc") or "") >= 20
+            assert all(step.command in card for step in mode.flow if step.command)
+
+
+def test_added_website_mode_gets_a_diagram_and_requires_a_flow(tmp_path: Path, monkeypatch) -> None:
+    from dataclasses import replace
+    from agentic_project_kit import workflow_modes
+    from agentic_project_kit.workflow_modes import WorkflowStep
+
+    original = workflow_modes.WORKFLOW_MODES
+    extra = replace(
+        next(mode for mode in original if mode.mode_id == "gui"),
+        mode_id="test_extra", label="Extra path",
+        flow=(WorkflowStep("you", "kit", "Select action."), WorkflowStep("kit", "kit", "Check state."),
+              WorkflowStep("kit", "you", "Show result.")),
+    )
+    monkeypatch.setattr(workflow_modes, "WORKFLOW_MODES", (*original, extra))
+    result = build_site(ROOT, output_dir=tmp_path / "good", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    assert (tmp_path / "good/static/mode-test-extra.svg").is_file()
+    monkeypatch.setattr(workflow_modes, "WORKFLOW_MODES", (*original, replace(extra, flow=())))
+    result = build_site(ROOT, output_dir=tmp_path / "bad", build_commit="a" * 40)
+    assert not result.ok
+    assert any("workflow diagram requires complete manifest-backed mode: test-extra" in err
+               for err in result.report.blockers)
+
+
 @pytest.fixture(scope="module")
 def built_site(tmp_path_factory: pytest.TempPathFactory) -> Path:
     output = tmp_path_factory.mktemp("role-figures") / "site"
@@ -65,6 +107,11 @@ def test_path_figure_uses_executor_names_and_current_site_modes(built_site: Path
     for mode, names in facts["mode_tools"].items():
         assert names == [row["name"] for row in executors if mode in row["path"].split(" or ")]
     assert all(row["name"] in _svg(built_site, "path-chooser")[0] for row in executors)
+    assert facts["branches"] == [["Agent Direct"], ["File Transfer", "Copy and Paste"], ["GUI"]]
+    for narrow in (False, True):
+        _, svg = _svg(built_site, "path-chooser", narrow)
+        roles = [node.text for node in svg.iter("{http://www.w3.org/2000/svg}text") if node.get("class") == "role"]
+        assert roles == ["Primary", "Cost-saving", "Emergency only", "Optional"]
 
 
 def test_repository_figure_uses_init_files_and_example_steps(built_site: Path) -> None:

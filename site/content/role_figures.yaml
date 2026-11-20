@@ -22,7 +22,7 @@ figures:
   path-chooser:
     published: true
     title: Which path fits your assistant?
-    subtitle: Choose an available interface for your tool and task
+    question: Where does your AI assistant work?
     footnote: The four paths are not equally mature.
   background-and-ownership:
     published: false

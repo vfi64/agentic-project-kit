@@ -485,3 +485,4 @@ input:focus-visible, select:focus-visible, summary:focus-visible { outline: 3px 
 @media (max-width: 680px) { .task-grid, .command-contract { grid-template-columns: minmax(0, 1fr); } }
 
 .role-map img { min-width: 0; }
+.workflow-cards { grid-template-columns: minmax(0, 1fr); }

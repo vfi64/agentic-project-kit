@@ -611,7 +611,7 @@ def build_site(
         encoding="utf-8",
     )
     (output / "workflows" / "index.html").write_text(
-        render_workflows_html(root, metadata, workflow_projection),
+        render_workflows_html(root, metadata, workflow_projection, figure_files=frozenset(role_figures)),
         encoding="utf-8",
     )
     (output / "claims" / "claims.json").write_text(
@@ -835,6 +835,8 @@ def render_workflows_html(
     root: Path,
     metadata: SiteFoundationMetadata,
     projection: dict[str, object],
+    *,
+    figure_files: frozenset[str] = frozenset(),
 ) -> str:
     template_path = root / "site" / "templates" / "workflows.html"
     template = Template(template_path.read_text(encoding="utf-8"))
@@ -843,7 +845,7 @@ def render_workflows_html(
         "product_name": escape(metadata.product_name),
         "package_version": escape(metadata.package_version),
         "manifest_sha": escape(metadata.manifest_sha),
-        "mode_cards": _workflow_mode_cards(projection),
+        "mode_cards": _workflow_mode_cards(projection, figure_files),
         "core_workflow_items": _workflow_step_items(projection),
         "boundary_items": _workflow_boundary_items(projection),
         "brownfield_status": escape(_projection_value(projection, "brownfield.status", "not recorded")),
@@ -1105,7 +1107,9 @@ def _read_b1_evidence(root: Path) -> dict[str, object]:
     }
 
 
-def _workflow_mode_cards(projection: dict[str, object]) -> str:
+def _workflow_mode_cards(projection: dict[str, object], figure_files: frozenset[str]) -> str:
+    from .site_path_figures import picture
+
     modes = projection.get("modes")
     if not isinstance(modes, list) or not modes:
         return '        <article class="panel"><p>No workflow modes are currently projected.</p></article>'
@@ -1113,6 +1117,11 @@ def _workflow_mode_cards(projection: dict[str, object]) -> str:
     for mode in modes:
         if not isinstance(mode, dict):
             continue
+        slug = _string(mode.get("id"))
+        figure = ""
+        if f"mode-{slug}.svg" in figure_files:
+            img = picture(f"mode-{slug}", prefix="../static/", alt=f"{mode['title']} sequence diagram")
+            figure = f'<figure class="architecture-map role-map">{img}</figure>'
         cards.append(
             '        <article class="panel workflow-card" id="mode-'
             f'{escape(_string(mode.get("id")))}">'
@@ -1120,6 +1129,7 @@ def _workflow_mode_cards(projection: dict[str, object]) -> str:
             f'<p class="eyebrow">{escape(_string(mode.get("role_label")))}</p>'
             f"<p>{escape(_string(mode.get('summary')))}</p>"
             f"<p><strong>Best for:</strong> {escape(_string(mode.get('best_for')))}</p>"
+            f"{figure}"
             '<ul class="summary-list command-flow">'
             f"\n{_mode_command_items(mode)}\n"
             "</ul>"
