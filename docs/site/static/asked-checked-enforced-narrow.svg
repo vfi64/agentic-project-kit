@@ -3,29 +3,29 @@
 <style>.title{font:700 22px sans-serif;fill:#17202a}.sub{font:15px sans-serif;fill:#586674}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.foot{font:14px sans-serif;fill:#586674}</style>
 <metadata>{&quot;ci_events&quot;: [&quot;push&quot;, &quot;pull_request&quot;], &quot;ci_summary&quot;: [&quot;Runs on: push, pull request&quot;, &quot;Runs project tests&quot;, &quot;Runs agentic-kit check&quot;], &quot;instruction_files&quot;: [&quot;AGENTS.md&quot;, &quot;docs/handoff/STANDARD_AGENT_PROMPT.md&quot;], &quot;manifest_commands&quot;: [&quot;agentic-kit check&quot;, &quot;agentic-kit doctor&quot;]}</metadata>
 <rect width="480" height="838" fill="#fff"/>
-<text x="24" y="36" class="title">Asked, checked, enforced</text>
-<text x="24" y="65" class="sub">How strongly a project rule binds an agent</text>
+<text x="24" y="36" class="title" data-source="Asked, checked, enforced">Asked, checked, enforced</text>
+<text x="24" y="65" class="sub" data-source="How strongly a project rule binds an agent">How strongly a project rule binds an agent</text>
 <rect x="24" y="98" width="432" height="156" rx="10" fill="#f1f3f5" stroke="#586674" stroke-width="1.5"/>
 <rect x="24" y="98" width="432" height="8" rx="4" fill="#586674"/>
-<text x="38" y="127" class="head">1  Asked</text>
-<text x="38" y="154" class="body">AGENTS.md</text>
-<text x="38" y="177" class="body">STANDARD_AGENT_PROMPT.md</text>
-<text x="38" y="200" class="body">Agent instructions guide work. An agent can</text>
-<text x="38" y="223" class="body">ignore them.</text>
+<text x="38" y="127" class="head" data-source="1  Asked">1  Asked</text>
+<text x="38" y="154" class="body" data-source="AGENTS.md">AGENTS.md</text>
+<text x="38" y="177" class="body" data-source="STANDARD_AGENT_PROMPT.md">STANDARD_AGENT_PROMPT.md</text>
+<text x="38" y="200" class="body" data-source="Agent instructions guide work. An agent can ignore them.">Agent instructions guide work. An agent can</text>
+<text x="38" y="223" class="body" data-source="Agent instructions guide work. An agent can ignore them.">ignore them.</text>
 <rect x="24" y="278" width="432" height="202" rx="10" fill="#e6f2f0" stroke="#0f766e" stroke-width="1.5"/>
 <rect x="24" y="278" width="432" height="8" rx="4" fill="#0f766e"/>
-<text x="38" y="307" class="head">2  Checked</text>
-<text x="38" y="334" class="body">Local: check and doctor</text>
-<text x="38" y="357" class="body">Runs on: push, pull request</text>
-<text x="38" y="380" class="body">Runs project tests</text>
-<text x="38" y="403" class="body">Runs agentic-kit check</text>
-<text x="38" y="426" class="body">Failures are reported and fail the CI run.</text>
-<text x="38" y="449" class="body">Without level 3, a red CI can still be merged.</text>
+<text x="38" y="307" class="head" data-source="2  Checked">2  Checked</text>
+<text x="38" y="334" class="body" data-source="Local: check and doctor">Local: check and doctor</text>
+<text x="38" y="357" class="body" data-source="Runs on: push, pull request">Runs on: push, pull request</text>
+<text x="38" y="380" class="body" data-source="Runs project tests">Runs project tests</text>
+<text x="38" y="403" class="body" data-source="Runs agentic-kit check">Runs agentic-kit check</text>
+<text x="38" y="426" class="body" data-source="Failures are reported and fail the CI run.">Failures are reported and fail the CI run.</text>
+<text x="38" y="449" class="body" data-source="Without level 3, a red CI can still be merged.">Without level 3, a red CI can still be merged.</text>
 <rect x="24" y="504" width="432" height="228" rx="10" fill="#eaeefc" stroke="#3454d1" stroke-width="1.5"/>
 <rect x="24" y="504" width="432" height="8" rx="4" fill="#3454d1"/>
-<text x="38" y="533" class="head">3  Enforced</text>
-<text x="38" y="560" class="body">Required checks can block a merge only when a</text>
-<text x="38" y="583" class="body">maintainer enables branch protection in GitHub.</text>
-<text x="24" y="772" class="foot">Branch protection is a GitHub setting. The Kit lists it</text>
-<text x="24" y="792" class="foot">as a setup task.</text>
+<text x="38" y="533" class="head" data-source="3  Enforced">3  Enforced</text>
+<text x="38" y="560" class="body" data-source="Required checks can block a merge only when a maintainer enables branch protection in GitHub.">Required checks can block a merge only when a</text>
+<text x="38" y="583" class="body" data-source="Required checks can block a merge only when a maintainer enables branch protection in GitHub.">maintainer enables branch protection in GitHub.</text>
+<text x="24" y="772" class="foot" data-source="Branch protection is a GitHub setting. The Kit lists it as a setup task.">Branch protection is a GitHub setting. The Kit lists it</text>
+<text x="24" y="792" class="foot" data-source="Branch protection is a GitHub setting. The Kit lists it as a setup task.">as a setup task.</text>
 </svg>

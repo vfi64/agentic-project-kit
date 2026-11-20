@@ -526,7 +526,7 @@ def build_site(
     navigation = report.task_projection
     (output / "commands" / "tasks.json").write_text(
         json.dumps(navigation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    index_html = render_index_html(root, report)
+    index_html = render_index_html(root, report, conductor="kit-conductor.svg" in role_figures)
     quickstart_projection = _build_quickstart_projection(metadata, command_catalog)
     detail_files = {r["command"]: r["file"] for r in (report.detail_projection or {}).get("commands", [])}
     quickstart_projection["detail_links"] = detail_files
@@ -568,6 +568,7 @@ def build_site(
         explanation_output.mkdir()
         (explanation_output / "index.html").write_text(
             render_explanation(root, report.explanation_projection,
+                               ownership="background-and-ownership.svg" in role_figures,
                                repository_url=metadata.repository_url,
                                product_name=metadata.product_name,
                                version=metadata.package_version), encoding="utf-8")
@@ -611,7 +612,7 @@ def build_site(
         encoding="utf-8",
     )
     (output / "workflows" / "index.html").write_text(
-        render_workflows_html(root, metadata, workflow_projection),
+        render_workflows_html(root, metadata, workflow_projection, figure_files=frozenset(role_figures)),
         encoding="utf-8",
     )
     (output / "claims" / "claims.json").write_text(
@@ -760,7 +761,8 @@ def _docs_pages_fallback_status_projection(root: Path) -> SiteStatusProjection:
     )
 
 
-def render_index_html(root: Path, report: SiteFoundationReport) -> str:
+def render_index_html(root: Path, report: SiteFoundationReport, *, conductor: bool = False) -> str:
+    from .site_path_figures import picture
     from .site_usage import render_generated_finish_status
 
     metadata = report.metadata
@@ -772,6 +774,11 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
     values = {
         "site_nav": render_site_navigation("index.html"),
         "generated_finish_status": render_generated_finish_status(root),
+        "hero_map_class": " conductor-map" if conductor else "",
+        "hero_map": (
+            picture("kit-conductor", prefix="static/", alt="You direct the work. The Kit coordinates checks and repository state.")
+            if conductor else '<img src="static/kit-architecture.svg" alt="The Kit connects human intent, assistants, checks and repository evidence.">'
+        ),
         "product_name": escape(metadata.product_name),
         "former_product_name": escape(metadata.former_product_name),
         "package_name": escape(metadata.package_name),
@@ -835,6 +842,8 @@ def render_workflows_html(
     root: Path,
     metadata: SiteFoundationMetadata,
     projection: dict[str, object],
+    *,
+    figure_files: frozenset[str] = frozenset(),
 ) -> str:
     template_path = root / "site" / "templates" / "workflows.html"
     template = Template(template_path.read_text(encoding="utf-8"))
@@ -843,7 +852,7 @@ def render_workflows_html(
         "product_name": escape(metadata.product_name),
         "package_version": escape(metadata.package_version),
         "manifest_sha": escape(metadata.manifest_sha),
-        "mode_cards": _workflow_mode_cards(projection),
+        "mode_cards": _workflow_mode_cards(projection, figure_files),
         "core_workflow_items": _workflow_step_items(projection),
         "boundary_items": _workflow_boundary_items(projection),
         "brownfield_status": escape(_projection_value(projection, "brownfield.status", "not recorded")),
@@ -1105,7 +1114,9 @@ def _read_b1_evidence(root: Path) -> dict[str, object]:
     }
 
 
-def _workflow_mode_cards(projection: dict[str, object]) -> str:
+def _workflow_mode_cards(projection: dict[str, object], figure_files: frozenset[str]) -> str:
+    from .site_path_figures import picture
+
     modes = projection.get("modes")
     if not isinstance(modes, list) or not modes:
         return '        <article class="panel"><p>No workflow modes are currently projected.</p></article>'
@@ -1113,6 +1124,11 @@ def _workflow_mode_cards(projection: dict[str, object]) -> str:
     for mode in modes:
         if not isinstance(mode, dict):
             continue
+        slug = _string(mode.get("id"))
+        figure = ""
+        if f"mode-{slug}.svg" in figure_files:
+            img = picture(f"mode-{slug}", prefix="../static/", alt=f"{mode['title']} sequence diagram")
+            figure = f'<figure class="architecture-map role-map">{img}</figure>'
         cards.append(
             '        <article class="panel workflow-card" id="mode-'
             f'{escape(_string(mode.get("id")))}">'
@@ -1120,6 +1136,7 @@ def _workflow_mode_cards(projection: dict[str, object]) -> str:
             f'<p class="eyebrow">{escape(_string(mode.get("role_label")))}</p>'
             f"<p>{escape(_string(mode.get('summary')))}</p>"
             f"<p><strong>Best for:</strong> {escape(_string(mode.get('best_for')))}</p>"
+            f"{figure}"
             '<ul class="summary-list command-flow">'
             f"\n{_mode_command_items(mode)}\n"
             "</ul>"

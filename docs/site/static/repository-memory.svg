@@ -1,40 +1,41 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 549" role="img" aria-labelledby="title desc">
-<title id="title">The chat ends, the repository remembers</title><desc id="desc">The chat ends, the repository remembers. Session 1: Ask for the change, Start the work, Check the work, Inspect project health, Publish, Hand off. Repository files: AGENTS.md, docs/STATUS.md, docs/handoff/CURRENT_HANDOFF.md, src/demo/__init__.py, tests/test_smoke.py. Session 2: Reads repository files and the supplied package.. Chat history: not carried over. The successor package is local. Copy it explicitly to another machine. Chat history is not carried over.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 569" role="img" aria-labelledby="title desc">
+<title id="title">The chat ends, the repository remembers</title><desc id="desc">The chat ends, the repository remembers. Session 1: Ask for the change, Start the work, Check the work, Inspect project health, Publish, Hand off. Repository files: AGENTS.md, docs/STATUS.md, docs/handoff/CURRENT_HANDOFF.md, src/demo/__init__.py, tests/test_smoke.py. Session 2: Reads repository files and the versioned package.. Chat history: not carried over. In this example, the validated package matches the five files on the simulated remote. Chat history is not carried over.</desc>
 <style>.title{font:700 22px sans-serif;fill:#17202a}.sub{font:15px sans-serif;fill:#586674}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.foot{font:14px sans-serif;fill:#586674}</style>
-<metadata>{&quot;first_session_steps&quot;: [&quot;Ask for the change&quot;, &quot;Start the work&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Publish&quot;, &quot;Hand off&quot;], &quot;init_files&quot;: [&quot;.agentic/DOC_LIFECYCLE.md&quot;, &quot;.agentic/INITIAL_LLM_PROMPT.md&quot;, &quot;.agentic/ci/agentic-gate.yaml&quot;, &quot;.agentic/ci/pre-commit-snippet.yaml&quot;, &quot;.agentic/config.yaml&quot;, &quot;.agentic/dpa/workspace_init_projection.json&quot;, &quot;.agentic/project.yaml&quot;, &quot;.agentic/registries/documentation.yaml&quot;, &quot;.agentic/registries/rules.yaml&quot;, &quot;.agentic/rules/README.md&quot;, &quot;.agentic/state/README.md&quot;, &quot;.agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md&quot;, &quot;.agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md&quot;, &quot;.agentic/state/handoff/README.md&quot;, &quot;.agentic/state/handoff/START_NEW_CHAT_PROMPT.md&quot;, &quot;.agentic/state/handoff/packages/latest/execution_contract.json&quot;, &quot;.agentic/state/handoff/packages/latest/source_manifest.json&quot;, &quot;.agentic/state/handoff/packages/latest/successor_context.yaml&quot;, &quot;.agentic/state/handoff/packages/latest/successor_prompt.md&quot;, &quot;.agentic/state/handoff/packages/latest/validation_report.json&quot;, &quot;.agentic/state/status.md&quot;, &quot;.agentic/todo.yaml&quot;, &quot;.agentic/transfer/inbox/.gitkeep&quot;, &quot;.github/ISSUE_TEMPLATE/agent_regression.yml&quot;, &quot;.github/copilot-instructions.md&quot;, &quot;.github/pull_request_template.md&quot;, &quot;.github/workflows/ci.yml&quot;, &quot;.gitignore&quot;, &quot;.pre-commit-config.yaml&quot;, &quot;AGENTS.md&quot;, &quot;CHANGELOG.md&quot;, &quot;README.md&quot;, &quot;docs/DOCUMENTATION_COVERAGE.yaml&quot;, &quot;docs/LOGGING_AND_EVIDENCE.md&quot;, &quot;docs/PROJECT_START.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/TEST_GATES.md&quot;, &quot;docs/TODO.md&quot;, &quot;docs/architecture/ARCHITECTURE_CONTRACT.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;docs/handoff/STANDARD_AGENT_PROMPT.md&quot;, &quot;pyproject.toml&quot;, &quot;scripts/stage_recent_logs.py&quot;, &quot;sentinel.yaml&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;second_session_action&quot;: &quot;Reads repository files and the supplied package.&quot;, &quot;shown_files&quot;: [&quot;AGENTS.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;steps&quot;: [&quot;Create the project&quot;, &quot;Acknowledge the rules&quot;, &quot;Ask for the change&quot;, &quot;Start the work&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Publish&quot;, &quot;Hand off&quot;, &quot;Start the next session&quot;]}</metadata>
-<rect width="960" height="549" fill="#fff"/>
-<text x="24" y="36" class="title">The chat ends, the repository remembers</text>
-<text x="24" y="65" class="sub">A later session can use the same agent or another one</text>
+<metadata>{&quot;first_session_steps&quot;: [&quot;Ask for the change&quot;, &quot;Start the work&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Publish&quot;, &quot;Hand off&quot;], &quot;init_files&quot;: [&quot;.agentic/DOC_LIFECYCLE.md&quot;, &quot;.agentic/INITIAL_LLM_PROMPT.md&quot;, &quot;.agentic/ci/agentic-gate.yaml&quot;, &quot;.agentic/ci/pre-commit-snippet.yaml&quot;, &quot;.agentic/config.yaml&quot;, &quot;.agentic/dpa/workspace_init_projection.json&quot;, &quot;.agentic/project.yaml&quot;, &quot;.agentic/registries/documentation.yaml&quot;, &quot;.agentic/registries/rules.yaml&quot;, &quot;.agentic/rules/README.md&quot;, &quot;.agentic/state/README.md&quot;, &quot;.agentic/state/handoff/CLOSEOUT_BEFORE_CHAT_SWITCH_PROMPT.md&quot;, &quot;.agentic/state/handoff/NEXT_CHAT_BOOTSTRAP.md&quot;, &quot;.agentic/state/handoff/README.md&quot;, &quot;.agentic/state/handoff/START_NEW_CHAT_PROMPT.md&quot;, &quot;.agentic/state/handoff/packages/latest/execution_contract.json&quot;, &quot;.agentic/state/handoff/packages/latest/source_manifest.json&quot;, &quot;.agentic/state/handoff/packages/latest/successor_context.yaml&quot;, &quot;.agentic/state/handoff/packages/latest/successor_prompt.md&quot;, &quot;.agentic/state/handoff/packages/latest/validation_report.json&quot;, &quot;.agentic/state/status.md&quot;, &quot;.agentic/todo.yaml&quot;, &quot;.agentic/transfer/inbox/.gitkeep&quot;, &quot;.github/ISSUE_TEMPLATE/agent_regression.yml&quot;, &quot;.github/copilot-instructions.md&quot;, &quot;.github/pull_request_template.md&quot;, &quot;.github/workflows/ci.yml&quot;, &quot;.gitignore&quot;, &quot;.pre-commit-config.yaml&quot;, &quot;AGENTS.md&quot;, &quot;CHANGELOG.md&quot;, &quot;README.md&quot;, &quot;docs/DOCUMENTATION_COVERAGE.yaml&quot;, &quot;docs/LOGGING_AND_EVIDENCE.md&quot;, &quot;docs/PROJECT_START.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/TEST_GATES.md&quot;, &quot;docs/TODO.md&quot;, &quot;docs/architecture/ARCHITECTURE_CONTRACT.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;docs/handoff/STANDARD_AGENT_PROMPT.md&quot;, &quot;pyproject.toml&quot;, &quot;scripts/stage_recent_logs.py&quot;, &quot;sentinel.yaml&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;second_session_action&quot;: &quot;Reads repository files and the versioned package.&quot;, &quot;shown_files&quot;: [&quot;AGENTS.md&quot;, &quot;docs/STATUS.md&quot;, &quot;docs/handoff/CURRENT_HANDOFF.md&quot;, &quot;src/demo/__init__.py&quot;, &quot;tests/test_smoke.py&quot;], &quot;steps&quot;: [&quot;Create the project&quot;, &quot;Acknowledge the rules&quot;, &quot;Ask for the change&quot;, &quot;Start the work&quot;, &quot;Check the work&quot;, &quot;Inspect project health&quot;, &quot;Publish&quot;, &quot;Hand off&quot;, &quot;Start the next session&quot;]}</metadata>
+<rect width="960" height="569" fill="#fff"/>
+<text x="24" y="36" class="title" data-source="The chat ends, the repository remembers">The chat ends, the repository remembers</text>
+<text x="24" y="65" class="sub" data-source="A later session can use the same agent or another one">A later session can use the same agent or another one</text>
 <rect x="24" y="98" width="328" height="202" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
-<text x="38" y="127" class="head">Session 1</text>
-<text x="38" y="154" class="body">Ask for the change</text>
-<text x="38" y="177" class="body">Start the work</text>
-<text x="38" y="200" class="body">Check the work</text>
-<text x="38" y="223" class="body">Inspect project health</text>
-<text x="38" y="246" class="body">Publish</text>
-<text x="38" y="269" class="body">Hand off</text>
+<text x="38" y="127" class="head" data-source="Session 1">Session 1</text>
+<text x="38" y="154" class="body" data-source="Ask for the change">Ask for the change</text>
+<text x="38" y="177" class="body" data-source="Start the work">Start the work</text>
+<text x="38" y="200" class="body" data-source="Check the work">Check the work</text>
+<text x="38" y="223" class="body" data-source="Inspect project health">Inspect project health</text>
+<text x="38" y="246" class="body" data-source="Publish">Publish</text>
+<text x="38" y="269" class="body" data-source="Hand off">Hand off</text>
 <rect x="608" y="98" width="328" height="110" rx="10" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
-<text x="622" y="127" class="head">Session 2</text>
-<text x="622" y="154" class="body">Reads repository files and the</text>
-<text x="622" y="177" class="body">supplied package.</text>
+<text x="622" y="127" class="head" data-source="Session 2">Session 2</text>
+<text x="622" y="154" class="body" data-source="Reads repository files and the versioned package.">Reads repository files and the</text>
+<text x="622" y="177" class="body" data-source="Reads repository files and the versioned package.">versioned package.</text>
 <rect x="377" y="111" width="206" height="86" rx="10" fill="#fff" stroke="#586674" stroke-width="1.5" stroke-dasharray="6 5"/>
-<text x="391" y="140" class="head">Chat history</text>
-<text x="391" y="167" class="body">not carried over</text>
+<text x="391" y="140" class="head" data-source="Chat history">Chat history</text>
+<text x="391" y="167" class="body" data-source="not carried over">not carried over</text>
 <rect x="24" y="358" width="912" height="105" rx="10" fill="#fff" stroke="#17202a" stroke-width="1.5"/>
-<text x="38" y="387" class="head">Repository files</text>
+<text x="38" y="387" class="head" data-source="Repository files">Repository files</text>
 <rect x="34" y="399" width="215" height="54" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
-<text x="43" y="420" class="body">AGENTS.md</text>
+<text x="43" y="420" class="body" data-source="AGENTS.md">AGENTS.md</text>
 <rect x="259" y="399" width="215" height="54" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
-<text x="268" y="420" class="body">docs/STATUS.md</text>
+<text x="268" y="420" class="body" data-source="docs/STATUS.md">docs/STATUS.md</text>
 <rect x="484" y="399" width="215" height="54" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
-<text x="493" y="420" class="body">docs/handoff/CURRENT_</text>
-<text x="493" y="439" class="body">HANDOFF.md</text>
+<text x="493" y="420" class="body" data-source="docs/handoff/CURRENT_HANDOFF.md">docs/handoff/CURRENT_</text>
+<text x="493" y="439" class="body" data-source="docs/handoff/CURRENT_HANDOFF.md">HANDOFF.md</text>
 <rect x="709" y="399" width="215" height="54" rx="8" fill="#fff" stroke="#c8d3dc" stroke-width="1.5"/>
-<text x="718" y="420" class="body">src/demo/__init__.py</text>
-<text x="718" y="439" class="body">tests/test_smoke.py</text>
+<text x="718" y="420" class="body" data-source="src/demo/__init__.py">src/demo/__init__.py</text>
+<text x="718" y="439" class="body" data-source="tests/test_smoke.py">tests/test_smoke.py</text>
 <path d="M188 300V355m-5 -6 5 6 5 -6" fill="none" stroke="#0f766e" stroke-width="1.5"/>
-<text x="200" y="334" class="body">writes</text>
+<text x="200" y="334" class="body" data-source="writes">writes</text>
 <path d="M772 358V211m-5 6 5 -6 5 6" fill="none" stroke="#3454d1" stroke-width="1.5"/>
-<text x="784" y="288" class="body">reads</text>
-<text x="24" y="503" class="foot">The successor package is local. Copy it explicitly to another machine. Chat history is not carried over.</text>
+<text x="784" y="288" class="body" data-source="reads">reads</text>
+<text x="24" y="503" class="foot" data-source="In this example, the validated package matches the five files on the simulated remote. Chat history is not carried over.">In this example, the validated package matches the five files on the simulated remote. Chat history is not</text>
+<text x="24" y="523" class="foot" data-source="In this example, the validated package matches the five files on the simulated remote. Chat history is not carried over.">carried over.</text>
 </svg>

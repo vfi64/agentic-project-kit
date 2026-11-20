@@ -1,23 +1,33 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 650" role="img" aria-labelledby="title desc">
-<title id="title">Which path fits your assistant?</title><desc id="desc">Which path fits your assistant?. Agent Direct: Codex CLI, Claude Code, GitHub Copilot cloud agent. File Transfer: Browser chat. Copy and Paste: Browser chat. GUI: Kit interface. The four paths are not equally mature.</desc>
-<style>.title{font:700 22px sans-serif;fill:#17202a}.sub{font:15px sans-serif;fill:#586674}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.foot{font:14px sans-serif;fill:#586674}</style>
-<metadata>{&quot;executors&quot;: [{&quot;name&quot;: &quot;Codex CLI&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Claude Code&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;GitHub Copilot cloud agent&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Browser chat&quot;, &quot;path&quot;: &quot;Copy and Paste or File Transfer&quot;}], &quot;mode_tools&quot;: {&quot;Agent Direct&quot;: [&quot;Codex CLI&quot;, &quot;Claude Code&quot;, &quot;GitHub Copilot cloud agent&quot;], &quot;Copy and Paste&quot;: [&quot;Browser chat&quot;], &quot;File Transfer&quot;: [&quot;Browser chat&quot;], &quot;GUI&quot;: []}, &quot;modes&quot;: [&quot;Agent Direct&quot;, &quot;File Transfer&quot;, &quot;Copy and Paste&quot;, &quot;GUI&quot;]}</metadata>
-<rect width="480" height="650" fill="#fff"/>
-<text x="24" y="36" class="title">Which path fits your assistant?</text>
-<text x="24" y="65" class="sub">Choose an available interface for your tool and task</text>
-<rect x="24" y="98" width="432" height="133" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
-<text x="38" y="127" class="head">Agent Direct</text>
-<text x="38" y="154" class="body">Codex CLI</text>
-<text x="38" y="177" class="body">Claude Code</text>
-<text x="38" y="200" class="body">GitHub Copilot cloud agent</text>
-<rect x="24" y="255" width="432" height="87" rx="10" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
-<text x="38" y="284" class="head">File Transfer</text>
-<text x="38" y="311" class="body">Browser chat</text>
-<rect x="24" y="366" width="432" height="87" rx="10" fill="#fff" stroke="#a16207" stroke-width="1.5"/>
-<text x="38" y="395" class="head">Copy and Paste</text>
-<text x="38" y="422" class="body">Browser chat</text>
-<rect x="24" y="477" width="432" height="87" rx="10" fill="#fff" stroke="#586674" stroke-width="1.5"/>
-<text x="38" y="506" class="head">GUI</text>
-<text x="38" y="533" class="body">Kit interface</text>
-<text x="24" y="604" class="foot">The four paths are not equally mature.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 648" role="img" aria-labelledby="title desc">
+<title id="title">Which path fits your assistant?</title><desc id="desc">Where does your AI assistant work? Repository and terminal access: Primary Agent Direct. Browser chat without repository access: Cost-saving File Transfer, Emergency only Copy and Paste. A local window for Kit actions: Optional GUI.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.note{font:14px sans-serif;fill:#586674}.role{font:700 14px sans-serif;fill:#0f766e}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#0f766e"/></marker></defs>
+<metadata>{&quot;branches&quot;: [[&quot;Agent Direct&quot;], [&quot;File Transfer&quot;, &quot;Copy and Paste&quot;], [&quot;GUI&quot;]], &quot;executors&quot;: [{&quot;name&quot;: &quot;Codex CLI&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Claude Code&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;GitHub Copilot cloud agent&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}, {&quot;name&quot;: &quot;Browser chat&quot;, &quot;path&quot;: &quot;Copy and Paste or File Transfer&quot;}, {&quot;name&quot;: &quot;Cursor&quot;, &quot;path&quot;: &quot;Agent Direct&quot;}], &quot;mode_tools&quot;: {&quot;Agent Direct&quot;: [&quot;Codex CLI&quot;, &quot;Claude Code&quot;, &quot;GitHub Copilot cloud agent&quot;, &quot;Cursor&quot;], &quot;Copy and Paste&quot;: [&quot;Browser chat&quot;], &quot;File Transfer&quot;: [&quot;Browser chat&quot;], &quot;GUI&quot;: []}, &quot;modes&quot;: [&quot;Agent Direct&quot;, &quot;File Transfer&quot;, &quot;Copy and Paste&quot;, &quot;GUI&quot;], &quot;roles&quot;: {&quot;Agent Direct&quot;: &quot;primary&quot;, &quot;Copy and Paste&quot;: &quot;emergency&quot;, &quot;File Transfer&quot;: &quot;cost_saving&quot;, &quot;GUI&quot;: &quot;optional&quot;}}</metadata>
+<rect width="480" height="648" fill="#fff"/>
+<text x="24" y="36" class="title" data-source="Which path fits your assistant?">Which path fits your assistant?</text>
+<rect x="24" y="53" width="432" height="42" rx="9" fill="#edf3f1" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="38" y="80" class="head" data-source="Where does your AI assistant work?">Where does your AI assistant work?</text>
+<path d="M40 95 V119" stroke="#0f766e" marker-end="url(#arrow)"/>
+<rect x="24" y="121" width="432" height="174" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="38" y="147" class="head" data-source="Repository and terminal access">Repository and terminal access</text>
+<text x="38" y="177" class="body" data-source="Codex CLI">Codex CLI</text>
+<text x="38" y="198" class="body" data-source="Claude Code">Claude Code</text>
+<text x="38" y="219" class="body" data-source="GitHub Copilot cloud agent">GitHub Copilot cloud agent</text>
+<text x="38" y="240" class="body" data-source="Cursor">Cursor</text>
+<text x="38" y="261" class="head" data-source="Agent Direct">Agent Direct</text>
+<text x="38" y="281" class="role" data-source="Primary">Primary</text>
+<path d="M15 75 V341 H22" fill="none" stroke="#0f766e" marker-end="url(#arrow)"/>
+<rect x="24" y="321" width="432" height="160" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="38" y="347" class="head" data-source="Browser chat without repository access">Browser chat without repository access</text>
+<text x="38" y="377" class="body" data-source="Browser chat">Browser chat</text>
+<text x="38" y="398" class="head" data-source="File Transfer">File Transfer</text>
+<text x="38" y="418" class="role" data-source="Cost-saving">Cost-saving</text>
+<text x="38" y="447" class="head" data-source="Copy and Paste">Copy and Paste</text>
+<text x="38" y="467" class="role" data-source="Emergency only">Emergency only</text>
+<path d="M15 75 V527 H22" fill="none" stroke="#0f766e" marker-end="url(#arrow)"/>
+<rect x="24" y="507" width="432" height="90" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="38" y="533" class="head" data-source="A local window for Kit actions">A local window for Kit actions</text>
+<text x="38" y="563" class="head" data-source="GUI">GUI</text>
+<text x="38" y="583" class="role" data-source="Optional">Optional</text>
+<text x="24" y="627" class="note" data-source="The four paths are not equally mature.">The four paths are not equally mature.</text>
 </svg>

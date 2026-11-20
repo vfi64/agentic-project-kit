@@ -6,6 +6,10 @@ import json
 from pathlib import Path
 from textwrap import wrap
 
+from .site_path_figures import render_mode_figures, render_path_chooser, text_node
+from .site_ownership_figures import render_ownership_figure
+from .workflow_modes import modes_for
+
 import yaml
 
 
@@ -93,6 +97,7 @@ def collect_role_figure_facts(root: Path, workflow_projection: dict, fixture: tu
         "path-chooser": {
             "executors": [{"name": row["name"], "path": row["path"]} for row in executors],
             "modes": [row["title"] for row in modes],
+            "roles": {row["title"]: row["role"] for row in modes},
             "mode_tools": {mode["title"]: [row["name"] for row in executors if mode["title"] in row["path"].split(" or ")]
                            for mode in modes},
         },
@@ -102,11 +107,29 @@ def collect_role_figure_facts(root: Path, workflow_projection: dict, fixture: tu
 def render_role_figures(root: Path, workflow_projection: dict, fixture: tuple[dict, list[str], str]) -> dict[str, str]:
     content = yaml.safe_load((root / "site/content/role_figures.yaml").read_text(encoding="utf-8"))["figures"]
     facts = collect_role_figure_facts(root, workflow_projection, fixture)
-    result = {}
+    manifest = json.loads((root / "docs/reference/agentic-kit-commands.json").read_text(encoding="utf-8"))
+    known = {row["qualified_name"] for row in manifest["commands"]}
+    result = render_mode_figures(modes_for("site"), workflow_projection["modes"], known)
     for name in NAMES:
         for narrow in (False, True):
-            cards = _cards(name, facts[name], content[name])
-            result[name + ("-narrow" if narrow else "") + ".svg"] = _render_svg(name, content[name], facts[name], cards, narrow=narrow)
+            filename = name + ("-narrow" if narrow else "") + ".svg"
+            if name == "path-chooser":
+                result[filename] = render_path_chooser(content[name], facts[name], narrow=narrow)
+            else:
+                cards = _cards(name, facts[name], content[name])
+                result[filename] = _render_svg(name, content[name], facts[name], cards, narrow=narrow)
+    for name in ("background-and-ownership", "kit-conductor"):
+        if content[name]["published"] is not True:
+            continue
+        commands = ("agentic-kit work start", "agentic-kit work finish")
+        documented = {step["command"] for step in fixture[0]["steps"]}
+        if not set(commands) <= known & documented:
+            raise ValueError(f"{name} requires the documented generated-project work cycle")
+        for narrow in (False, True):
+            filename = name + ("-narrow" if narrow else "") + ".svg"
+            result[filename] = render_ownership_figure(
+                name, content[name], facts["path-chooser"]["executors"], commands, narrow=narrow,
+            )
     return result
 
 
@@ -125,8 +148,7 @@ def _cards(name: str, facts: dict, content: dict) -> list[Card]:
             ("Session 2", [facts["second_session_action"]], ACCENT2),
             ("Chat history", ["not carried over"], MUTED),
         ]
-    return [(mode, facts["mode_tools"][mode] or ["Kit interface"], (ACCENT, ACCENT2, WARN, MUTED)[i % 4])
-            for i, mode in enumerate(facts["modes"])]
+    raise ValueError(f"unknown role figure: {name}")
 
 
 def _lines(items: list[str], width: int) -> list[str]:
@@ -145,7 +167,11 @@ def _lines(items: list[str], width: int) -> list[str]:
     return lines
 
 
-def _card(x: int, y: int, width: int, height: int, heading: str, lines: list[str], color: str,
+def _source_lines(items: list[str], width: int) -> list[tuple[str, str]]:
+    return [(line, item) for item in items for line in _lines([item], width)]
+
+
+def _card(x: int, y: int, width: int, height: int, heading: str, lines: list[tuple[str, str]], color: str,
           *, bar: bool = False, dashed: bool = False) -> list[str]:
     fill = TINT[color] if bar else "#fff"
     dash = ' stroke-dasharray="6 5"' if dashed else ""
@@ -153,16 +179,16 @@ def _card(x: int, y: int, width: int, height: int, heading: str, lines: list[str
                 f'fill="{fill}" stroke="{color}" stroke-width="1.5"{dash}/>']
     if bar:
         elements.append(f'<rect x="{x}" y="{y}" width="{width}" height="8" rx="4" fill="{color}"/>')
-    elements.append(f'<text x="{x + 14}" y="{y + 29}" class="head">{escape(heading)}</text>')
-    elements.extend(f'<text x="{x + 14}" y="{y + 56 + i * 23}" class="body">{escape(line)}</text>'
-                    for i, line in enumerate(lines))
+    elements.append(text_node(heading, x + 14, y + 29, kind="head"))
+    elements.extend(text_node(line, x + 14, y + 56 + i * 23, source=source)
+                    for i, (line, source) in enumerate(lines))
     return elements
 
 
 def _control_layout(cards: list[Card], *, narrow: bool) -> tuple[list[str], int]:
     elements = []
     width, gap = (432, 24) if narrow else (288, 24)
-    rows = [_lines(items, 47 if narrow else 31) for _, items, _ in cards]
+    rows = [_source_lines(items, 47 if narrow else 31) for _, items, _ in cards]
     heights = []
     for lines in rows:
         required = 64 + 23 * len(lines)
@@ -184,7 +210,7 @@ def _repository_files(y: int, width: int, repository: Card, *, narrow: bool) -> 
     columns = 1 if narrow else len(file_groups)
     gap = 10
     file_width = (width - (columns + 1) * gap) // columns
-    rows = [_lines(group, 31 if narrow else 24) for group in file_groups]
+    rows = [_source_lines(group, 31 if narrow else 24) for group in file_groups]
     contents = []
     top = y + 41
     for start in range(0, len(rows), columns):
@@ -194,8 +220,8 @@ def _repository_files(y: int, width: int, repository: Card, *, narrow: bool) -> 
             x = 24 + gap + column * (file_width + gap)
             contents.append(f'<rect x="{x}" y="{top}" width="{file_width}" height="{height}" rx="8" '
                             f'fill="#fff" stroke="{LINE}" stroke-width="1.5"/>')
-            contents.extend(f'<text x="{x + 9}" y="{top + 21 + index * 19}" class="body">{escape(line)}</text>'
-                            for index, line in enumerate(lines))
+            contents.extend(text_node(line, x + 9, top + 21 + index * 19, source=source)
+                            for index, (line, source) in enumerate(lines))
         top += height + gap
     height = top - y
     return _card(24, y, width, height, heading, [], color) + contents, height
@@ -205,13 +231,13 @@ def _memory_layout(cards: list[Card], labels: dict, *, narrow: bool) -> tuple[li
     first, repository, second, history = cards
     session_width = 432 if narrow else 328
     width = 47 if narrow else 36
-    first_lines = _lines(first[1], width)
-    second_lines = _lines(second[1], width)
+    first_lines = _source_lines(first[1], width)
+    second_lines = _source_lines(second[1], width)
     if len(second_lines) > 2:
-        second_line = second_lines[1]
+        second_line, source = second_lines[1]
         if len(second_line) >= width:
             second_line = second_line.rsplit(" ", 1)[0]
-        second_lines = [second_lines[0], second_line + "…"]
+        second_lines = [second_lines[0], (second_line + "…", source)]
 
     first_height = 64 + 23 * len(first_lines)
     second_height = 64 + 23 * len(second_lines)
@@ -231,7 +257,7 @@ def _memory_layout(cards: list[Card], labels: dict, *, narrow: bool) -> tuple[li
 
     elements = _card(24, session_y, session_width, first_height, first[0], first_lines, first[2])
     elements.extend(_card(second_x, second_y, session_width, second_height, second[0], second_lines, second[2]))
-    elements.extend(_card(history_x, history_y, history_width, 86, history[0], history[1], history[2], dashed=True))
+    elements.extend(_card(history_x, history_y, history_width, 86, history[0], _source_lines(history[1], 20), history[2], dashed=True))
     elements.extend(repository_parts)
     center = 24 + (repository_width if narrow else session_width) // 2
     repository_bottom = repository_y + repository_height
@@ -247,39 +273,19 @@ def _memory_layout(cards: list[Card], labels: dict, *, narrow: bool) -> tuple[li
         elbow = tip - 6 if end > start else tip + 6
         elements.append(f'<path d="M{x} {start}V{tip}m-5 {elbow - tip} 5 {tip - elbow} 5 {elbow - tip}" '
                         f'fill="none" stroke="{color}" stroke-width="1.5"/>')
-        elements.append(f'<text x="{x + 12}" y="{(start + end) // 2 + 5}" class="body">{escape(label)}</text>')
+        elements.append(text_node(label, x + 12, (start + end) // 2 + 5))
     return elements, max(repository_bottom, second_y + second_height)
-
-
-def _chooser_layout(cards: list[Card], *, narrow: bool) -> tuple[list[str], int]:
-    columns = 1 if narrow else 2
-    width = 432 if narrow else 444
-    y = 98
-    elements = []
-    for start in range(0, len(cards), columns):
-        row = [
-            (heading, [line for item in items for line in wrap(item, 47 if narrow else 43)], color)
-            for heading, items, color in cards[start:start + columns]
-        ]
-        height = max(64 + 23 * len(lines) for _, lines, _ in row)
-        for column, (heading, lines, color) in enumerate(row):
-            elements.extend(_card(24 + column * (width + 24), y, width, height, heading, lines, color))
-        y += height + 24
-    return elements, y - 24
 
 
 def _render_svg(name: str, content: dict, facts: dict, cards: list[Card], *, narrow: bool) -> str:
     width = 480 if narrow else 960
     if name == "asked-checked-enforced":
         body, bottom = _control_layout(cards, narrow=narrow)
-    elif name == "repository-memory":
-        body, bottom = _memory_layout(cards, content["arrow_labels"], narrow=narrow)
     else:
-        body, bottom = _chooser_layout(cards, narrow=narrow)
-    foot_lines = _lines([content["footnote"]], 55 if narrow else 110)
+        body, bottom = _memory_layout(cards, content["arrow_labels"], narrow=narrow)
+    foot_lines = _source_lines([content["footnote"]], 55 if narrow else 110)
     height = bottom + 66 + 20 * len(foot_lines)
     title = escape(str(content["title"]))
-    subtitle = escape(str(content["subtitle"]))
     desc = escape(f"{content['title']}. " + ". ".join(heading + ": " + ", ".join(items) for heading, items, _ in cards) + ". " + str(content["footnote"]))
     parts = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">',
              f'<title id="title">{title}</title><desc id="desc">{desc}</desc>',
@@ -288,9 +294,9 @@ def _render_svg(name: str, content: dict, facts: dict, cards: list[Card], *, nar
              '.foot{font:14px sans-serif;fill:#586674}</style>',
              f'<metadata>{escape(json.dumps(facts, sort_keys=True))}</metadata>',
              f'<rect width="{width}" height="{height}" fill="#fff"/>',
-             f'<text x="24" y="36" class="title">{title}</text>',
-             f'<text x="24" y="65" class="sub">{subtitle}</text>', *body]
-    parts.extend(f'<text x="24" y="{bottom + 40 + i * 20}" class="foot">{escape(line)}</text>'
-                 for i, line in enumerate(foot_lines))
+             text_node(content["title"], 24, 36, kind="title"),
+             text_node(content["subtitle"], 24, 65, kind="sub"), *body]
+    parts.extend(text_node(line, 24, bottom + 40 + i * 20, kind="foot", source=source)
+                 for i, (line, source) in enumerate(foot_lines))
     parts.append("</svg>")
     return "\n".join(parts) + "\n"

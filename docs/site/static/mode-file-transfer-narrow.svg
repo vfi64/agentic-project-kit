@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 558" role="img" aria-labelledby="title desc">
+<title id="title">File Transfer</title><desc id="desc">You to Kit and repository: Start new work. You to Kit and repository: Send your task so the Kit publishes it to the repository. Command: agentic-kit transfer submit-user-task. You to AI assistant: Write g in the chat. AI assistant to Kit and repository: Read the published task before working. Command: agentic-kit transfer read-user-task. You to Kit and repository: Run Check, then use Finish &amp; publish after review.</desc>
+<style>.title{font:700 22px sans-serif;fill:#17202a}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.note{font:14px sans-serif;fill:#586674}.role{font:700 14px sans-serif;fill:#0f766e}</style>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1L9 5L1 9z" fill="#0f766e"/></marker></defs>
+<metadata>{&quot;flow&quot;: [{&quot;action&quot;: &quot;Start new work.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;kit&quot;, &quot;command&quot;: null}, {&quot;action&quot;: &quot;Send your task so the Kit publishes it to the repository.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;kit&quot;, &quot;command&quot;: &quot;agentic-kit transfer submit-user-task&quot;}, {&quot;action&quot;: &quot;Write g in the chat.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;assistant&quot;, &quot;command&quot;: null}, {&quot;action&quot;: &quot;Read the published task before working.&quot;, &quot;actor_from&quot;: &quot;assistant&quot;, &quot;actor_to&quot;: &quot;kit&quot;, &quot;command&quot;: &quot;agentic-kit transfer read-user-task&quot;}, {&quot;action&quot;: &quot;Run Check, then use Finish &amp; publish after review.&quot;, &quot;actor_from&quot;: &quot;you&quot;, &quot;actor_to&quot;: &quot;kit&quot;, &quot;command&quot;: null}], &quot;mode_id&quot;: &quot;file_transfer&quot;}</metadata>
+<rect width="480" height="558" fill="#fff"/>
+<text x="24" y="36" class="title" data-source="File Transfer">File Transfer</text>
+<rect x="24" y="63" width="432" height="74" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="86" class="role" data-source="1. You → Kit and repository">1. You → Kit and repository</text>
+<text x="36" y="116" class="body" data-source="Start new work.">Start new work.</text>
+<rect x="24" y="147" width="432" height="116" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="170" class="role" data-source="2. You → Kit and repository">2. You → Kit and repository</text>
+<text x="36" y="200" class="body" data-source="Send your task so the Kit publishes it to the repository.">Send your task so the Kit publishes it to the</text>
+<text x="36" y="221" class="body" data-source="Send your task so the Kit publishes it to the repository.">repository.</text>
+<text x="36" y="242" class="note" data-source="agentic-kit transfer submit-user-task">agentic-kit transfer submit-user-task</text>
+<rect x="24" y="273" width="432" height="74" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="296" class="role" data-source="3. You → AI assistant">3. You → AI assistant</text>
+<text x="36" y="326" class="body" data-source="Write g in the chat.">Write g in the chat.</text>
+<rect x="24" y="357" width="432" height="95" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="380" class="role" data-source="4. AI assistant → Kit and repository">4. AI assistant → Kit and repository</text>
+<text x="36" y="410" class="body" data-source="Read the published task before working.">Read the published task before working.</text>
+<text x="36" y="431" class="note" data-source="agentic-kit transfer read-user-task">agentic-kit transfer read-user-task</text>
+<rect x="24" y="462" width="432" height="74" rx="9" fill="#f6f7f4" stroke="#c8d3dc" stroke-width="1.5"/>
+<text x="36" y="485" class="role" data-source="5. You → Kit and repository">5. You → Kit and repository</text>
+<text x="36" y="515" class="body" data-source="Run Check, then use Finish &amp; publish after review.">Run Check, then use Finish &amp; publish after review.</text>
+</svg>

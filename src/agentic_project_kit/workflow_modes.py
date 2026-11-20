@@ -142,7 +142,7 @@ WORKFLOW_MODES = (
         best_for="Assistants with repository and terminal access, such as Codex CLI or Claude Code.",
         summary=(
             "The assistant runs Kit commands in the repository and you review the result. "
-            "In the GUI, Remote covers the GitHub pull request and CI steps."
+            "In the GUI, this path appears as Remote. Remote covers the GitHub pull request and CI steps."
         ),
         commands=(
             "agentic-kit command-for",

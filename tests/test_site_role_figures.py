@@ -14,7 +14,49 @@ from agentic_project_kit.site_role_figures import _ci_summary, _lines, collect_r
 
 
 ROOT = Path(__file__).resolve().parents[1]
-FIGURES = ("asked-checked-enforced", "repository-memory", "path-chooser")
+FIGURES = ("asked-checked-enforced", "repository-memory", "path-chooser", "background-and-ownership", "kit-conductor")
+
+
+def test_every_website_mode_has_a_sequence_in_its_own_card(built_site: Path) -> None:
+    from agentic_project_kit.workflow_modes import modes_for
+
+    page = (built_site / "workflows/index.html").read_text()
+    slugs = {mode.mode_id.replace("_", "-") for mode in modes_for("site")}
+    assert {path.stem.removeprefix("mode-") for path in (built_site / "static").glob("mode-*.svg")
+            if not path.stem.endswith("-narrow")} == slugs
+    for mode in modes_for("site"):
+        slug = mode.mode_id.replace("_", "-")
+        card = page.split(f'id="mode-{slug}"', 1)[1].split("</article>", 1)[0]
+        assert f"mode-{slug}.svg" in card and f"mode-{slug}-narrow.svg" in card
+        for narrow in (False, True):
+            _, svg = _svg(built_site, f"mode-{slug}", narrow)
+            facts = _facts(svg)
+            assert [step["action"] for step in facts["flow"]] == [step.action for step in mode.flow]
+            assert svg.get("role") == "img" and len(svg.findtext("{http://www.w3.org/2000/svg}desc") or "") >= 20
+            assert all(step.command in card for step in mode.flow if step.command)
+
+
+def test_added_website_mode_gets_a_diagram_and_requires_a_flow(tmp_path: Path, monkeypatch) -> None:
+    from dataclasses import replace
+    from agentic_project_kit import workflow_modes
+    from agentic_project_kit.workflow_modes import WorkflowStep
+
+    original = workflow_modes.WORKFLOW_MODES
+    extra = replace(
+        next(mode for mode in original if mode.mode_id == "gui"),
+        mode_id="test_extra", label="Extra path",
+        flow=(WorkflowStep("you", "kit", "Select action."), WorkflowStep("kit", "kit", "Check state."),
+              WorkflowStep("kit", "you", "Show result.")),
+    )
+    monkeypatch.setattr(workflow_modes, "WORKFLOW_MODES", (*original, extra))
+    result = build_site(ROOT, output_dir=tmp_path / "good", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    assert (tmp_path / "good/static/mode-test-extra.svg").is_file()
+    monkeypatch.setattr(workflow_modes, "WORKFLOW_MODES", (*original, replace(extra, flow=())))
+    result = build_site(ROOT, output_dir=tmp_path / "bad", build_commit="a" * 40)
+    assert not result.ok
+    assert any("workflow diagram requires complete manifest-backed mode: test-extra" in err
+               for err in result.report.blockers)
 
 
 @pytest.fixture(scope="module")
@@ -38,7 +80,8 @@ def _facts(root: ET.Element) -> dict:
 
 
 def test_role_figures_are_accessible_responsive_and_source_bound(built_site: Path) -> None:
-    pages = {"asked-checked-enforced": "understand/index.html", "repository-memory": "use/index.html", "path-chooser": "workflows/index.html"}
+    pages = {"asked-checked-enforced": "understand/index.html", "repository-memory": "use/index.html", "path-chooser": "workflows/index.html",
+             "background-and-ownership": "understand/index.html", "kit-conductor": "index.html"}
     for name in FIGURES:
         for narrow in (False, True):
             source, root = _svg(built_site, name, narrow)
@@ -59,12 +102,17 @@ def test_path_figure_uses_executor_names_and_current_site_modes(built_site: Path
     assert [mode["role"] for mode in projection["modes"]] == ["primary", "cost_saving", "emergency", "optional"]
     page = (built_site / "workflows/index.html").read_text(encoding="utf-8")
     assert 'id="mode-remote"' not in page
-    assert "In the GUI, Remote covers the GitHub pull request and CI steps." in page
+    assert "In the GUI, this path appears as Remote. Remote covers the GitHub pull request and CI steps." in page
     assert facts["executors"] == [{"name": row["name"], "path": row["path"]} for row in executors]
     assert facts["modes"] == [row["title"] for row in projection["modes"]]
     for mode, names in facts["mode_tools"].items():
         assert names == [row["name"] for row in executors if mode in row["path"].split(" or ")]
     assert all(row["name"] in _svg(built_site, "path-chooser")[0] for row in executors)
+    assert facts["branches"] == [["Agent Direct"], ["File Transfer", "Copy and Paste"], ["GUI"]]
+    for narrow in (False, True):
+        _, svg = _svg(built_site, "path-chooser", narrow)
+        roles = [node.text for node in svg.iter("{http://www.w3.org/2000/svg}text") if node.get("class") == "role"]
+        assert roles == ["Primary", "Cost-saving", "Emergency only", "Optional"]
 
 
 def test_repository_figure_uses_init_files_and_example_steps(built_site: Path) -> None:
@@ -123,8 +171,7 @@ def test_repository_arrows_and_second_session_are_readable(built_site: Path, nar
     displayed_action = " ".join(labels[index + 1:index + 3]).rstrip("…")
     assert action == displayed_action or action.startswith(displayed_action + " ")
     assert "Reads" in labels[index + 1]
-    assert "package is local" in " ".join(labels)
-    assert "another machine" in " ".join(labels)
+    assert "validated package matches the five files on the simulated remote" in " ".join(labels)
     repository = labels[labels.index("Repository files") + 1:labels.index(arrow_labels["writes"])]
     names: list[str] = []
     for line in repository:
@@ -162,10 +209,49 @@ def test_file_labels_wrap_at_separators_without_breaking_words() -> None:
 
 
 
-def test_unpublished_figures_are_not_embedded(built_site: Path) -> None:
-    content = yaml.safe_load((ROOT / "site/content/role_figures.yaml").read_text(encoding="utf-8"))
-    assert content["figures"]["background-and-ownership"]["published"] is False
-    assert content["figures"]["kit-conductor"]["published"] is False
-    pages = " ".join(path.read_text(encoding="utf-8") for path in built_site.rglob("*.html"))
-    assert "background-and-ownership.svg" not in pages
-    assert "kit-conductor.svg" not in pages
+def test_ownership_figures_obey_publication_flags(tmp_path: Path, monkeypatch) -> None:
+    original = Path.read_text
+    config = ROOT / "site/content/role_figures.yaml"
+    content = yaml.safe_load(original(config, encoding="utf-8"))
+    for name in FIGURES[-2:]:
+        content["figures"][name]["published"] = False
+
+    def read(path, *args, **kwargs):
+        return yaml.safe_dump(content) if path == config else original(path, *args, **kwargs)
+
+    monkeypatch.setattr(Path, "read_text", read)
+    result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
+    assert result.ok, result.report.blockers
+    for name, page in zip(FIGURES[-2:], ("understand/index.html", "index.html")):
+        assert name not in (tmp_path / "site" / page).read_text()
+        assert not (tmp_path / "site/static" / f"{name}.svg").exists()
+
+
+def test_conductor_uses_reviewed_executors_and_names_simulation(built_site: Path) -> None:
+    executors = yaml.safe_load((ROOT / "site/content/executors.yaml").read_text())["executors"]
+    for narrow in (False, True):
+        _, svg = _svg(built_site, "kit-conductor", narrow)
+        assert _facts(svg)["executors"] == [{"name": row["name"], "path": row["path"]} for row in executors]
+        labels = " ".join(node.text or "" for node in svg.iter("{http://www.w3.org/2000/svg}text"))
+        assert all(row["name"] in labels for row in executors)
+        assert "simulates GitHub" in labels
+
+
+def test_rendered_svg_text_preserves_source_word_boundaries(built_site: Path) -> None:
+    from agentic_project_kit.workflow_modes import modes_for
+
+    names = (*FIGURES, *(f"mode-{mode.mode_id.replace('_', '-')}" for mode in modes_for("site")))
+    for name in names:
+        for narrow in (False, True):
+            _, svg = _svg(built_site, name, narrow)
+            for element in svg.iter("{http://www.w3.org/2000/svg}text"):
+                source = element.get("data-source")
+                line = (element.text or "").removesuffix("…")
+                assert source and line, (name, narrow, element.text)
+                boundaries = r"[\s/_-]"
+                assert any(
+                    (match.start() == 0 or re.match(boundaries, source[match.start() - 1]))
+                    and (match.end() == len(source) or re.match(boundaries, source[match.end()])
+                         or re.match(boundaries, line[-1]))
+                    for match in re.finditer(re.escape(line), source)
+                ), (name, narrow, source, line)

@@ -113,6 +113,8 @@ def test_public_usage_commands_run_in_generated_project(tmp_path: Path, monkeypa
             continue
         command = step["command"]
         assert command in known
+        if command == "agentic-kit transfer chat-switch-complete":
+            remote_before_handoff = run("git", "--git-dir", str(remote), "rev-parse", "main", cwd=cwd)
         json_flag = ["--json"] if command in {"agentic-kit work finish", "agentic-kit transfer chat-switch-complete"} else []
         output = run(str(cli), *step["argv"], *json_flag, cwd=cwd)
         if command == "agentic-kit init":
@@ -131,8 +133,22 @@ def test_public_usage_commands_run_in_generated_project(tmp_path: Path, monkeypa
             assert "Formats: CSV and TSV" in run("git", "--git-dir", str(remote), "show",
                                                  "main:export-format.txt", cwd=cwd)
         elif command == "agentic-kit transfer chat-switch-complete":
+            assert run("git", "--git-dir", str(remote), "rev-parse", "main", cwd=cwd) == remote_before_handoff
             report_path = Path(json.loads(output)["validation_report_path"])
             assert json.loads((cwd / report_path).read_text(encoding="utf-8"))["status"] == "PASS"
+            package = (cwd / report_path).parent.relative_to(cwd)
+            expected = {str(package / name) for name in (
+                "execution_contract.json", "source_manifest.json", "successor_context.yaml",
+                "successor_prompt.md", "validation_report.json",
+            )}
+            assert set(run("git", "ls-files", "--", str(package), cwd=cwd).splitlines()) == expected
+            assert set(run("git", "--git-dir", str(remote), "ls-tree", "-r", "--name-only",
+                           "main", "--", str(package), cwd=cwd).splitlines()) == expected
+            for path in sorted(expected):
+                remote_bytes = subprocess.check_output(
+                    ["git", "--git-dir", str(remote), "show", f"main:{path}"], cwd=cwd,
+                )
+                assert remote_bytes == (cwd / path).read_bytes(), path
 
 
 def test_usage_story_groups_sessions_and_marks_steps_without_commands(tmp_path: Path) -> None:
@@ -266,7 +282,7 @@ def test_tool_source_links_are_distinct_and_codex_uses_agent_guide(tmp_path: Pat
     assert result.ok, result.report.blockers
     page = (tmp_path / "site/use/index.html").read_text(encoding="utf-8")
     labels = re.findall(r'<a href="[^"]+">(Source: [^<]+)</a>', page)
-    assert len(labels) == 4 and len(set(labels)) == 4
+    assert len(labels) == 5 and len(set(labels)) == 5
     assert "https://developers.openai.com/codex/guides/agents-md" in page
 
 

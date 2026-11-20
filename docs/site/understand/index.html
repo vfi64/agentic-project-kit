@@ -57,6 +57,7 @@
 
       <section id="architecture" aria-labelledby="architecture-title">
         <p class="eyebrow">Governance and execution are separate responsibilities</p><h2 id="architecture-title">How the Kit works</h2>
+        <figure class="architecture-map role-map"><picture><source media="(max-width: 640px)" srcset="../static/background-and-ownership-narrow.svg"><img src="../static/background-and-ownership.svg" alt="Which project responsibilities stay with you."></picture></figure>
         <figure class="architecture-map"><img src="../static/kit-architecture.svg" alt="A human defines intent and approves decisions. A replaceable executor proposes and runs bounded actions through Kit contracts and checks. Git, CI and release services provide execution results. Evidence returns to repository state and successor handoffs.">
           <figcaption>On narrow screens, scroll the diagram horizontally. Logical responsibilities. A guard validates defined contracts; it does not prove general software correctness.</figcaption></figure>
         <figure class="architecture-map role-map"><picture><source media="(max-width: 680px)" srcset="../static/asked-checked-enforced-narrow.svg"><img src="../static/asked-checked-enforced.svg" alt="Instructions ask an agent; checks report failures; GitHub branch protection can require passing checks before merge."></picture><figcaption>Three levels of control, projected from a generated project and the command manifest.</figcaption></figure>
