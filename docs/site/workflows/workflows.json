@@ -29,7 +29,7 @@
   },
   "core_workflow": [
     {
-      "detail": "Choose File Transfer, Copy and Paste, Agent Direct, or the GUI surface.",
+      "detail": "Choose the work path that fits your assistant and access.",
       "title": "Select the interaction mode"
     },
     {
@@ -48,87 +48,7 @@
   "kind": "site_workflow_projection",
   "modes": [
     {
-      "best_for": "Web or hosted LLMs without direct terminal or repository access.",
-      "commands": [
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer read-user-task",
-          "safety": "BOUNDED",
-          "surface": "primitive",
-          "when_to_use": "Read the current GUI file-transfer task and report its next action."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer submit-user-task",
-          "safety": "BOUNDED",
-          "surface": "primitive",
-          "when_to_use": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer remote-next",
-          "safety": "BOUNDED",
-          "surface": "orchestrator",
-          "when_to_use": "Run the next repo-backed transfer order for local or remote work handoff."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer chat-switch-complete",
-          "safety": "BOUNDED",
-          "surface": "orchestrator",
-          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
-        }
-      ],
-      "id": "file-transfer",
-      "summary": "The human and the LLM exchange bounded Kit transfer files while the repository remains the source of truth.",
-      "title": "File Transfer"
-    },
-    {
-      "best_for": "Small manual web-LLM sessions where a file-transfer carrier is not needed.",
-      "commands": [
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit workflow request",
-          "safety": "BOUNDED",
-          "surface": "primitive",
-          "when_to_use": "Request the configured declarative workflow without running it."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit workflow run",
-          "safety": "BOUNDED",
-          "surface": "primitive",
-          "when_to_use": "Run the current workflow, or set a stored workflow item and run it."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer log-header",
-          "safety": "BOUNDED",
-          "surface": "primitive",
-          "when_to_use": "Render the dynamic local-to-LLM copy/paste log header from rule files."
-        },
-        {
-          "dry_run_available": false,
-          "manifest_present": true,
-          "qualified_name": "agentic-kit transfer chat-switch-complete",
-          "safety": "BOUNDED",
-          "surface": "orchestrator",
-          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
-        }
-      ],
-      "id": "copy-paste",
-      "summary": "The LLM proposes a bounded terminal block, the human runs it, and the important output is returned to the conversation.",
-      "title": "Copy and Paste"
-    },
-    {
-      "best_for": "Executors with controlled repository and terminal access.",
+      "best_for": "Assistants with repository and terminal access, such as Codex CLI or Claude Code.",
       "commands": [
         {
           "dry_run_available": false,
@@ -172,11 +92,97 @@
         }
       ],
       "id": "agent-direct",
-      "summary": "The executor can run Kit commands directly, but repository governance, evidence, safety classes and handoff state remain separate from the agent.",
+      "role": "primary",
+      "role_label": "Primary",
+      "summary": "The assistant runs Kit commands in the repository and you review the result. In the GUI, Remote covers the GitHub pull request and CI steps.",
       "title": "Agent Direct"
     },
     {
-      "best_for": "Local operator visibility over manifest-backed actions and readiness checks.",
+      "best_for": "Browser chats without direct terminal access.",
+      "commands": [
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer submit-user-task",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Submit a GUI file-transfer task from a UTF-8 file to the canonical task carrier."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer read-user-task",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Read the current GUI file-transfer task and report its next action."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer remote-next",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Run the next repo-backed transfer order for local or remote work handoff."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer chat-switch-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
+        }
+      ],
+      "id": "file-transfer",
+      "role": "cost_saving",
+      "role_label": "Cost-saving",
+      "summary": "Use a browser chat with no API or CLI usage costs for the chat workflow. Your chat subscription may still apply.",
+      "title": "File Transfer"
+    },
+    {
+      "best_for": "Emergency path when other paths fail.",
+      "commands": [
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workflow request",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Request the configured declarative workflow without running it."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit workflow run",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Run the current workflow, or set a stored workflow item and run it."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer log-header",
+          "safety": "BOUNDED",
+          "surface": "primitive",
+          "when_to_use": "Render the dynamic local-to-LLM copy/paste log header from rule files."
+        },
+        {
+          "dry_run_available": false,
+          "manifest_present": true,
+          "qualified_name": "agentic-kit transfer chat-switch-complete",
+          "safety": "BOUNDED",
+          "surface": "orchestrator",
+          "when_to_use": "Create a deterministic successor handoff package and prompt projections."
+        }
+      ],
+      "id": "copy-paste",
+      "role": "emergency",
+      "role_label": "Emergency only",
+      "summary": "Review an assistant's terminal block before running it locally, then send back the relevant output.",
+      "title": "Copy and Paste"
+    },
+    {
+      "best_for": "Local access to Kit actions and readiness checks.",
       "commands": [
         {
           "dry_run_available": false,
@@ -204,10 +210,12 @@
         }
       ],
       "id": "gui",
-      "summary": "The GUI entry point is available, but full parity with every CLI command is not claimed. The manifest remains the command authority.",
+      "role": "optional",
+      "role_label": "Optional",
+      "summary": "Use the local window for the Kit actions available there. See the command reference for the full CLI.",
       "title": "GUI"
     }
   ],
   "schema_version": 1,
-  "source": "site_generator.py"
+  "source": "workflow_modes.py"
 }
