@@ -1,12 +1,12 @@
 schema_version: 1
 current_head:
-  full: 35bbc54fdbec42304e3064cab8aa6013c4a6e337
-  short: 35bbc54f
-  subject: Complete generated operating layer and generic CI (#2829)
+  full: 2d695d994900143971448d761e7d2bb1779c4f72
+  short: 2d695d99
+  subject: Improve mobile usage page and update project direction (#2831)
 last_substantive_work_state:
-  full: 35bbc54fdbec42304e3064cab8aa6013c4a6e337
-  short: 35bbc54f
-  subject: Complete generated operating layer and generic CI (#2829)
+  full: 2d695d994900143971448d761e7d2bb1779c4f72
+  short: 2d695d99
+  subject: Improve mobile usage page and update project direction (#2831)
 administrative_context:
   - "PR #1257 hardened admin-refresh-pr and pr-complete recovery."
   - "PR #1255 added generated operational handoff block replacement."

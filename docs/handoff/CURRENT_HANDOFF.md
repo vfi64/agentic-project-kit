@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `35bbc54fdbec42304e3064cab8aa6013c4a6e337` (`35bbc54f`), after `Complete generated operating layer and generic CI (#2829)`.
-Last substantive work state is `35bbc54fdbec42304e3064cab8aa6013c4a6e337` (`35bbc54f`), after `Complete generated operating layer and generic CI (#2829)`.
+Current verified main/admin HEAD is `2d695d994900143971448d761e7d2bb1779c4f72` (`2d695d99`), after `Improve mobile usage page and update project direction (#2831)`.
+Last substantive work state is `2d695d994900143971448d761e7d2bb1779c4f72` (`2d695d99`), after `Improve mobile usage page and update project direction (#2831)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
