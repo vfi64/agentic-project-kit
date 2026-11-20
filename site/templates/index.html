@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Agentic Project Kit helps maintainers direct AI-assisted work through repository-owned decisions, checks, evidence and handoffs.">
+    <meta name="description" content="Agentic Project Kit is the control layer for people who direct AI coding agents: design and deliver low-drift projects without being a programmer or a GitHub specialist.">
     <title>${product_name}</title>
     <link rel="stylesheet" href="static/site.css">
   </head>
@@ -15,8 +15,10 @@
         <div>
           <p class="eyebrow">Repository-owned governance for AI-assisted work</p>
           <h1 id="site-title">${product_name}</h1>
-          <p class="lede">Give AI more work, not more authority.</p>
-          <p>Keep project decisions, checks, evidence and handoffs in your Git repository. The Kit helps maintainers direct AI-assisted work and review its results. Your chosen assistant or a person makes the changes; you own design, approvals and releases.</p>
+          <p class="lede"><strong>Design and deliver software with AI agents, without having to be a programmer or a GitHub specialist.</strong></p>
+          <p>Not a coding assistant and not a replacement for Cursor, Claude Code or Codex: the control layer above them. You decide; agents write the code; the Kit keeps rules, decisions and memory in your repository and handles the GitHub mechanics.</p>
+          <p>Works best with Codex CLI or Claude Code. File Transfer with a browser chat saves API and CLI costs; Copy and Paste is the emergency path.</p>
+          ${generated_finish_status}
           <div class="hero-actions" aria-label="Primary generated views">
             <a href="quickstart/index.html">Quickstart</a>
             <a href="use/index.html">Use with Codex or Claude</a>
@@ -31,7 +33,7 @@
       <section class="panel" aria-labelledby="everyday-title">
         <p class="eyebrow">Two sessions, one repository</p><h2 id="everyday-title">Continue a reviewed change in a new chat</h2>
         <p>Imagine a small Python CSV exporter. You ask an assistant to add tab-separated output while preserving comma-separated output. The assistant proposes code and a regression test. You review both and run the tests and configured Kit checks.</p>
-        <p>For a project created by <code>agentic-kit init</code>, record the current goal, test results, and next step in <code>docs/handoff/CURRENT_HANDOFF.md</code>. In the next session, use the generated starter prompt so a new assistant reads the repository state. A failing CSV regression test reports a break only if the test covers that behavior.</p>
+        <p>Record the current goal, test results and next step in the repository. Generate the validated successor package and give the next session access to it so the assistant can resume. A failing CSV regression test reports a break only if the test covers that behavior.</p>
         <p>You decide whether the change meets the requirement and whether to approve a merge or release. The Kit's green checks confirm only their named conditions.</p>
         <a href="use/index.html">Follow the example with Codex or Claude</a>
       </section>

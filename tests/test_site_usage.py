@@ -19,7 +19,7 @@ import yaml
 
 from agentic_project_kit.cli import app
 from agentic_project_kit.command_manifest import load_manifest
-from agentic_project_kit.site_generator import build_site
+from agentic_project_kit.site_generator import build_site, collect_site_foundation_metadata, render_index_html
 from agentic_project_kit.site_init_figure import _short_path
 from agentic_project_kit.site_usage import render_usage_page
 from agentic_project_kit.templates import BASE_FILES
@@ -35,6 +35,23 @@ class VisibleText(HTMLParser):
 
     def handle_data(self, data: str) -> None:
         self.parts.append(data)
+
+
+@pytest.mark.parametrize("has_finish", [False, True])
+def test_homepage_warns_only_without_a_finish_step(tmp_path: Path, has_finish: bool) -> None:
+    report = collect_site_foundation_metadata(ROOT, build_commit="a" * 40)
+    assert report.ok, report.blockers
+    template = tmp_path / "site/templates/index.html"
+    template.parent.mkdir(parents=True)
+    shutil.copyfile(ROOT / "site/templates/index.html", template)
+    example_path = tmp_path / "site/content/usage_example.yaml"
+    example_path.parent.mkdir()
+    example = yaml.safe_load((ROOT / "site/content/usage_example.yaml").read_text(encoding="utf-8"))
+    if not has_finish:
+        example["steps"] = [step for step in example["steps"] if step["command"] != "agentic-kit work finish"]
+    example_path.write_text(yaml.safe_dump(example), encoding="utf-8")
+    page = render_index_html(tmp_path, report)
+    assert ("has not yet been demonstrated end to end in a generated project" in page) is not has_finish
 
 
 def test_public_usage_page_renders_template_prompt_and_source_bound_tools(tmp_path: Path) -> None:

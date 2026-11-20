@@ -761,6 +761,8 @@ def _docs_pages_fallback_status_projection(root: Path) -> SiteStatusProjection:
 
 
 def render_index_html(root: Path, report: SiteFoundationReport) -> str:
+    from .site_usage import render_generated_finish_status
+
     metadata = report.metadata
     command_catalog = report.command_catalog
     assert metadata is not None
@@ -769,6 +771,7 @@ def render_index_html(root: Path, report: SiteFoundationReport) -> str:
     template = Template(template_path.read_text(encoding="utf-8"))
     values = {
         "site_nav": render_site_navigation("index.html"),
+        "generated_finish_status": render_generated_finish_status(root),
         "product_name": escape(metadata.product_name),
         "former_product_name": escape(metadata.former_product_name),
         "package_name": escape(metadata.package_name),

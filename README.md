@@ -1,19 +1,41 @@
 # Agentic Project Kit
 
-**Give AI more work, not more authority.**
-
-Agentic Project Kit keeps project decisions, checks, evidence, and handoffs in a Git repository. It helps maintainers direct AI-assisted work and review its results. Coding assistants or people make the changes; the maintainer owns design, approvals, and releases. The Kit checks defined rules and records what happened. It does not judge whether an architecture or a change is good.
-
-The Kit can carry repository context into a later chat and block a workflow when a defined condition fails. Its controls have targeted tests and bounded observations; a reduction in development time, defects, or total cost has not been established. Maintaining contracts, tests, state files, and closeout evidence takes work.
-
 Current version: 1.4.0
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.20101359.svg)](https://doi.org/10.5281/zenodo.20101359)
 
-`agentic-project-kit` is a local Python CLI for governing AI-assisted repository work with contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
-
 Generated website: <https://vfi64.github.io/agentic-project-kit/>. Start with the
 [practical Codex or Claude walkthrough](https://vfi64.github.io/agentic-project-kit/use/)
-for a tested generated-project cycle and its manual session handoff.
+for a tested generated-project cycle and its session handoff.
+
+**Design and deliver software with AI agents, without having to be a programmer or a GitHub specialist.**
+
+Agentic Project Kit is not a coding assistant and does not replace Cursor, Claude Code or Codex.
+It is the control layer above them, for the person who directs the work: you set requirements,
+make design decisions and approve results; AI agents write the code; the Kit keeps rules,
+decisions and project memory in the Git repository, checks them at every step and handles
+branches, pull requests, CI and merges through a few commands.
+
+**Main goal: abstraction.** The Kit takes the details of coding and of GitHub off your hands, so
+that you can act as the architect of a project designed to stay low-drift, in any programming
+language. Python has dedicated templates; other languages use the `generic` project type.
+
+**How to work with it, in order of preference:**
+
+1. **Primary: an agent with repository and terminal access**, such as Codex CLI or Claude Code.
+   This is where the Kit is most useful.
+2. **Cost-saving: File Transfer with a browser chat**, such as Claude or ChatGPT. No API or CLI
+   usage costs; use it when your CLI quota is used up.
+3. **Emergency only: Copy and Paste.**
+
+**Not the goal:** minimal administration or minimal tokens. The Kit adds files, checks and
+commits to keep the project consistent. That is a deliberate cost.
+
+**Current status:** projects created with `agentic-kit init` get the full operating layer: rule
+acknowledgement, gated `work start` / `work finish` and an automatic session handoff package.
+The mechanisms are tested; in generated projects, `work finish` has so far been tested only
+against a simulated GitHub, and the effect on drift in daily use has not been measured yet.
+
+Maintained as a personal tool and shared as-is.
 
 ## Why this exists
 
@@ -24,6 +46,14 @@ The kit turns those lessons into reusable repository scaffolding.
 Goal: make repository state, handoffs, documentation coverage, tasks, release state, and policy expectations visible enough to reduce context drift.
 
 ## Release and handoff details
+
+**Give AI more work, not more authority.**
+
+Agentic Project Kit keeps project decisions, checks, evidence, and handoffs in a Git repository. It helps maintainers direct AI-assisted work and review its results. Coding assistants or people make the changes; the maintainer owns design, approvals, and releases. The Kit checks defined rules and records what happened. It does not judge whether an architecture or a change is good.
+
+The Kit can carry repository context into a later chat and block a workflow when a defined condition fails. Its controls have targeted tests and bounded observations; a reduction in development time, defects, or total cost has not been established. Maintaining contracts, tests, state files, and closeout evidence takes work.
+
+`agentic-project-kit` is a local Python CLI for governing AI-assisted repository work with contracts, gates, evidence, handoffs, policy selection, task tracking, GitHub automation, and release validation.
 
 > Handoff architecture: the deterministic Successor Handoff Package writes `successor_context.yaml`, `source_manifest.json`, `validation_report.json`, `execution_contract.json`, and `successor_prompt.md` under `docs/reports/handoff-packages/latest/` for this repo or `.agentic/state/handoff/packages/latest/` externally. New chats verify package and execution contract, not chat memory.
 
