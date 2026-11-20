@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `f976c95daa6fb814cc6283cb88612bef81ced9d5` (`f976c95d`), after `Clarify practical website work cycle (#2827)`.
-Last substantive work state is `f976c95daa6fb814cc6283cb88612bef81ced9d5` (`f976c95d`), after `Clarify practical website work cycle (#2827)`.
+Current verified main/admin HEAD is `35bbc54fdbec42304e3064cab8aa6013c4a6e337` (`35bbc54f`), after `Complete generated operating layer and generic CI (#2829)`.
+Last substantive work state is `35bbc54fdbec42304e3064cab8aa6013c4a6e337` (`35bbc54f`), after `Complete generated operating layer and generic CI (#2829)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
