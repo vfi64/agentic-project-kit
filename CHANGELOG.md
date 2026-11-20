@@ -1,5 +1,6 @@
 ## Unreleased
 
+- Changed: The README and website explain how the Kit helps people direct AI coding agents, prioritize the available work paths and state the limits of the generated-project evidence.
 - Changed: Workflow roles and steps now come from one source for the GUI and website. The walkthrough distinguishes the local successor package from repository files, and work start preserves the upstream hint alongside other blockers.
 - Fixed: Work start explains how to connect a branch without an upstream, and the website walkthrough and its diagrams show the generated-project workflow, handoff and CI checks more clearly.
 - Added: Source-bound, accessible wide and narrow SVGs explain control levels, repository memory and available work paths on the website.

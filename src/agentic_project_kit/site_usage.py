@@ -14,6 +14,21 @@ from .site_navigation import render_site_navigation
 from .templates import BASE_FILES
 
 
+def render_generated_finish_status(root: Path) -> str:
+    """Show the homepage qualification when the documented example has no finish step."""
+    path = root / "site/content/usage_example.yaml"
+    example = yaml.safe_load(path.read_text(encoding="utf-8")) if path.is_file() else {}
+    steps = example.get("steps", []) if isinstance(example, dict) else []
+    if isinstance(steps, list) and any(
+        isinstance(step, dict) and step.get("command") == "agentic-kit work finish" for step in steps
+    ):
+        return ""
+    return (
+        "<p><code>work finish</code> has not yet been demonstrated end to end in a generated project; "
+        'see the <a href="use/index.html">Use page</a>.</p>'
+    )
+
+
 def render_usage_page(root: Path, *, command_names: set[str], product_name: str) -> str:
     """Render the tested init cycle and tool guidance from reviewed sources."""
     executors = yaml.safe_load((root / "site/content/executors.yaml").read_text(encoding="utf-8"))
