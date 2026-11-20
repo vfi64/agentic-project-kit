@@ -15,7 +15,39 @@ LINE = "#c8d3dc"
 ACCENT = "#0f766e"
 ACCENT2 = "#3454d1"
 WARN = "#a16207"
+TINT = {MUTED: "#f1f3f5", ACCENT: "#e6f2f0", ACCENT2: "#eaeefc", INK: "#f6f7f4"}
 NAMES = ("asked-checked-enforced", "repository-memory", "path-chooser")
+Card = tuple[str, list[str], str]
+
+
+def _ci_summary(ci_text: str) -> tuple[list[str], list[str]]:
+    ci = yaml.load(ci_text, Loader=yaml.BaseLoader)
+    events = ci.get("on", {})
+    if not isinstance(events, dict) or set(events) != {"push", "pull_request"}:
+        raise ValueError("generated CI trigger changed")
+    commands = [
+        (job, step) for job in ci.get("jobs", {}).values()
+        for step in job.get("steps", []) if "run" in step
+    ]
+    if not any(step["run"].strip() == "agentic-kit check" for _, step in commands):
+        raise ValueError("generated CI no longer runs agentic-kit check")
+
+    has_tests = False
+    for job, step in commands:
+        run = step["run"].strip()
+        is_check = run == "agentic-kit check"
+        if not is_check and step.get("name") in {"Install Kit", "Install project and Kit"}:
+            continue
+        if not is_check and (step.get("name"), run) != ("Run tests", "if [ -d tests ]; then pytest -q; fi"):
+            raise ValueError(f"unrecognized generated CI step: {step.get('name', '<unnamed>')}")
+        if any("if" in entry or entry.get("continue-on-error", "false").lower() != "false" for entry in (job, step)):
+            raise ValueError("generated CI check or test is conditional or allows failure")
+        has_tests = has_tests or not is_check
+    summary = ["Runs on: " + ", ".join(event.replace("_", " ") for event in sorted(events, reverse=True))]
+    if has_tests:
+        summary.append("Runs project tests")
+    summary.append("Runs agentic-kit check")
+    return sorted(events, reverse=True), summary
 
 
 def collect_role_figure_facts(root: Path, workflow_projection: dict, fixture: tuple[dict, list[str], str]) -> dict[str, dict]:
@@ -29,13 +61,11 @@ def collect_role_figure_facts(root: Path, workflow_projection: dict, fixture: tu
     manifest_commands = {row["qualified_name"] for row in manifest["commands"]}
     if not {"agentic-kit check", "agentic-kit doctor"} <= manifest_commands:
         raise ValueError("role figure command missing from manifest")
-    ci = yaml.load(ci_text, Loader=yaml.BaseLoader)
-    events = ci.get("on", {})
-    if not isinstance(events, dict) or not {"push", "pull_request"} <= set(events):
-        raise ValueError("generated CI trigger changed")
-    ci_steps = [str(step["run"]).strip() for job in ci.get("jobs", {}).values() for step in job.get("steps", []) if "run" in step]
-    if not any("agentic-kit check" in step.splitlines() for step in ci_steps):
-        raise ValueError("generated CI no longer runs agentic-kit check")
+    events, ci_summary = _ci_summary(ci_text)
+    sessions = {session: [step for step in example["steps"] if str(step["session"]) == session]
+                for session in ("1", "2")}
+    if not sessions["1"] or not sessions["2"] or not sessions["2"][0].get("agent"):
+        raise ValueError("repository memory figure requires two sessions and a second-session agent action")
     required = ["AGENTS.md", "docs/STATUS.md", "docs/handoff/CURRENT_HANDOFF.md"]
     shown = required + [next((path for path in files if path.startswith(prefix)), "") for prefix in ("src/", "tests/")]
     prompt = "docs/handoff/STANDARD_AGENT_PROMPT.md"
@@ -50,15 +80,15 @@ def collect_role_figure_facts(root: Path, workflow_projection: dict, fixture: tu
             raise ValueError(f"executor has no site mode: {row['name']}")
     return {
         "asked-checked-enforced": {
-            "ci_events": list(events), "ci_steps": ci_steps,
+            "ci_events": events, "ci_summary": ci_summary,
             "manifest_commands": sorted({"agentic-kit check", "agentic-kit doctor"}),
             "instruction_files": required[:1] + [prompt],
         },
         "repository-memory": {
             "init_files": files, "shown_files": shown,
             "steps": [row["title"] for row in example["steps"]],
-            "sessions": [{"name": session, "steps": [row["title"] for row in example["steps"] if str(row["session"]) == session]}
-                         for session in ("1", "2")],
+            "first_session_steps": [step["title"] for step in sessions["1"]],
+            "second_session_action": sessions["2"][0]["agent"],
         },
         "path-chooser": {
             "executors": [{"name": row["name"], "path": row["path"]} for row in executors],
@@ -80,39 +110,174 @@ def render_role_figures(root: Path, workflow_projection: dict, fixture: tuple[di
     return result
 
 
-def _cards(name: str, facts: dict, content: dict) -> list[tuple[str, list[str], str]]:
+def _cards(name: str, facts: dict, content: dict) -> list[Card]:
     if name == "asked-checked-enforced":
-        checks = [step.replace("\n", " ") for step in facts["ci_steps"]]
+        local = "Local: " + " and ".join(command.removeprefix("agentic-kit ") for command in facts["manifest_commands"])
         return [
-            ("1  Asked", facts["instruction_files"] + ["Agent instructions guide work; they can be ignored."], MUTED),
-            ("2  Checked", facts["manifest_commands"] + ["CI: " + ", ".join(facts["ci_events"])] + checks, ACCENT),
+            ("1  Asked", [Path(path).name for path in facts["instruction_files"]] + [content["asked"]], MUTED),
+            ("2  Checked", [local, *facts["ci_summary"], *content["checked"]], ACCENT),
             ("3  Enforced", [content["branch_protection"]], ACCENT2),
         ]
     if name == "repository-memory":
         return [
-            ("Session 1", facts["sessions"][0]["steps"], ACCENT),
+            ("Session 1", facts["first_session_steps"], ACCENT),
             ("Repository files", facts["shown_files"], INK),
-            ("Session 2", facts["sessions"][1]["steps"], ACCENT2),
+            ("Session 2", [facts["second_session_action"]], ACCENT2),
             ("Chat history", ["not carried over"], MUTED),
         ]
     return [(mode, facts["mode_tools"][mode] or ["Kit interface"], (ACCENT, ACCENT2, WARN, MUTED)[i % 4])
             for i, mode in enumerate(facts["modes"])]
 
 
-def _render_svg(name: str, content: dict, facts: dict, cards: list[tuple[str, list[str], str]], *, narrow: bool) -> str:
+def _lines(items: list[str], width: int) -> list[str]:
+    lines = []
+    for item in items:
+        for line in wrap(item, width, break_long_words=False, break_on_hyphens=False):
+            # textwrap leaves an oversized word on its own line. Split long
+            # filenames only at path or name separators.
+            while len(line) > width:
+                split = max(line.rfind(separator, 0, width) for separator in "/_-") + 1
+                if split == 0:
+                    break
+                lines.append(line[:split])
+                line = line[split:]
+            lines.append(line)
+    return lines
+
+
+def _card(x: int, y: int, width: int, height: int, heading: str, lines: list[str], color: str,
+          *, bar: bool = False, dashed: bool = False) -> list[str]:
+    fill = TINT[color] if bar else "#fff"
+    dash = ' stroke-dasharray="6 5"' if dashed else ""
+    elements = [f'<rect x="{x}" y="{y}" width="{width}" height="{height}" rx="10" '
+                f'fill="{fill}" stroke="{color}" stroke-width="1.5"{dash}/>']
+    if bar:
+        elements.append(f'<rect x="{x}" y="{y}" width="{width}" height="8" rx="4" fill="{color}"/>')
+    elements.append(f'<text x="{x + 14}" y="{y + 29}" class="head">{escape(heading)}</text>')
+    elements.extend(f'<text x="{x + 14}" y="{y + 56 + i * 23}" class="body">{escape(line)}</text>'
+                    for i, line in enumerate(lines))
+    return elements
+
+
+def _control_layout(cards: list[Card], *, narrow: bool) -> tuple[list[str], int]:
+    elements = []
+    width, gap = (432, 24) if narrow else (288, 24)
+    rows = [_lines(items, 47 if narrow else 31) for _, items, _ in cards]
+    heights = []
+    for lines in rows:
+        required = 64 + 23 * len(lines)
+        heights.append(max(required, heights[-1] + 26) if heights else required)
+    y = 98
+    bottom = y + heights[-1]
+    for index, ((heading, _, color), lines, height) in enumerate(zip(cards, rows, heights)):
+        x = 24 if narrow else 24 + index * (width + gap)
+        top = y if narrow else bottom - height
+        elements.extend(_card(x, top, width, height, heading, lines, color, bar=True))
+        if narrow:
+            y += height + gap
+    return elements, y - gap if narrow else bottom
+
+
+def _repository_files(y: int, width: int, repository: Card, *, narrow: bool) -> tuple[list[str], int]:
+    heading, files, color = repository
+    file_groups = [[path] for path in files[:3]] + [files[3:]]
+    columns = 1 if narrow else len(file_groups)
+    gap = 10
+    file_width = (width - (columns + 1) * gap) // columns
+    rows = [_lines(group, 31 if narrow else 24) for group in file_groups]
+    contents = []
+    top = y + 41
+    for start in range(0, len(rows), columns):
+        row = rows[start:start + columns]
+        height = 16 + 19 * max(map(len, row))
+        for column, lines in enumerate(row):
+            x = 24 + gap + column * (file_width + gap)
+            contents.append(f'<rect x="{x}" y="{top}" width="{file_width}" height="{height}" rx="8" '
+                            f'fill="#fff" stroke="{LINE}" stroke-width="1.5"/>')
+            contents.extend(f'<text x="{x + 9}" y="{top + 21 + index * 19}" class="body">{escape(line)}</text>'
+                            for index, line in enumerate(lines))
+        top += height + gap
+    height = top - y
+    return _card(24, y, width, height, heading, [], color) + contents, height
+
+
+def _memory_layout(cards: list[Card], labels: dict, *, narrow: bool) -> tuple[list[str], int]:
+    first, repository, second, history = cards
+    session_width = 432 if narrow else 328
+    width = 47 if narrow else 36
+    first_lines = _lines(first[1], width)
+    second_lines = _lines(second[1], width)
+    if len(second_lines) > 2:
+        second_line = second_lines[1]
+        if len(second_line) >= width:
+            second_line = second_line.rsplit(" ", 1)[0]
+        second_lines = [second_lines[0], second_line + "…"]
+
+    first_height = 64 + 23 * len(first_lines)
+    second_height = 64 + 23 * len(second_lines)
+    history_width = 138 if narrow else 206
+    repository_width = 432 - history_width - 18 if narrow else 912
+    session_y = 98
+    first_bottom = session_y + first_height
+    second_x = 24 if narrow else 608
+    second_y = session_y
+    repository_y = first_bottom + 58
+    repository_parts, repository_height = _repository_files(repository_y, repository_width, repository, narrow=narrow)
+    if narrow:
+        second_y = repository_y + repository_height + 58
+        history_x, history_y = 24 + repository_width + 18, repository_y
+    else:
+        history_x, history_y = (960 - history_width) // 2, session_y + 13
+
+    elements = _card(24, session_y, session_width, first_height, first[0], first_lines, first[2])
+    elements.extend(_card(second_x, second_y, session_width, second_height, second[0], second_lines, second[2]))
+    elements.extend(_card(history_x, history_y, history_width, 86, history[0], history[1], history[2], dashed=True))
+    elements.extend(repository_parts)
+    center = 24 + (repository_width if narrow else session_width) // 2
+    repository_bottom = repository_y + repository_height
+    if narrow:
+        read_arrow = (center, repository_bottom, second_y)
+    else:
+        read_arrow = (second_x + session_width // 2, repository_y, second_y + second_height)
+    for label, (x, start, end), color in (
+        (labels["writes"], (center, first_bottom, repository_y), ACCENT),
+        (labels["reads"], read_arrow, ACCENT2),
+    ):
+        tip = end - 3 if end > start else end + 3
+        elbow = tip - 6 if end > start else tip + 6
+        elements.append(f'<path d="M{x} {start}V{tip}m-5 {elbow - tip} 5 {tip - elbow} 5 {elbow - tip}" '
+                        f'fill="none" stroke="{color}" stroke-width="1.5"/>')
+        elements.append(f'<text x="{x + 12}" y="{(start + end) // 2 + 5}" class="body">{escape(label)}</text>')
+    return elements, max(repository_bottom, second_y + second_height)
+
+
+def _chooser_layout(cards: list[Card], *, narrow: bool) -> tuple[list[str], int]:
+    columns = 1 if narrow else 2
+    width = 432 if narrow else 444
+    y = 98
+    elements = []
+    for start in range(0, len(cards), columns):
+        row = [
+            (heading, [line for item in items for line in wrap(item, 47 if narrow else 43)], color)
+            for heading, items, color in cards[start:start + columns]
+        ]
+        height = max(64 + 23 * len(lines) for _, lines, _ in row)
+        for column, (heading, lines, color) in enumerate(row):
+            elements.extend(_card(24 + column * (width + 24), y, width, height, heading, lines, color))
+        y += height + 24
+    return elements, y - 24
+
+
+def _render_svg(name: str, content: dict, facts: dict, cards: list[Card], *, narrow: bool) -> str:
     width = 480 if narrow else 960
-    columns = 1 if narrow else (2 if name == "path-chooser" else 3)
-    gap = 24
-    margin = 24
-    card_width = (width - 2 * margin - (columns - 1) * gap) // columns
-    max_chars = 47 if narrow else (31 if columns == 3 else 43)
-    wrapped = [(heading, [line for item in items for line in (wrap(str(item), max_chars, break_long_words=True) or [""])], color)
-               for heading, items, color in cards]
-    row_heights = []
-    for start in range(0, len(wrapped), columns):
-        row_heights.append(max(64 + 23 * len(lines) for _, lines, _ in wrapped[start:start + columns]))
-    foot_lines = wrap(str(content["footnote"]), 55 if narrow else 110)
-    height = 116 + sum(row_heights) + gap * (len(row_heights) - 1) + 48 + 20 * len(foot_lines)
+    if name == "asked-checked-enforced":
+        body, bottom = _control_layout(cards, narrow=narrow)
+    elif name == "repository-memory":
+        body, bottom = _memory_layout(cards, content["arrow_labels"], narrow=narrow)
+    else:
+        body, bottom = _chooser_layout(cards, narrow=narrow)
+    foot_lines = _lines([content["footnote"]], 55 if narrow else 110)
+    height = bottom + 66 + 20 * len(foot_lines)
     title = escape(str(content["title"]))
     subtitle = escape(str(content["subtitle"]))
     desc = escape(f"{content['title']}. " + ". ".join(heading + ": " + ", ".join(items) for heading, items, _ in cards) + ". " + str(content["footnote"]))
@@ -124,25 +289,8 @@ def _render_svg(name: str, content: dict, facts: dict, cards: list[tuple[str, li
              f'<metadata>{escape(json.dumps(facts, sort_keys=True))}</metadata>',
              f'<rect width="{width}" height="{height}" fill="#fff"/>',
              f'<text x="24" y="36" class="title">{title}</text>',
-             f'<text x="24" y="65" class="sub">{subtitle}</text>']
-    row_y = 98
-    for row_index, row_height in enumerate(row_heights):
-        for col, (heading, lines, color) in enumerate(wrapped[row_index * columns:(row_index + 1) * columns]):
-            x = margin + col * (card_width + gap)
-            dash = ' stroke-dasharray="6 5"' if name == "repository-memory" and row_index * columns + col == 3 else ""
-            parts.append(f'<rect x="{x}" y="{row_y}" width="{card_width}" height="{row_height}" rx="10" fill="#fff" stroke="{color}" stroke-width="1.5"{dash}/>')
-            parts.append(f'<text x="{x + 14}" y="{row_y + 29}" class="head">{escape(heading)}</text>')
-            parts.extend(f'<text x="{x + 14}" y="{row_y + 56 + i * 23}" class="body">{escape(line)}</text>' for i, line in enumerate(lines))
-            if name == "repository-memory" and row_index * columns + col < 2:
-                if narrow:
-                    start_x, start_y = x + card_width // 2, row_y + row_height
-                    arrow = "M0 0v22m-5 -5 5 5 5 -5"
-                else:
-                    start_x, start_y = x + card_width, row_y + row_height // 2
-                    arrow = "M0 0h22m-5 -5 5 5 -5 5"
-                parts.append(f'<path d="{arrow}" transform="translate({start_x} {start_y})" fill="none" stroke="{MUTED}" stroke-width="1.5"/>')
-        row_y += row_height + gap
-    parts.extend(f'<text x="24" y="{row_y + 16 + i * 20}" class="foot">{escape(line)}</text>'
+             f'<text x="24" y="65" class="sub">{subtitle}</text>', *body]
+    parts.extend(f'<text x="24" y="{bottom + 40 + i * 20}" class="foot">{escape(line)}</text>'
                  for i, line in enumerate(foot_lines))
     parts.append("</svg>")
     return "\n".join(parts) + "\n"

@@ -14,6 +14,7 @@
         <p class="eyebrow">A practical first cycle</p>
         <h1>Use with Codex or Claude</h1>
         <p class="lede">You choose the goal and approve the result. Your coding agent edits and tests the project. The Kit creates durable project state and reports violations of defined rules.</p>
+        <p>Push the first commit with <code>git push -u origin main</code> before <code>work start</code>.</p>
       </header>
 
       <section aria-labelledby="tool-heading">
@@ -34,7 +35,7 @@ ${tools}
 
       <section aria-labelledby="cycle-heading">
         <h2 id="cycle-heading">One work cycle: add TSV, keep CSV</h2>
-        <p>This scenario illustrates the roles; it is not a measurement of drift reduction. The Kit commands below were run in a fresh generated Python project by the repository test. The agent's code change and regression test are proposed work, not part of that command fixture.</p>
+        <p>The repository test runs these Kit commands in a newly generated Python project. It uses a local remote and simulates GitHub, including a passing CI result and the merge. The example illustrates a CSV and TSV change. The test publishes a change to <code>export-format.txt</code>.</p>
         <figure class="architecture-map role-map"><picture><source media="(max-width: 680px)" srcset="../static/repository-memory-narrow.svg"><img src="../static/repository-memory.svg" alt="Two work sessions use the same repository files; chat history is not carried over."></picture><figcaption>Session actions come from the documented first-cycle example; files come from its generated project.</figcaption></figure>
         <div class="table-scroll" tabindex="0" role="region" aria-label="First work cycle">
           <table><thead><tr><th>Step</th><th>What you do</th><th>What the agent does</th><th>What the Kit checks</th></tr></thead><tbody>

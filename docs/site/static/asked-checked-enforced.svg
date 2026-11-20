@@ -1,36 +1,34 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 524" role="img" aria-labelledby="title desc">
-<title id="title">Asked, checked, enforced</title><desc id="desc">Asked, checked, enforced. 1  Asked: AGENTS.md, docs/handoff/STANDARD_AGENT_PROMPT.md, Agent instructions guide work; they can be ignored.. 2  Checked: agentic-kit check, agentic-kit doctor, CI: pull_request, push, python -m pip install --upgrade pip if [ -f pyproject.toml ]; then pip install -e &quot;.[dev]&quot; || pip install -e .; fi  pip install agentic-project-kit==1.4.0, if [ -d tests ]; then pytest -q; fi, agentic-kit check. 3  Enforced: Required checks can block a merge only when a maintainer enables branch protection in GitHub.. Branch protection is a GitHub setting; the Kit lists it as a setup task.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 458" role="img" aria-labelledby="title desc">
+<title id="title">Asked, checked, enforced</title><desc id="desc">Asked, checked, enforced. 1  Asked: AGENTS.md, STANDARD_AGENT_PROMPT.md, Agent instructions guide work. An agent can ignore them.. 2  Checked: Local: check and doctor, Runs on: push, pull request, Runs project tests, Runs agentic-kit check, Failures are reported and fail the CI run., Without level 3, a red CI can still be merged.. 3  Enforced: Required checks can block a merge only when a maintainer enables branch protection in GitHub.. Branch protection is a GitHub setting. The Kit lists it as a setup task.</desc>
 <style>.title{font:700 22px sans-serif;fill:#17202a}.sub{font:15px sans-serif;fill:#586674}.head{font:700 16px sans-serif;fill:#17202a}.body{font:14px sans-serif;fill:#17202a}.foot{font:14px sans-serif;fill:#586674}</style>
-<metadata>{&quot;ci_events&quot;: [&quot;pull_request&quot;, &quot;push&quot;], &quot;ci_steps&quot;: [&quot;python -m pip install --upgrade pip\nif [ -f pyproject.toml ]; then pip install -e \&quot;.[dev]\&quot; || pip install -e .; fi\n\npip install agentic-project-kit==1.4.0&quot;, &quot;if [ -d tests ]; then pytest -q; fi&quot;, &quot;agentic-kit check&quot;], &quot;instruction_files&quot;: [&quot;AGENTS.md&quot;, &quot;docs/handoff/STANDARD_AGENT_PROMPT.md&quot;], &quot;manifest_commands&quot;: [&quot;agentic-kit check&quot;, &quot;agentic-kit doctor&quot;]}</metadata>
-<rect width="960" height="524" fill="#fff"/>
+<metadata>{&quot;ci_events&quot;: [&quot;push&quot;, &quot;pull_request&quot;], &quot;ci_summary&quot;: [&quot;Runs on: push, pull request&quot;, &quot;Runs project tests&quot;, &quot;Runs agentic-kit check&quot;], &quot;instruction_files&quot;: [&quot;AGENTS.md&quot;, &quot;docs/handoff/STANDARD_AGENT_PROMPT.md&quot;], &quot;manifest_commands&quot;: [&quot;agentic-kit check&quot;, &quot;agentic-kit doctor&quot;]}</metadata>
+<rect width="960" height="458" fill="#fff"/>
 <text x="24" y="36" class="title">Asked, checked, enforced</text>
 <text x="24" y="65" class="sub">How strongly a project rule binds an agent</text>
-<rect x="24" y="98" width="288" height="340" rx="10" fill="#fff" stroke="#586674" stroke-width="1.5"/>
-<text x="38" y="127" class="head">1  Asked</text>
-<text x="38" y="154" class="body">AGENTS.md</text>
-<text x="38" y="177" class="body">docs/handoff/STANDARD_AGENT_PRO</text>
-<text x="38" y="200" class="body">MPT.md</text>
-<text x="38" y="223" class="body">Agent instructions guide work;</text>
-<text x="38" y="246" class="body">they can be ignored.</text>
-<rect x="336" y="98" width="288" height="340" rx="10" fill="#fff" stroke="#0f766e" stroke-width="1.5"/>
-<text x="350" y="127" class="head">2  Checked</text>
-<text x="350" y="154" class="body">agentic-kit check</text>
-<text x="350" y="177" class="body">agentic-kit doctor</text>
-<text x="350" y="200" class="body">CI: pull_request, push</text>
-<text x="350" y="223" class="body">python -m pip install --upgrade</text>
-<text x="350" y="246" class="body">pip if [ -f pyproject.toml ];</text>
-<text x="350" y="269" class="body">then pip install -e &quot;.[dev]&quot; ||</text>
-<text x="350" y="292" class="body">pip install -e .; fi  pip</text>
-<text x="350" y="315" class="body">install agentic-project-</text>
-<text x="350" y="338" class="body">kit==1.4.0</text>
-<text x="350" y="361" class="body">if [ -d tests ]; then pytest</text>
-<text x="350" y="384" class="body">-q; fi</text>
-<text x="350" y="407" class="body">agentic-kit check</text>
-<rect x="648" y="98" width="288" height="340" rx="10" fill="#fff" stroke="#3454d1" stroke-width="1.5"/>
+<rect x="24" y="216" width="288" height="156" rx="10" fill="#f1f3f5" stroke="#586674" stroke-width="1.5"/>
+<rect x="24" y="216" width="288" height="8" rx="4" fill="#586674"/>
+<text x="38" y="245" class="head">1  Asked</text>
+<text x="38" y="272" class="body">AGENTS.md</text>
+<text x="38" y="295" class="body">STANDARD_AGENT_PROMPT.md</text>
+<text x="38" y="318" class="body">Agent instructions guide work.</text>
+<text x="38" y="341" class="body">An agent can ignore them.</text>
+<rect x="336" y="124" width="288" height="248" rx="10" fill="#e6f2f0" stroke="#0f766e" stroke-width="1.5"/>
+<rect x="336" y="124" width="288" height="8" rx="4" fill="#0f766e"/>
+<text x="350" y="153" class="head">2  Checked</text>
+<text x="350" y="180" class="body">Local: check and doctor</text>
+<text x="350" y="203" class="body">Runs on: push, pull request</text>
+<text x="350" y="226" class="body">Runs project tests</text>
+<text x="350" y="249" class="body">Runs agentic-kit check</text>
+<text x="350" y="272" class="body">Failures are reported and fail</text>
+<text x="350" y="295" class="body">the CI run.</text>
+<text x="350" y="318" class="body">Without level 3, a red CI can</text>
+<text x="350" y="341" class="body">still be merged.</text>
+<rect x="648" y="98" width="288" height="274" rx="10" fill="#eaeefc" stroke="#3454d1" stroke-width="1.5"/>
+<rect x="648" y="98" width="288" height="8" rx="4" fill="#3454d1"/>
 <text x="662" y="127" class="head">3  Enforced</text>
 <text x="662" y="154" class="body">Required checks can block a</text>
 <text x="662" y="177" class="body">merge only when a maintainer</text>
 <text x="662" y="200" class="body">enables branch protection in</text>
 <text x="662" y="223" class="body">GitHub.</text>
-<text x="24" y="478" class="foot">Branch protection is a GitHub setting; the Kit lists it as a setup task.</text>
+<text x="24" y="412" class="foot">Branch protection is a GitHub setting. The Kit lists it as a setup task.</text>
 </svg>

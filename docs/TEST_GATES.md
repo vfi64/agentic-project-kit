@@ -1,5 +1,11 @@
 # Test Gates
 
+The public Use walkthrough is exercised against a fresh generated project and a
+local bare remote in `tests/test_site_usage.py`. The fixture uses simulated
+GitHub and passing CI, checks the merged file on the bare remote and validates
+the successor package. `tests/test_work_start_missing_upstream.py` checks the
+diagnostic and the same startup after the upstream is set.
+
 ### Greenfield audit and recovery regressions
 
 KIT-GF-104: `tests/test_workspace_recovery.py` covers generator type recovery,

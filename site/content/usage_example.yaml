@@ -9,12 +9,26 @@ steps:
     you: Choose the project type.
     agent: Runs the command on your request.
     kit: Creates the project contract, status, test-gate and handoff files.
+  - session: setup
+    title: Acknowledge the rules
+    command: agentic-kit rules acknowledge
+    argv: [rules, acknowledge]
+    you: Set up the remote, push main with an upstream, and read the project rules.
+    agent: Records the rule acknowledgement.
+    kit: Binds the acknowledgement to the current rule sources.
   - session: "1"
     title: Ask for the change
     command: null
     you: "State the requirement: add TSV output and keep CSV output unchanged."
-    agent: Changes the code and adds a regression test for existing CSV output.
+    agent: Inspects the repository before proposing the change.
     kit: Nothing runs at this step; the Kit does not write or judge code.
+  - session: "1"
+    title: Start the work
+    command: agentic-kit work start
+    argv: [work, start, --branch, feat/tsv]
+    you: Approve starting the change.
+    agent: Prepares the branch, adds TSV output and writes a regression test for CSV.
+    kit: Checks the repository state and prepares the work branch.
   - session: "1"
     title: Check the work
     command: agentic-kit check
@@ -30,14 +44,22 @@ steps:
     agent: Runs the health check and reports the result.
     kit: Reports project health within its named checks.
   - session: "1"
+    title: Publish
+    command: agentic-kit work finish
+    argv: [work, finish, --branch, feat/tsv, --title, Add TSV output, --message, Add TSV output, --path, export-format.txt, --dry-run]
+    you: Review the proposed publication steps and approve them before execution.
+    agent: Previews the closeout for explicitly selected changed files.
+    kit: Plans a commit, pull request, CI check and merge. Execution requires explicit approval.
+  - session: "1"
     title: Hand off
-    command: null
-    you: Confirm the handoff text.
-    agent: Writes the goal, test results and next step to docs/handoff/CURRENT_HANDOFF.md.
-    kit: This example records the handoff manually in the repository.
+    command: agentic-kit transfer chat-switch-complete
+    argv: [transfer, chat-switch-complete]
+    you: Request a handoff before changing sessions.
+    agent: Prepares the successor package after the approved closeout.
+    kit: Writes and validates the successor package; a failed validation blocks.
   - session: "2"
     title: Start the next session
     command: null
-    you: Paste the starter prompt into a new session.
-    agent: Reads AGENTS.md, project state and the handoff before continuing. It runs check and doctor again for new work.
-    kit: No check runs merely from pasting the prompt; later checks have the same limits as in session 1.
+    you: Open a new session with the validated handoff.
+    agent: Reads AGENTS.md, project state and the successor package.
+    kit: Supplies versioned context for the next session.

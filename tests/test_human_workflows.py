@@ -42,7 +42,7 @@ def test_work_start_runs_safe_start_sequence(monkeypatch):
     payload = json.loads(result.stdout)
     assert payload["result_status"] == "PASS"
     assert calls[:4] == [
-        ["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main"],
+        ["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main", "--json"],
         ["./.venv/bin/agentic-kit", "rules", "acknowledge"],
         ["./.venv/bin/agentic-kit", "transfer", "post-merge-check", "--main-branch", "main"],
         ["./.venv/bin/agentic-kit", "transfer", "repo-status"],
@@ -74,7 +74,7 @@ def test_work_start_stops_after_failed_sync_main(monkeypatch):
     assert result.exit_code == 2
     payload = json.loads(result.stdout)
     assert payload["blockers"] == ["sync-main"]
-    assert calls == [["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main"]]
+    assert calls == [["./.venv/bin/agentic-kit", "transfer", "sync-main", "--main-branch", "main", "--json"]]
 
 
 def test_work_start_skips_post_merge_check_for_external_first_cycle(monkeypatch):
