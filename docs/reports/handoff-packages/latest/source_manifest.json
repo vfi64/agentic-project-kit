@@ -60,10 +60,10 @@
       "yaml_valid": true
     },
     {
-      "bytes": 117169,
+      "bytes": 117270,
       "exists": true,
       "path": "docs/DOCUMENTATION_REGISTRY.yaml",
-      "registry_document_count": 454,
+      "registry_document_count": 455,
       "yaml_valid": true
     },
     {
@@ -82,7 +82,7 @@
       "path": "docs/handoff/CURRENT_HANDOFF.md"
     },
     {
-      "bytes": 7803,
+      "bytes": 7813,
       "exists": true,
       "path": "docs/handoff/NEXT_CHAT_BOOTSTRAP.md"
     },
