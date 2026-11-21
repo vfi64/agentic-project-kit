@@ -1,8 +1,8 @@
 <!-- agentic:generated operational-handoff-state begin -->
 ## Current Operational Handoff State
 
-Current verified main/admin HEAD is `a501272eef8aeb866bebb6d323ce1a240dcaaf71` (`a501272e`), after `Align Agent Direct with the tested Use workflow (#2843)`.
-Last substantive work state is `a501272eef8aeb866bebb6d323ce1a240dcaaf71` (`a501272e`), after `Align Agent Direct with the tested Use workflow (#2843)`.
+Current verified main/admin HEAD is `b70833e4d26978128fe1cf52d8bd6eed40ccfd13` (`b70833e4`), after `Fix release branch tests and report failed release CI (#2846)`.
+Last substantive work state is `b70833e4d26978128fe1cf52d8bd6eed40ccfd13` (`b70833e4`), after `Fix release branch tests and report failed release CI (#2846)`.
 
 PR #1257 hardened admin-refresh-pr and pr-complete recovery.
 PR #1255 added generated operational handoff block replacement.
