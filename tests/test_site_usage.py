@@ -17,6 +17,7 @@ import pytest
 from typer.testing import CliRunner
 import yaml
 
+from agentic_project_kit import site_generator
 from agentic_project_kit.cli import app
 from agentic_project_kit.command_manifest import load_manifest
 from agentic_project_kit.site_generator import build_site, collect_site_foundation_metadata, render_index_html
@@ -215,14 +216,32 @@ def test_entry_pages_do_not_show_internal_work_ids(tmp_path: Path) -> None:
         assert not pattern.search(" ".join(visible.parts)), relative
 
 
-def test_development_case_details_live_on_evidence_page(tmp_path: Path) -> None:
+@pytest.mark.parametrize("release_preparation", [False, True])
+def test_development_case_details_live_on_evidence_page(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, release_preparation: bool,
+) -> None:
+    if release_preparation:
+        read_pyproject = site_generator._read_pyproject
+
+        def read_unreleased_pyproject(root: Path, blockers: list[str]) -> dict:
+            config = read_pyproject(root, blockers)
+            config["project"]["version"] = "999.0.0"
+            return config
+
+        assert not (ROOT / "docs/reports/release/release-run-999.0.0.json").exists()
+        monkeypatch.setattr(site_generator, "_read_pyproject", read_unreleased_pyproject)
+
     result = build_site(ROOT, output_dir=tmp_path / "site", build_commit="a" * 40)
     assert result.ok, result.report.blockers
+    assert result.report.metadata is not None
+    if release_preparation:
+        assert result.report.metadata.package_version == "999.0.0"
     evidence = (tmp_path / "site/evidence/index.html").read_text(encoding="utf-8")
     overview = (tmp_path / "site/index.html").read_text(encoding="utf-8")
     workflows = (tmp_path / "site/workflows/index.html").read_text(encoding="utf-8")
     assert 'id="development-cases"' in evidence
-    assert "KIT-GF-078" in evidence
+    release_evidence = ROOT / f"docs/reports/release/release-run-{result.report.metadata.package_version}.json"
+    assert ("Self-hosting case: KIT-GF-078" in evidence) == release_evidence.is_file()
     assert "Five maintenance cycles in one familiar repository" in evidence
     assert "KIT-GF-078" not in overview
     assert "B1 Closeout" not in workflows

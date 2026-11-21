@@ -10,6 +10,7 @@ byte-identical.
 import json
 import subprocess
 
+import pytest
 from typer.testing import CliRunner
 
 from agentic_project_kit.cli import app
@@ -17,7 +18,7 @@ from agentic_project_kit.cli_commands.human_workflows import WORK_FINISH_CI_TIME
 from agentic_project_kit.release_run import RELEASE_CI_TIMEOUT_SECONDS, ReleaseRunOptions, run_release
 from agentic_project_kit.release_run_evidence import encoded, evidence_path, snapshot_without_archive_approval
 from agentic_project_kit.release_run_resume import original_doi_subject
-from test_release_run import FakeRunner, _assert_agentic_argv_options_exist, _state_path
+from test_release_run import FakeRunner, _assert_agentic_argv_options_exist, _state_path, _workspace
 from test_release_run_api_resume import ResumeRunner, _mutations
 from test_release_run_evidence import prepared
 from test_release_run_recovery import _blocked_state, _run
@@ -28,6 +29,68 @@ def _completed(argv, stdout='{"result_status": "PASS"}\n', rc=0):
 
 
 # --- the wait -----------------------------------------------------------------------------------
+
+@pytest.mark.parametrize("ci_state, conclusion", [
+    ("FAILED", "FAILURE"), ("FAILED", "CANCELLED"), ("FAILED", "TIMED_OUT"), ("PENDING", None),
+])
+def test_release_b4_routes_only_red_ci_to_a_human(tmp_path, ci_state, conclusion):
+    _workspace(tmp_path)
+    head = "a" * 40
+    check = "test-shard (1)"
+    url = "https://github.com/example/project/actions/runs/42/job/123"
+
+    class ReleaseCiRunner(FakeRunner):
+        def __call__(self, argv, cwd):
+            command = list(argv)
+            if command[:4] == ["gh", "pr", "view", "7"]:
+                self.calls.append(command)
+                return _completed(command, json.dumps({
+                    "headRefOid": head,
+                    "statusCheckRollup": [
+                        {"name": check, "status": "COMPLETED", "conclusion": conclusion, "detailsUrl": url},
+                        {"name": "test-shard (2)", "status": "COMPLETED", "conclusion": "SUCCESS"},
+                    ],
+                }))
+            if command[1:3] == ["work", "finish"] and "--execute" in command:
+                self.calls.append(command)
+                wait = (
+                    f"PR readiness outcome: BLOCKED\n- check failed: {check}\nCI state: FAILED"
+                    if ci_state == "FAILED" else "PR readiness outcome: TIMEOUT"
+                )
+                complete = {
+                    "result_status": "BLOCKED", "ci_state": ci_state, "failed_step": "pr-wait-ci",
+                    "pr_number": 7, "expected_head_sha": head,
+                    "steps": [{"name": "pr-wait-ci", "stdout": wait}],
+                }
+                create = {
+                    "result_status": "BLOCKED", "ci_state": ci_state, "blockers": ["pr-complete_blocked_payload"],
+                    "pr_number": 7, "expected_head_sha": head,
+                    "steps": [{"name": "pr-complete", "stdout": json.dumps(complete)}],
+                }
+                return _completed(command, json.dumps({
+                    "result_status": "BLOCKED", "blockers": ["pr-create-complete"],
+                    "steps": [{"name": "pr-create-complete", "stdout": json.dumps(create)}],
+                }), rc=2)
+            return super().__call__(argv, cwd)
+
+    runner = ReleaseCiRunner()
+    options = {"version": "1.2.3", "root": tmp_path}
+    preview = run_release(ReleaseRunOptions(**options), runner=runner)
+    result = run_release(ReleaseRunOptions(
+        **options, execute=True, expected_signature=preview["gate"]["approval_signature"],
+    ), runner=runner)
+    assert result["result_status"] == "BLOCKED"
+    assert result["current_step"] == "B4"
+    if conclusion == "FAILURE":
+        assert result["next_command_kind"] == "human"
+        assert result["next_command"] == ""
+        assert check in result["next_action"]
+        assert url in result["next_action"]
+        assert "test-shard (2)" not in result["next_action"]
+    else:
+        assert "release run" in result["next_command"]
+        assert any(cmd[:3] == ["gh", "pr", "view"] for cmd in runner.calls) == (ci_state == "FAILED")
+
 
 def test_work_finish_waits_900_seconds_by_default_and_passes_an_explicit_wait(monkeypatch):
     assert WORK_FINISH_CI_TIMEOUT_SECONDS == RELEASE_CI_TIMEOUT_SECONDS == 900
