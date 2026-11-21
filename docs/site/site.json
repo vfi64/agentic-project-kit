@@ -15053,9 +15053,8 @@
     },
     "release": {
       "date": "2026-11-21",
-      "entry_count": 16,
+      "entry_count": 15,
       "notes": [
-        "Zenodo DOI verification pending for v1.4.1.",
         "Fixed: Evidence page tests accept a release branch without archived release evidence, and a failed release PR check reports its name and link instead of suggesting another release-run attempt.",
         "Fixed: The Agent Direct card and sequence show the tested Use workflow. Wide diagrams put each action and command at its arrow, and labels describe the sending actor.",
         "Fixed: Figure tests check word boundaries in the rendered SVGs. The generated-project walkthrough reports the verified match between the validated successor package and the five files on its simulated remote.",
@@ -16304,7 +16303,7 @@
     "package_version": "1.4.1",
     "product_name": "Agentic Project Kit",
     "projection_type": "pages-fallback",
-    "release_tag": "v1.4.0",
+    "release_tag": "v1.4.1",
     "repository_url": "https://github.com/vfi64/agentic-project-kit",
     "reproduced_manifest_sha": "6e810d7d8fe3",
     "requires_python": ">=3.10",
@@ -16319,7 +16318,7 @@
       "orchestrator": 37,
       "primitive": 107
     },
-    "version_doi": "10.5281/zenodo.24250696"
+    "version_doi": "10.5281/zenodo.24415051"
   },
   "roadmap_projection": {
     "roadmap_counts": {
@@ -16339,13 +16338,13 @@
   "schema_version": 1,
   "status_projection": {
     "concept_doi": "10.5281/zenodo.20101359",
-    "current_release_tag": "v1.4.0",
+    "current_release_tag": "v1.4.1",
     "current_verified_main": "See docs/STATUS.md",
-    "current_verified_release": "1.4.0",
+    "current_verified_release": "1.4.1",
     "current_version": "1.4.1",
     "latest_substantive_work": "See docs/STATUS.md for current repository state.",
     "next_safe_step": "See docs/handoff/CURRENT_HANDOFF.md for current handoff guidance.",
-    "version_doi": "10.5281/zenodo.24250696"
+    "version_doi": "10.5281/zenodo.24415051"
   },
   "task_projection": {
     "execution_authorized": false,

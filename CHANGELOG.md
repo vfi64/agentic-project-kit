@@ -2,7 +2,6 @@
 
 ## v1.4.1 - 2026-11-21
 
-- Zenodo DOI verification pending for v1.4.1.
 - Fixed: Evidence page tests accept a release branch without archived release evidence, and a failed release PR check reports its name and link instead of suggesting another release-run attempt.
 - Fixed: The Agent Direct card and sequence show the tested Use workflow. Wide diagrams put each action and command at its arrow, and labels describe the sending actor.
 - Fixed: Figure tests check word boundaries in the rendered SVGs. The generated-project walkthrough reports the verified match between the validated successor package and the five files on its simulated remote.
@@ -18,6 +17,10 @@
 - Improved: Grouped website navigation and added a source-bound Codex/Claude walkthrough with a tested generated-project cycle; curated command descriptions now fail the site build when missing.
 - Fixed: Invalid legacy chat handoff packages no longer write successor files or return success in text and prompt modes.
 - Fixed: Generated website pages now share one navigation order and mark the current page or command area. The README and website opening explain the Kit's role, limits, and a two-session example more directly.
+
+Post-release verification complete: GitHub Release exists, Zenodo concept DOI `10.5281/zenodo.20101359`, verified v1.4.1 DOI `10.5281/zenodo.24415051`.
+
+Zenodo v1.4.1 DOI: 10.5281/zenodo.24415051
 
 ## v1.4.0 - 2026-11-15
 
